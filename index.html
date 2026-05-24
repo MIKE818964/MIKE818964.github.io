@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HONEYBADGER SOFTWARE INC — polished Windows tools for 3D printers, machinery, and dashboards. J1 Bridge: OrcaSlicer + Snapmaker J1, finally talking to each other.">
+<meta name="keywords" content="Snapmaker J1, J1 Bridge, OrcaSlicer, 3D printing, HONEYBADGER, Klipper alternative, Snapmaker dashboard">
+<meta property="og:title" content="HONEYBADGER SOFTWARE INC">
+<meta property="og:description" content="Small Windows tools that fix what the big vendors won't. J1 Bridge coming soon.">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/108652491?v=4">
+<meta property="og:type" content="website">
+<title>HONEYBADGER SOFTWARE INC — Polished Tools for the Stubborn Few</title>
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-row">
+    <a href="/" class="brand">
+      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="HBSW logo" class="brand-logo">
+      <div class="brand-text">
+        <div class="brand-name">HONEYBADGER</div>
+        <div class="brand-tag">SOFTWARE INC</div>
+      </div>
+    </a>
+    <nav class="site-nav">
+      <a href="#products">Products</a>
+      <a href="#why">Why</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="hero-eyebrow">In active beta · public release coming soon</div>
+        <h1 class="hero-title">Small Windows tools<br>that fix what the<br>big vendors won't.</h1>
+        <p class="hero-sub">3D printers, machinery, dashboards — they all ship with workflow gaps. We build the polished one-click installers that close them.</p>
+        <div class="hero-cta">
+          <a href="#notify" class="btn btn-primary">Notify me when J1 Bridge launches</a>
+          <a href="#products" class="btn btn-ghost">See what's coming</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="hero-art-frame"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PRODUCTS
+     ============================================================ -->
+<section id="products" class="section section-products">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">FEATURED — IN ACTIVE BETA</div>
+      <h2>J1 Bridge</h2>
+      <p class="lede">OrcaSlicer + Snapmaker J1, finally talking to each other.</p>
+    </div>
+
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-icon">📂</div>
+        <h3>Drag-drop slicing</h3>
+        <p>Drop an STL on the Home tab. We slice with the correct J1 profile, patch the printer's broken start macro, upload, and start the print. One drag. No Reddit hacks.</p>
+      </div>
+      <div class="product-card">
+        <div class="product-icon">📡</div>
+        <h3>Live monitoring during prints</h3>
+        <p>Bed + both nozzles + ETA + pause/resume/cancel from your desk. Works on <strong>stock V2.8.0 firmware</strong> — no Klipper conversion, warranty intact. Rare for J1.</p>
+      </div>
+      <div class="product-card">
+        <div class="product-icon">📷</div>
+        <h3>Camera tab built-in</h3>
+        <p>Plug a USB webcam in, pick it from the dropdown. Or point at a network MJPEG stream. No OctoPi flash, no SD card configuration, no separate Pi.</p>
+      </div>
+      <div class="product-card">
+        <div class="product-icon">📦</div>
+        <h3>One-click installer</h3>
+        <p>Real Windows installer. No Python, no Docker, no terminal commands. If your grandmother can use Photoshop, she can install J1 Bridge.</p>
+      </div>
+      <div class="product-card">
+        <div class="product-icon">🛡</div>
+        <h3>Honest Known Issues page</h3>
+        <p>Every product ships with a built-in Known Issues tab on day one. No surprises. No marketing claim the code can't back up.</p>
+      </div>
+      <div class="product-card">
+        <div class="product-icon">🦡</div>
+        <h3>Free + open development</h3>
+        <p>Free for personal use. Patreon for those who want to feed the badger. No telemetry, no analytics, no "phone home."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     COMPARISON
+     ============================================================ -->
+<section class="section section-comparison">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">THE WORKFLOW COLLAPSE</div>
+      <h2>Replace four tools and a Reddit search with one drag-and-drop.</h2>
+    </div>
+
+    <div class="comparison-table">
+      <div class="comparison-row comparison-head">
+        <div>What you do now</div>
+        <div>What J1 Bridge does</div>
+      </div>
+      <div class="comparison-row">
+        <div>Install 350 MB of Snapmaker Luban, fight the slicer, export gcode, manually upload via Luban or curl</div>
+        <div class="cell-win">Drop the STL on the Home tab. It slices, uploads, and prints.</div>
+      </div>
+      <div class="comparison-row">
+        <div>Walk to the printer to check temps and progress</div>
+        <div class="cell-win">Live Monitor tab — bed + both nozzles + ETA + controls from your desk</div>
+      </div>
+      <div class="comparison-row">
+        <div>Buy an OctoPi rig, flash an SD card, configure mjpg-streamer to add a webcam</div>
+        <div class="cell-win">Plug a USB webcam in, pick it from the dropdown</div>
+      </div>
+      <div class="comparison-row">
+        <div>Convert to Klipper to get any real dashboard (voids warranty, hours of work, scary)</div>
+        <div class="cell-win">One-click installer. No Klipper. No Pi. No soldering. Warranty intact.</div>
+      </div>
+      <div class="comparison-row">
+        <div>Realize the J1's start macro leaves wiper marks on every print, search Reddit for fixes</div>
+        <div class="cell-win">We patch it automatically. Every print starts clean.</div>
+      </div>
+      <div class="comparison-row">
+        <div>Pretend the firmware doesn't have bugs</div>
+        <div class="cell-win">Bundled Known Issues page lists every limit honestly</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WHY HONEYBADGER
+     ============================================================ -->
+<section id="why" class="section section-why">
+  <div class="container">
+    <div class="section-head center">
+      <div class="kicker">PHILOSOPHY</div>
+      <h2>Why HONEYBADGER</h2>
+    </div>
+
+    <div class="why-quote">
+      The honey badger doesn't care. It chews through firmware bugs vendors won't fix, walks past "this can't be done" forum threads, and ships the polished thing anyway.
+    </div>
+
+    <ul class="principle-list">
+      <li><strong>One-click installers, no terminals.</strong> A user shouldn't need to know what Python is to use your software.</li>
+      <li><strong>Honest about limits.</strong> Every product ships with a Known Issues page on day one.</li>
+      <li><strong>No telemetry, no analytics, no "phone home."</strong> Your machines are your business.</li>
+      <li><strong>Free + open where it makes sense.</strong> Patreon for those who want to feed the badger; nothing locked behind a paywall.</li>
+      <li><strong>Polished or it doesn't ship.</strong> No DOS-window installers. No "pip install" instructions for end users.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================
+     ROADMAP
+     ============================================================ -->
+<section id="roadmap" class="section section-roadmap">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">WHAT'S NEXT</div>
+      <h2>Active builds</h2>
+    </div>
+
+    <div class="roadmap-grid">
+      <div class="roadmap-card">
+        <div class="roadmap-status status-beta">ACTIVE BETA</div>
+        <h3>J1 Bridge v0.1</h3>
+        <p>Drag-drop slice, live monitor, camera tab, Known Issues page. Installer + Patreon launch imminent.</p>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-status status-dev">IN DEVELOPMENT</div>
+        <h3>J1 Bridge v0.2</h3>
+        <p>"Release LCD" toggle, dual-extruder T1 readout polish, multi-printer dashboard support, auto-updater stability.</p>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-status status-dev">HARDWARE PROTOTYPE</div>
+        <h3>C7 Corvette CAN bus dashboard</h3>
+        <p>Pi 4 + PiCAN2 + 10-15" touchscreen reading the raw CAN bus on 2014-2019 C7 Corvettes. Open-source firmware + optional turnkey kit.</p>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-status status-internal">INDUSTRIAL · INTERNAL</div>
+        <h3>Maguire blender monitoring</h3>
+        <p>Plant-scale operator dashboards, scaling from 1 to 150 blenders. The pattern feeds back into everything else.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     NOTIFY ME CTA
+     ============================================================ -->
+<section id="notify" class="section section-cta">
+  <div class="container">
+    <div class="cta-card">
+      <h2>Get notified when J1 Bridge ships</h2>
+      <p>Public release lands with the Patreon launch. ⭐ the GitHub profile or follow the brand below to get pinged when v0.1.0 drops.</p>
+      <div class="cta-buttons">
+        <a href="https://github.com/MIKE818964" target="_blank" rel="noopener" class="btn btn-primary">⭐ Follow on GitHub</a>
+        <a href="https://github.com/MIKE818964?tab=repositories" target="_blank" rel="noopener" class="btn btn-ghost">Browse projects</a>
+      </div>
+      <p class="cta-fineprint">No email list yet — we'll add one when Patreon is live. For now, GitHub watch is the cleanest signal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div>
+      <div class="brand-tag-sm">Built honest. Shipped polished. Maintained free.</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+      <span class="footer-sep">·</span>
+      <a href="#products">Products</a>
+      <span class="footer-sep">·</span>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+  </div>
+  <div class="container footer-fineprint">
+    <small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small>
+  </div>
+</footer>
+
+</body>
+</html>
