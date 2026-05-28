@@ -293,6 +293,44 @@ img { max-width: 100%; height: auto; }
 }
 
 /* ============================================================
+   STUDIO INTRO GRID
+   ============================================================ */
+.section-studio { background: var(--bg-mid); }
+.studio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.studio-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 26px 22px;
+  text-align: left;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.studio-card:hover {
+  border-color: var(--border-hi);
+  transform: translateY(-2px);
+}
+.studio-icon { font-size: 30px; margin-bottom: 12px; }
+.studio-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--accent-hi);
+  letter-spacing: 0.3px;
+}
+.studio-card p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.55;
+}
+
+/* ============================================================
    PROOF GALLERY
    ============================================================ */
 .section-proof {
