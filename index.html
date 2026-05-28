@@ -42,7 +42,7 @@
       <div class="hero-text">
         <div class="hero-eyebrow">In active beta · public release coming soon</div>
         <h1 class="hero-title">Small Windows tools<br>that fix what the<br>big vendors won't.</h1>
-        <p class="hero-sub">3D printers, machinery, dashboards — they all ship with workflow gaps. We build the polished one-click installers that close them.</p>
+        <p class="hero-sub">3D printers, machinery, dashboards — they all ship with workflow gaps. We build the polished one-click installers that close them. <strong>J1 Bridge has held live monitoring for multiple days on stock V2.8.0 firmware.</strong></p>
         <div class="hero-cta">
           <a href="#notify" class="btn btn-primary">Notify me when J1 Bridge launches</a>
           <a href="#products" class="btn btn-ghost">See what's coming</a>
@@ -75,7 +75,7 @@
       <div class="product-card">
         <div class="product-icon">📡</div>
         <h3>Live monitoring during prints</h3>
-        <p>Bed + both nozzles + ETA + pause/resume/cancel from your desk. Works on <strong>stock V2.8.0 firmware</strong> — no Klipper conversion, warranty intact. Rare for J1.</p>
+        <p>Bed + both nozzles + ETA + pause/resume/cancel from your desk. Works on <strong>stock V2.8.0 firmware</strong> — no Klipper conversion, warranty intact. <strong>Validated over multi-day continuous use.</strong></p>
       </div>
       <div class="product-card">
         <div class="product-icon">📷</div>
@@ -98,6 +98,49 @@
         <p>Free for personal use. Patreon for those who want to feed the badger. No telemetry, no analytics, no "phone home."</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEE IT IN ACTION
+     ============================================================ -->
+<section id="proof" class="section section-proof">
+  <div class="container">
+    <div class="section-head center">
+      <div class="kicker">PROOF OF LIFE · CAPTURED LIVE FROM THE APP</div>
+      <h2>This is the running product.<br>Not a mockup. Not vaporware.</h2>
+      <p class="lede center-narrow">Screenshots below pulled directly from the live NiceGUI server while an actual print was in progress. Bed at 90&deg;C climbing to 100. Left nozzle locked at 260&deg;C. Right nozzle at ambient (this print only uses T0). Live monitoring has held continuously for multiple days on stock V2.8.0 firmware.</p>
+    </div>
+
+    <!-- Hero screenshot: Monitor mid-print -->
+    <figure class="shot shot-hero">
+      <img src="assets/images/screenshots/monitor.webp" alt="J1 Bridge Monitor tab showing live print at 90&deg;C bed and 260&deg;C hotend" loading="lazy">
+      <figcaption>
+        <strong>Monitor tab during a live print.</strong> Bed + dual hotends + state + controls, refreshing every 3 seconds. Pause/Resume/Cancel from your desk.
+      </figcaption>
+    </figure>
+
+    <!-- Secondary screenshots: 3-column grid -->
+    <div class="shot-grid">
+      <figure class="shot">
+        <img src="assets/images/screenshots/home.webp" alt="J1 Bridge Home tab with drag-drop STL upload" loading="lazy">
+        <figcaption><strong>Home tab.</strong> Drag the STL anywhere on the window — slicing kicks off, gcode validates, auto-uploads, print starts.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/images/screenshots/camera.webp" alt="J1 Bridge Camera tab with USB and Network camera modes" loading="lazy">
+        <figcaption><strong>Camera tab.</strong> USB webcam or network MJPEG, no OctoPi flash. Snapshot button writes to disk.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/images/screenshots/settings.webp" alt="J1 Bridge Settings tab showing safety gates and printer profile" loading="lazy">
+        <figcaption><strong>Settings tab.</strong> Safety gates (fan clamp, start macro patch, bed-temp override) default ON. Add multiple printers.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/images/screenshots/known_issues.webp" alt="J1 Bridge Known Issues tab listing every limitation honestly" loading="lazy">
+        <figcaption><strong>Known Issues tab.</strong> Every limit listed honestly. LCD lock-out while monitoring, history page WIP, etc. No surprises.</figcaption>
+      </figure>
+    </div>
+
+    <p class="proof-fineprint">All screenshots captured automatically via Playwright against the production NiceGUI server (<code>localhost:8765</code>) on <span id="capture-date">2026-05-28</span>. App icons are the actual J1 Bridge brand. Honey Badger backgrounds are <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">bundled with the installer</a>.</p>
   </div>
 </section>
 
