@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>HONEYBADGER · Share Center</title>
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .share-hero { padding: 70px 0 30px; text-align: center; }
+  .share-hero h1 { font-size: 42px; margin: 0 0 12px; color: var(--text); letter-spacing: -0.5px; }
+  .share-hero p { color: var(--text-mid); max-width: 720px; margin: 0 auto; font-size: 17px; }
+  .share-category { padding: 36px 0; border-top: 1px solid var(--border); }
+  .share-category h2 {
+    font-size: 22px;
+    margin: 0 0 6px;
+    color: var(--accent-hi);
+    letter-spacing: 0.5px;
+  }
+  .share-category .kicker { margin-bottom: 6px; }
+  .share-category > .container > p {
+    color: var(--text-mid);
+    font-size: 14.5px;
+    margin: 0 0 22px;
+    max-width: 800px;
+  }
+  .share-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .share-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.15s, background 0.15s;
+  }
+  .share-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    background: var(--bg-card-hi);
+    color: var(--text);
+  }
+  .share-btn-label {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--accent-hi);
+    letter-spacing: 0.3px;
+  }
+  .share-btn-hint {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    font-family: "JetBrains Mono", monospace;
+  }
+  .share-instructions {
+    background: rgba(123,196,224,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+    color: var(--text-mid);
+    font-size: 14px;
+  }
+  .share-instructions strong { color: var(--accent-hi); }
+  .copy-box {
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--text);
+    margin: 12px 0;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+  .copy-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #05080C;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .copy-btn:hover { background: var(--accent-hi); }
+  details.snippet {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 8px 0;
+    overflow: hidden;
+  }
+  details.snippet summary {
+    padding: 12px 18px;
+    cursor: pointer;
+    color: var(--accent-hi);
+    font-weight: 600;
+    user-select: none;
+    list-style: none;
+  }
+  details.snippet summary::-webkit-details-marker { display: none; }
+  details.snippet summary:before {
+    content: "▸";
+    margin-right: 8px;
+    transition: transform 0.15s;
+    display: inline-block;
+  }
+  details.snippet[open] summary:before { transform: rotate(90deg); }
+  details.snippet > div { padding: 0 18px 14px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-row">
+    <a href="/" class="brand">
+      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="HBSW logo" class="brand-logo">
+      <div class="brand-text">
+        <div class="brand-name">HONEYBADGER</div>
+        <div class="brand-tag">SOFTWARE INC</div>
+      </div>
+    </a>
+    <nav class="site-nav">
+      <a href="/">Home</a>
+      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<section class="share-hero">
+  <div class="container">
+    <div class="kicker">SHARE CENTER · INTERNAL TOOL</div>
+    <h1>One-click cross-platform distribution</h1>
+    <p>Each button opens a platform's submit window pre-filled with the right title + URL. Hit Submit on the platform. Total time to hit 30+ communities: roughly 5 minutes if you're warmed up.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="share-category">
+  <div class="container">
+    <div class="kicker">⚡ AUTO-FILL · ONE CLICK</div>
+    <h2>Social networks &amp; aggregators</h2>
+    <p>These open the platform's compose form with text and URL pre-populated. You log in (if not already) and click Submit. That's it.</p>
+
+    <div class="share-grid">
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20one-person%20studio%20shipping%20polished%20Windows%20desktop%20tools.%20First%20product%3A%20J1%20Bridge%2C%20live-monitor%20your%20Snapmaker%20J1%20on%20stock%20firmware.%20Multiple%20projects%20coming.&url=https%3A%2F%2Fmike818964.github.io&hashtags=3DPrinting%2CSnapmaker%2CMakerProjects%2CDIY">
+        <div class="share-btn-label">𝕏 / Twitter</div>
+        <div class="share-btn-hint">tweet with auto-filled text + URL</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">LinkedIn</div>
+        <div class="share-btn-hint">share to feed (good for B2B / industrial)</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">Facebook</div>
+        <div class="share-btn-hint">share to wall or any group you're in</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fmike818964.github.io&t=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20one-person%20studio%20shipping%20polished%20Windows%20desktop%20tools">
+        <div class="share-btn-label">Hacker News (Show HN)</div>
+        <div class="share-btn-hint">submit as "Show HN: ..."</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://lobste.rs/stories/new?title=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20one-person%20studio%20shipping%20polished%20Windows%20desktop%20tools&url=https%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">Lobsters</div>
+        <div class="share-btn-hint">submit (invite required to post)</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/submit?url=https%3A%2F%2Fmike818964.github.io&title=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20one-person%20studio%20shipping%20polished%20Windows%20desktop%20tools">
+        <div class="share-btn-label">Reddit · pick any sub</div>
+        <div class="share-btn-hint">choose subreddit on submit page</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https%3A%2F%2Fmike818964.github.io&title=HONEYBADGER%20SOFTWARE%20INC">
+        <div class="share-btn-label">Pocket</div>
+        <div class="share-btn-hint">save / share for read-later</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="mailto:?subject=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20polished%20Windows%20tools%20for%20makers%20%26%20tinkerers&body=Came%20across%20this%20one-person%20studio%20building%20polished%20desktop%20tools%20across%203D%20printing%2C%20automotive%20electronics%2C%20industrial%20dashboards%2C%20and%20maker%20projects.%20First%20product%20J1%20Bridge%20is%20in%20active%20beta.%0A%0Ahttps%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">Email a friend</div>
+        <div class="share-btn-hint">opens your mail client pre-composed</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="share-category">
+  <div class="container">
+    <div class="kicker">🎯 REDDIT · PRE-FILLED SUBS</div>
+    <h2>Bullseye communities</h2>
+    <p>Each opens that subreddit's submit page with title + body pre-filled. Review, edit if needed, hit Post. Note: many subs require account-age &amp; karma minimums — make sure your account qualifies before posting.</p>
+
+    <div class="share-grid">
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/snapmaker/submit?title=%5BProject%5D%20J1%20Bridge%3A%20live%20print%20monitoring%20on%20stock%20V2.8.0%20firmware&text=Snapmaker%20J1%20owner%20here.%20Spent%20the%20last%20few%20months%20building%20J1%20Bridge%20%E2%80%94%20a%20polished%20Windows%20desktop%20app%20that%20fixes%20the%20workflow%20gaps%20the%20stock%20Luban%20%2B%20firmware%20combo%20leaves%20on%20the%20table.%0A%0AWhat%20it%20does%3A%0A-%20Drag-drop%20slicing%20%E2%86%92%20OrcaSlicer%20CLI%20slices%20with%20the%20right%20J1%20profile%20%E2%86%92%20broken%20start%20macro%20auto-patched%20%E2%86%92%20uploaded%20%E2%86%92%20print%20starts.%0A-%20Live%20monitoring%20during%20prints%20on%20stock%20V2.8.0%20firmware.%20No%20Klipper%2C%20no%20warranty%20void.%0A-%20Built-in%20Camera%20tab%20(USB%20webcam%20or%20MJPEG).%0A-%20One-click%20installer.%20No%20Python%2C%20no%20Pi%2C%20no%20soldering.%0A-%20Honest%20Known%20Issues%20page.%0A%0AMulti-day%20endurance%20tested.%20Public%20release%20coming%20soon%20with%20Patreon%20launch.%0A%0ALanding%20page%20with%20full%20screenshots%2C%20roadmap%2C%20notify-on-launch%3A%0A%F0%9F%A6%A1%20https%3A%2F%2Fmike818964.github.io%0A%0AGitHub%3A%20https%3A%2F%2Fgithub.com%2FMIKE818964%0A%0ALooking%20for%203-5%20beta%20testers%20%E2%80%94%20DM%20if%20interested.">
+        <div class="share-btn-label">r/snapmaker</div>
+        <div class="share-btn-hint">PRIMARY target — bullseye audience</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/3Dprinting/submit?title=Built%20a%20polished%20Windows%20app%20that%20fixes%20the%20Snapmaker%20J1%27s%20stock-firmware%20workflow&text=The%20Snapmaker%20J1%20has%20a%20frustrating%20stock%20workflow%3A%20Luban%20is%20bloated%2C%20OrcaSlicer%20doesn%27t%20auto-upload%2C%20no%20PC%20dashboard%20unless%20you%20convert%20to%20Klipper%20(warranty%20void%2C%20hours%20of%20soldering).%0A%0AJ1%20Bridge%20collapses%20all%20of%20it%20into%20one%20polished%20Windows%20app.%20The%20technical%20achievement%3A%20live%20monitoring%20on%20stock%20V2.8.0%20firmware.%20The%20J1%27s%20SACP%20protocol%20only%20allows%20one%20client%20at%20a%20time%20%E2%80%94%20every%20other%20PC%20dashboard%20attempt%20dies%20at%20that%20wall.%20We%20ship%20a%20Go%20sidecar%20that%20holds%20the%20slot%20cleanly%20with%20a%20Windows%20Job%20Object%20kill-on-close.%0A%0AHonest%20trade-off%20(documented%20in%20the%20Known%20Issues%20page%20shipped%20on%20day%20one)%3A%20LCD%20touchscreen%20is%20locked%20while%20monitoring%20is%20active.%20%22Release%20LCD%22%20toggle%20coming%20in%20v0.2.%0A%0AMulti-day%20tested.%20Looking%20for%20beta%20testers.%0A%0ALanding%20page%3A%20https%3A%2F%2Fmike818964.github.io%0AGitHub%3A%20https%3A%2F%2Fgithub.com%2FMIKE818964">
+        <div class="share-btn-label">r/3Dprinting</div>
+        <div class="share-btn-hint">broader 3D printing audience</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/coolgithubprojects/submit?url=https%3A%2F%2Fgithub.com%2FMIKE818964&title=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20one-person%20studio%20shipping%20polished%20Windows%20desktop%20tools">
+        <div class="share-btn-label">r/coolgithubprojects</div>
+        <div class="share-btn-hint">links-only sub, low friction</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/SomethingIMade/submit?title=Built%20a%20one-person%20software%20studio%20shipping%20polished%20Windows%20tools%20across%203D%20printing%2C%20automotive%2C%20industrial%2C%20and%20maker%20projects&text=Started%20HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20a%20small%20studio%20building%20the%20tools%20I%20wished%20existed.%20First%20product%20J1%20Bridge%20(Snapmaker%20J1%20dashboard%20with%20live%20monitoring%20on%20stock%20firmware)%20in%20active%20beta.%20C7%20Corvette%20CAN%20bus%20dashboard%20hardware%20prototyping.%20Plant%20monitoring%20industrial%20tooling%20in%20production%20use.%0A%0AAll%20polished%20Windows%20installers%2C%20no%20%22pip%20install%22%20instructions%20for%20end%20users.%0A%0ALanding%3A%20https%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">r/SomethingIMade</div>
+        <div class="share-btn-hint">maker / builder showcase</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/Maker/submit?title=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20one-person%20studio%20building%20polished%20tools%20for%20makers&text=Building%20a%20small%20studio%20focused%20on%20%22tools%20that%20don%27t%20suck%22%20%E2%80%94%203D%20printing%2C%20automotive%20electronics%2C%20industrial%20dashboards%2C%20learn-from-PLC-docs%20projects.%20Polished%20Windows%20installers%2C%20honest%20Known%20Issues%20pages%20shipped%20day%20one%2C%20no%20telemetry.%0A%0AFirst%20product%20(J1%20Bridge)%20in%20active%20beta.%0A%0ALanding%3A%20https%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">r/Maker</div>
+        <div class="share-btn-hint">DIY maker community</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/InternetIsBeautiful/submit?url=https%3A%2F%2Fmike818964.github.io&title=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20a%20small%20studio%20building%20polished%20Windows%20tools%20for%20people%20who%20tinker%20with%20gear">
+        <div class="share-btn-label">r/InternetIsBeautiful</div>
+        <div class="share-btn-hint">beautifully-built sites get traction</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/programming/submit?title=Building%20a%20one-person%20Windows%20desktop%20tools%20studio%3A%20reverse-engineering%20Snapmaker%20SACP%2C%20Windows%20Job%20Objects%20for%20safe%20subprocess%20lifecycle&url=https%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">r/programming</div>
+        <div class="share-btn-hint">technical angle: SACP reverse-engineering</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/Python/submit?title=Shipping%20a%20one-person%20Windows%20tools%20studio%20with%20NiceGUI%20%2B%20PyInstaller%20%2B%20pywebview%20%2B%20Inno%20Setup&text=Built%20J1%20Bridge%20(my%20first%20public%20product)%20with%20NiceGUI%20wrapped%20in%20pywebview%2C%20frozen%20by%20PyInstaller%2C%20installed%20via%20Inno%20Setup.%20One-click%20Windows%20installer.%20Bundles%20a%20Go%20subprocess%20managed%20by%20a%20Windows%20Job%20Object.%20%0A%0AAMA%20about%20the%20stack%20choices.%0A%0AStudio%3A%20https%3A%2F%2Fmike818964.github.io%20%7C%20Source%20on%20GitHub%20with%20Patreon%20launch.">
+        <div class="share-btn-label">r/Python</div>
+        <div class="share-btn-hint">stack angle: NiceGUI + PyInstaller</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/opensource/submit?title=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20building%20a%20portfolio%20of%20polished%20Windows%20tools%2C%20source%20going%20up%20with%20each%20launch&url=https%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">r/opensource</div>
+        <div class="share-btn-hint">indie open-source studio angle</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/learnprogramming/submit?title=Building%20in%20public%3A%20how%20I%27m%20shipping%20a%20one-person%20Windows%20software%20studio%20(HONEYBADGER%20SOFTWARE%20INC)&text=Started%20a%20small%20software%20studio%2C%20already%20have%20one%20product%20(J1%20Bridge)%20in%20active%20beta%20and%20three%20more%20in%20the%20pipeline.%20Open%20to%20questions%20on%20packaging%2C%20marketing%2C%20licensing%2C%20etc.%20%0A%0AStudio%20landing%20page%3A%20https%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">r/learnprogramming</div>
+        <div class="share-btn-hint">build-in-public angle for learners</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/sideproject/submit?title=Launching%20HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20one-person%20studio%2C%20first%20product%20J1%20Bridge%20in%20active%20beta&text=Side-project-turned-studio.%20Building%20polished%20Windows%20desktop%20tools%20across%203D%20printing%2C%20automotive%2C%20industrial%2C%20maker.%20First%20product%20launching%20with%20Patreon%20soon.%0A%0AAMA%20about%20the%20journey.%0A%0Ahttps%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">r/sideproject</div>
+        <div class="share-btn-hint">indie maker community</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://reddit.com/r/raspberry_pi/submit?title=Building%20a%20Pi%204%20%2B%20PiCAN2%20CAN%20bus%20dashboard%20for%20C7%20Corvettes&text=Part%20of%20a%20multi-product%20studio%20I%27m%20running%20(HONEYBADGER%20SOFTWARE%20INC).%20The%20C7%20dashboard%20uses%20a%20Pi%204%2BPiCAN2%20to%20read%20the%20raw%20CAN%20bus%2C%20rendering%20on%20a%2010-15%22%20touchscreen%20via%20PySide6%2BQML.%20Hardware%20prototype%20in%20progress.%0A%0AOther%20projects%20(J1%20Bridge%2C%20Maguire%20industrial%20monitoring)%20at%3A%20https%3A%2F%2Fmike818964.github.io">
+        <div class="share-btn-label">r/raspberry_pi</div>
+        <div class="share-btn-hint">C7 dashboard project angle</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="share-category">
+  <div class="container">
+    <div class="kicker">📋 MANUAL SUBMIT · COPY THE TEXT</div>
+    <h2>Communities that don't accept auto-fill</h2>
+    <p>Click the platform link, then copy from the matching snippet below. Total time per platform: under 60 seconds.</p>
+
+    <div class="share-grid">
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://discord.com/channels/688392612937252876">
+        <div class="share-btn-label">Snapmaker official Discord</div>
+        <div class="share-btn-hint">#snapmaker-j1 channel</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://forum.snapmaker.com/c/snapmaker-j1/30">
+        <div class="share-btn-label">Snapmaker official forum</div>
+        <div class="share-btn-hint">J1 category — new topic</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://hackaday.io/projects">
+        <div class="share-btn-label">Hackaday.io</div>
+        <div class="share-btn-hint">create a project page (free)</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://www.hackster.io/projects/create">
+        <div class="share-btn-label">Hackster.io</div>
+        <div class="share-btn-hint">multi-project profile, indexed by Google</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://dev.to/new">
+        <div class="share-btn-label">DEV.to article</div>
+        <div class="share-btn-hint">write a build-in-public post</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://www.indiehackers.com/post/new">
+        <div class="share-btn-label">Indie Hackers</div>
+        <div class="share-btn-hint">milestone post when launching</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="mailto:tips@hackaday.com?subject=HONEYBADGER%20SOFTWARE%20INC%20%E2%80%94%20stock-firmware%20live%20print%20monitoring%20on%20Snapmaker%20J1%20via%20Windows%20Job%20Object%20wrapping">
+        <div class="share-btn-label">Hackaday tip line</div>
+        <div class="share-btn-hint">pre-composed email draft</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://printables.com">
+        <div class="share-btn-label">Printables forum</div>
+        <div class="share-btn-hint">Software / Tools section</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://www.facebook.com/groups/snapmakerj1/">
+        <div class="share-btn-label">FB: Snapmaker J1 Owners</div>
+        <div class="share-btn-hint">post in the group</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://makerworld.com">
+        <div class="share-btn-label">MakerWorld community</div>
+        <div class="share-btn-hint">tools / software section</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://3dprinting.stackexchange.com/questions/ask">
+        <div class="share-btn-label">3D Printing Stack Exchange</div>
+        <div class="share-btn-hint">answer existing questions linking to project</div>
+      </a>
+
+      <a class="share-btn" target="_blank" rel="noopener" href="https://forum.allaboutcircuits.com/">
+        <div class="share-btn-label">AllAboutCircuits forum</div>
+        <div class="share-btn-hint">electronics maker angle</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section class="share-category">
+  <div class="container">
+    <div class="kicker">✂ COPY-PASTE SNIPPETS</div>
+    <h2>Pre-written copy by platform</h2>
+    <p>Expand the snippet for the platform you're posting to, hit Copy, paste in. All snippets respect the platform's character limits and tone.</p>
+
+    <details class="snippet">
+      <summary>Twitter / X (under 280 chars)</summary>
+      <div>
+        <div class="copy-box" id="snip-twitter">HONEYBADGER SOFTWARE INC — one-person studio shipping polished Windows desktop tools. First product J1 Bridge (live-monitor your Snapmaker J1 on stock firmware) in active beta. C7 Corvette CAN bus dashboard + industrial tools coming.
+
+🦡 https://mike818964.github.io</div>
+        <button class="copy-btn" onclick="copySnippet('snip-twitter', this)">Copy</button>
+      </div>
+    </details>
+
+    <details class="snippet">
+      <summary>LinkedIn (business / industrial framing)</summary>
+      <div>
+        <div class="copy-box" id="snip-linkedin">Launching HONEYBADGER SOFTWARE INC — a one-person studio shipping polished Windows desktop tools across 3D printing, automotive electronics, industrial monitoring, and maker projects.
+
+Our philosophy: one-click installers, no terminals, honest about limits, no telemetry. If a user has to read a README to use the software, it isn't done.
+
+First product (J1 Bridge for Snapmaker J1 3D printers) is in active beta. C7 Corvette CAN bus dashboard hardware prototyping. Industrial blender monitoring already in production use.
+
+Multi-day endurance tested. Public release with Patreon launch coming soon.
+
+Visit the studio: https://mike818964.github.io
+GitHub: https://github.com/MIKE818964</div>
+        <button class="copy-btn" onclick="copySnippet('snip-linkedin', this)">Copy</button>
+      </div>
+    </details>
+
+    <details class="snippet">
+      <summary>Snapmaker Discord (#snapmaker-j1)</summary>
+      <div>
+        <div class="copy-box" id="snip-discord">Hey J1 owners — built a thing I want feedback on before public release.
+
+J1 Bridge is a Windows desktop app that wraps the whole OrcaSlicer → J1 workflow into one drag-and-drop window. Drop an STL on the Home tab, it slices with the right J1 profile, patches the broken start macro, uploads, prints, and gives you live monitoring (bed + both nozzles + ETA + pause/resume/cancel) from your desk. Works on stock V2.8.0 firmware — no Klipper conversion, warranty intact. Has held continuous monitoring through multi-day prints in my own use.
+
+One-click installer, no Python, no terminals, no Pi.
+
+It's the first product of HONEYBADGER SOFTWARE INC, a small studio I'm building — more projects coming (C7 Corvette CAN dashboard, plant monitoring tooling).
+
+Looking for 3-5 beta testers before public launch.
+🦡 https://mike818964.github.io
+GitHub: https://github.com/MIKE818964
+
+Public release + Patreon dropping soon. Hit me up if you want in.</div>
+        <button class="copy-btn" onclick="copySnippet('snip-discord', this)">Copy</button>
+      </div>
+    </details>
+
+    <details class="snippet">
+      <summary>Hacker News (Show HN, under 80 char title)</summary>
+      <div>
+        <div class="copy-box" id="snip-hn">Title: Show HN: HONEYBADGER – one-person studio shipping polished Windows tools
+
+URL: https://mike818964.github.io
+
+First-comment context (post immediately after submission):
+Hi HN — I'm building a small studio called HONEYBADGER SOFTWARE INC. The framing: one developer, multiple polished Windows desktop products across the things people actually own and tinker with — 3D printers, the C7 Corvette in their garage, the machinery at their plant. Every product ships with a one-click installer, a Known Issues page from day one, and zero telemetry.
+
+First product, J1 Bridge, is in active beta: a desktop app for the Snapmaker J1 3D printer that does drag-drop slicing + live monitoring on STOCK firmware (no Klipper conversion). The technical bit: I had to wrap a single-client SACP protocol with a Go sidecar managed by a Windows Job Object to guarantee no orphans lock the printer's LCD. Multi-day endurance tested.
+
+Happy to AMA about packaging (NiceGUI + pywebview + PyInstaller + Inno Setup), reverse-engineering Snapmaker's protocol, or the studio model.</div>
+        <button class="copy-btn" onclick="copySnippet('snip-hn', this)">Copy</button>
+      </div>
+    </details>
+
+    <details class="snippet">
+      <summary>Indie Hackers (build-in-public milestone)</summary>
+      <div>
+        <div class="copy-box" id="snip-ih">Title: Launched HONEYBADGER SOFTWARE INC — first product in active beta
+
+Body:
+Started a one-person Windows desktop tools studio. Brand-new website live, first product (J1 Bridge for Snapmaker J1 3D printers) in active beta with multi-day endurance testing complete. C7 Corvette CAN bus dashboard is the second product (hardware prototyping). Plant monitoring industrial tooling is the third (production use in my day job).
+
+The studio model: solve the workflow problems vendors won't, ship polished Windows installers (no terminals, no "pip install"), be honest about limits with a Known Issues page on day one.
+
+Public release lands with Patreon launch — both coming soon.
+
+Studio: https://mike818964.github.io
+GitHub: https://github.com/MIKE818964
+
+Looking for feedback, beta testers (especially Snapmaker J1 owners), and connections to maker / industrial / automotive communities. AMA.</div>
+        <button class="copy-btn" onclick="copySnippet('snip-ih', this)">Copy</button>
+      </div>
+    </details>
+
+    <details class="snippet">
+      <summary>DEV.to article (build-in-public, longer-form)</summary>
+      <div>
+        <div class="copy-box" id="snip-devto">Title: Launching HONEYBADGER SOFTWARE INC: building a one-person Windows desktop tools studio
+
+Tags: showdev, indiedev, python, opensource
+
+Body:
+I just launched HONEYBADGER SOFTWARE INC — a one-person studio that ships polished Windows desktop tools across 3D printing, automotive electronics, industrial dashboards, and maker projects.
+
+The thesis is simple: vendors leave workflow gaps. Hobbyists and tinkerers reach for Klipper conversions, Raspberry Pi rigs, Python scripts on the command line. There's a missing class of product: polished, one-click-installable, "if your grandmother can use Photoshop she can use this" desktop apps for the things people actually own.
+
+That's what I'm shipping.
+
+## First product: J1 Bridge
+
+The Snapmaker J1 is a great dual-extruder 3D printer with a frustrating stock workflow. Bloated slicer, broken start macros, no PC dashboard unless you destroy the warranty by converting to Klipper.
+
+J1 Bridge fixes all of it: drag-drop slicing in OrcaSlicer, broken start macro auto-patched, uploaded, live monitoring (bed + both nozzles + ETA + controls), USB webcam tab. Works on STOCK firmware. The hard part was the SACP single-client protocol — every other PC dashboard attempt for this printer dies because the firmware only accepts one client connection. I solved it by bundling a Go sidecar managed by a Windows Job Object that guarantees no orphan locks the printer's LCD when the app closes.
+
+Multi-day endurance tested.
+
+## Tech stack (for the curious)
+
+- NiceGUI for the UI (Python web framework that renders native via pywebview)
+- pywebview wrapping Edge WebView2 for the native window
+- PyInstaller for the freeze
+- Inno Setup for the Windows installer
+- snapmaker_moonraker (goeland86's Go sidecar) for the SACP bridge
+- Windows Job Objects via ctypes for safe subprocess lifecycle
+
+## What's next
+
+C7 Corvette CAN bus dashboard (Pi 4 + PiCAN2 + 10-15" touchscreen, raw CAN reading, custom QML UI), plant monitoring industrial tooling, more.
+
+Public release lands with Patreon launch. ⭐ the GitHub profile for notify-on-launch.
+
+Studio: https://mike818964.github.io
+GitHub: https://github.com/MIKE818964
+
+AMA about packaging, reverse-engineering, the studio model, anything.</div>
+        <button class="copy-btn" onclick="copySnippet('snip-devto', this)">Copy</button>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div>
+      <div class="brand-tag-sm">Internal share center — not indexed</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function copySnippet(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = "✓ Copied";
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  }).catch(err => {
+    btn.textContent = "Copy failed";
+  });
+}
+</script>
+
+</body>
+</html>
