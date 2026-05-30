@@ -1,6 +1,8 @@
-/* HONEYBADGER SOFTWARE INC landing page
-   Dark theme matching the J1 Bridge app palette.
-   Mobile-first, no JS dependencies, no build step.
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* HONEYBADGER SOFTWARE INC — VIVID rebuild
+   Warm honey-amber palette, display type, scroll motion, imagery.
+   Mobile-first, no build step.
 */
 
 /* ============================================================
@@ -10,8 +12,8 @@
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  background: #05080C;
-  color: #D0CCBC;
+  background: var(--bg-deep);
+  color: var(--text);
   font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.6;
@@ -20,20 +22,21 @@ body {
 }
 
 :root {
-  --bg-deep:    #05080C;
-  --bg-mid:     #0E1218;
-  --bg-card:    #161B23;
-  --bg-card-hi: #1E242F;
-  --accent:     #5DA8C7;
-  --accent-hi:  #7BC4E0;
-  --gold:       #C9A961;
-  --green:      #6FCF97;
-  --red:        #D14545;
-  --text:       #D0CCBC;
-  --text-mid:   #9CA3AF;
-  --text-dim:   #6B7280;
-  --border:     rgba(93, 168, 199, 0.18);
-  --border-hi:  rgba(93, 168, 199, 0.35);
+  --bg-deep:    #0a0807;   /* warm near-black (was cold blue-black) */
+  --bg-mid:     #120f0b;
+  --bg-card:    #1a1611;
+  --bg-card-hi: #241e16;
+  --bg-light:   #f6f1e8;   /* warm cream — for light rhythm sections */
+  --accent:     #ff9e1b;   /* HONEY AMBER — signature */
+  --accent-hi:  #ffb84d;
+  --gold:       #e8b04b;
+  --green:      #5fd39a;
+  --red:        #ef5a4c;
+  --text:       #f1ece2;   /* warm off-white */
+  --text-mid:   #b3a89a;
+  --text-dim:   #80735f;
+  --border:     rgba(255, 158, 27, 0.16);
+  --border-hi:  rgba(255, 158, 27, 0.34);
 }
 
 a { color: var(--accent-hi); text-decoration: none; transition: color 0.15s; }
@@ -883,3 +886,81 @@ img { max-width: 100%; height: auto; }
 .showcase-card p { color: var(--text-mid); font-size: 14.5px; margin: 0 0 18px; flex: 1; }
 .showcase-card .sc-link { font-weight: 600; color: var(--accent-hi); font-size: 14px; }
 .showcase-card .sc-link:hover { color: var(--gold); }
+
+/* ============================================================
+   ====  V3 VISUAL AMP — warm · vivid · in motion  ===========
+   ============================================================ */
+
+/* Display typeface on all headings (de-genericize the look) */
+.hero-title, .page-hero h1, .section h2, .brand-name, .cta-card h2,
+.split-cta h2, .showcase-card h3, .feature-row h3, .discord-card h2,
+.tier-price, .why-quote, .post-card h3 { font-family: "Space Grotesk", "Inter", sans-serif; }
+
+/* Hero — bigger, brighter, with a slow animated honey glow */
+.hero {
+  padding: 96px 0 112px;
+  background-color: var(--bg-deep);
+  background-image:
+    radial-gradient(900px 520px at 12% -10%, rgba(255,158,27,0.17), transparent 62%),
+    radial-gradient(820px 620px at 100% 6%, rgba(255,184,77,0.08), transparent 60%),
+    radial-gradient(760px 520px at 62% 116%, rgba(232,176,75,0.09), transparent 60%);
+  background-size: 200% 200%, 200% 200%, 200% 200%;
+  animation: heroGlow 20s ease-in-out infinite alternate;
+}
+@keyframes heroGlow {
+  0%   { background-position: 0% 0%, 100% 0%, 50% 100%; }
+  100% { background-position: 28% 18%, 72% 12%, 42% 88%; }
+}
+.hero::before { opacity: 0.05; }
+.hero-title { font-size: clamp(40px, 7vw, 80px); letter-spacing: -1.6px; }
+.hero-title .hl {
+  color: var(--accent);
+  background: linear-gradient(100deg, var(--accent), var(--gold) 70%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-eyebrow { color: var(--accent-hi); border-color: rgba(255,158,27,0.4); background: rgba(255,158,27,0.07); }
+
+/* Punchier amber CTA — the single highest-contrast element */
+.btn-primary { box-shadow: 0 8px 24px rgba(255,158,27,0.22); }
+.btn-primary:hover { box-shadow: 0 12px 32px rgba(255,158,27,0.34); }
+.btn-gold { box-shadow: 0 8px 24px rgba(232,176,75,0.20); }
+
+/* LIGHT sections — break up the dark, add rhythm */
+.section-light { background: var(--bg-light); color: #4a443c; }
+.section-light .kicker { color: #c2790a; }
+.section-light h2, .section-light h3, .section-light .why-quote { color: #1c1813; }
+.section-light .lede, .section-light p, .section-light li { color: #5c544a; }
+.section-light .product-card, .section-light .studio-card,
+.section-light .showcase-card, .section-light .post-card,
+.section-light .tier-card, .section-light .principle-list li {
+  background: #fffdf9; border-color: rgba(20,16,10,0.10); box-shadow: 0 12px 34px rgba(40,30,10,0.07);
+}
+.section-light .product-card h3, .section-light .studio-card h3, .section-light .showcase-card h3 { color: #16120c; }
+.section-light .product-card p, .section-light .studio-card p, .section-light .showcase-card p { color: #6a6155; }
+.section-light .sc-link, .section-light a { color: #c2790a; }
+.section-light .principle-list strong { color: #16120c; }
+.section-light .studio-icon, .section-light .product-icon { filter: saturate(1.1); }
+
+/* Scroll-reveal motion (added by nav.js as elements enter view) */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){
+  .reveal { opacity: 1 !important; transform: none !important; transition: none; }
+  .hero { animation: none; }
+}
+
+/* Showcase card imagery banners */
+.showcase-card { overflow: hidden; }
+.sc-media {
+  margin: -30px -30px 18px; height: 172px; overflow: hidden; position: relative;
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+}
+.sc-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.showcase-card:hover .sc-media img { transform: scale(1.05); }
+.sc-media.tile { background:
+  radial-gradient(130% 120% at 28% 18%, rgba(255,158,27,0.22), transparent 60%),
+  linear-gradient(150deg, #241c10, #0d0b07); }
+.sc-media .sc-emoji { font-size: 66px; filter: drop-shadow(0 8px 20px rgba(0,0,0,.55)); }
+
+/* Section headings get a small amber tick for polish */
+.section-head .kicker::before { content: ""; }
