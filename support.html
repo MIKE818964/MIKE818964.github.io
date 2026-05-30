@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Honeybadger Software support & documentation — install guides, FAQs, troubleshooting, and the honest Known Issues pages for J1 Bridge, the C7 Dashboard, and the Gauge Builder.">
+<meta name="theme-color" content="#05080C">
+<title>Support &amp; Docs | HONEYBADGER SOFTWARE INC</title>
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
+    <span class="topbar-links">
+      <a href="community.html">Community</a>
+      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+      <a href="downloads.html">Downloads</a>
+    </span>
+  </div>
+</div>
+<header class="site-header">
+  <div class="container header-row">
+    <a href="/" class="brand">
+      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
+      <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
+    </a>
+    <nav class="site-nav" id="siteNav">
+      <a href="/">Home</a>
+      <div class="nav-dropdown">
+        <a href="products.html" class="nav-dropdown-trigger">Products ▾</a>
+        <div class="nav-dropdown-menu">
+          <a href="j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
+          <a href="c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
+          <a href="gauge-builder.html"><strong>Gauge Builder</strong><span>Design a custom digital cluster</span></a>
+          <a href="industrial.html"><strong>Industrial</strong><span>Plant monitoring &amp; dashboards</span></a>
+        </div>
+      </div>
+      <a href="community.html">Community</a>
+      <a href="support.html">Support</a>
+      <a href="downloads.html">Downloads</a>
+      <a href="news.html">News</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="header-actions">
+      <a href="builder.html" class="btn btn-gold btn-sm">Try the Gauge Builder</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Support</div>
+    <div class="eyebrow-chip">📚 DOCS · FAQ · KNOWN ISSUES</div>
+    <h1>Support &amp; documentation</h1>
+    <p class="lede">Install guides, answers, and honest limitations. Can't find it? The fastest help is the <a href="community.html">community Discord</a>.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="docs-layout">
+      <aside class="docs-sidebar">
+        <div class="docs-group">Getting started</div>
+        <a href="#start">Quick start</a>
+        <a href="#install">Installing</a>
+        <div class="docs-group">Products</div>
+        <a href="#j1">J1 Bridge</a>
+        <a href="#c7">C7 Dashboard</a>
+        <a href="#builder">Gauge Builder</a>
+        <div class="docs-group">Help</div>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </aside>
+
+      <div class="docs-content">
+        <h2 id="start">Quick start</h2>
+        <p>Every Honeybadger product is built to install and run without a terminal. Pick your product below, grab it from the <a href="downloads.html">Downloads</a> page, and follow the in-app guidance. Each app ships with a built-in <strong>Known Issues</strong> page so you always know exactly what works and what's still cooking.</p>
+
+        <h2 id="install" style="margin-top:36px">Installing</h2>
+        <p>Windows products ship as a single signed installer — no Python, no Docker, no command line. Hardware kits (like the C7 Dashboard) arrive pre-flashed: plug in, mount, power on. If Windows SmartScreen warns on a new release, choose <em>More info → Run anyway</em>; signing reputation builds with each download.</p>
+
+        <h2 id="j1" style="margin-top:36px">J1 Bridge</h2>
+        <p>Connect your Snapmaker J1/J1s to the same network as your PC, open J1 Bridge, and add the printer by IP under Settings. Drag an STL onto the Home tab to slice → upload → print. See the <a href="j1-bridge.html">product page</a> for the full workflow.</p>
+        <div class="faq-item"><details><summary>Do I need to convert to Klipper?</summary><div class="faq-body">No. J1 Bridge works on <strong>stock V2.8.0 firmware</strong>. No flashing, no warranty risk.</div></details></div>
+        <div class="faq-item"><details><summary>My first layer has wiper marks</summary><div class="faq-body">That's the stock start macro. J1 Bridge patches it automatically — make sure the start-macro patch safety gate is ON in Settings.</div></details></div>
+
+        <h2 id="c7" style="margin-top:36px">C7 Dashboard</h2>
+        <p>The kit arrives ready to run. Plug into the OBD-II port, mount the touchscreen, and power on from a switched 12V source. The dashboard auto-detects your trim and shows the right gauges. Boost gauges appear automatically on Z06 / ZR1.</p>
+        <div class="faq-item"><details><summary>Does this reflash or modify my ECU?</summary><div class="faq-body">No. The dashboard reads the OEM CAN bus <strong>passively</strong>. No reflash, no tune change, warranty intact. Control features drive their own relays — they never write to the ECU.</div></details></div>
+        <div class="faq-item"><details><summary>Which years and trims are supported?</summary><div class="faq-body">2014–2019 C7 Stingray, Grand Sport, Z06, and ZR1. Auto trans, M7 manual, and MagneRide are auto-detected.</div></details></div>
+
+        <h2 id="builder" style="margin-top:36px">Gauge Builder</h2>
+        <p>The <a href="builder.html">Gauge Builder</a> runs in any modern browser — no install. Pick a style, materials, needle, and units; the preview rebuilds live. The exact SVG you design renders identically on the C7 dashboard.</p>
+
+        <h2 id="faq" style="margin-top:36px">Frequently asked</h2>
+        <div class="faq-item"><details><summary>Is any of this free?</summary><div class="faq-body">J1 Bridge is free for personal use, and the Gauge Builder is free to use in the browser. The C7 Dashboard is a commercial hardware kit. Support the studio if you'd like to feed the badger — nothing essential is paywalled.</div></details></div>
+        <div class="faq-item"><details><summary>Do you collect any data?</summary><div class="faq-body">No telemetry, no analytics, no "phone home." Your machines are your business.</div></details></div>
+        <div class="faq-item"><details><summary>How do I report a bug or request a feature?</summary><div class="faq-body">Post in the <a href="community.html">community</a> or email <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a>. Confirmed limitations go on each product's Known Issues page.</div></details></div>
+
+        <h2 id="contact" style="margin-top:36px">Contact</h2>
+        <p>Email <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a> or jump into the <a href="community.html">Discord</a> for the fastest response.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
+        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
+      </div>
+      <div class="footer-col"><h4>Products</h4><a href="j1-bridge.html">J1 Bridge</a><a href="c7-dashboard.html">C7 Dashboard</a><a href="builder.html">Gauge Builder</a><a href="industrial.html">Industrial</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="support.html">Support &amp; Docs</a><a href="downloads.html">Downloads</a><a href="news.html">News</a><a href="about.html">About</a></div>
+      <div class="footer-col"><h4>Community</h4><a href="community.html">Forums</a><a href="community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
+    </div>
+    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small></div>
+  </div>
+</footer>
+<script src="assets/js/nav.js"></script>
+</body>
+</html>

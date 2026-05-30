@@ -3,24 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="HONEYBADGER SOFTWARE INC — one-person studio shipping polished tools across 3D printing, automotive electronics, industrial dashboards, and maker projects. Active products: J1 Bridge (Snapmaker), C7 Corvette CAN bus dashboard with customizable live tuning gauges + 250-app multimedia + safety-interlocked nitrous control, Maguire plant monitoring.">
-<meta name="keywords" content="HONEYBADGER software studio, indie Windows desktop apps, J1 Bridge Snapmaker, C7 Corvette CAN bus, C7 Corvette dashboard kit, swappable gauge clusters, C7 nitrous controller, C7 multimedia head unit, OrcaSlicer, OpenSCAD, NiceGUI, Raspberry Pi maker projects, industrial dashboards, one-click installers">
-<!-- OpenGraph for Reddit / Facebook / LinkedIn / Discord / Slack -->
-<meta property="og:title" content="J1 Bridge — Snapmaker J1 + OrcaSlicer, finally talking to each other">
-<meta property="og:description" content="Drag-drop slice. Live monitor during prints. USB camera. One-click installer. Works on stock V2.8.0 firmware — no Klipper conversion. Multi-day endurance tested. By HONEYBADGER SOFTWARE INC.">
+<meta name="description" content="HONEYBADGER SOFTWARE INC — a one-person studio shipping polished tools across 3D printing, automotive electronics, and industrial monitoring. Products: J1 Bridge (Snapmaker), C7 Corvette CAN dashboard, the Gauge Builder, and plant-scale industrial dashboards.">
+<meta name="keywords" content="Honeybadger Software, indie software studio, J1 Bridge, C7 Corvette dashboard, gauge builder, custom gauge cluster, Raspberry Pi automotive, industrial dashboards, Windows desktop tools">
+<meta property="og:title" content="HONEYBADGER SOFTWARE INC — Polished Tools for the Stubborn Few">
+<meta property="og:description" content="A small studio building polished tools for the gear you actually own — 3D printers, the car in your garage, the machines at your plant. J1 Bridge, C7 dashboard, Gauge Builder + more.">
 <meta property="og:image" content="https://mike818964.github.io/assets/images/og_card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="J1 Bridge — OrcaSlicer + Snapmaker J1 dashboard with live monitoring">
-<meta property="og:url" content="https://mike818964.github.io/">
+<meta property="og:url" content="https://honeybadger.software/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="HONEYBADGER SOFTWARE INC">
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="J1 Bridge — OrcaSlicer + Snapmaker J1, finally working together">
-<meta name="twitter:description" content="Drag-drop slice → live monitor → camera → one-click installer. Stock firmware. No Klipper, no Pi, no soldering. Multi-day tested.">
+<meta name="twitter:title" content="HONEYBADGER SOFTWARE INC — Polished Tools for the Stubborn Few">
+<meta name="twitter:description" content="Polished tools for 3D printing, automotive electronics, and industrial monitoring. By a one-person studio that ships.">
 <meta name="twitter:image" content="https://mike818964.github.io/assets/images/og_card.png">
-<!-- Theme color for mobile browser chrome -->
 <meta name="theme-color" content="#05080C">
 <title>HONEYBADGER SOFTWARE INC — Polished Tools for the Stubborn Few</title>
 <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
@@ -28,38 +24,69 @@
 </head>
 <body>
 
+<!-- ===== TOP UTILITY STRIP ===== -->
+<div class="topbar">
+  <div class="container">
+    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
+    <span class="topbar-links">
+      <a href="community.html">Community</a>
+      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+      <a href="downloads.html">Downloads</a>
+    </span>
+  </div>
+</div>
+
+<!-- ===== HEADER / NAV ===== -->
 <header class="site-header">
   <div class="container header-row">
     <a href="/" class="brand">
-      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="HBSW logo" class="brand-logo">
+      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
       <div class="brand-text">
         <div class="brand-name">HONEYBADGER</div>
         <div class="brand-tag">SOFTWARE INC</div>
       </div>
     </a>
-    <nav class="site-nav">
-      <a href="#products">J1 Bridge</a>
-      <a href="#c7">C7 Dash</a>
-      <a href="#why">Why</a>
-      <a href="#roadmap">Roadmap</a>
-      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+    <nav class="site-nav" id="siteNav">
+      <a href="/">Home</a>
+      <div class="nav-dropdown">
+        <a href="products.html" class="nav-dropdown-trigger">Products ▾</a>
+        <div class="nav-dropdown-menu">
+          <a href="j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
+          <a href="c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
+          <a href="gauge-builder.html"><strong>Gauge Builder</strong><span>Design a custom digital cluster</span></a>
+          <a href="industrial.html"><strong>Industrial</strong><span>Plant monitoring &amp; dashboards</span></a>
+        </div>
+      </div>
+      <a href="community.html">Community</a>
+      <a href="support.html">Support</a>
+      <a href="downloads.html">Downloads</a>
+      <a href="news.html">News</a>
+      <a href="about.html">About</a>
     </nav>
+    <div class="header-actions">
+      <a href="builder.html" class="btn btn-gold btn-sm">Try the Gauge Builder</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
   </div>
 </header>
 
-<!-- ============================================================
-     HERO
-     ============================================================ -->
+<!-- ===== HERO ===== -->
 <section class="hero">
   <div class="container">
     <div class="hero-grid">
       <div class="hero-text">
-        <div class="hero-eyebrow">In active beta · public release coming soon</div>
-        <h1 class="hero-title">Small Windows tools<br>that fix what the<br>big vendors won't.</h1>
-        <p class="hero-sub">One-person studio shipping polished Windows desktop tools — 3D printing, automotive electronics, industrial dashboards, science &amp; maker tooling. Built for people who want to <em>use</em> their gear, not babysit it. <strong>Multiple projects in active development. First public release coming soon.</strong></p>
+        <div class="hero-eyebrow">A ONE-PERSON SOFTWARE STUDIO · MULTIPLE PRODUCTS IN ACTIVE BUILD</div>
+        <h1 class="hero-title">Polished tools<br>for the gear you<br>actually own.</h1>
+        <p class="hero-sub">HONEYBADGER SOFTWARE INC builds software and open hardware across the things you tinker with — your <strong>3D printer</strong>, the <strong>car in your garage</strong>, the <strong>machines at your plant</strong>. Real installers. No "convert your firmware first." No "pip install" for end users. Just tools that work.</p>
         <div class="hero-cta">
-          <a href="#notify" class="btn btn-primary">Notify me when J1 Bridge launches</a>
-          <a href="#products" class="btn btn-ghost">See what's coming</a>
+          <a href="products.html" class="btn btn-primary">Explore the products</a>
+          <a href="builder.html" class="btn btn-ghost">Build a gauge cluster →</a>
+        </div>
+        <div class="pill-row">
+          <span class="pill">No telemetry</span>
+          <span class="pill">No tracking</span>
+          <span class="pill">Honest Known-Issues pages</span>
+          <span class="pill">Free where it makes sense</span>
         </div>
       </div>
       <div class="hero-art">
@@ -69,323 +96,196 @@
   </div>
 </section>
 
-<!-- ============================================================
-     STUDIO INTRO — multi-project framing
-     ============================================================ -->
+<!-- ===== PRODUCT SHOWCASE (equal weight) ===== -->
+<section id="products" class="section">
+  <div class="container">
+    <div class="section-head center">
+      <div class="kicker">THE PRODUCTS</div>
+      <h2>Four products. One stubborn studio.</h2>
+      <p class="lede center-narrow">Each one solves a problem the big vendors left on the table — and each ships polished, or it doesn't ship.</p>
+    </div>
+
+    <div class="showcase-grid">
+      <div class="showcase-card">
+        <span class="sc-badge beta">ACTIVE BETA</span>
+        <div class="sc-icon">🧊</div>
+        <h3>J1 Bridge</h3>
+        <p>OrcaSlicer + Snapmaker J1, finally talking to each other. Drag-drop slicing, live print monitoring, built-in camera — all on stock firmware. No Klipper, no Pi, warranty intact.</p>
+        <a href="j1-bridge.html" class="sc-link">Learn about J1 Bridge →</a>
+      </div>
+      <div class="showcase-card">
+        <span class="sc-badge kit">COMMERCIAL KIT · PRE-LAUNCH</span>
+        <div class="sc-icon">🚗</div>
+        <h3>C7 Dashboard</h3>
+        <p>The aftermarket touchscreen head unit GM never gave the C7 Corvette. Live tuning gauges, a 250-app multimedia center, and a safety-interlocked nitrous controller — reading the OEM CAN bus passively, no reflash.</p>
+        <a href="c7-dashboard.html" class="sc-link">See the C7 Dashboard →</a>
+      </div>
+      <div class="showcase-card">
+        <span class="sc-badge tool">LIVE · TRY IT NOW</span>
+        <div class="sc-icon">🎛️</div>
+        <h3>Gauge Builder</h3>
+        <p>Design your own digital gauge cluster in the browser — pick the style, bezel, face material, needle, and units. What you build renders pixel-identical on the physical dashboard. No bait-and-switch.</p>
+        <a href="builder.html" class="sc-link">Open the Gauge Builder →</a>
+      </div>
+      <div class="showcase-card">
+        <span class="sc-badge soon">INDUSTRIAL · SCALING</span>
+        <div class="sc-icon">🏭</div>
+        <h3>Industrial Dashboards</h3>
+        <p>Plant-scale operator dashboards and cost analytics — OPC UA, MQTT, Modbus — scaling from one machine to 150. Battle-tested in production today, productized next.</p>
+        <a href="industrial.html" class="sc-link">Industrial monitoring →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STUDIO INTRO ===== -->
 <section id="studio" class="section section-studio">
   <div class="container">
     <div class="section-head center">
       <div class="kicker">THE STUDIO</div>
-      <h2>One developer. Multiple projects.<br>Polished tools that don't suck.</h2>
-      <p class="lede center-narrow">HONEYBADGER SOFTWARE INC is a small studio building tools across the things you actually own and tinker with — 3D printers, the car in your garage, the machinery at your plant, the maker projects on your bench. Every product is a polished Windows installer or a real piece of open hardware. No "pip install" instructions for end users. No "convert your firmware first." No "buy 5 other things first." Just tools that work.</p>
+      <h2>One developer. Multiple disciplines.<br>Tools that don't suck.</h2>
+      <p class="lede center-narrow">Honeybadger Software builds across the things you actually own and tinker with — 3D printers, the car in your garage, the machinery at your plant, the maker projects on your bench. Every product is a polished Windows installer or a real piece of open hardware. No "convert your firmware first." No "buy five other things first." Just tools that work.</p>
     </div>
 
     <div class="studio-grid">
       <div class="studio-card">
         <div class="studio-icon">🧊</div>
         <h3>3D Printing</h3>
-        <p>J1 Bridge — drag-drop slicing, live monitoring, camera, all on stock Snapmaker firmware. Public beta, more printers planned.</p>
+        <p>J1 Bridge — drag-drop slicing, live monitoring, camera, all on stock Snapmaker firmware. Public beta; more printers planned.</p>
       </div>
       <div class="studio-card">
         <div class="studio-icon">🚗</div>
         <h3>Automotive</h3>
-        <p>C7 Corvette dashboard kit — swappable live tuning gauge clusters, 250-app multimedia head unit, multi-interlock nitrous controller. Raw-CAN passive read (no ECU reflash, warranty intact). Commercial kit for the C7 community, prototype validated, pre-launch.</p>
+        <p>C7 Corvette dashboard kit + the Gauge Builder. Swappable live clusters, multimedia, nitrous safety. Raw-CAN passive read — warranty intact.</p>
       </div>
       <div class="studio-card">
         <div class="studio-icon">🏭</div>
         <h3>Industrial</h3>
-        <p>Plant monitoring tooling — operator dashboards, OPC UA / MQTT / Modbus, per-shift costing, scaling from 1 to 150 machines. In-house production today, productized later.</p>
+        <p>Plant monitoring tooling — operator dashboards, OPC UA / MQTT / Modbus, per-shift costing, scaling from 1 to 150 machines.</p>
       </div>
       <div class="studio-card">
         <div class="studio-icon">🔬</div>
         <h3>Maker &amp; Learn</h3>
-        <p>PLC documentation tooling, vendor-hardware knowledge bases, side projects for people who want to <em>understand</em> the gear they own — not just operate it.</p>
+        <p>PLC documentation tooling and vendor-hardware knowledge bases for people who want to <em>understand</em> their gear, not just operate it.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============================================================
-     PRODUCTS
-     ============================================================ -->
-<section id="products" class="section section-products">
-  <div class="container">
-    <div class="section-head">
-      <div class="kicker">FIRST PRODUCT — IN ACTIVE BETA</div>
-      <h2>J1 Bridge</h2>
-      <p class="lede">OrcaSlicer + Snapmaker J1, finally talking to each other.</p>
-    </div>
-
-    <div class="product-grid">
-      <div class="product-card">
-        <div class="product-icon">📂</div>
-        <h3>Drag-drop slicing</h3>
-        <p>Drop an STL on the Home tab. We slice with the correct J1 profile, patch the printer's broken start macro, upload, and start the print. One drag. No Reddit hacks.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">📡</div>
-        <h3>Live monitoring during prints</h3>
-        <p>Bed + both nozzles + ETA + pause/resume/cancel from your desk. Works on <strong>stock V2.8.0 firmware</strong> — no Klipper conversion, warranty intact. <strong>Validated over multi-day continuous use.</strong></p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">📷</div>
-        <h3>Camera tab built-in</h3>
-        <p>Plug a USB webcam in, pick it from the dropdown. Or point at a network MJPEG stream. No OctoPi flash, no SD card configuration, no separate Pi.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">📦</div>
-        <h3>One-click installer</h3>
-        <p>Real Windows installer. No Python, no Docker, no terminal commands. If your grandmother can use Photoshop, she can install J1 Bridge.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">🛡</div>
-        <h3>Honest Known Issues page</h3>
-        <p>Every product ships with a built-in Known Issues tab on day one. No surprises. No marketing claim the code can't back up.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">🦡</div>
-        <h3>Free + open development</h3>
-        <p>Free for personal use. Patreon for those who want to feed the badger. No telemetry, no analytics, no "phone home."</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     SEE IT IN ACTION
-     ============================================================ -->
-<section id="proof" class="section section-proof">
-  <div class="container">
-    <div class="section-head center">
-      <div class="kicker">PROOF OF LIFE · CAPTURED LIVE FROM THE APP</div>
-      <h2>This is the running product.<br>Not a mockup. Not vaporware.</h2>
-      <p class="lede center-narrow">Screenshots below pulled directly from the live NiceGUI server while an actual print was in progress. Bed at 90&deg;C climbing to 100. Left nozzle locked at 260&deg;C. Right nozzle at ambient (this print only uses T0). Live monitoring has held continuously for multiple days on stock V2.8.0 firmware.</p>
-    </div>
-
-    <!-- Hero screenshot: Monitor mid-print -->
-    <figure class="shot shot-hero">
-      <img src="assets/images/screenshots/monitor.webp" alt="J1 Bridge Monitor tab showing live print at 90&deg;C bed and 260&deg;C hotend" loading="lazy">
-      <figcaption>
-        <strong>Monitor tab during a live print.</strong> Bed + dual hotends + state + controls, refreshing every 3 seconds. Pause/Resume/Cancel from your desk.
-      </figcaption>
-    </figure>
-
-    <!-- Secondary screenshots: 3-column grid -->
-    <div class="shot-grid">
-      <figure class="shot">
-        <img src="assets/images/screenshots/home.webp" alt="J1 Bridge Home tab with drag-drop STL upload" loading="lazy">
-        <figcaption><strong>Home tab.</strong> Drag the STL anywhere on the window — slicing kicks off, gcode validates, auto-uploads, print starts.</figcaption>
-      </figure>
-      <figure class="shot">
-        <img src="assets/images/screenshots/camera.webp" alt="J1 Bridge Camera tab with USB and Network camera modes" loading="lazy">
-        <figcaption><strong>Camera tab.</strong> USB webcam or network MJPEG, no OctoPi flash. Snapshot button writes to disk.</figcaption>
-      </figure>
-      <figure class="shot">
-        <img src="assets/images/screenshots/settings.webp" alt="J1 Bridge Settings tab showing safety gates and printer profile" loading="lazy">
-        <figcaption><strong>Settings tab.</strong> Safety gates (fan clamp, start macro patch, bed-temp override) default ON. Add multiple printers.</figcaption>
-      </figure>
-      <figure class="shot">
-        <img src="assets/images/screenshots/known_issues.webp" alt="J1 Bridge Known Issues tab listing every limitation honestly" loading="lazy">
-        <figcaption><strong>Known Issues tab.</strong> Every limit listed honestly. LCD lock-out while monitoring, history page WIP, etc. No surprises.</figcaption>
-      </figure>
-    </div>
-
-    <p class="proof-fineprint">All screenshots captured automatically via Playwright against the production NiceGUI server (<code>localhost:8765</code>) on <span id="capture-date">2026-05-28</span>. App icons are the actual J1 Bridge brand. Honey Badger backgrounds are <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">bundled with the installer</a>.</p>
-  </div>
-</section>
-
-<!-- ============================================================
-     C7 CORVETTE DASHBOARD KIT — second product, commercial
-     ============================================================ -->
-<section id="c7" class="section section-products">
-  <div class="container">
-    <div class="section-head">
-      <div class="kicker">SECOND PRODUCT — COMMERCIAL KIT · PRE-LAUNCH</div>
-      <h2>C7 Corvette Dashboard</h2>
-      <p class="lede">The aftermarket touchscreen head unit GM never gave the C7. Three full dashboards in one sealed kit — swappable gauge clusters, multimedia, nitrous safety control.</p>
-    </div>
-
-    <div class="product-grid">
-      <div class="product-card">
-        <div class="product-icon">⛽</div>
-        <h3>Swappable gauge clusters</h3>
-        <p>MAF, boost, RPM, speed, ECT, AFR — big analog dials with proper redline arcs, plus 24 status cells for fuel trims, injector duty, knock retard, timing advance, oil pressure. Swap layouts on the fly; multiple color themes built in. <strong>Reads from the OEM CAN bus passively — no ECU reflash, no warranty void.</strong></p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">📺</div>
-        <h3>250-app multimedia head unit</h3>
-        <p>10 tabs, 25 apps per tab: streaming music, video, live TV, news, sports, weather + maps, podcasts, social, productivity tools, browser games. Netflix / Prime / Disney+ DRM works — Widevine pre-installed. Bluetooth audio direct to your OEM stereo, no aux cable required.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">⚡</div>
-        <h3>Multi-interlock nitrous control</h3>
-        <p>Software-managed RPM-window switch with seven independent interlocks: physical arm switch, software arm, gear ≠ P/N, RPM in window, TPS at WOT, coolant warmed, bottle temp safe. Programmable purge bursts. Bottle heater thermostat with hard cutoff. Fail-safe default-OFF on every relay.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">🛟</div>
-        <h3>Always-available touch escape</h3>
-        <p>Any app you open gets a draggable BACK + KEYBOARD overlay. Auto-hides after 5 sec for immersion, wakes on touch. Auto-respawns if it crashes. No "stuck on a sign-in page with no way out" — ever.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">🔧</div>
-        <h3>OBD-II + raw CAN, both</h3>
-        <p>Reads broadcast frames (RPM, TPS, gear, coolant) for low-latency live data AND falls back to OBD-II Mode 22 for harder signals (oil pressure, fuel level, intake air, voltage). Validated against the C7 community VBOX reference + opendbc Cadillac CT6 powertrain DBC.</p>
-      </div>
-      <div class="product-card">
-        <div class="product-icon">📦</div>
-        <h3>Sealed turnkey kit</h3>
-        <p>Touchscreen, head unit, OBD2 cable, mount, wiring, all included. Plug into the OBD port, mount the screen, power on. No flashing, no soldering, no Linux command line. <strong>Closed-source — this one's a product, not a community DIY.</strong></p>
-      </div>
-    </div>
-
-    <div class="section-head" style="margin-top: 2rem;">
-      <div class="kicker">SUPPORTED TRIMS</div>
-      <h2 style="font-size: 1.3rem;">2014–2019 C7 Stingray · Grand Sport · Z06 · ZR1</h2>
-      <p class="lede">Trim-specific signal maps for all four variants. Z06 / ZR1 boost gauge appears automatically when supercharger hardware is detected. Auto trans, M7 manual, MagneRide all detected.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     COMPARISON
-     ============================================================ -->
-<section class="section section-comparison">
-  <div class="container">
-    <div class="section-head">
-      <div class="kicker">THE WORKFLOW COLLAPSE</div>
-      <h2>Replace four tools and a Reddit search with one drag-and-drop.</h2>
-    </div>
-
-    <div class="comparison-table">
-      <div class="comparison-row comparison-head">
-        <div>What you do now</div>
-        <div>What J1 Bridge does</div>
-      </div>
-      <div class="comparison-row">
-        <div>Install 350 MB of Snapmaker Luban, fight the slicer, export gcode, manually upload via Luban or curl</div>
-        <div class="cell-win">Drop the STL on the Home tab. It slices, uploads, and prints.</div>
-      </div>
-      <div class="comparison-row">
-        <div>Walk to the printer to check temps and progress</div>
-        <div class="cell-win">Live Monitor tab — bed + both nozzles + ETA + controls from your desk</div>
-      </div>
-      <div class="comparison-row">
-        <div>Buy an OctoPi rig, flash an SD card, configure mjpg-streamer to add a webcam</div>
-        <div class="cell-win">Plug a USB webcam in, pick it from the dropdown</div>
-      </div>
-      <div class="comparison-row">
-        <div>Convert to Klipper to get any real dashboard (voids warranty, hours of work, scary)</div>
-        <div class="cell-win">One-click installer. No Klipper. No Pi. No soldering. Warranty intact.</div>
-      </div>
-      <div class="comparison-row">
-        <div>Realize the J1's start macro leaves wiper marks on every print, search Reddit for fixes</div>
-        <div class="cell-win">We patch it automatically. Every print starts clean.</div>
-      </div>
-      <div class="comparison-row">
-        <div>Pretend the firmware doesn't have bugs</div>
-        <div class="cell-win">Bundled Known Issues page lists every limit honestly</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     WHY HONEYBADGER
-     ============================================================ -->
+<!-- ===== WHY HONEYBADGER ===== -->
 <section id="why" class="section section-why">
   <div class="container">
     <div class="section-head center">
       <div class="kicker">PHILOSOPHY</div>
       <h2>Why HONEYBADGER</h2>
     </div>
-
     <div class="why-quote">
       The honey badger doesn't care. It chews through firmware bugs vendors won't fix, walks past "this can't be done" forum threads, and ships the polished thing anyway.
     </div>
-
     <ul class="principle-list">
-      <li><strong>One-click installers, no terminals.</strong> A user shouldn't need to know what Python is to use your software.</li>
+      <li><strong>One-click installers, no terminals.</strong> A user shouldn't need to know what Python is to use the software.</li>
       <li><strong>Honest about limits.</strong> Every product ships with a Known Issues page on day one.</li>
       <li><strong>No telemetry, no analytics, no "phone home."</strong> Your machines are your business.</li>
-      <li><strong>Free + open where it makes sense.</strong> Patreon for those who want to feed the badger; nothing locked behind a paywall.</li>
+      <li><strong>Free + open where it makes sense.</strong> Support the studio if you want to feed the badger; nothing essential locked behind a paywall.</li>
       <li><strong>Polished or it doesn't ship.</strong> No DOS-window installers. No "pip install" instructions for end users.</li>
     </ul>
   </div>
 </section>
 
-<!-- ============================================================
-     ROADMAP
-     ============================================================ -->
-<section id="roadmap" class="section section-roadmap">
+<!-- ===== COMMUNITY TEASER ===== -->
+<section class="section">
+  <div class="container">
+    <div class="split-cta">
+      <div>
+        <h2>Join the build.</h2>
+        <p>A community for owners, tinkerers, and tuners — share builds, get support, and shape what ships next. Discord chat + forums.</p>
+      </div>
+      <a href="community.html" class="btn btn-primary">Enter the Community →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEWS TEASER ===== -->
+<section class="section section-alt">
   <div class="container">
     <div class="section-head">
-      <div class="kicker">WHAT'S NEXT</div>
-      <h2>Active builds</h2>
+      <div class="kicker">FROM THE BENCH</div>
+      <h2>Latest news</h2>
     </div>
-
-    <div class="roadmap-grid">
-      <div class="roadmap-card">
-        <div class="roadmap-status status-beta">ACTIVE BETA</div>
-        <h3>J1 Bridge v0.1</h3>
-        <p>Drag-drop slice, live monitor, camera tab, Known Issues page. Installer + Patreon launch imminent.</p>
-      </div>
-      <div class="roadmap-card">
-        <div class="roadmap-status status-dev">IN DEVELOPMENT</div>
-        <h3>J1 Bridge v0.2</h3>
-        <p>"Release LCD" toggle, dual-extruder T1 readout polish, multi-printer dashboard support, auto-updater stability.</p>
-      </div>
-      <div class="roadmap-card">
-        <div class="roadmap-status status-dev">HARDWARE PROTOTYPE · COMMERCIAL KIT</div>
-        <h3>C7 Corvette dashboard kit</h3>
-        <p>Touchscreen head unit for 2014-2019 C7 Stingray / Grand Sport / Z06 / ZR1. Passive CAN read of RPM / TPS / gear / coolant / oil pressure / boost. Three integrated dashboards: tuning gauges, 250-app multimedia, safety-interlocked nitrous controller. Sealed commercial kit — closed-source, pre-launch.</p>
-      </div>
-      <div class="roadmap-card">
-        <div class="roadmap-status status-internal">INDUSTRIAL · INTERNAL</div>
-        <h3>Maguire blender monitoring</h3>
-        <p>Plant-scale operator dashboards, scaling from 1 to 150 blenders. The pattern feeds back into everything else.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     NOTIFY ME CTA
-     ============================================================ -->
-<section id="notify" class="section section-cta">
-  <div class="container">
-    <div class="cta-card">
-      <h2>Get notified when J1 Bridge ships</h2>
-      <p>Public release lands with the Patreon launch. ⭐ the GitHub profile or follow the brand below to get pinged when v0.1.0 drops.</p>
-      <div class="cta-buttons">
-        <a href="https://github.com/MIKE818964" target="_blank" rel="noopener" class="btn btn-primary">⭐ Follow on GitHub</a>
-        <a href="https://github.com/MIKE818964?tab=repositories" target="_blank" rel="noopener" class="btn btn-ghost">Browse projects</a>
-      </div>
-      <p class="cta-fineprint">No email list yet — we'll add one when Patreon is live. For now, GitHub watch is the cleanest signal.</p>
+    <div class="post-grid">
+      <article class="post-card">
+        <div class="post-stripe"></div>
+        <div class="post-body">
+          <span class="post-tag">GAUGE BUILDER</span>
+          <h3>The Gauge Builder goes live</h3>
+          <p>Design a custom digital cluster in your browser — style, bezel, face material, needle, units — and it renders identically on the dash.</p>
+          <span class="post-date">Read more on the News page →</span>
+        </div>
+      </article>
+      <article class="post-card">
+        <div class="post-stripe"></div>
+        <div class="post-body">
+          <span class="post-tag">C7 DASHBOARD</span>
+          <h3>C7 head unit hits hardware prototype</h3>
+          <p>Three integrated dashboards — tuning gauges, 250-app multimedia, and a safety-interlocked nitrous controller — running on a real C7.</p>
+          <span class="post-date">Read more on the News page →</span>
+        </div>
+      </article>
+      <article class="post-card">
+        <div class="post-stripe"></div>
+        <div class="post-body">
+          <span class="post-tag">J1 BRIDGE</span>
+          <h3>J1 Bridge endurance-tested for days</h3>
+          <p>Live monitoring held continuously over multi-day prints on stock V2.8.0 firmware. Installer + launch imminent.</p>
+          <span class="post-date">Read more on the News page →</span>
+        </div>
+      </article>
     </div>
   </div>
 </section>
 
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
+<!-- ===== FOOTER ===== -->
 <footer class="site-footer">
-  <div class="container footer-row">
-    <div class="footer-brand">
-      <div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div>
-      <div class="brand-tag-sm">Built honest. Shipped polished. Maintained free.</div>
+  <div class="container">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-brand-row">
+          <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo">
+          <div>
+            <div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div>
+            <div class="brand-tag-sm">Built honest. Shipped polished.</div>
+          </div>
+        </div>
+        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="j1-bridge.html">J1 Bridge</a>
+        <a href="c7-dashboard.html">C7 Dashboard</a>
+        <a href="builder.html">Gauge Builder</a>
+        <a href="industrial.html">Industrial</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="support.html">Support &amp; Docs</a>
+        <a href="downloads.html">Downloads</a>
+        <a href="news.html">News</a>
+        <a href="about.html">About</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="community.html">Forums</a>
+        <a href="community.html">Discord</a>
+        <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a>
+      </div>
     </div>
-    <div class="footer-links">
-      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
-      <span class="footer-sep">·</span>
-      <a href="#products">Products</a>
-      <span class="footer-sep">·</span>
-      <a href="#roadmap">Roadmap</a>
+    <div class="footer-fineprint">
+      <small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small>
     </div>
-  </div>
-  <div class="container footer-fineprint">
-    <small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small>
   </div>
 </footer>
 
+<script src="assets/js/nav.js"></script>
 </body>
 </html>
