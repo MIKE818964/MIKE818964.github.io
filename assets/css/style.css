@@ -1069,3 +1069,12 @@ img { max-width: 100%; height: auto; }
   .hero-grid { grid-template-columns: 1fr; }
   .hero-shot { transform: none; max-width: 520px; }
 }
+
+/* The honey badger mascot — attitude next to the philosophy quote */
+.why-badger {
+  display: block; width: clamp(150px, 22vw, 250px); height: auto; margin: 0 auto 14px;
+  filter: drop-shadow(0 16px 26px rgba(40,30,10,0.20));
+  animation: prowl 7s ease-in-out infinite alternate;
+}
+@keyframes prowl { from { transform: translateX(-12px) rotate(-1.5deg); } to { transform: translateX(12px) rotate(1.5deg); } }
+@media (prefers-reduced-motion: reduce){ .why-badger { animation: none; } }
