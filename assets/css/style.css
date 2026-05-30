@@ -22,21 +22,22 @@ body {
 }
 
 :root {
-  --bg-deep:    #0a0807;   /* warm near-black (was cold blue-black) */
-  --bg-mid:     #120f0b;
-  --bg-card:    #1a1611;
-  --bg-card-hi: #241e16;
-  --bg-light:   #f6f1e8;   /* warm cream — for light rhythm sections */
-  --accent:     #ff9e1b;   /* HONEY AMBER — signature */
-  --accent-hi:  #ffb84d;
-  --gold:       #e8b04b;
-  --green:      #5fd39a;
-  --red:        #ef5a4c;
-  --text:       #f1ece2;   /* warm off-white */
-  --text-mid:   #b3a89a;
-  --text-dim:   #80735f;
-  --border:     rgba(255, 158, 27, 0.16);
-  --border-hi:  rgba(255, 158, 27, 0.34);
+  --bg-deep:    #faf6ee;   /* warm cream — main background (LIGHT theme) */
+  --bg-mid:     #f1e8d8;   /* warm tint — alternating bands */
+  --bg-card:    #ffffff;
+  --bg-card-hi: #fbf6ee;
+  --bg-light:   #ffffff;
+  --bg-dark:    #14110c;   /* warm near-black — footer + top strip */
+  --accent:     #ed7a06;   /* vivid amber-orange — CTAs, kickers */
+  --accent-hi:  #b35e09;   /* deep amber — readable accent/link text on light */
+  --gold:       #b9842b;
+  --green:      #2e9e63;
+  --red:        #d8472f;
+  --text:       #1d1813;   /* near-black warm */
+  --text-mid:   #5e5446;
+  --text-dim:   #8d8170;
+  --border:     rgba(20, 16, 10, 0.12);
+  --border-hi:  rgba(237, 122, 6, 0.45);
 }
 
 a { color: var(--accent-hi); text-decoration: none; transition: color 0.15s; }
@@ -964,3 +965,62 @@ img { max-width: 100%; height: auto; }
 
 /* Section headings get a small amber tick for polish */
 .section-head .kicker::before { content: ""; }
+
+/* ============================================================
+   ====  LIGHT THEME ADJUSTMENTS — bright, vivid, not dark  ===
+   ============================================================ */
+/* Sticky header → light glass */
+.site-header { background: rgba(250,246,238,0.9); border-bottom-color: var(--border); }
+.brand-name { color: var(--text); }
+.site-nav > a, .nav-dropdown-trigger { color: var(--text-mid); }
+.nav-dropdown-menu { background: #fff; box-shadow: 0 24px 60px rgba(40,30,10,0.18); }
+
+/* Thin DARK top strip (keeps light text) for premium contrast */
+.topbar { background: var(--bg-dark); border-bottom-color: rgba(255,255,255,0.06); }
+.topbar .topbar-tag { color: #b8ad9c; }
+.topbar .topbar-links a { color: #d8cebd; }
+.topbar .topbar-links a:hover { color: var(--accent); }
+
+/* Hero: airy cream + warm amber glow (drop the muddy avatar wash) */
+.hero::before { display: none; }
+.hero-sub { color: var(--text-mid); }
+.hero-eyebrow { background: rgba(237,122,6,0.08); }
+
+/* Comparison + spec: dark cells → light tints */
+.comparison-row > div:first-child { background: rgba(20,16,10,0.04); color: var(--text-dim); }
+.comparison-head > div:first-child { color: var(--text-dim); }
+.comparison-head > div:last-child { color: var(--accent-hi); }
+.spec-table th { background: rgba(20,16,10,0.04); color: var(--text-mid); }
+
+/* Cards lift cleanly on white */
+.product-card, .studio-card, .roadmap-card, .post-card, .tier-card,
+.showcase-card, .forum-cat, .dl-card, .stat-box, .shot, .faq-item,
+.docs-sidebar, .principle-list li { background: var(--bg-card); box-shadow: 0 10px 30px rgba(40,30,10,0.05); }
+.product-card h3, .studio-card h3, .showcase-card h3 { color: var(--accent-hi); }
+.why-quote { color: var(--text); }
+.btn-ghost { color: var(--text); border-color: var(--border-hi); }
+.btn-ghost:hover { background: #fff; border-color: var(--accent); color: var(--accent-hi); }
+
+/* Discord card → warm light */
+.discord-card { background: linear-gradient(135deg, #fffdf9, #f3ead8); border-color: var(--border-hi); }
+.discord-card h2 { color: var(--text); }
+.discord-embed { background: rgba(20,16,10,0.03); }
+.embed-placeholder { color: var(--text-dim); }
+
+/* VIVID amber CTA band (adds color, not just light) */
+.split-cta { background: linear-gradient(135deg, #ed7a06, #d96a05); border-color: rgba(237,122,6,0.5); box-shadow: 0 18px 44px rgba(237,122,6,0.22); }
+.split-cta h2 { color: #fff; }
+.split-cta p { color: rgba(255,255,255,0.92); }
+.split-cta .btn-primary { background: #14110c; color: #fff; border-color: #14110c; box-shadow: none; }
+.split-cta .btn-primary:hover { background: #000; }
+.split-cta .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.7); }
+.split-cta .btn-ghost:hover { background: rgba(255,255,255,0.14); color: #fff; border-color: #fff; }
+
+/* DARK footer anchors the bright page */
+.site-footer { background: var(--bg-dark); border-top-color: rgba(255,255,255,0.06); color: #b8ad9c; }
+.footer-col h4 { color: #8d8170; }
+.footer-col a { color: #d8cebd; }
+.footer-col a:hover { color: var(--accent); }
+.footer-col .footer-blurb { color: #b8ad9c; }
+.brand-name-sm { color: #fff; }
+.footer-fineprint { border-top-color: rgba(255,255,255,0.08); color: #8d8170; }
