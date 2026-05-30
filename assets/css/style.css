@@ -1078,4 +1078,12 @@ img { max-width: 100%; height: auto; }
   animation: prowl 7s ease-in-out infinite alternate;
 }
 @keyframes prowl { from { transform: translateY(-7px); } to { transform: translateY(7px); } }
+
+/* Brand band — bold badger interlude (dark, dramatic) */
+.brand-band { background: var(--bg-dark); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 50px 0; }
+.brand-band-grid { display: grid; grid-template-columns: 320px 1fr; gap: 44px; align-items: center; }
+.brand-band-art { width: 100%; max-width: 320px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 26px 60px rgba(0,0,0,0.55); }
+.brand-band h2 { color: #fff; margin: 8px 0 12px; font-family: "Space Grotesk","Inter",sans-serif; font-size: clamp(26px,3.4vw,40px); }
+.brand-band p { color: #c9bdab; margin: 0 0 22px; max-width: 520px; }
+@media (max-width: 760px){ .brand-band-grid { grid-template-columns: 1fr; text-align: center; } .brand-band-art { margin: 0 auto; max-width: 280px; } .brand-band p { margin-left: auto; margin-right: auto; } }
 @media (prefers-reduced-motion: reduce){ .why-badger { animation: none; } }
