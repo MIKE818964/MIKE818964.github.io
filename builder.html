@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Honeybadger Gauge Builder — Create Your Own</title>
+<style>
+  :root{--bg:#07090c;--panel:#10141a;--line:#1d2530;--amber:#ffae00;--txt:#cfd6dd;--mut:#8b949e;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:600 15px/1.4 'Segoe UI',system-ui,sans-serif}
+  header{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+  header h1{font-size:17px;margin:0;letter-spacing:.5px;color:var(--amber)}
+  header .tag{font-size:11px;color:var(--mut);font-weight:500}
+  .app{display:flex;flex-wrap:wrap;gap:22px;padding:22px;align-items:flex-start}
+  .controls{flex:0 0 280px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .controls h2{font-size:12px;letter-spacing:2px;color:var(--mut);margin:0 0 14px;text-transform:uppercase}
+  .ctl{margin-bottom:15px}
+  .ctl label{display:block;font-size:12px;color:var(--mut);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+  select,input[type=range]{width:100%}
+  select{background:#0b0e13;color:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font:inherit;font-size:14px}
+  input[type=color]{width:100%;height:38px;background:#0b0e13;border:1px solid var(--line);border-radius:9px;padding:3px;cursor:pointer}
+  .row{display:flex;gap:10px}.row>*{flex:1}
+  .valrow{display:flex;justify-content:space-between;align-items:baseline}
+  .valrow b{color:var(--amber);font-size:16px}
+  .stage{flex:1 1 420px;min-height:460px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 38%,#0e1219,#06070a);border:1px solid var(--line);border-radius:14px;padding:24px}
+  #gauge svg{max-width:min(70vw,460px);max-height:60vh;filter:drop-shadow(0 10px 26px rgba(0,0,0,.6))}
+  .hint{margin-top:14px;color:var(--mut);font-size:12px;font-weight:500;text-align:center}
+  footer{padding:14px 20px;color:var(--mut);font-size:11px;border-top:1px solid var(--line)}
+  .pill{display:inline-block;font-size:10px;color:#06070a;background:var(--amber);border-radius:20px;padding:2px 9px;font-weight:800;letter-spacing:.5px}
+</style>
+</head>
+<body>
+<header>
+  <span style="font-size:20px">🦡</span>
+  <h1>Honeybadger Gauge Builder</h1>
+  <span class="pill">CREATE YOUR OWN</span>
+  <span class="tag">live demo · what you build is what ships on your dash</span>
+</header>
+
+<div class="app">
+  <div class="controls">
+    <h2>Customize</h2>
+    <div class="ctl"><label>Style</label>
+      <select id="style">
+        <option value="round">Round dial (needle)</option>
+        <option value="arc">Sweep arc (digital)</option>
+        <option value="bar">Horizontal bar (LED)</option>
+        <option value="ring">Minimal ring</option>
+      </select></div>
+    <div class="ctl row" id="matrow">
+      <div><label>Bezel</label>
+        <select id="bezel"><option value="chrome">Brushed chrome</option><option value="metal" selected>Dark metal</option><option value="black">Matte black</option></select></div>
+      <div><label>Face</label>
+        <select id="face"><option value="solid" selected>Solid dark</option><option value="carbon">Carbon fiber</option><option value="silver">Silver</option></select></div>
+    </div>
+    <div class="ctl"><label>Units</label>
+      <select id="units"><option value="rpm" selected>RPM (tach)</option><option value="mph">MPH (speedo)</option><option value="kmh">KM/H (speedo)</option><option value="psi">PSI (boost)</option></select></div>
+    <div class="ctl row">
+      <div><label>Needle</label><input type="color" id="needle" value="#ff3b30"></div>
+      <div><label>Accent</label><input type="color" id="accent" value="#cdd5de"></div>
+    </div>
+    <div class="ctl">
+      <div class="valrow"><label>Value</label><b id="vlabel">4200</b></div>
+      <input type="range" id="value" min="0" max="8000" step="50" value="4200">
+    </div>
+  </div>
+
+  <div class="stage">
+    <div id="gauge"></div>
+    <div class="hint">Change any control — the gauge rebuilds live. This is the exact SVG that renders on the physical dashboard.</div>
+  </div>
+</div>
+
+<footer>HONEYBADGER SOFTWARE INC · gauge builder preview · what you configure here ships pixel-identical to your dash.</footer>
+
+<script>
+const RAD = Math.PI/180;
+const f1 = n => Number(n).toFixed(1);
+function polar(cx,cy,r,d){const a=d*RAD; return [cx+r*Math.sin(a), cy-r*Math.cos(a)];}
+function arcPath(cx,cy,r,d0,d1){const [x0,y0]=polar(cx,cy,r,d0),[x1,y1]=polar(cx,cy,r,d1);
+  const large=Math.abs(d1-d0)>180?1:0; return `M ${f1(x0)} ${f1(y0)} A ${r} ${r} 0 ${large} 1 ${f1(x1)} ${f1(y1)}`;}
+function hx(c){return [1,3,5].map(i=>parseInt(c.slice(i,i+2),16));}
+function shade(c,f){let [r,g,b]=hx(c); const cl=x=>Math.max(0,Math.min(255,Math.round(x)));
+  if(f>=1){r+= (255-r)*(f-1); g+=(255-g)*(f-1); b+=(255-b)*(f-1);} else {r*=f; g*=f; b*=f;}
+  return '#'+[r,g,b].map(x=>cl(x).toString(16).padStart(2,'0')).join('');}
+const lum = c => {const [r,g,b]=hx(c); return r+g+b;};
+
+const UNITS = {
+  rpm:{label:'RPM',sub:'x1000',max:8000,redline:6500,step:1000,div:1000},
+  mph:{label:'MPH',sub:'',max:160,redline:null,step:20,div:1},
+  kmh:{label:'KM/H',sub:'',max:260,redline:null,step:40,div:1},
+  psi:{label:'BOOST',sub:'PSI',max:30,redline:22,step:5,div:1},
+};
+const START=-135, SWEEP=270;
+
+// ── ROUND (needle, full bezel/face options) ──────────────────────────────────
+function round(o){
+  const U=UNITS[o.unit], size=400, cx=200, cy=200, R=196;
+  const rmax=U.max, redline=U.redline??(rmax+1), val=o.value;
+  const ang=v=>START+(v/rmax)*SWEEP;
+  const faceval = o.face==='silver'?'#e9ecee':(o.face==='carbon'?'#131518':'#171b21');
+  const light = lum(faceval)>470, tcol = light?'#0a0c0d':'#ffffff';
+  let bz, bevel;
+  if(o.bezel==='chrome'){bz='<linearGradient id="bz" x1="0.12" y1="0" x2="0.62" y2="1"><stop offset="0" stop-color="#f7f9fb"/><stop offset="0.18" stop-color="#b6bcc2"/><stop offset="0.36" stop-color="#eef1f3"/><stop offset="0.52" stop-color="#7d848b"/><stop offset="0.7" stop-color="#d8dde1"/><stop offset="0.85" stop-color="#969ca2"/><stop offset="1" stop-color="#e6eaed"/></linearGradient>'; bevel='#2a2d30';}
+  else if(o.bezel==='black'){bz='<linearGradient id="bz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34383c"/><stop offset="1" stop-color="#0a0b0d"/></linearGradient>'; bevel='#000';}
+  else {bz=`<linearGradient id="bz" x1="0.15" y1="0" x2="0.7" y2="1"><stop offset="0" stop-color="${shade('#3c424b',1.5)}"/><stop offset="0.38" stop-color="#3c424b"/><stop offset="0.62" stop-color="${shade('#3c424b',0.55)}"/><stop offset="1" stop-color="${shade('#3c424b',1.2)}"/></linearGradient>`; bevel=shade('#3c424b',0.35);}
+  let face;
+  if(o.face==='carbon'){face='<linearGradient id="cw1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2c3137"/><stop offset="1" stop-color="#131518"/></linearGradient><linearGradient id="cw2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c3137"/><stop offset="1" stop-color="#131518"/></linearGradient><pattern id="fc" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#131518"/><rect width="11" height="11" fill="url(#cw1)"/><rect x="11" y="11" width="11" height="11" fill="url(#cw1)"/><rect x="11" width="11" height="11" fill="url(#cw2)"/><rect y="11" width="11" height="11" fill="url(#cw2)"/></pattern>';}
+  else if(o.face==='silver'){face='<radialGradient id="fc" cx="50%" cy="36%" r="76%"><stop offset="0" stop-color="#f3f5f7"/><stop offset="0.58" stop-color="#d2d7db"/><stop offset="1" stop-color="#9aa0a6"/></radialGradient>';}
+  else {face=`<radialGradient id="fc" cx="50%" cy="36%" r="76%"><stop offset="0" stop-color="${shade(faceval,1.45)}"/><stop offset="0.58" stop-color="${faceval}"/><stop offset="1" stop-color="${shade(faceval,0.45)}"/></radialGradient>`;}
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" font-family="'Rajdhani','Segoe UI',sans-serif">`;
+  s+=`<defs>${bz}${face}<linearGradient id="ndl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(o.needle,1.55)}"/><stop offset="1" stop-color="${shade(o.needle,0.85)}"/></linearGradient><radialGradient id="hub" cx="40%" cy="34%" r="72%"><stop offset="0" stop-color="#eef1f3"/><stop offset="0.46" stop-color="#969ca2"/><stop offset="1" stop-color="#34383c"/></radialGradient><radialGradient id="gl" cx="50%" cy="15%" r="60%"><stop offset="0" stop-color="#fff" stop-opacity="0.3"/><stop offset="0.4" stop-color="#fff" stop-opacity="0.06"/><stop offset="0.68" stop-color="#fff" stop-opacity="0"/></radialGradient><clipPath id="cl"><circle cx="${cx}" cy="${cy}" r="${R-26}"/></clipPath><filter id="dr" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.6"/></filter></defs>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#bz)"/><circle cx="${cx}" cy="${cy}" r="${R-13}" fill="none" stroke="${bevel}" stroke-width="4"/><circle cx="${cx}" cy="${cy}" r="${R-26}" fill="url(#fc)"/>`;
+  if(U.redline) s+=`<path d="${arcPath(cx,cy,R-40,ang(redline),ang(rmax))}" fill="none" stroke="#ff3b30" stroke-width="10" stroke-linecap="round"/>`;
+  for(let v=0; v<=rmax; v+=U.step){const a=ang(v); const o1=polar(cx,cy,R-30,a),o2=polar(cx,cy,R-48,a);
+    const rl=U.redline&&v>=redline; const col=rl?'#ff3b30':tcol;
+    s+=`<line x1="${f1(o1[0])}" y1="${f1(o1[1])}" x2="${f1(o2[0])}" y2="${f1(o2[1])}" stroke="${col}" stroke-width="4.5" stroke-linecap="round"/>`;
+    const n=polar(cx,cy,R-70,a);
+    s+=`<text x="${f1(n[0])}" y="${f1(n[1])}" fill="${col}" font-size="25" font-weight="700" text-anchor="middle" dominant-baseline="central">${Math.round(v/U.div)}</text>`;}
+  s+=`<text x="${cx}" y="${cy-46}" fill="${o.accent}" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="3">${U.label}</text>`;
+  if(U.sub) s+=`<text x="${cx}" y="${cy+52}" fill="${o.accent}" font-size="12" text-anchor="middle" letter-spacing="2">${U.sub}</text>`;
+  s+=`<text x="${cx}" y="${cy+88}" fill="${tcol}" font-size="28" font-weight="800" text-anchor="middle">${val}</text>`;
+  const L=R-46, a=ang(val);
+  s+=`<g transform="rotate(${f1(a)} ${cx} ${cy})" filter="url(#dr)"><polygon points="${cx-5.5},${cy} ${cx-1.5},${cy-L} ${cx+1.5},${cy-L} ${cx+5.5},${cy} ${cx},${cy+26}" fill="url(#ndl)"/></g>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="16" fill="url(#hub)" stroke="#2a2d30" stroke-width="2"/><circle cx="${cx-4}" cy="${cy-4}" r="4" fill="#fff" opacity="0.6"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R-26}" fill="url(#gl)" clip-path="url(#cl)"/></svg>`;
+  return s;
+}
+
+// ── ARC (sweep + dominant digital) ───────────────────────────────────────────
+function arc(o){
+  const U=UNITS[o.unit], size=400, cx=200, cy=200, R=170, A0=-125, A1=125, SW=A1-A0;
+  const rmax=U.max, redline=U.redline??(rmax+1), val=o.value, ang=v=>A0+(v/rmax)*SW;
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" font-family="'Rajdhani','Segoe UI',sans-serif">`;
+  s+=`<defs><linearGradient id="fl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${o.needle}"/><stop offset="0.62" stop-color="#ffd23f"/><stop offset="1" stop-color="#ff3b30"/></linearGradient><filter id="g" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4"/></filter></defs>`;
+  s+=`<rect width="${size}" height="${size}" rx="24" fill="#0c0f13"/>`;
+  s+=`<path d="${arcPath(cx,cy,R,A0,A1)}" fill="none" stroke="#232a33" stroke-width="22" stroke-linecap="round"/>`;
+  s+=`<path d="${arcPath(cx,cy,R,A0,ang(val))}" fill="none" stroke="url(#fl)" stroke-width="22" stroke-linecap="round" filter="url(#g)"/>`;
+  s+=`<path d="${arcPath(cx,cy,R,A0,ang(val))}" fill="none" stroke="url(#fl)" stroke-width="22" stroke-linecap="round"/>`;
+  if(U.redline){const r1=polar(cx,cy,R-16,ang(redline)),r2=polar(cx,cy,R+16,ang(redline));
+    s+=`<line x1="${f1(r1[0])}" y1="${f1(r1[1])}" x2="${f1(r2[0])}" y2="${f1(r2[1])}" stroke="#ff3b30" stroke-width="4"/>`;}
+  s+=`<text x="${cx}" y="${cy+6}" fill="#fff" font-size="78" font-weight="800" text-anchor="middle" dominant-baseline="central">${val}</text>`;
+  s+=`<text x="${cx}" y="${cy+52}" fill="${o.accent}" font-size="16" font-weight="700" text-anchor="middle" letter-spacing="3">${U.label}</text></svg>`;
+  return s;
+}
+
+// ── BAR (horizontal segmented LED) ───────────────────────────────────────────
+function bar(o){
+  const U=UNITS[o.unit], w=520, h=170, pad=20, n=30, gap=4, bx=pad, by=46, bh=54, bw=w-2*pad-150;
+  const seg=(bw-(n-1)*gap)/n, rmax=U.max, redline=U.redline??(rmax+1), val=o.value;
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="'Rajdhani','Segoe UI',sans-serif">`;
+  s+=`<defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.32"/><stop offset="0.42" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>`;
+  s+=`<rect width="${w}" height="${h}" rx="16" fill="#0c0f13"/>`;
+  for(let i=0;i<n;i++){const rpm=(i+0.5)/n*rmax, lit=rpm<=val;
+    const c = rpm>=redline?'#ff3b30':(rpm>=redline*0.82?'#ffd23f':o.needle);
+    const x=bx+i*(seg+gap);
+    s+=`<rect x="${f1(x)}" y="${by}" width="${f1(seg)}" height="${bh}" rx="3" fill="${lit?c:'#232a33'}"/>`;
+    if(lit) s+=`<rect x="${f1(x)}" y="${by}" width="${f1(seg)}" height="${bh}" rx="3" fill="url(#sg)"/>`;}
+  for(let k=0;k<=rmax;k+=U.step){const fx=bx+(k/rmax)*bw;
+    s+=`<text x="${f1(fx)}" y="${by+bh+18}" fill="#79818b" font-size="13" font-weight="600" text-anchor="middle">${Math.round(k/U.div)}</text>`;}
+  s+=`<text x="${bx}" y="${by-10}" fill="${o.accent}" font-size="14" font-weight="700" letter-spacing="2">${U.label}${U.sub?' '+U.sub:''}</text>`;
+  s+=`<text x="${w-pad}" y="${by+38}" fill="#fff" font-size="44" font-weight="800" text-anchor="end">${val}</text>`;
+  s+=`<text x="${w-pad}" y="${by+bh+18}" fill="#79818b" font-size="13" text-anchor="end">${U.label}</text></svg>`;
+  return s;
+}
+
+// ── RING (minimal) ───────────────────────────────────────────────────────────
+function ring(o){
+  const U=UNITS[o.unit], size=360, cx=180, cy=180, R=146, A0=-140, A1=140, SW=A1-A0;
+  const rmax=U.max, redline=U.redline??(rmax+1), val=o.value, ang=v=>A0+(v/rmax)*SW;
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" font-family="'Rajdhani','Segoe UI',sans-serif">`;
+  s+=`<defs><filter id="g" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.5"/></filter></defs>`;
+  s+=`<rect width="${size}" height="${size}" rx="22" fill="#0c0f13"/>`;
+  s+=`<path d="${arcPath(cx,cy,R,A0,A1)}" fill="none" stroke="#232a33" stroke-width="13" stroke-linecap="round"/>`;
+  s+=`<path d="${arcPath(cx,cy,R,A0,ang(val))}" fill="none" stroke="${o.needle}" stroke-width="13" stroke-linecap="round" filter="url(#g)"/>`;
+  s+=`<path d="${arcPath(cx,cy,R,A0,ang(val))}" fill="none" stroke="${o.needle}" stroke-width="13" stroke-linecap="round"/>`;
+  if(U.redline){const rp=polar(cx,cy,R,ang(redline)); s+=`<circle cx="${f1(rp[0])}" cy="${f1(rp[1])}" r="5.5" fill="#ff3b30"/>`;}
+  s+=`<text x="${cx}" y="${cy-2}" fill="#fff" font-size="72" font-weight="800" text-anchor="middle" dominant-baseline="central">${val}</text>`;
+  s+=`<text x="${cx}" y="${cy+44}" fill="${o.accent}" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="4">${U.label}</text></svg>`;
+  return s;
+}
+
+const RENDER={round,arc,bar,ring};
+const $=id=>document.getElementById(id);
+
+function render(){
+  const unit=$('units').value, U=UNITS[unit];
+  const v=$('value');
+  const o={style:$('style').value, bezel:$('bezel').value, face:$('face').value,
+           needle:$('needle').value, accent:$('accent').value, unit:unit, value:+v.value};
+  $('gauge').innerHTML = RENDER[o.style](o);
+  $('vlabel').textContent = o.value;
+  $('matrow').style.opacity = o.style==='round' ? '1' : '0.4';
+}
+function onUnit(){
+  const U=UNITS[$('units').value], v=$('value');
+  v.max=U.max; v.step=U.step/ (U.div>1?2:4) || 1;
+  if(+v.value>U.max) v.value=Math.round(U.max*0.52);
+  render();
+}
+['style','bezel','face','needle','accent','value'].forEach(id=>$(id).addEventListener('input',render));
+$('units').addEventListener('change',onUnit);
+onUnit();
+</script>
+</body>
+</html>
