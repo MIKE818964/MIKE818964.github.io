@@ -1024,3 +1024,48 @@ img { max-width: 100%; height: auto; }
 .footer-col .footer-blurb { color: #b8ad9c; }
 .brand-name-sm { color: #fff; }
 .footer-fineprint { border-top-color: rgba(255,255,255,0.08); color: #8d8170; }
+
+/* ============================================================
+   ====  HP-TUNERS ENERGY — bold hero + product imagery  ====
+   ============================================================ */
+.hero { padding-bottom: 84px; }
+.hero-grid { grid-template-columns: 1.05fr 1fr; gap: 50px; }
+.hero-title { text-transform: uppercase; font-size: clamp(40px, 6.6vw, 76px); line-height: 1.0; letter-spacing: -2px; }
+.hero-eyebrow { font-weight: 700; }
+.hero-sub { font-size: 18.5px; }
+
+/* Hero product shot — the C7 dash, framed + tilted like HP Tuners' device shots */
+.hero-shot {
+  position: relative; border-radius: 16px; overflow: hidden;
+  border: 1px solid rgba(20,16,10,0.16);
+  box-shadow: 0 40px 90px rgba(40,30,10,0.28), 0 8px 20px rgba(40,30,10,0.12);
+  background: #0d0f08; transform: rotate(-1.4deg);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.hero-shot:hover { transform: rotate(0deg) translateY(-4px); box-shadow: 0 52px 110px rgba(237,122,6,0.24), 0 10px 24px rgba(40,30,10,0.16); }
+.hero-shot img { display: block; width: 100%; height: auto; }
+.hero-shot::after {
+  content: "RUNNING LIVE ON A 2014 STINGRAY"; position: absolute; left: 14px; bottom: 13px;
+  font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 1.4px;
+  color: #fff; background: rgba(13,15,8,0.72); border: 1px solid rgba(255,255,255,0.22);
+  padding: 5px 10px; border-radius: 6px;
+}
+
+/* Credibility strip under the hero */
+.trust-strip {
+  display: flex; flex-wrap: wrap; gap: 14px 34px; align-items: center; justify-content: center;
+  padding: 20px 24px; background: var(--bg-mid);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.trust-strip span { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: 1px; color: var(--text-mid); text-transform: uppercase; }
+.trust-strip b { color: var(--accent-hi); }
+.trust-strip .dot { color: var(--accent); }
+
+/* Gauge SVG sits "contained" on a dark tile (not cropped) */
+.sc-media.contain { background: radial-gradient(130% 120% at 30% 18%, #20242c, #0b0d11); }
+.sc-media.contain img { width: auto; height: 150px; object-fit: contain; }
+
+@media (max-width: 880px){
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-shot { transform: none; max-width: 520px; }
+}

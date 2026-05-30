@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 440" width="440" height="440">
+<defs>
+ <linearGradient id="hero_oem_modern__cw1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2c3137"/><stop offset="1" stop-color="#13151820"/></linearGradient>
+ <linearGradient id="hero_oem_modern__cw2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c3137"/><stop offset="1" stop-color="#131518"/></linearGradient>
+ <pattern id="hero_oem_modern__carbon" width="22" height="22" patternUnits="userSpaceOnUse">
+   <rect width="22" height="22" fill="#131518"/>
+   <rect width="11" height="11" fill="url(#hero_oem_modern__cw1)"/><rect x="11" y="11" width="11" height="11" fill="url(#hero_oem_modern__cw1)"/>
+   <rect x="11" width="11" height="11" fill="url(#hero_oem_modern__cw2)"/><rect y="11" width="11" height="11" fill="url(#hero_oem_modern__cw2)"/></pattern>
+ <radialGradient id="hero_oem_modern__vig" cx="50%" cy="38%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/>
+   <stop offset="74%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.62"/></radialGradient>
+ <linearGradient id="hero_oem_modern__chrome" x1="0.12" y1="0" x2="0.62" y2="1">
+   <stop offset="0" stop-color="#f7f9fb"/><stop offset="0.17" stop-color="#b6bcc2"/><stop offset="0.35" stop-color="#eef1f3"/>
+   <stop offset="0.52" stop-color="#7d848b"/><stop offset="0.68" stop-color="#d8dde1"/><stop offset="0.84" stop-color="#969ca2"/>
+   <stop offset="1" stop-color="#e6eaed"/></linearGradient>
+ <linearGradient id="hero_oem_modern__ndl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb0ac"/>
+   <stop offset="1" stop-color="#d13027"/></linearGradient>
+ <radialGradient id="hero_oem_modern__hub" cx="40%" cy="34%" r="72%"><stop offset="0" stop-color="#eef1f3"/>
+   <stop offset="46%" stop-color="#969ca2"/><stop offset="100%" stop-color="#34383c"/></radialGradient>
+ <radialGradient id="hero_oem_modern__glass" cx="50%" cy="15%" r="60%"><stop offset="0" stop-color="#fff" stop-opacity="0.32"/>
+   <stop offset="40%" stop-color="#fff" stop-opacity="0.07"/><stop offset="68%" stop-color="#fff" stop-opacity="0"/></radialGradient>
+ <clipPath id="hero_oem_modern__fc"><circle cx="220.0" cy="220.0" r="186.0"/></clipPath>
+ <filter id="hero_oem_modern__drop" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.6"/></filter></defs>
+<circle cx="220.0" cy="220.0" r="216.0" fill="url(#hero_oem_modern__chrome)"/>
+<circle cx="220.0" cy="220.0" r="203.0" fill="none" stroke="#2a2d30" stroke-width="4"/>
+<circle cx="220.0" cy="220.0" r="186.0" fill="url(#hero_oem_modern__carbon)"/>
+<circle cx="220.0" cy="220.0" r="186.0" fill="url(#hero_oem_modern__vig)"/>
+<path d="M 391.17 203.14 A 172.00 172.00 0 0 1 341.62 341.62" fill="none" stroke="#ff3b30" stroke-width="10" stroke-linecap="round"/>
+<line x1="91.3" y1="348.7" x2="105.4" y2="334.6" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+<text x="122.4" y="317.6" fill="#ffffff" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central">0</text>
+<line x1="59.5" y1="305.8" x2="68.3" y2="301.1" stroke="#8b9298" stroke-width="2.2"/>
+<line x1="41.5" y1="255.5" x2="61.1" y2="251.6" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+<text x="84.7" y="246.9" fill="#ffffff" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central">1</text>
+<line x1="38.9" y1="202.2" x2="48.8" y2="203.1" stroke="#8b9298" stroke-width="2.2"/>
+<line x1="51.9" y1="150.4" x2="70.3" y2="158.0" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+<text x="92.5" y="167.2" fill="#ffffff" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central">2</text>
+<line x1="79.3" y1="104.5" x2="87.0" y2="110.9" stroke="#8b9298" stroke-width="2.2"/>
+<line x1="118.9" y1="68.7" x2="130.0" y2="85.3" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+<text x="143.3" y="105.3" fill="#ffffff" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central">3</text>
+<line x1="167.2" y1="45.8" x2="170.1" y2="55.4" stroke="#8b9298" stroke-width="2.2"/>
+<line x1="220.0" y1="38.0" x2="220.0" y2="58.0" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+<text x="220.0" y="82.0" fill="#ffffff" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central">4</text>
+<line x1="272.8" y1="45.8" x2="269.9" y2="55.4" stroke="#8b9298" stroke-width="2.2"/>
+<line x1="321.1" y1="68.7" x2="310.0" y2="85.3" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+<text x="296.7" y="105.3" fill="#ffffff" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central">5</text>
+<line x1="360.7" y1="104.5" x2="353.0" y2="110.9" stroke="#8b9298" stroke-width="2.2"/>
+<line x1="388.1" y1="150.4" x2="369.7" y2="158.0" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+<text x="347.5" y="167.2" fill="#ffffff" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central">6</text>
+<line x1="401.1" y1="202.2" x2="391.2" y2="203.1" stroke="#8b9298" stroke-width="2.2"/>
+<line x1="398.5" y1="255.5" x2="378.9" y2="251.6" stroke="#ff3b30" stroke-width="4.5" stroke-linecap="round"/>
+<text x="355.3" y="246.9" fill="#ff3b30" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central">7</text>
+<line x1="380.5" y1="305.8" x2="371.7" y2="301.1" stroke="#8b9298" stroke-width="2.2"/>
+<line x1="348.7" y1="348.7" x2="334.6" y2="334.6" stroke="#ff3b30" stroke-width="4.5" stroke-linecap="round"/>
+<text x="317.6" y="317.6" fill="#ff3b30" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="30" font-weight="700" text-anchor="middle" dominant-baseline="central">8</text>
+<text x="220.0" y="164.0" fill="#cdd5de" font-family="'Rajdhani','Segoe UI',sans-serif" font-size="19" font-weight="700" text-anchor="middle" letter-spacing="4">RPM</text>
+<g id="hero_oem_modern__needle" transform="rotate(6.75 220.0 220.0)" filter="url(#hero_oem_modern__drop)"><polygon points="214.0,220.0 218.4,54.0 221.6,54.0 226.0,220.0 220.0,250.0" fill="url(#hero_oem_modern__ndl)"/><polygon points="213.0,220.0 227.0,220.0 220.0,250.0" fill="#b22921"/></g>
+<circle cx="220.0" cy="220.0" r="18" fill="url(#hero_oem_modern__hub)" stroke="#2a2d30" stroke-width="2"/>
+<circle cx="215.0" cy="215.0" r="4.5" fill="#fff" opacity="0.6"/>
+<circle cx="220.0" cy="220.0" r="186.0" fill="url(#hero_oem_modern__glass)" clip-path="url(#hero_oem_modern__fc)"/>
+</svg>
