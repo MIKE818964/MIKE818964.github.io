@@ -42,4 +42,27 @@
       toggle && toggle.setAttribute('aria-expanded', 'false');
     });
   });
+
+  // Scroll-reveal: fade/slide common blocks up as they enter the viewport.
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce && 'IntersectionObserver' in window) {
+    var sel = '.section-head, .showcase-grid > *, .product-grid > *, .studio-grid > *,'
+            + '.feature-row, .post-grid > *, .tier-grid > *, .comparison-table,'
+            + '.discord-card, .stat-bar, .forum-grid > *, .dl-card, .why-quote,'
+            + '.principle-list, .split-cta, .cta-card, .shot, .spec-table';
+    var items = [].slice.call(document.querySelectorAll(sel));
+    items.forEach(function (el) { el.classList.add('reveal'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          var sibs = [].slice.call(e.target.parentElement ? e.target.parentElement.children : []);
+          var i = sibs.indexOf(e.target);
+          e.target.style.transitionDelay = (Math.max(0, i) % 6 * 70) + 'ms';
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    items.forEach(function (el) { io.observe(el); });
+  }
 })();
