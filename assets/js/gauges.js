@@ -1,128 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex">
-<title>Honeybadger Gauge Builder — Create Your Own</title>
-<style>
-  :root{--bg:#07090c;--panel:#10141a;--line:#1d2530;--amber:#ffae00;--txt:#cfd6dd;--mut:#8b949e;}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--txt);font:600 15px/1.4 'Segoe UI',system-ui,sans-serif}
-  header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  header h1{font-size:17px;margin:0;letter-spacing:.5px;color:var(--amber)}
-  header .tag{font-size:11px;color:var(--mut);font-weight:500}
-  .app{display:flex;flex-wrap:wrap;gap:22px;padding:20px;align-items:flex-start}
-  .controls{flex:0 0 290px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
-  .controls h2{font-size:12px;letter-spacing:2px;color:var(--mut);margin:0 0 14px;text-transform:uppercase}
-  .ctl{margin-bottom:14px}
-  .ctl label{display:block;font-size:11px;color:var(--mut);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
-  select{background:#0b0e13;color:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font:inherit;font-size:14px;width:100%}
-  input[type=color]{width:100%;height:38px;background:#0b0e13;border:1px solid var(--line);border-radius:9px;padding:3px;cursor:pointer}
-  input[type=range]{width:100%}
-  .row{display:flex;gap:10px}.row>*{flex:1}
-  .valrow{display:flex;justify-content:space-between;align-items:baseline}
-  .valrow b{color:var(--amber);font-size:16px}
-  .stage{flex:1 1 420px;min-height:480px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    background:radial-gradient(circle at 50% 38%,#0e1219,#06070a);border:1px solid var(--line);border-radius:14px;padding:24px}
-  #gauge svg{max-width:min(74vw,480px);max-height:62vh;filter:drop-shadow(0 10px 26px rgba(0,0,0,.6))}
-  .hint{margin-top:14px;color:var(--mut);font-size:12px;font-weight:500;text-align:center}
-  footer{padding:14px 20px;color:var(--mut);font-size:11px;border-top:1px solid var(--line)}
-  .pill{display:inline-block;font-size:10px;color:#06070a;background:var(--amber);border-radius:20px;padding:2px 9px;font-weight:800;letter-spacing:.5px}
-  .tpl-strip{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);background:#0b0e13}
-  .tpl-label{font-size:11px;letter-spacing:1.5px;color:var(--mut);text-transform:uppercase;margin-right:6px}
-  .tpl{background:#10141a;color:#cfd6dd;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:border-color .15s,color .15s}
-  .tpl:hover{border-color:var(--amber);color:#fff}
-  .sw-row{display:flex;flex-wrap:wrap;gap:7px}
-  .sw{width:26px;height:26px;border-radius:50%;border:2px solid #222b36;cursor:pointer;padding:0;transition:transform .1s,border-color .1s}
-  .sw:hover{transform:scale(1.12);border-color:#fff}
-</style>
-</head>
-<body>
-<header>
-  <a href="/" style="font-size:20px;text-decoration:none">🦡</a>
-  <h1>Honeybadger Gauge Builder</h1>
-  <span class="pill">CREATE YOUR OWN</span>
-  <span class="tag">live · what you build is what ships on your dash</span>
-  <a href="cluster.html" style="margin-left:auto;color:var(--amber);font-size:12px;text-decoration:none;font-weight:700">▦ Full cluster builder →</a>
-  <a href="/" style="margin-left:14px;color:#8b949e;font-size:12px;text-decoration:none">← honeybadger.software</a>
-</header>
-
-<div class="tpl-strip">
-  <span class="tpl-label">Templates</span>
-  <button class="tpl" data-style="race" data-unit="rpm" data-needle="#1ae7ff" data-accent="#1ae7ff" data-val="6200">🏁 IndyCar Race</button>
-  <button class="tpl" data-style="round" data-unit="rpm" data-needle="#39ff9a" data-accent="#bfe9cf" data-bezel="black" data-face="solid" data-val="3600">Green Analog</button>
-  <button class="tpl" data-style="round" data-unit="mph" data-needle="#ff3b30" data-accent="#cdd5de" data-bezel="chrome" data-face="carbon" data-val="80">Carbon OEM</button>
-  <button class="tpl" data-style="segarc" data-unit="rpm" data-needle="#1ae7ff" data-accent="#9fe7ff" data-val="5200">Sim / F1</button>
-  <button class="tpl" data-style="bar" data-unit="rpm" data-needle="#ff7a00" data-accent="#ffae00" data-val="5600">Muscle Bar</button>
-  <button class="tpl" data-style="neon" data-unit="rpm" data-needle="#ff2bd6" data-accent="#ff2bd6" data-val="5000">Neon</button>
-</div>
-
-<div class="app">
-  <div class="controls">
-    <h2>Customize</h2>
-    <div class="ctl"><label>Style</label>
-      <select id="style">
-        <option value="round">Round dial — needle</option>
-        <option value="arc">Sweep arc — digital</option>
-        <option value="halfarc">Half arc — digital</option>
-        <option value="ring">Minimal ring</option>
-        <option value="segarc">Segmented arc — sim/F1</option>
-        <option value="race">Race dash — shift bar 🏁</option>
-        <option value="neon">Neon outline</option>
-        <option value="bar">Horizontal bar — LED</option>
-        <option value="vbar">Vertical bar — LED</option>
-      </select></div>
-    <div class="ctl row" id="matrow">
-      <div><label>Bezel</label>
-        <select id="bezel">
-          <option value="chrome">Brushed chrome</option>
-          <option value="brushed">Polished steel</option>
-          <option value="metal" selected>Dark metal</option>
-          <option value="black">Matte black</option>
-          <option value="gunmetal">Gunmetal</option>
-          <option value="gold">Gold</option>
-        </select></div>
-      <div><label>Face</label>
-        <select id="face">
-          <option value="solid" selected>Solid dark</option>
-          <option value="carbon">Carbon fiber</option>
-          <option value="silver">Silver</option>
-          <option value="brushed">Brushed alloy</option>
-          <option value="white">White</option>
-        </select></div>
-    </div>
-    <div class="ctl"><label>Gauge type / Units</label>
-      <select id="units">
-        <option value="rpm" selected>Tach — RPM</option>
-        <option value="mph">Speedo — MPH</option>
-        <option value="kmh">Speedo — KM/H</option>
-        <option value="boost">Boost — PSI</option>
-        <option value="oiltemp">Oil temp — °F</option>
-        <option value="coolant">Coolant — °F</option>
-        <option value="oilpress">Oil pressure — PSI</option>
-        <option value="fuel">Fuel — %</option>
-      </select></div>
-    <div class="ctl row">
-      <div><label>Needle / fill</label><input type="color" id="needle" value="#ff3b30"></div>
-      <div><label>Accent</label><input type="color" id="accent" value="#cdd5de"></div>
-    </div>
-    <div class="ctl"><label>Color theme</label><div class="sw-row" id="swrow"></div></div>
-    <div class="ctl">
-      <div class="valrow"><label>Value</label><b id="vlabel">4200</b></div>
-      <input type="range" id="value" min="0" max="8000" step="50" value="4200">
-    </div>
-  </div>
-
-  <div class="stage">
-    <div id="gauge"></div>
-    <div class="hint">Change any control — the gauge rebuilds live. This is the exact SVG that renders on the physical dashboard.</div>
-  </div>
-</div>
-
-<footer>HONEYBADGER SOFTWARE INC · gauge builder (growing toward ~50 styles per type) · what you configure ships pixel-identical to your dash.</footer>
-
-<script>
+/* Honeybadger gauge engine (shared) — extracted verbatim from the live builder.
+   Pure SVG renderers; what renders here ships pixel-identical on the dash. */
+(function(){
 const RAD=Math.PI/180, f1=n=>Number(n).toFixed(1);
 function polar(cx,cy,r,d){const a=d*RAD;return[cx+r*Math.sin(a),cy-r*Math.cos(a)];}
 function arcP(cx,cy,r,d0,d1){const[x0,y0]=polar(cx,cy,r,d0),[x1,y1]=polar(cx,cy,r,d1);const l=Math.abs(d1-d0)>180?1:0;return`M ${f1(x0)} ${f1(y0)} A ${r} ${r} 0 ${l} 1 ${f1(x1)} ${f1(y1)}`;}
@@ -225,20 +103,21 @@ function race(o){const U=UNITS[o.unit],w=560,h=300,rmax=U.max,redline=U.redline?
   s+=`<text x="${w-pad}" y="${h-24}" fill="#27e36a" font-size="20" font-weight="700" text-anchor="end">${Math.round((U.redline?redline:rmax)/U.div)}<tspan font-size="11" fill="#5b6772"> RL</tspan></text>`;
   s+=`</svg>`;return s;}
 const RENDER={round,arc,halfarc,ring,segarc,neon,bar,vbar,race};
-const $=id=>document.getElementById(id);
-function render(){
-  const o={style:$('style').value,bezel:$('bezel').value,face:$('face').value,needle:$('needle').value,accent:$('accent').value,unit:$('units').value,value:+$('value').value};
-  $('gauge').innerHTML=RENDER[o.style](o);
-  $('vlabel').textContent=o.value;
-  $('matrow').style.opacity=o.style==='round'?'1':'0.4';
-}
-function onUnit(){const U=UNITS[$('units').value],v=$('value');v.max=U.max;v.step=Math.max(1,Math.round(U.max/160));if(+v.value>U.max)v.value=Math.round(U.max*0.52);render();}
-['style','bezel','face','needle','accent','value'].forEach(id=>$(id).addEventListener('input',render));
-$('units').addEventListener('change',onUnit);
-function applyPreset(d){if(d.unit){$('units').value=d.unit;onUnit();}if(d.style)$('style').value=d.style;if(d.bezel)$('bezel').value=d.bezel;if(d.face)$('face').value=d.face;if(d.needle)$('needle').value=d.needle;if(d.accent)$('accent').value=d.accent;if(d.val)$('value').value=d.val;render();}
-document.querySelectorAll('.tpl').forEach(b=>b.addEventListener('click',()=>applyPreset(b.dataset)));
-[['#ff7a00','#ffae00'],['#39ff9a','#bfe9cf'],['#1ae7ff','#9fe7ff'],['#3b82f6','#bcd3ff'],['#ff2bd6','#ff8be9'],['#ff3b30','#ffd0cc'],['#e8b04b','#f0d79a'],['#e8edf2','#cdd5de'],['#b8ff00','#e3ff9a'],['#8a5cff','#c9b4ff']].forEach(([nd,ac])=>{const b=document.createElement('button');b.className='sw';b.style.background=`linear-gradient(135deg,${nd} 60%,${ac} 60%)`;b.addEventListener('click',()=>{$('needle').value=nd;$('accent').value=ac;render();});$('swrow').appendChild(b);});
-onUnit();
-</script>
-</body>
-</html>
+
+const PALETTES=[
+ {name:'Amber',needle:'#ff7a00',accent:'#ffae00'},
+ {name:'Honey',needle:'#ed7a06',accent:'#ffb84d'},
+ {name:'Green',needle:'#39ff9a',accent:'#bfe9cf'},
+ {name:'Lime',needle:'#b8ff00',accent:'#e3ff9a'},
+ {name:'Cyan',needle:'#1ae7ff',accent:'#9fe7ff'},
+ {name:'Ice',needle:'#7bdfff',accent:'#d6f4ff'},
+ {name:'Blue',needle:'#3b82f6',accent:'#bcd3ff'},
+ {name:'Violet',needle:'#8a5cff',accent:'#c9b4ff'},
+ {name:'Magenta',needle:'#ff2bd6',accent:'#ff8be9'},
+ {name:'Red',needle:'#ff3b30',accent:'#ffd0cc'},
+ {name:'Gold',needle:'#e8b04b',accent:'#f0d79a'},
+ {name:'White',needle:'#e8edf2',accent:'#cdd5de'}
+];
+
+window.HBG={RENDER,UNITS,PALETTES,START,SWEEP,f1,polar,arcP,shade,lum,bezelDef,faceDef,frame};
+})();

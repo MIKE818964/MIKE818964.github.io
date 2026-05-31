@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Honeybadger Cluster Builder — Design a Full Dash</title>
+<style>
+  :root{--bg:#07090c;--panel:#10141a;--line:#1d2530;--amber:#ffae00;--txt:#cfd6dd;--mut:#8b949e;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:600 15px/1.4 'Segoe UI',system-ui,sans-serif}
+  header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  header h1{font-size:17px;margin:0;letter-spacing:.5px;color:var(--amber)}
+  header .tag{font-size:11px;color:var(--mut);font-weight:500}
+  .pill{display:inline-block;font-size:10px;color:#06070a;background:var(--amber);border-radius:20px;padding:2px 9px;font-weight:800;letter-spacing:.5px}
+  .app{display:flex;flex-wrap:wrap;gap:22px;padding:20px;align-items:flex-start}
+  .controls{flex:0 0 290px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .controls h2{font-size:12px;letter-spacing:2px;color:var(--mut);margin:0 0 14px;text-transform:uppercase}
+  .ctl{margin-bottom:16px}
+  .ctl label{display:block;font-size:11px;color:var(--mut);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+  select{background:#0b0e13;color:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font:inherit;font-size:14px;width:100%}
+  input[type=color]{width:100%;height:38px;background:#0b0e13;border:1px solid var(--line);border-radius:9px;padding:3px;cursor:pointer}
+  .row2{display:flex;gap:10px}.row2>*{flex:1}
+  .swatches{display:flex;flex-wrap:wrap;gap:8px}
+  .swatch{width:30px;height:30px;border-radius:50%;border:2px solid #222b36;cursor:pointer;padding:0;transition:transform .1s,border-color .1s}
+  .swatch:hover{transform:scale(1.12);border-color:#fff}
+  .stage{flex:1 1 560px;min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 32%,#0e1219,#06070a);border:1px solid var(--line);border-radius:14px;padding:26px}
+  #cluster{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+  #cluster .row{display:flex;gap:20px;justify-content:center;align-items:center;flex-wrap:wrap;width:100%}
+  #cluster .slot{flex:0 0 auto;max-width:100%}
+  #cluster .slot svg{display:block;width:100%;height:auto;filter:drop-shadow(0 8px 22px rgba(0,0,0,.55))}
+  .hint{margin-top:16px;color:var(--mut);font-size:12px;font-weight:500;text-align:center}
+  .hint b{color:var(--amber)}
+  footer{padding:14px 20px;color:var(--mut);font-size:11px;border-top:1px solid var(--line)}
+  a.home{color:var(--mut);font-size:12px;text-decoration:none}
+  a.home:hover{color:var(--amber)}
+</style>
+</head>
+<body>
+<header>
+  <a href="/" style="font-size:20px;text-decoration:none">🦡</a>
+  <h1>Honeybadger Cluster Builder</h1>
+  <span class="pill">BUILD A FULL DASH</span>
+  <span class="tag">arrange a whole instrument cluster · what you build is what ships</span>
+  <a class="home" href="builder.html" style="margin-left:auto">single gauge →</a>
+  <a class="home" href="/" style="margin-left:14px">← honeybadger.software</a>
+</header>
+
+<div class="app">
+  <div class="controls">
+    <h2>Cluster</h2>
+    <div class="ctl"><label>Layout</label>
+      <select id="layout">
+        <option value="twin">Twin-Dial (tach + speedo)</option>
+        <option value="chrono">Chronograph · 1 big + 3 sub</option>
+        <option value="six">Six-Pack (6 gauges)</option>
+        <option value="quad">Quad (2 × 2)</option>
+        <option value="bigtwo">Big + Two</option>
+        <option value="racestrip">Race Strip (IndyCar)</option>
+      </select></div>
+    <div class="ctl"><label>Gauge style</label>
+      <select id="style">
+        <option value="round">Round dial — needle</option>
+        <option value="arc">Sweep arc — digital</option>
+        <option value="ring">Minimal ring</option>
+        <option value="segarc">Segmented arc — sim/F1</option>
+        <option value="neon">Neon outline</option>
+      </select></div>
+    <div class="ctl"><label>Color theme</label>
+      <div class="swatches" id="swatches"></div></div>
+    <div class="ctl row2">
+      <div><label>Needle / fill</label><input type="color" id="needle" value="#ff3b30"></div>
+      <div><label>Accent</label><input type="color" id="accent" value="#cdd5de"></div>
+    </div>
+    <div class="ctl row2">
+      <div><label>Bezel</label>
+        <select id="bezel">
+          <option value="chrome">Chrome</option><option value="brushed">Steel</option>
+          <option value="metal" selected>Dark metal</option><option value="black">Matte black</option>
+          <option value="gunmetal">Gunmetal</option><option value="gold">Gold</option>
+        </select></div>
+      <div><label>Face</label>
+        <select id="face">
+          <option value="solid" selected>Solid dark</option><option value="carbon">Carbon</option>
+          <option value="silver">Silver</option><option value="brushed">Brushed</option><option value="white">White</option>
+        </select></div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div id="cluster"></div>
+    <div class="hint"><b id="layoutName">Twin-Dial</b> — change layout, style, or colors and the whole cluster rebuilds. This is the real SVG that renders on the dash.</div>
+  </div>
+</div>
+
+<footer>HONEYBADGER SOFTWARE INC · cluster builder · arrange a full instrument cluster — same engine as the single-gauge builder, so it ships pixel-identical to your dash.</footer>
+
+<script src="assets/js/gauges.js?v=1"></script>
+<script>
+const {RENDER,UNITS,PALETTES}=window.HBG;
+const $=id=>document.getElementById(id);
+const LAYOUTS={
+  twin:{name:'Twin-Dial', rows:[[{u:'rpm'},{u:'mph'}]]},
+  chrono:{name:'Chronograph · 1 + 3', rows:[[{u:'rpm',hero:1}],[{u:'mph'},{u:'coolant'},{u:'fuel'}]]},
+  six:{name:'Six-Pack', rows:[[{u:'rpm'},{u:'mph'},{u:'boost'}],[{u:'oiltemp'},{u:'coolant'},{u:'fuel'}]]},
+  quad:{name:'Quad', rows:[[{u:'rpm'},{u:'mph'}],[{u:'coolant'},{u:'fuel'}]]},
+  bigtwo:{name:'Big + Two', rows:[[{u:'rpm',hero:1}],[{u:'mph'},{u:'fuel'}]]},
+  racestrip:{name:'Race Strip', force:'race', rows:[[{u:'rpm',strip:1}]]},
+};
+function slotWidth(s,rowLen){
+  if(s.strip) return 'min(760px,96%)';
+  if(s.hero)  return 'min(360px,80%)';
+  return rowLen>=3 ? 'min(210px,30%)' : 'min(250px,44%)';
+}
+function gaugeSVG(u,style,P){
+  return RENDER[style]({style:style,unit:u,needle:P.needle,accent:P.accent,bezel:P.bezel,face:P.face,value:UNITS[u].val});
+}
+function render(){
+  const L=LAYOUTS[$('layout').value], style=$('style').value;
+  const P={needle:$('needle').value,accent:$('accent').value,bezel:$('bezel').value,face:$('face').value};
+  let html='';
+  L.rows.forEach(row=>{
+    html+='<div class="row">';
+    row.forEach(s=>{ const st=L.force||style; html+=`<div class="slot" style="width:${slotWidth(s,row.length)}">${gaugeSVG(s.u,st,P)}</div>`; });
+    html+='</div>';
+  });
+  $('cluster').innerHTML=html;
+  $('layoutName').textContent=L.name;
+  $('style').parentElement.style.opacity = L.force ? '0.4' : '1';
+}
+// expanded color theme swatches
+PALETTES.forEach(p=>{
+  const b=document.createElement('button');
+  b.className='swatch'; b.title=p.name;
+  b.style.background=`linear-gradient(135deg, ${p.needle} 60%, ${p.accent} 60%)`;
+  b.addEventListener('click',()=>{ $('needle').value=p.needle; $('accent').value=p.accent; render(); });
+  $('swatches').appendChild(b);
+});
+['layout','style','needle','accent','bezel','face'].forEach(id=>$(id).addEventListener('input',render));
+render();
+</script>
+</body>
+</html>
