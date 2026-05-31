@@ -119,5 +119,5 @@ const PALETTES=[
  {name:'White',needle:'#e8edf2',accent:'#cdd5de'}
 ];
 
-window.HBG={RENDER,UNITS,PALETTES,START,SWEEP,f1,polar,arcP,shade,lum,bezelDef,faceDef,frame};
+window.HBG={RENDER,UNITS,PALETTES,START,SWEEP,f1,polar,arcP,shade,lum,bezelDef,faceDef};
 })();
