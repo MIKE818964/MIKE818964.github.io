@@ -131,11 +131,11 @@
 
 <script src="assets/js/gauges.js?v=7"></script>
 <script src="assets/js/anim.js?v=3"></script>
-<script src="assets/js/symbols.js?v=2"></script>
+<script src="assets/js/symbols.js?v=4"></script>
 <script>
 const {RENDER,UNITS,PALETTES}=window.HBG;
 const SYM=window.HBSYM?window.HBSYM.SYMBOLS:{}, SYMLIST=window.HBSYM?window.HBSYM.list:[];
-const SYMSTATES={nitrouspanel:['armed','purging','firing','heating','off'],bottle:['idle','heating','purging','cold'],purge:['closed','open'],armswitch:['armed','safe'],controller:['on','purging','off'],indicator:['on','off']};
+const SYMSTATES={nitrouspanel:['armed','purging','firing','heating','off'],nitrouscontroller:['armed','purging','firing','heating','off'],bottle:['idle','heating','purging','cold'],purge:['closed','open'],armswitch:['armed','safe'],controller:['on','purging','off'],indicator:['on','off']};
 const TELLICONS=['armed','purge','wot','shift','boost','ready','oil','temp','fuel','batt','check','knock'];
 const $=id=>document.getElementById(id);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -192,7 +192,8 @@ function add(opts){
 }
 function addSymbol(sym){
   const meta=(SYMLIST.find(s=>s.sym===sym)||{}).opts||{};
-  const w=Object.assign({id:nid++,kind:'symbol',sym:sym,color:sym==='nitrouspanel'?'#ff5b00':'#39ff9a',fx:0.5,fy:0.5,size:sym==='nitrouspanel'?0.5:0.16},meta);
+  const big=sym==='nitrouspanel'||sym==='nitrouscontroller';
+  const w=Object.assign({id:nid++,kind:'symbol',sym:sym,color:big?'#ff5b00':'#39ff9a',fx:0.5,fy:0.5,size:big?0.52:0.16},meta);
   widgets.push(w); select(w.id);
 }
 

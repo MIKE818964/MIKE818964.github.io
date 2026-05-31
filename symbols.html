@@ -37,10 +37,14 @@
 
 <footer>HONEYBADGER SOFTWARE INC · symbol library (growing) · every part is parametric SVG — live values, glows, purge vapor, theme colors. Drag them onto your screen in the designer.</footer>
 
-<script src="assets/js/symbols.js?v=1"></script>
+<script src="assets/js/symbols.js?v=4"></script>
 <script>
 const S=window.HBSYM.SYMBOLS;
 const GROUPS=[
+  ['Nitrous system — full panels · drop straight onto your dash',[
+    [S.nitrouscontroller({state:'armed'}),'Controller · set points'],
+    [S.nitrouspanel({state:'purging',level:64}),'System panel · live flow'],
+  ]],
   ['Nitrous bottle — live level · heater · purge · frost',[
     [S.bottle({state:'idle',level:62}),'Idle · 62%'],
     [S.bottle({state:'heating',level:48,pressure:1050}),'Heater on (glow)'],
