@@ -9,14 +9,39 @@ function shade(c,f){let[r,g,b]=hx(c);const cl=x=>Math.max(0,Math.min(255,Math.ro
 const lum=c=>{const[r,g,b]=hx(c);return r+g+b;};
 
 const UNITS={
+  // --- core ---
   rpm:{label:'RPM',sub:'x1000',max:8000,redline:6500,step:1000,div:1000},
   mph:{label:'MPH',sub:'',max:160,redline:null,step:20,div:1},
   kmh:{label:'KM/H',sub:'',max:260,redline:null,step:40,div:1},
+  // --- engine / boost ---
   boost:{label:'BOOST',sub:'PSI',max:30,redline:22,step:5,div:1},
-  oiltemp:{label:'OIL TEMP',sub:'°F',max:300,redline:260,step:50,div:1},
+  map:{label:'MAP',sub:'kPa',max:255,redline:null,step:50,div:1},
+  maf:{label:'MAF',sub:'lb/min',max:60,redline:null,step:10,div:1},
+  tps:{label:'TPS',sub:'%',max:100,redline:null,step:20,div:1},
+  // --- temps ---
   coolant:{label:'COOLANT',sub:'°F',max:260,redline:230,step:40,div:1},
+  oiltemp:{label:'OIL TEMP',sub:'°F',max:300,redline:260,step:50,div:1},
+  transtemp:{label:'TRANS',sub:'°F',max:300,redline:270,step:50,div:1},
+  iat:{label:'IAT',sub:'°F',max:200,redline:160,step:40,div:1},
+  // --- pressures / fluids ---
   oilpress:{label:'OIL PRES',sub:'PSI',max:100,redline:null,step:20,div:1},
+  fuelpsi:{label:'FUEL PRES',sub:'PSI',max:80,redline:null,step:20,div:1},
   fuel:{label:'FUEL',sub:'%',max:100,redline:null,step:25,div:1},
+  volts:{label:'VOLTS',sub:'V',min:8,max:18,redline:null,step:2,div:1},
+  // --- air/fuel ---
+  afr:{label:'AFR',sub:':1',min:10,max:18,redline:16,step:1,div:1},
+  afrcmd:{label:'AFR CMD',sub:':1',min:10,max:18,redline:16,step:1,div:1},
+  o2b1:{label:'O2 B1',sub:'mV',max:1000,redline:null,step:200,div:1},
+  o2b2:{label:'O2 B2',sub:'mV',max:1000,redline:null,step:200,div:1},
+  stftb1:{label:'STFT B1',sub:'%',min:-25,max:25,redline:null,step:10,div:1},
+  stftb2:{label:'STFT B2',sub:'%',min:-25,max:25,redline:null,step:10,div:1},
+  ltftb1:{label:'LTFT B1',sub:'%',min:-25,max:25,redline:null,step:10,div:1},
+  ltftb2:{label:'LTFT B2',sub:'%',min:-25,max:25,redline:null,step:10,div:1},
+  injb1:{label:'INJ B1',sub:'%',max:100,redline:90,step:20,div:1},
+  injb2:{label:'INJ B2',sub:'%',max:100,redline:90,step:20,div:1},
+  // --- tuning / spark ---
+  timing:{label:'TIMING',sub:'°',min:-10,max:45,redline:null,step:10,div:1},
+  knock:{label:'KNOCK',sub:'°',max:15,redline:5,step:3,div:1},
 };
 const START=-135,SWEEP=270;
 
@@ -37,13 +62,13 @@ function faceDef(fc){
 }
 
 function round(o){
-  const U=UNITS[o.unit],size=400,cx=200,cy=200,R=196,rmax=U.max,redline=U.redline??(rmax+1),val=o.value,ang=v=>START+(v/rmax)*SWEEP;
+  const U=UNITS[o.unit],size=400,cx=200,cy=200,R=196,rmax=U.max,rmin=U.min||0,redline=U.redline??(rmax+1),val=o.value,ang=v=>START+((v-rmin)/(rmax-rmin))*SWEEP;
   const [bz,bevel]=bezelDef(o.bezel), [face,faceval]=faceDef(o.face);
   const tcol=lum(faceval)>470?'#0a0c0d':'#ffffff';
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" font-family="'Rajdhani','Segoe UI',sans-serif"><defs>${bz}${face}<linearGradient id="ndl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(o.needle,1.55)}"/><stop offset="1" stop-color="${shade(o.needle,0.85)}"/></linearGradient><radialGradient id="hub" cx="40%" cy="34%" r="72%"><stop offset="0" stop-color="#eef1f3"/><stop offset="0.46" stop-color="#969ca2"/><stop offset="1" stop-color="#34383c"/></radialGradient><radialGradient id="gl" cx="50%" cy="15%" r="60%"><stop offset="0" stop-color="#fff" stop-opacity="0.3"/><stop offset="0.4" stop-color="#fff" stop-opacity="0.06"/><stop offset="0.68" stop-color="#fff" stop-opacity="0"/></radialGradient><clipPath id="cl"><circle cx="${cx}" cy="${cy}" r="${R-26}"/></clipPath><filter id="dr" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.6"/></filter></defs>`;
   s+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#bz)"/><circle cx="${cx}" cy="${cy}" r="${R-13}" fill="none" stroke="${bevel}" stroke-width="4"/><circle cx="${cx}" cy="${cy}" r="${R-26}" fill="url(#fc)"/>`;
   if(U.redline)s+=`<path d="${arcP(cx,cy,R-40,ang(redline),ang(rmax))}" fill="none" stroke="#ff3b30" stroke-width="10" stroke-linecap="round"/>`;
-  for(let v=0;v<=rmax;v+=U.step){const a=ang(v),o1=polar(cx,cy,R-30,a),o2=polar(cx,cy,R-48,a),rl=U.redline&&v>=redline,col=rl?'#ff3b30':tcol;
+  for(let v=rmin;v<=rmax+1e-6;v+=U.step){const a=ang(v),o1=polar(cx,cy,R-30,a),o2=polar(cx,cy,R-48,a),rl=U.redline&&v>=redline,col=rl?'#ff3b30':tcol;
     s+=`<line x1="${f1(o1[0])}" y1="${f1(o1[1])}" x2="${f1(o2[0])}" y2="${f1(o2[1])}" stroke="${col}" stroke-width="4.5" stroke-linecap="round"/>`;
     const n=polar(cx,cy,R-70,a);s+=`<text x="${f1(n[0])}" y="${f1(n[1])}" fill="${col}" font-size="24" font-weight="700" text-anchor="middle" dominant-baseline="central">${Math.round(v/U.div)}</text>`;}
   s+=`<text x="${cx}" y="${cy-46}" fill="${o.accent}" font-size="17" font-weight="700" text-anchor="middle" letter-spacing="2">${U.label}</text>`;
@@ -54,44 +79,44 @@ function round(o){
   s+=`<circle cx="${cx}" cy="${cy}" r="16" fill="url(#hub)" stroke="#2a2d30" stroke-width="2"/><circle cx="${cx-4}" cy="${cy-4}" r="4" fill="#fff" opacity="0.6"/><circle cx="${cx}" cy="${cy}" r="${R-26}" fill="url(#gl)" clip-path="url(#cl)"/></svg>`;
   return s;
 }
-function arc(o){const U=UNITS[o.unit],size=400,cx=200,cy=200,R=170,A0=-125,A1=125,SW=250,rmax=U.max,redline=U.redline??(rmax+1),val=o.value,ang=v=>A0+(v/rmax)*SW;
+function arc(o){const U=UNITS[o.unit],size=400,cx=200,cy=200,R=170,A0=-125,A1=125,SW=250,rmax=U.max,rmin=U.min||0,redline=U.redline??(rmax+1),val=o.value,ang=v=>A0+((v-rmin)/(rmax-rmin))*SW;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" font-family="'Rajdhani',sans-serif"><defs><linearGradient id="fl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${o.needle}"/><stop offset="0.62" stop-color="#ffd23f"/><stop offset="1" stop-color="#ff3b30"/></linearGradient><filter id="g" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4"/></filter></defs><rect width="${size}" height="${size}" rx="24" fill="#0c0f13"/>`;
   s+=`<path d="${arcP(cx,cy,R,A0,A1)}" fill="none" stroke="#232a33" stroke-width="22" stroke-linecap="round"/><path d="${arcP(cx,cy,R,A0,ang(val))}" fill="none" stroke="url(#fl)" stroke-width="22" stroke-linecap="round" filter="url(#g)"/><path d="${arcP(cx,cy,R,A0,ang(val))}" fill="none" stroke="url(#fl)" stroke-width="22" stroke-linecap="round"/>`;
   if(U.redline){const r1=polar(cx,cy,R-16,ang(redline)),r2=polar(cx,cy,R+16,ang(redline));s+=`<line x1="${f1(r1[0])}" y1="${f1(r1[1])}" x2="${f1(r2[0])}" y2="${f1(r2[1])}" stroke="#ff3b30" stroke-width="4"/>`;}
   s+=`<text x="${cx}" y="${cy+6}" fill="#fff" font-size="76" font-weight="800" text-anchor="middle" dominant-baseline="central">${val}</text><text x="${cx}" y="${cy+52}" fill="${o.accent}" font-size="16" font-weight="700" text-anchor="middle" letter-spacing="3">${U.label}</text></svg>`;return s;}
-function halfarc(o){const U=UNITS[o.unit],w=440,h=258,cx=220,cy=h-28,R=h-54,A0=-90,A1=90,SW=180,rmax=U.max,redline=U.redline??(rmax+1),val=o.value,ang=v=>A0+(v/rmax)*SW;
+function halfarc(o){const U=UNITS[o.unit],w=440,h=258,cx=220,cy=h-28,R=h-54,A0=-90,A1=90,SW=180,rmax=U.max,rmin=U.min||0,redline=U.redline??(rmax+1),val=o.value,ang=v=>A0+((v-rmin)/(rmax-rmin))*SW;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="'Rajdhani',sans-serif"><defs><linearGradient id="fl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${o.needle}"/><stop offset="0.62" stop-color="#ffd23f"/><stop offset="1" stop-color="#ff3b30"/></linearGradient><filter id="g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.5"/></filter></defs><rect width="${w}" height="${h}" rx="20" fill="#0c0f13"/>`;
   s+=`<path d="${arcP(cx,cy,R,A0,A1)}" fill="none" stroke="#232a33" stroke-width="22" stroke-linecap="round"/><path d="${arcP(cx,cy,R,A0,ang(val))}" fill="none" stroke="url(#fl)" stroke-width="22" stroke-linecap="round" filter="url(#g)"/><path d="${arcP(cx,cy,R,A0,ang(val))}" fill="none" stroke="url(#fl)" stroke-width="22" stroke-linecap="round"/>`;
   s+=`<text x="${cx}" y="${cy-16}" fill="#fff" font-size="68" font-weight="800" text-anchor="middle">${val}</text><text x="${cx}" y="${cy+12}" fill="${o.accent}" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="4">${U.label}</text></svg>`;return s;}
-function ring(o){const U=UNITS[o.unit],size=360,cx=180,cy=180,R=146,A0=-140,A1=140,SW=280,rmax=U.max,redline=U.redline??(rmax+1),val=o.value,ang=v=>A0+(v/rmax)*SW;
+function ring(o){const U=UNITS[o.unit],size=360,cx=180,cy=180,R=146,A0=-140,A1=140,SW=280,rmax=U.max,rmin=U.min||0,redline=U.redline??(rmax+1),val=o.value,ang=v=>A0+((v-rmin)/(rmax-rmin))*SW;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" font-family="'Rajdhani',sans-serif"><defs><filter id="g" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.5"/></filter></defs><rect width="${size}" height="${size}" rx="22" fill="#0c0f13"/>`;
   s+=`<path d="${arcP(cx,cy,R,A0,A1)}" fill="none" stroke="#232a33" stroke-width="13" stroke-linecap="round"/><path d="${arcP(cx,cy,R,A0,ang(val))}" fill="none" stroke="${o.needle}" stroke-width="13" stroke-linecap="round" filter="url(#g)"/><path d="${arcP(cx,cy,R,A0,ang(val))}" fill="none" stroke="${o.needle}" stroke-width="13" stroke-linecap="round"/>`;
   if(U.redline){const rp=polar(cx,cy,R,ang(redline));s+=`<circle cx="${f1(rp[0])}" cy="${f1(rp[1])}" r="5.5" fill="#ff3b30"/>`;}
   s+=`<text x="${cx}" y="${cy-2}" fill="#fff" font-size="70" font-weight="800" text-anchor="middle" dominant-baseline="central">${val}</text><text x="${cx}" y="${cy+44}" fill="${o.accent}" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="4">${U.label}</text></svg>`;return s;}
-function segarc(o){const U=UNITS[o.unit],size=400,cx=200,cy=200,R=164,A0=-120,A1=120,SW=240,n=22,sw=SW/n,rmax=U.max,redline=U.redline??(rmax+1),val=o.value;
+function segarc(o){const U=UNITS[o.unit],size=400,cx=200,cy=200,R=164,A0=-120,A1=120,SW=240,n=22,sw=SW/n,rmax=U.max,rmin=U.min||0,redline=U.redline??(rmax+1),val=o.value;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" font-family="'Rajdhani',sans-serif"><rect width="${size}" height="${size}" rx="24" fill="#0c0f13"/>`;
-  for(let i=0;i<n;i++){const a0=A0+i*sw+1.3,a1=A0+(i+1)*sw-1.3,mid=(i+0.5)/n*rmax,lit=mid<=val,c=mid>=redline?'#ff3b30':(mid>=redline*0.78?'#ffd23f':o.needle);
+  for(let i=0;i<n;i++){const a0=A0+i*sw+1.3,a1=A0+(i+1)*sw-1.3,mid=rmin+(i+0.5)/n*(rmax-rmin),lit=mid<=val,c=mid>=redline?'#ff3b30':(mid>=redline*0.78?'#ffd23f':o.needle);
     s+=`<path d="${arcP(cx,cy,R,a0,a1)}" fill="none" stroke="${lit?c:'#232a33'}" stroke-width="26"/>`;}
   s+=`<text x="${cx}" y="${cy-4}" fill="#fff" font-size="78" font-weight="800" text-anchor="middle" dominant-baseline="central">${val}</text><text x="${cx}" y="${cy+50}" fill="${o.accent}" font-size="16" font-weight="700" text-anchor="middle" letter-spacing="3">${U.label}</text></svg>`;return s;}
-function neon(o){const U=UNITS[o.unit],size=380,cx=190,cy=190,R=156,A0=-135,A1=135,SW=270,nz=o.needle,rmax=U.max,redline=U.redline??(rmax+1),val=o.value,ang=v=>A0+(v/rmax)*SW;
+function neon(o){const U=UNITS[o.unit],size=380,cx=190,cy=190,R=156,A0=-135,A1=135,SW=270,nz=o.needle,rmax=U.max,rmin=U.min||0,redline=U.redline??(rmax+1),val=o.value,ang=v=>A0+((v-rmin)/(rmax-rmin))*SW;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" font-family="'Rajdhani',sans-serif"><defs><filter id="nz" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="${size}" height="${size}" rx="24" fill="#06070a"/>`;
   s+=`<path d="${arcP(cx,cy,R,A0,A1)}" fill="none" stroke="${shade(nz,0.28)}" stroke-width="3"/><path d="${arcP(cx,cy,R,A0,ang(val))}" fill="none" stroke="${nz}" stroke-width="5" stroke-linecap="round" filter="url(#nz)"/>`;
-  for(let k=0;k<=rmax;k+=U.step){const a=ang(k),o1=polar(cx,cy,R-11,a),o2=polar(cx,cy,R-23,a),col=U.redline&&k>=redline?'#ff3b6b':nz;
+  for(let k=rmin;k<=rmax+1e-6;k+=U.step){const a=ang(k),o1=polar(cx,cy,R-11,a),o2=polar(cx,cy,R-23,a),col=U.redline&&k>=redline?'#ff3b6b':nz;
     s+=`<line x1="${f1(o1[0])}" y1="${f1(o1[1])}" x2="${f1(o2[0])}" y2="${f1(o2[1])}" stroke="${col}" stroke-width="2.5" filter="url(#nz)"/>`;}
   s+=`<text x="${cx}" y="${cy+4}" fill="${nz}" font-size="74" font-weight="800" text-anchor="middle" dominant-baseline="central" filter="url(#nz)">${val}</text><text x="${cx}" y="${cy+50}" fill="${nz}" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="4">${U.label}</text></svg>`;return s;}
-function bar(o){const U=UNITS[o.unit],w=520,h=170,pad=20,n=30,gap=4,bx=pad,by=46,bh=54,bw=w-2*pad-150,seg=(bw-(n-1)*gap)/n,rmax=U.max,redline=U.redline??(rmax+1),val=o.value;
+function bar(o){const U=UNITS[o.unit],w=520,h=170,pad=20,n=30,gap=4,bx=pad,by=46,bh=54,bw=w-2*pad-150,seg=(bw-(n-1)*gap)/n,rmax=U.max,rmin=U.min||0,redline=U.redline??(rmax+1),val=o.value;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="'Rajdhani',sans-serif"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.32"/><stop offset="0.42" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="${w}" height="${h}" rx="16" fill="#0c0f13"/>`;
-  for(let i=0;i<n;i++){const rp=(i+0.5)/n*rmax,lit=rp<=val,c=rp>=redline?'#ff3b30':(rp>=redline*0.82?'#ffd23f':o.needle),x=bx+i*(seg+gap);
+  for(let i=0;i<n;i++){const rp=rmin+(i+0.5)/n*(rmax-rmin),lit=rp<=val,c=rp>=redline?'#ff3b30':(rp>=redline*0.82?'#ffd23f':o.needle),x=bx+i*(seg+gap);
     s+=`<rect x="${f1(x)}" y="${by}" width="${f1(seg)}" height="${bh}" rx="3" fill="${lit?c:'#232a33'}"/>`;if(lit)s+=`<rect x="${f1(x)}" y="${by}" width="${f1(seg)}" height="${bh}" rx="3" fill="url(#sg)"/>`;}
-  for(let k=0;k<=rmax;k+=U.step){const fx=bx+(k/rmax)*bw;s+=`<text x="${f1(fx)}" y="${by+bh+18}" fill="#79818b" font-size="13" font-weight="600" text-anchor="middle">${Math.round(k/U.div)}</text>`;}
+  for(let k=rmin;k<=rmax+1e-6;k+=U.step){const fx=bx+((k-rmin)/(rmax-rmin))*bw;s+=`<text x="${f1(fx)}" y="${by+bh+18}" fill="#79818b" font-size="13" font-weight="600" text-anchor="middle">${Math.round(k/U.div)}</text>`;}
   s+=`<text x="${bx}" y="${by-10}" fill="${o.accent}" font-size="14" font-weight="700" letter-spacing="2">${U.label}${U.sub?' '+U.sub:''}</text><text x="${w-pad}" y="${by+38}" fill="#fff" font-size="44" font-weight="800" text-anchor="end">${val}</text><text x="${w-pad}" y="${by+bh+18}" fill="#79818b" font-size="13" text-anchor="end">${U.label}</text></svg>`;return s;}
-function vbar(o){const U=UNITS[o.unit],w=180,h=380,bw=58,bx=(w-bw)/2,by=54,bh=h-104,n=22,gap=4,seg=(bh-(n-1)*gap)/n,rmax=U.max,redline=U.redline??(rmax+1),val=o.value;
+function vbar(o){const U=UNITS[o.unit],w=180,h=380,bw=58,bx=(w-bw)/2,by=54,bh=h-104,n=22,gap=4,seg=(bh-(n-1)*gap)/n,rmax=U.max,rmin=U.min||0,redline=U.redline??(rmax+1),val=o.value;
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="'Rajdhani',sans-serif"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0.32"/><stop offset="0.42" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="${w}" height="${h}" rx="16" fill="#0c0f13"/>`;
-  for(let i=0;i<n;i++){const rp=(i+0.5)/n*rmax,lit=rp<=val,c=rp>=redline?'#ff3b30':(rp>=redline*0.82?'#ffd23f':o.needle),y=by+bh-(i+1)*seg-i*gap;
+  for(let i=0;i<n;i++){const rp=rmin+(i+0.5)/n*(rmax-rmin),lit=rp<=val,c=rp>=redline?'#ff3b30':(rp>=redline*0.82?'#ffd23f':o.needle),y=by+bh-(i+1)*seg-i*gap;
     s+=`<rect x="${f1(bx)}" y="${f1(y)}" width="${bw}" height="${f1(seg)}" rx="3" fill="${lit?c:'#232a33'}"/>`;if(lit)s+=`<rect x="${f1(bx)}" y="${f1(y)}" width="${bw}" height="${f1(seg)}" rx="3" fill="url(#sg)"/>`;}
   s+=`<text x="${w/2}" y="36" fill="#fff" font-size="30" font-weight="800" text-anchor="middle">${val}</text><text x="${w/2}" y="${h-20}" fill="${o.accent}" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="2">${U.label}</text></svg>`;return s;}
 
-function race(o){const U=UNITS[o.unit],w=560,h=300,rmax=U.max,redline=U.redline??(rmax+1),val=o.value,n=18,pad=24,gap=5,bw=w-2*pad,seg=(bw-(n-1)*gap)/n,by=22,bh=30,ratio=Math.min(1,val/rmax);
+function race(o){const U=UNITS[o.unit],w=560,h=300,rmax=U.max,rmin=U.min||0,redline=U.redline??(rmax+1),val=o.value,n=18,pad=24,gap=5,bw=w-2*pad,seg=(bw-(n-1)*gap)/n,by=22,bh=30,ratio=Math.min(1,Math.max(0,(val-rmin)/(rmax-rmin)));
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="'Rajdhani','Consolas',monospace"><defs><filter id="rg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.6"/></filter></defs>`;
   s+=`<rect width="${w}" height="${h}" rx="14" fill="#06080b"/><rect x="3" y="3" width="${w-6}" height="${h-6}" rx="12" fill="none" stroke="#171d26" stroke-width="2"/>`;
   for(let i=0;i<n;i++){const frac=(i+0.5)/n,lit=frac<=ratio,c=frac>0.93?'#8a5cff':frac>0.82?'#ff3b30':frac>0.58?'#ffd23f':'#27e36a',x=pad+i*(seg+gap);
