@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Honeybadger Symbol Library — Animated Dash Parts</title>
+<style>
+  :root{--bg:#07090c;--panel:#10141a;--line:#1d2530;--amber:#ffae00;--txt:#cfd6dd;--mut:#8b949e;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:600 15px/1.4 'Segoe UI',system-ui,sans-serif}
+  header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  header h1{font-size:17px;margin:0;letter-spacing:.5px;color:var(--amber)}
+  header .tag{font-size:11px;color:var(--mut);font-weight:500}
+  .pill{display:inline-block;font-size:10px;color:#06070a;background:var(--amber);border-radius:20px;padding:2px 9px;font-weight:800;letter-spacing:.5px}
+  a.home{color:var(--mut);font-size:12px;text-decoration:none}a.home:hover{color:var(--amber)}
+  h2.grp{font-size:12px;letter-spacing:2px;color:var(--mut);text-transform:uppercase;padding:6px 22px 0;margin:18px 0 0}
+  .grid{display:flex;flex-wrap:wrap;gap:18px;padding:14px 22px;align-items:flex-end}
+  figure{margin:0;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+  figure .sym{display:flex;align-items:center;justify-content:center}
+  figure .sym svg{display:block;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+  figcaption{margin-top:10px;font-size:11.5px;letter-spacing:.4px;color:#9aa3ad}
+  footer{padding:14px 20px;color:var(--mut);font-size:11px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header>
+  <a href="/" style="font-size:20px;text-decoration:none">🦡</a>
+  <h1>Honeybadger Symbol Library</h1>
+  <span class="pill">LIVE · ANIMATED</span>
+  <span class="tag">skeuomorphic dash parts — original SVG, recolor + animate, ships to your dash</span>
+  <a class="home" href="designer.html" style="margin-left:auto;color:var(--amber);font-weight:700">▦ Screen designer →</a>
+  <a class="home" href="/" style="margin-left:14px">← honeybadger.software</a>
+</header>
+
+<div id="lib"></div>
+
+<footer>HONEYBADGER SOFTWARE INC · symbol library (growing) · every part is parametric SVG — live values, glows, purge vapor, theme colors. Drag them onto your screen in the designer.</footer>
+
+<script src="assets/js/symbols.js?v=1"></script>
+<script>
+const S=window.HBSYM.SYMBOLS;
+const GROUPS=[
+  ['Nitrous bottle — live level · heater · purge · frost',[
+    [S.bottle({state:'idle',level:62}),'Idle · 62%'],
+    [S.bottle({state:'heating',level:48,pressure:1050}),'Heater on (glow)'],
+    [S.bottle({state:'purging',level:80}),'Purging (vapor)'],
+    [S.bottle({state:'cold',level:30,pressure:600}),'Cold (frost)'],
+    [S.bottle({color:'#ff3b30',state:'idle',level:70,label:'N₂O'}),'Red theme'],
+    [S.bottle({color:'#ed7a06',state:'idle',level:55}),'Amber theme'],
+  ]],
+  ['Purge solenoid · arm switch · controller',[
+    [S.purge({state:'closed'}),'Purge — closed'],
+    [S.purge({state:'open'}),'Purge — open (flow)'],
+    [S.armswitch({state:'armed'}),'Arm switch — armed'],
+    [S.armswitch({state:'safe'}),'Arm switch — safe'],
+    [S.controller({state:'on',display:'ARMED'}),'Controller — armed'],
+    [S.controller({state:'purging',display:'PURGE'}),'Controller — purging'],
+    [S.controller({state:'off',display:'OFF'}),'Controller — off'],
+  ]],
+  ['Telltales / indicator lights — glow when active',[
+    [S.indicator({icon:'armed',state:'on'}),'Armed'],
+    [S.indicator({icon:'purge',state:'on'}),'Purge'],
+    [S.indicator({icon:'wot',state:'on'}),'WOT'],
+    [S.indicator({icon:'shift',state:'on'}),'Shift'],
+    [S.indicator({icon:'boost',state:'on'}),'Boost'],
+    [S.indicator({icon:'ready',state:'on'}),'Ready'],
+    [S.indicator({icon:'oil',state:'on'}),'Oil'],
+    [S.indicator({icon:'temp',state:'on'}),'Temp'],
+    [S.indicator({icon:'fuel',state:'on'}),'Fuel'],
+    [S.indicator({icon:'batt',state:'on'}),'Battery'],
+    [S.indicator({icon:'check',state:'on'}),'Check'],
+    [S.indicator({icon:'knock',state:'on'}),'Knock'],
+    [S.indicator({icon:'oil',state:'off'}),'Oil — off'],
+  ]],
+];
+let html='';
+GROUPS.forEach(([title,items])=>{
+  html+=`<h2 class="grp">${title}</h2><div class="grid">`;
+  items.forEach(([s,cap])=>{html+=`<figure><div class="sym">${s}</div><figcaption>${cap}</figcaption></figure>`;});
+  html+='</div>';
+});
+document.getElementById('lib').innerHTML=html;
+</script>
+</body>
+</html>

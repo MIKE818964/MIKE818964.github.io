@@ -1,0 +1,132 @@
+/* Honeybadger SYMBOLS — skeuomorphic, animated dash "parts" as ORIGINAL parametric SVG.
+   Same idea as the gauges: code, not scraped images — so they scale crisp, recolor to any
+   theme, and animate live (heater glow, purge vapor, valve flow, telltale pulse).
+   window.HBSYM = { SYMBOLS, list } */
+(function(){
+const f1=n=>(+n).toFixed(1);
+function hx(c){return[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));}
+function shade(c,f){let[r,g,b]=hx(c);const cl=x=>Math.max(0,Math.min(255,Math.round(x)));if(f>=1){r+=(255-r)*(f-1);g+=(255-g)*(f-1);b+=(255-b)*(f-1);}else{r*=f;g*=f;b*=f;}return'#'+[r,g,b].map(x=>cl(x).toString(16).padStart(2,'0')).join('');}
+const svg=(w,h,b)=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="'Rajdhani','Segoe UI',sans-serif">${b}</svg>`;
+
+// ── NITROUS BOTTLE — live level, heater glow, purge vapor, frost ──────────────
+function bottle(o){o=o||{};
+  const col=o.color||'#1f6bd6', lvl=Math.max(0,Math.min(100,o.level!=null?o.level:62)),
+        psi=Math.max(0,Math.min(1200,o.pressure!=null?o.pressure:950)), st=o.state||'idle';
+  const w=150,h=320,cx=75,bx=35,bw=80,top=74,bot=h-14,bH=bot-top,fillY=bot-(lvl/100)*bH;
+  const lo=shade(col,0.5),hi=shade(col,1.65);
+  let d=`<defs>
+    <linearGradient id="bdy" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${lo}"/><stop offset="0.26" stop-color="${hi}"/><stop offset="0.5" stop-color="${col}"/><stop offset="0.8" stop-color="${lo}"/><stop offset="1" stop-color="${shade(col,0.35)}"/></linearGradient>
+    <linearGradient id="liq" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade(col,0.35)}"/><stop offset="0.5" stop-color="${shade(col,0.85)}"/><stop offset="1" stop-color="${shade(col,0.3)}"/></linearGradient>
+    <linearGradient id="chr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8b9197"/><stop offset="0.32" stop-color="#f2f4f6"/><stop offset="0.56" stop-color="#7d848b"/><stop offset="1" stop-color="#cfd4d8"/></linearGradient>
+    <radialGradient id="heat" cx="50%" cy="62%" r="62%"><stop offset="0" stop-color="#ff7a00" stop-opacity="0.6"/><stop offset="1" stop-color="#ff7a00" stop-opacity="0"/></radialGradient>
+    <clipPath id="bc"><rect x="${bx}" y="${top}" width="${bw}" height="${bH}" rx="16"/></clipPath></defs>`;
+  let b='';
+  if(st==='heating')b+=`<ellipse cx="${cx}" cy="${top+bH*0.62}" rx="80" ry="125" fill="url(#heat)"><animate attributeName="opacity" values="0.45;1;0.45" dur="1.7s" repeatCount="indefinite"/></ellipse>`;
+  // body + liquid
+  b+=`<rect x="${bx}" y="${top}" width="${bw}" height="${bH}" rx="16" fill="url(#bdy)" stroke="${shade(col,0.3)}" stroke-width="1.5"/>`;
+  b+=`<rect x="${bx}" y="${f1(fillY)}" width="${bw}" height="${f1(bot-fillY)}" fill="url(#liq)" clip-path="url(#bc)"/>`;
+  b+=`<rect x="${bx}" y="${f1(fillY)}" width="${bw}" height="3" fill="#fff" opacity="0.55" clip-path="url(#bc)"/>`;
+  b+=`<rect x="${bx+11}" y="${top}" width="11" height="${bH}" rx="5" fill="#fff" opacity="0.2" clip-path="url(#bc)"/>`;
+  if(st==='cold')b+=`<rect x="${bx}" y="${top+bH*0.5}" width="${bw}" height="${bH*0.5}" fill="#dff1ff" opacity="0.34" clip-path="url(#bc)"/>`;
+  // label band
+  b+=`<rect x="${bx-2}" y="${f1(top+bH*0.30)}" width="${bw+4}" height="58" fill="#0c0f13" opacity="0.92"/>`;
+  b+=`<text x="${cx}" y="${f1(top+bH*0.30+25)}" fill="#fff" font-size="23" font-weight="800" text-anchor="middle" letter-spacing="1">${o.label||'N₂O'}</text>`;
+  b+=`<text x="${cx}" y="${f1(top+bH*0.30+45)}" fill="${hi}" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="3">HONEYBADGER</text>`;
+  b+=`<text x="${cx}" y="${bot-9}" fill="#fff" font-size="13" font-weight="800" text-anchor="middle">${Math.round(lvl)}%</text>`;
+  // neck + valve + handle
+  b+=`<rect x="${cx-15}" y="56" width="30" height="24" rx="4" fill="url(#chr)"/>`;
+  b+=`<rect x="${cx-22}" y="32" width="44" height="28" rx="7" fill="url(#chr)" stroke="#6b7176"/>`;
+  b+=`<circle cx="${cx}" cy="22" r="14" fill="url(#chr)" stroke="#6b7176" stroke-width="1.5"/><circle cx="${cx}" cy="22" r="5" fill="#5a6066"/>`;
+  b+=`<rect x="${cx+20}" y="38" width="18" height="13" rx="2" fill="url(#chr)"/>`;
+  // pressure mini-gauge
+  const pa=-120+(psi/1200)*240, prad=pa*Math.PI/180;
+  b+=`<circle cx="${cx+48}" cy="44" r="15" fill="#0c0f13" stroke="url(#chr)" stroke-width="2.5"/>`;
+  b+=`<line x1="${cx+48}" y1="44" x2="${f1(cx+48+11*Math.sin(prad))}" y2="${f1(44-11*Math.cos(prad))}" stroke="${psi>1100?'#ff3b30':'#39ff9a'}" stroke-width="2"/><circle cx="${cx+48}" cy="44" r="2.5" fill="#cfd4d8"/>`;
+  // purge vapor
+  if(st==='purging')for(let i=0;i<3;i++){const bg=(i*0.27).toFixed(2);b+=`<circle cx="${cx+44}" cy="44" r="3" fill="#eaf6ff"><animate attributeName="cx" values="${cx+44};${cx+92}" dur="0.8s" begin="${bg}s" repeatCount="indefinite"/><animate attributeName="cy" values="44;${30-i*4}" dur="0.8s" begin="${bg}s" repeatCount="indefinite"/><animate attributeName="r" values="3;15" dur="0.8s" begin="${bg}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.95;0" dur="0.8s" begin="${bg}s" repeatCount="indefinite"/></circle>`;}
+  return svg(w,h,d+b);
+}
+
+// ── PURGE SOLENOID / VALVE — open(flow+glow) / closed ─────────────────────────
+function purge(o){o=o||{};const open=o.state==='open',col=o.color||'#39ff9a',w=170,h=120,cy=60;
+  let d=`<defs><linearGradient id="mt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfd4d8"/><stop offset="0.5" stop-color="#7d848b"/><stop offset="1" stop-color="#3c4248"/></linearGradient><filter id="fg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3.5"/></filter></defs>`;
+  let b=`<rect width="${w}" height="${h}" rx="12" fill="#0c0f13"/>`;
+  // inlet/outlet pipes
+  b+=`<rect x="6" y="${cy-9}" width="40" height="18" rx="3" fill="url(#mt)"/><rect x="${w-46}" y="${cy-9}" width="40" height="18" rx="3" fill="url(#mt)"/>`;
+  // flow particles when open
+  if(open)for(let i=0;i<4;i++){const bg=(i*0.18).toFixed(2);b+=`<circle cy="${cy}" r="4" fill="${col}" filter="url(#fg)"><animate attributeName="cx" values="50;${w-50}" dur="0.7s" begin="${bg}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="0.7s" begin="${bg}s" repeatCount="indefinite"/></circle>`;}
+  // solenoid coil
+  b+=`<rect x="58" y="20" width="54" height="80" rx="8" fill="url(#mt)" stroke="#2a2f34"/>`;
+  for(let i=0;i<6;i++)b+=`<rect x="60" y="${24+i*12}" width="50" height="6" rx="3" fill="#2a2f34" opacity="0.55"/>`;
+  // valve body center
+  b+=`<circle cx="${w/2}" cy="${cy}" r="20" fill="#1a1f25" stroke="url(#mt)" stroke-width="3"/>`;
+  b+=`<circle cx="${w/2}" cy="${cy}" r="11" fill="${open?col:'#2a313a'}" ${open?'filter="url(#fg)"':''}>${open?'<animate attributeName="opacity" values="0.7;1;0.7" dur="1.1s" repeatCount="indefinite"/>':''}</circle>`;
+  // top terminal
+  b+=`<rect x="${w/2-7}" y="8" width="14" height="16" rx="2" fill="url(#mt)"/>`;
+  b+=`<text x="${w/2}" y="${h-8}" fill="${open?col:'#5b6772'}" font-size="13" font-weight="800" text-anchor="middle" letter-spacing="2">${open?'OPEN':'CLOSED'}</text>`;
+  return svg(w,h,d+b);
+}
+
+// ── ARM SWITCH — guarded missile toggle, armed(glow)/safe ─────────────────────
+function armswitch(o){o=o||{};const armed=o.state!=='safe',w=120,h=150;
+  let d=`<defs><linearGradient id="pl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4047"/><stop offset="1" stop-color="#14181c"/></linearGradient><radialGradient id="gl" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#ff2a1f" stop-opacity="0.7"/><stop offset="1" stop-color="#ff2a1f" stop-opacity="0"/></radialGradient></defs>`;
+  let b=`<rect width="${w}" height="${h}" rx="12" fill="#0c0f13"/>`;
+  // plate
+  b+=`<rect x="22" y="24" width="76" height="100" rx="10" fill="url(#pl)" stroke="#0a0c0e"/>`;
+  [[30,32],[90,32],[30,116],[90,116]].forEach(p=>b+=`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="#5a6066"/>`);
+  if(armed)b+=`<ellipse cx="60" cy="62" rx="46" ry="40" fill="url(#gl)"><animate attributeName="opacity" values="0.55;1;0.55" dur="1.3s" repeatCount="indefinite"/></ellipse>`;
+  // guard cover (up=armed, down=safe over switch)
+  if(armed){b+=`<path d="M44 60 L76 60 L72 30 L48 30 Z" fill="#b81e16" stroke="#7a120c" stroke-width="2" opacity="0.92"/>`;
+    b+=`<rect x="52" y="58" width="16" height="34" rx="4" fill="#e8edf2"/><rect x="52" y="58" width="16" height="10" rx="4" fill="#ff3b30"/>`; // toggle up
+  }else{b+=`<path d="M44 92 L76 92 L72 60 L48 60 Z" fill="#1d232a" stroke="#0a0c0e" stroke-width="2"/>`;
+    b+=`<rect x="52" y="66" width="16" height="26" rx="4" fill="#9aa0a6"/>`; // toggle covered/down
+  }
+  b+=`<text x="60" y="140" fill="${armed?'#ff3b30':'#5b6772'}" font-size="14" font-weight="800" text-anchor="middle" letter-spacing="3">${armed?'ARMED':'SAFE'}</text>`;
+  return svg(w,h,d+b);
+}
+
+// ── CONTROLLER BOX — "physical" unit, live display + status LEDs ──────────────
+function controller(o){o=o||{};const on=o.state!=='off',col=o.color||'#39ff9a',disp=o.display||(on?'ARMED':'SAFE'),w=240,h=150;
+  let d=`<defs><linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3037"/><stop offset="1" stop-color="#0e1216"/></linearGradient><linearGradient id="bt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4047"/><stop offset="1" stop-color="#1a1f25"/></linearGradient></defs>`;
+  let b=`<rect width="${w}" height="${h}" rx="14" fill="url(#cb)" stroke="#05070a" stroke-width="2"/>`;
+  [[14,14],[226,14],[14,136],[226,136]].forEach(p=>b+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#5a6066"/><circle cx="${p[0]}" cy="${p[1]}" r="1.6" fill="#1a1f25"/>`);
+  b+=`<text x="20" y="30" fill="${col}" font-size="13" font-weight="800" letter-spacing="2">HONEYBADGER · N₂O</text>`;
+  // display
+  b+=`<rect x="20" y="40" width="150" height="60" rx="6" fill="#05140c" stroke="#0a0c0e" stroke-width="2"/>`;
+  b+=`<text x="95" y="82" fill="${on?col:'#1f3a2c'}" font-family="'Consolas',monospace" font-size="34" font-weight="800" text-anchor="middle">${disp}</text>`;
+  if(on)b+=`<rect x="20" y="40" width="150" height="60" rx="6" fill="${col}" opacity="0.05"><animate attributeName="opacity" values="0.03;0.1;0.03" dur="2s" repeatCount="indefinite"/></rect>`;
+  // status LEDs
+  const leds=[['PWR','#39ff9a',on],['ARM',on?'#ff3b30':'#3a2326',on],['PRG','#ffd23f',o.state==='purging']];
+  leds.forEach((L,i)=>{const ly=46+i*18;b+=`<circle cx="190" cy="${ly}" r="6" fill="${L[2]?L[1]:shade(L[1],0.3)}">${L[2]?`<animate attributeName="opacity" values="0.6;1;0.6" dur="1.1s" repeatCount="indefinite"/>`:''}</circle><text x="202" y="${ly+4}" fill="#9aa0a6" font-size="10" font-weight="700">${L[0]}</text>`;});
+  // buttons
+  ['ARM','PURGE','SET'].forEach((t,i)=>{const bx=20+i*72;b+=`<rect x="${bx}" y="112" width="62" height="26" rx="5" fill="url(#bt)" stroke="#05070a"/><text x="${bx+31}" y="129" fill="#cfd4d8" font-size="11" font-weight="800" text-anchor="middle">${t}</text>`;});
+  return svg(w,h,d+b);
+}
+
+// ── INDICATOR / TELLTALE — round LED + glyph, glow when ON ────────────────────
+const TELL={armed:['◉','#ff3b30'],purge:['❄','#39c5ff'],wot:['WOT','#ffd23f'],shift:['▲','#7a5cff'],
+  oil:['OIL','#ff7a00'],temp:['TEMP','#ff3b30'],fuel:['⛽','#ffd23f'],batt:['BATT','#ff3b30'],
+  check:['CHK','#ffae00'],knock:['KNK','#ff3b30'],boost:['BST','#39ff9a'],ready:['RDY','#39ff9a']};
+function indicator(o){o=o||{};const k=o.icon||'armed',on=o.state!=='off',t=TELL[k]||TELL.armed,col=o.color||t[1],w=110,h=110,cx=55,cy=50;
+  let d=`<defs><radialGradient id="ig" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="${col}" stop-opacity="0.85"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></radialGradient><radialGradient id="lens" cx="42%" cy="34%" r="70%"><stop offset="0" stop-color="${shade(col,1.6)}"/><stop offset="0.6" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,0.45)}"/></radialGradient></defs>`;
+  let b=`<rect width="${w}" height="${h}" rx="12" fill="#0c0f13"/>`;
+  if(on)b+=`<circle cx="${cx}" cy="${cy}" r="42" fill="url(#ig)"><animate attributeName="opacity" values="0.6;1;0.6" dur="1.2s" repeatCount="indefinite"/></circle>`;
+  b+=`<circle cx="${cx}" cy="${cy}" r="30" fill="#14181c" stroke="#2a313a" stroke-width="2"/>`;
+  b+=`<circle cx="${cx}" cy="${cy}" r="26" fill="${on?'url(#lens)':shade(col,0.28)}"/>`;
+  if(on)b+=`<circle cx="${cx-8}" cy="${cy-9}" r="7" fill="#fff" opacity="0.4"/>`;
+  const big=t[0].length<=2;
+  b+=`<text x="${cx}" y="${cy+(big?7:5)}" fill="${on?'#0a0c0d':shade(col,0.5)}" font-size="${big?26:15}" font-weight="800" text-anchor="middle" dominant-baseline="middle">${t[0]}</text>`;
+  b+=`<text x="${cx}" y="${h-10}" fill="${on?col:'#5b6772'}" font-size="11" font-weight="800" text-anchor="middle" letter-spacing="2">${(o.label||k).toUpperCase()}</text>`;
+  return svg(w,h,d+b);
+}
+
+const SYMBOLS={bottle,purge,armswitch,controller,indicator};
+window.HBSYM={SYMBOLS,
+  list:[
+    {sym:'bottle',name:'N₂O bottle',opts:{state:'idle',level:62}},
+    {sym:'purge',name:'Purge solenoid',opts:{state:'closed'}},
+    {sym:'armswitch',name:'Arm switch',opts:{state:'armed'}},
+    {sym:'controller',name:'Controller unit',opts:{state:'on'}},
+    {sym:'indicator',name:'Telltale',opts:{icon:'armed',state:'on'}}
+  ]};
+})();
