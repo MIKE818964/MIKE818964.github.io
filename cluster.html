@@ -113,8 +113,10 @@ function slotWidth(s,rowLen){
   if(s.hero)  return 'min(360px,80%)';
   return rowLen>=3 ? 'min(210px,30%)' : 'min(250px,44%)';
 }
+const DEMO={rpm:4200,mph:78,kmh:120,boost:15,oiltemp:215,coolant:200,oilpress:55,fuel:64};
 function gaugeSVG(u,style,P){
-  return RENDER[style]({style:style,unit:u,needle:P.needle,accent:P.accent,bezel:P.bezel,face:P.face,value:UNITS[u].val});
+  const v = DEMO[u]!=null ? DEMO[u] : Math.round(UNITS[u].max*0.55);
+  return RENDER[style]({style:style,unit:u,needle:P.needle,accent:P.accent,bezel:P.bezel,face:P.face,value:v});
 }
 function render(){
   const L=LAYOUTS[$('layout').value], style=$('style').value;
