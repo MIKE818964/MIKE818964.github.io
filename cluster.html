@@ -57,6 +57,7 @@
         <option value="six">Six-Pack (6 gauges)</option>
         <option value="quad">Quad (2 × 2)</option>
         <option value="bigtwo">Big + Two</option>
+        <option value="tuning">Tuning · AFR + trims + O₂</option>
         <option value="racestrip">Race Strip (IndyCar)</option>
       </select></div>
     <div class="ctl"><label>Gauge style</label>
@@ -96,7 +97,7 @@
 
 <footer>HONEYBADGER SOFTWARE INC · cluster builder · arrange a full instrument cluster — same engine as the single-gauge builder, so it ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=2"></script>
+<script src="assets/js/gauges.js?v=3"></script>
 <script>
 const {RENDER,UNITS,PALETTES}=window.HBG;
 const $=id=>document.getElementById(id);
@@ -106,6 +107,7 @@ const LAYOUTS={
   six:{name:'Six-Pack', rows:[[{u:'rpm'},{u:'mph'},{u:'boost'}],[{u:'oiltemp'},{u:'coolant'},{u:'fuel'}]]},
   quad:{name:'Quad', rows:[[{u:'rpm'},{u:'mph'}],[{u:'coolant'},{u:'fuel'}]]},
   bigtwo:{name:'Big + Two', rows:[[{u:'rpm',hero:1}],[{u:'mph'},{u:'fuel'}]]},
+  tuning:{name:'Tuning · AFR + trims', rows:[[{u:'afr',hero:1}],[{u:'o2b1'},{u:'stftb1'},{u:'ltftb1'},{u:'knock'}]]},
   racestrip:{name:'Race Strip', force:'race', rows:[[{u:'rpm',strip:1}]]},
 };
 function slotWidth(s,rowLen){
@@ -113,9 +115,10 @@ function slotWidth(s,rowLen){
   if(s.hero)  return 'min(360px,80%)';
   return rowLen>=3 ? 'min(210px,30%)' : 'min(250px,44%)';
 }
-const DEMO={rpm:4200,mph:78,kmh:120,boost:15,oiltemp:215,coolant:200,oilpress:55,fuel:64};
+const DEMO={rpm:4200,mph:78,kmh:120,boost:15,map:95,maf:14,tps:22,coolant:200,oiltemp:215,transtemp:178,iat:104,
+  oilpress:55,fuelpsi:58,fuel:64,volts:14.2,afr:14.2,afrcmd:14.7,o2b1:445,o2b2:430,stftb1:2,stftb2:-1,ltftb1:3,ltftb2:1,injb1:42,injb2:41,timing:24,knock:0};
 function gaugeSVG(u,style,P){
-  const v = DEMO[u]!=null ? DEMO[u] : Math.round(UNITS[u].max*0.55);
+  const U=UNITS[u], mn=U.min||0, v = DEMO[u]!=null ? DEMO[u] : Math.round(mn+(U.max-mn)*0.55);
   return RENDER[style]({style:style,unit:u,needle:P.needle,accent:P.accent,bezel:P.bezel,face:P.face,value:v});
 }
 function render(){
