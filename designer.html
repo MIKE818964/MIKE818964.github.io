@@ -98,13 +98,13 @@
 
 <footer>HONEYBADGER SOFTWARE INC · screen designer · your gauges are the symbol library — same engine as the builders, so the layout ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=4"></script>
+<script src="assets/js/gauges.js?v=5"></script>
 <script>
 const {RENDER,UNITS,PALETTES}=window.HBG;
 const $=id=>document.getElementById(id);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const FOOT={r1:[1024,600],r2:[1280,400],r3:[1920,720],r4:[800,800]};
-const STYLES=[['round','Round dial — needle'],['arc','Sweep arc — digital'],['halfarc','Half arc'],['ring','Minimal ring'],['segarc','Segmented arc'],['neon','Neon outline'],['bar','Horizontal bar'],['vbar','Vertical bar'],['race','Race shift-bar 🏁'],['digit','Numeric readout'],['trend','Trend chart']];
+const STYLES=window.HBG.STYLES;
 const DEMO={rpm:4200,mph:78,kmh:120,boost:15,map:95,maf:14,tps:22,coolant:200,oiltemp:215,transtemp:178,iat:104,oilpress:55,fuelpsi:58,fuel:64,volts:14.2,afr:14.2,afrcmd:14.7,o2b1:445,o2b2:430,stftb1:2,stftb2:-1,ltftb1:3,ltftb2:1,injb1:42,injb2:41,timing:24,knock:0};
 function demoVal(u){const U=UNITS[u],mn=U.min||0;return DEMO[u]!=null?DEMO[u]:Math.round(mn+(U.max-mn)*0.55);}
 

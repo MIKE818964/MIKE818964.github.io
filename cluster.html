@@ -62,13 +62,7 @@
         <option value="racestrip">Race Strip (IndyCar)</option>
       </select></div>
     <div class="ctl"><label>Gauge style</label>
-      <select id="style">
-        <option value="round">Round dial — needle</option>
-        <option value="arc">Sweep arc — digital</option>
-        <option value="ring">Minimal ring</option>
-        <option value="segarc">Segmented arc — sim/F1</option>
-        <option value="neon">Neon outline</option>
-      </select></div>
+      <select id="style"></select></div>
     <div class="ctl"><label>Color theme</label>
       <div class="swatches" id="swatches"></div></div>
     <div class="ctl row2">
@@ -98,10 +92,11 @@
 
 <footer>HONEYBADGER SOFTWARE INC · cluster builder · arrange a full instrument cluster — same engine as the single-gauge builder, so it ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=4"></script>
+<script src="assets/js/gauges.js?v=5"></script>
 <script>
-const {RENDER,UNITS,PALETTES}=window.HBG;
+const {RENDER,UNITS,PALETTES,STYLES}=window.HBG;
 const $=id=>document.getElementById(id);
+STYLES.forEach(function(p){var op=document.createElement('option');op.value=p[0];op.textContent=p[1];$('style').appendChild(op);});
 const LAYOUTS={
   twin:{name:'Twin-Dial', rows:[[{u:'rpm'},{u:'mph'}]]},
   chrono:{name:'Chronograph · 1 + 3', rows:[[{u:'rpm',hero:1}],[{u:'mph'},{u:'coolant'},{u:'fuel'}]]},
