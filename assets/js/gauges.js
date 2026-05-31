@@ -127,7 +127,28 @@ function race(o){const U=UNITS[o.unit],w=560,h=300,rmax=U.max,rmin=U.min||0,redl
   s+=`<text x="${pad}" y="${h-24}" fill="#1ae7ff" font-size="20" font-weight="700">${Math.round(ratio*100)}<tspan font-size="11" fill="#5b6772"> %</tspan></text>`;
   s+=`<text x="${w-pad}" y="${h-24}" fill="#27e36a" font-size="20" font-weight="700" text-anchor="end">${Math.round((U.redline?redline:rmax)/U.div)}<tspan font-size="11" fill="#5b6772"> RL</tspan></text>`;
   s+=`</svg>`;return s;}
-const RENDER={round,arc,halfarc,ring,segarc,neon,bar,vbar,race};
+function digit(o){const U=UNITS[o.unit],w=300,h=170,val=o.value,redline=U.redline??Infinity,vc=val>=redline?'#ff3b30':'#ffffff';
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="'Rajdhani','Consolas',monospace">`;
+  s+=`<rect width="${w}" height="${h}" rx="14" fill="#0c0f13"/><rect x="2" y="2" width="${w-4}" height="${h-4}" rx="12" fill="none" stroke="#1c2530" stroke-width="2"/>`;
+  s+=`<rect x="0" y="0" width="${w}" height="7" rx="3" fill="${o.accent}"/>`;
+  s+=`<text x="${w/2}" y="44" fill="${o.accent}" font-size="19" font-weight="700" letter-spacing="3" text-anchor="middle">${U.label}</text>`;
+  s+=`<text x="${w/2}" y="${h/2+30}" fill="${vc}" font-size="74" font-weight="800" text-anchor="middle" dominant-baseline="middle">${val}</text>`;
+  s+=`<text x="${w/2}" y="${h-20}" fill="#79818b" font-size="16" font-weight="600" text-anchor="middle" letter-spacing="2">${U.sub||''}</text>`;
+  s+=`</svg>`;return s;}
+function trend(o){const U=UNITS[o.unit],w=380,h=200,rmax=U.max,rmin=U.min||0,val=o.value,redline=U.redline??(rmax+1),px=24,py=24,gw=w-2*px,gh=h-58;
+  const base=Math.max(0.05,Math.min(0.95,(val-rmin)/(rmax-rmin)));let pts=[];const N=48;
+  for(let i=0;i<=N;i++){const t=i/N;let v=base+0.12*Math.sin(t*8.5+0.6)+0.06*Math.sin(t*21+2)-0.04*(1-t);v=Math.max(0.04,Math.min(0.97,v));pts.push([px+t*gw,py+gh-v*gh]);}
+  const d='M '+pts.map(p=>f1(p[0])+' '+f1(p[1])).join(' L ');
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="'Rajdhani',sans-serif"><defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${o.needle}" stop-opacity="0.4"/><stop offset="1" stop-color="${o.needle}" stop-opacity="0"/></linearGradient></defs>`;
+  s+=`<rect width="${w}" height="${h}" rx="14" fill="#0c0f13"/>`;
+  for(let g=0;g<=3;g++){const yy=py+gh*g/3;s+=`<line x1="${px}" y1="${f1(yy)}" x2="${px+gw}" y2="${f1(yy)}" stroke="#1c2530" stroke-width="1"/>`;}
+  if(U.redline){const ry=py+gh-Math.max(0,Math.min(1,(redline-rmin)/(rmax-rmin)))*gh;s+=`<line x1="${px}" y1="${f1(ry)}" x2="${px+gw}" y2="${f1(ry)}" stroke="#ff3b30" stroke-width="1.5" stroke-dasharray="5 4"/>`;}
+  s+=`<path d="${d} L ${f1(px+gw)} ${py+gh} L ${px} ${py+gh} Z" fill="url(#ar)"/><path d="${d}" fill="none" stroke="${o.needle}" stroke-width="3" stroke-linejoin="round"/>`;
+  s+=`<circle cx="${f1(pts[N][0])}" cy="${f1(pts[N][1])}" r="4" fill="#fff"/>`;
+  s+=`<text x="${px}" y="17" fill="${o.accent}" font-size="15" font-weight="700" letter-spacing="2">${U.label}</text>`;
+  s+=`<text x="${w-px}" y="${h-14}" fill="#fff" font-size="30" font-weight="800" text-anchor="end">${val}<tspan font-size="13" fill="#79818b"> ${U.sub||''}</tspan></text>`;
+  s+=`</svg>`;return s;}
+const RENDER={round,arc,halfarc,ring,segarc,neon,bar,vbar,race,digit,trend};
 
 const PALETTES=[
  {name:'Amber',needle:'#ff7a00',accent:'#ffae00'},

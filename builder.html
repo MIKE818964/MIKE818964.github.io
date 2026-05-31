@@ -44,7 +44,8 @@
   <h1>Honeybadger Gauge Builder</h1>
   <span class="pill">CREATE YOUR OWN</span>
   <span class="tag">live · what you build is what ships on your dash</span>
-  <a href="cluster.html" style="margin-left:auto;color:var(--amber);font-size:12px;text-decoration:none;font-weight:700">▦ Full cluster builder →</a>
+  <a href="designer.html" style="margin-left:auto;color:var(--amber);font-size:12px;text-decoration:none;font-weight:700">▦ Screen designer →</a>
+  <a href="cluster.html" style="margin-left:14px;color:var(--amber);font-size:12px;text-decoration:none;font-weight:700">presets →</a>
   <a href="/" style="margin-left:14px;color:#8b949e;font-size:12px;text-decoration:none">← honeybadger.software</a>
 </header>
 
@@ -72,6 +73,8 @@
         <option value="neon">Neon outline</option>
         <option value="bar">Horizontal bar — LED</option>
         <option value="vbar">Vertical bar — LED</option>
+        <option value="digit">Numeric readout</option>
+        <option value="trend">Trend chart</option>
       </select></div>
     <div class="ctl row" id="matrow">
       <div><label>Bezel</label>
@@ -153,7 +156,7 @@
 
 <footer>HONEYBADGER SOFTWARE INC · gauge builder (growing toward ~50 styles per type) · what you configure ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=3"></script>
+<script src="assets/js/gauges.js?v=4"></script>
 <script>
 const {RENDER,UNITS,PALETTES}=window.HBG;
 const $=id=>document.getElementById(id);
