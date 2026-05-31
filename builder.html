@@ -63,19 +63,7 @@
   <div class="controls">
     <h2>Customize</h2>
     <div class="ctl"><label>Style</label>
-      <select id="style">
-        <option value="round">Round dial — needle</option>
-        <option value="arc">Sweep arc — digital</option>
-        <option value="halfarc">Half arc — digital</option>
-        <option value="ring">Minimal ring</option>
-        <option value="segarc">Segmented arc — sim/F1</option>
-        <option value="race">Race dash — shift bar 🏁</option>
-        <option value="neon">Neon outline</option>
-        <option value="bar">Horizontal bar — LED</option>
-        <option value="vbar">Vertical bar — LED</option>
-        <option value="digit">Numeric readout</option>
-        <option value="trend">Trend chart</option>
-      </select></div>
+      <select id="style"></select></div>
     <div class="ctl row" id="matrow">
       <div><label>Bezel</label>
         <select id="bezel">
@@ -156,10 +144,11 @@
 
 <footer>HONEYBADGER SOFTWARE INC · gauge builder (growing toward ~50 styles per type) · what you configure ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=4"></script>
+<script src="assets/js/gauges.js?v=5"></script>
 <script>
-const {RENDER,UNITS,PALETTES}=window.HBG;
+const {RENDER,UNITS,PALETTES,STYLES}=window.HBG;
 const $=id=>document.getElementById(id);
+STYLES.forEach(function(p){var op=document.createElement('option');op.value=p[0];op.textContent=p[1];$('style').appendChild(op);});
 function render(){
   const o={style:$('style').value,bezel:$('bezel').value,face:$('face').value,needle:$('needle').value,accent:$('accent').value,unit:$('units').value,value:+$('value').value};
   $('gauge').innerHTML=RENDER[o.style](o);
