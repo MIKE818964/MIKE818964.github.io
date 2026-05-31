@@ -168,10 +168,52 @@ function nitrouspanel(o){o=o||{};
   return svg(w,h,d+b);
 }
 
-const SYMBOLS={bottle,purge,armswitch,controller,indicator,nitrouspanel};
+// ── NITROUS CONTROLLER — the control HMI with editable SET POINTS: RPM window,
+//    TPS/WOT min, coolant min, purge program, bottle-heater target/cutoff +
+//    interlock status. Mirrors the Pi DashNitrous screen. ────────────────────
+function nitrouscontroller(o){o=o||{};
+  const st=o.state||'armed', col=o.color||'#ff5b00', armed=st!=='off'&&st!=='safe',
+        ok='#39ff80', w=600, h=380;
+  const sp=Object.assign({rpmLo:3000,rpmHi:6500,tps:92,coolant:160,htrMode:'AUTO',htrTgt:75,htrCut:90,purgeN:3,purgeDur:1.0,purgeInt:2.0,bottle:78,pressure:950,level:64},o.sp||{});
+  const field=(x,y,label,val,unit)=>{const wd=118;
+    let r=`<rect x="${x}" y="${y}" width="${wd}" height="48" rx="6" fill="#0e141b" stroke="#1d2733"/>`;
+    r+=`<text x="${x+10}" y="${y+16}" fill="#79818b" font-size="9" font-weight="700" letter-spacing="1">${label}</text>`;
+    r+=`<text x="${x+10}" y="${y+39}" fill="#fff" font-size="18" font-weight="800">${val}<tspan font-size="10" fill="#79818b"> ${unit||''}</tspan></text>`;
+    r+=`<rect x="${x+wd-42}" y="${y+8}" width="16" height="15" rx="3" fill="#1a2230"/><text x="${x+wd-34}" y="${y+20}" fill="${col}" font-size="13" font-weight="800" text-anchor="middle">−</text>`;
+    r+=`<rect x="${x+wd-22}" y="${y+8}" width="16" height="15" rx="3" fill="#1a2230"/><text x="${x+wd-14}" y="${y+20}" fill="${col}" font-size="13" font-weight="800" text-anchor="middle">+</text>`;
+    return r;};
+  const sect=(x,y,t)=>`<text x="${x}" y="${y}" fill="${col}" font-size="11" font-weight="800" letter-spacing="2">${t}</text>`;
+  let b=`<rect x="2" y="2" width="${w-4}" height="${h-4}" rx="16" fill="#0b0e12" stroke="${col}" stroke-width="2"/>`;
+  b+=`<text x="20" y="30" fill="${col}" font-size="15" font-weight="800" letter-spacing="2">HONEYBADGER · N₂O CONTROLLER</text>`;
+  b+=`<text x="${w-20}" y="30" fill="${armed?'#ff3b30':'#5b6772'}" font-size="13" font-weight="800" text-anchor="end" letter-spacing="2">${armed?'● ARMED':'○ SAFE'}</text>`;
+  b+=`<rect x="18" y="46" width="160" height="60" rx="8" fill="${armed?'#3a0d0a':'#12171d'}" stroke="${armed?'#ff3b30':'#2a323d'}" stroke-width="2"/>`;
+  if(armed)b+=`<rect x="18" y="46" width="160" height="60" rx="8" fill="#ff3b30" opacity="0.08"><animate attributeName="opacity" values="0.04;0.14;0.04" dur="1.4s" repeatCount="indefinite"/></rect>`;
+  b+=`<text x="98" y="84" fill="${armed?'#ff3b30':'#cfd4d8'}" font-size="26" font-weight="800" text-anchor="middle" letter-spacing="2">${armed?'ARMED':'ARM'}</text>`;
+  const bx=40,by=128,bw=52,bh=118,fy=by+bh-(sp.level/100)*bh;
+  b+=`<clipPath id="nc_bc"><rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="10"/></clipPath>`;
+  b+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="10" fill="${shade('#1f6bd6',0.7)}" stroke="#13315a"/>`;
+  b+=`<rect x="${bx}" y="${f1(fy)}" width="${bw}" height="${f1(by+bh-fy)}" fill="${shade('#1f6bd6',0.9)}" clip-path="url(#nc_bc)"/>`;
+  b+=`<text x="${bx+bw/2}" y="${by+bh/2+5}" fill="#fff" font-size="15" font-weight="800" text-anchor="middle">N₂O</text>`;
+  b+=`<rect x="${bx+bw/2-8}" y="${by-12}" width="16" height="14" rx="3" fill="#9aa0a6"/>`;
+  b+=`<text x="${bx+bw+14}" y="${by+16}" fill="#79818b" font-size="9" font-weight="700">LEVEL</text><text x="${bx+bw+14}" y="${by+35}" fill="#fff" font-size="16" font-weight="800">${Math.round(sp.level)}<tspan font-size="9" fill="#79818b"> %</tspan></text>`;
+  b+=`<text x="${bx+bw+14}" y="${by+62}" fill="#79818b" font-size="9" font-weight="700">BOTTLE</text><text x="${bx+bw+14}" y="${by+81}" fill="${ok}" font-size="16" font-weight="800">${Math.round(sp.bottle)}<tspan font-size="9" fill="#79818b"> °F</tspan></text>`;
+  b+=`<text x="${bx+bw+14}" y="${by+108}" fill="#79818b" font-size="9" font-weight="700">PRESSURE</text><text x="${bx+bw+14}" y="${by+127}" fill="${sp.pressure>1100?'#ff3b30':'#fff'}" font-size="16" font-weight="800">${Math.round(sp.pressure)}<tspan font-size="9" fill="#79818b"> psi</tspan></text>`;
+  b+=sect(196,44,'INTERLOCKS · SET POINTS');
+  b+=field(196,52,'RPM WIN',sp.rpmLo+'–'+sp.rpmHi,'')+field(328,52,'WOT MIN',sp.tps,'%')+field(460,52,'COOLANT',sp.coolant,'°F');
+  b+=sect(196,124,'PURGE PROGRAM');
+  b+=field(196,132,'COUNT',sp.purgeN,'×')+field(328,132,'EACH',sp.purgeDur.toFixed(1),'s')+field(460,132,'INTERVAL',sp.purgeInt.toFixed(1),'s');
+  b+=sect(196,204,'BOTTLE HEATER');
+  b+=field(196,212,'MODE',sp.htrMode,'')+field(328,212,'TARGET',sp.htrTgt,'°F')+field(460,212,'CUTOFF',sp.htrCut,'°F');
+  b+=sect(196,290,'INTERLOCK STATUS');
+  [['ARM',armed],['RPM',true],['TPS',true],['TEMP',sp.bottle<sp.htrCut],['COOLANT',true],['GEAR',true]].forEach((g,i)=>{const gx=210+i*64,gy=310;b+=`<circle cx="${gx}" cy="${gy}" r="8" fill="${g[1]?ok:'#3a2326'}"/>${g[1]?`<circle cx="${gx}" cy="${gy}" r="8" fill="${ok}" opacity="0.3"><animate attributeName="r" values="8;13;8" dur="1.9s" repeatCount="indefinite"/></circle>`:''}<text x="${gx}" y="${gy+26}" fill="#9aa3ad" font-size="9" font-weight="700" text-anchor="middle">${g[0]}</text>`;});
+  return svg(w,h,b);
+}
+
+const SYMBOLS={bottle,purge,armswitch,controller,indicator,nitrouspanel,nitrouscontroller};
 window.HBSYM={SYMBOLS,
   list:[
     {sym:'nitrouspanel',name:'Nitrous panel (linked)',opts:{state:'armed',level:64}},
+    {sym:'nitrouscontroller',name:'Nitrous controller · set points',opts:{state:'armed'}},
     {sym:'bottle',name:'N₂O bottle',opts:{state:'idle',level:62}},
     {sym:'purge',name:'Purge solenoid',opts:{state:'closed'}},
     {sym:'armswitch',name:'Arm switch',opts:{state:'armed'}},
