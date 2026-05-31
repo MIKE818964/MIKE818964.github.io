@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>Honeybadger Gauge Builder — Create Your Own</title>
+<title>Honeybadger Dash Builder — Create Your Own</title>
 <style>
   :root{--bg:#07090c;--panel:#10141a;--line:#1d2530;--amber:#ffae00;--txt:#cfd6dd;--mut:#8b949e;}
   *{box-sizing:border-box}
@@ -41,7 +41,7 @@
 <body>
 <header>
   <a href="/" style="font-size:20px;text-decoration:none">🦡</a>
-  <h1>Honeybadger Gauge Builder</h1>
+  <h1>Honeybadger Dash Builder</h1>
   <span class="pill">CREATE YOUR OWN</span>
   <span class="tag">live · what you build is what ships on your dash</span>
   <a href="designer.html" style="margin-left:auto;color:var(--amber);font-size:12px;text-decoration:none;font-weight:700">▦ Screen designer →</a>
@@ -133,6 +133,8 @@
     <div class="ctl">
       <div class="valrow"><label>Value</label><b id="vlabel">4200</b></div>
       <input type="range" id="value" min="0" max="8000" step="50" value="4200">
+      <button id="live" style="margin-top:10px;width:100%;background:#10141a;color:#cfd6dd;border:1px solid var(--line);border-radius:9px;padding:9px;font:inherit;font-weight:700;cursor:pointer">⏸ Pause live demo</button>
+      <label style="display:block;margin-top:9px;font-size:12px;color:var(--mut)"><input type="checkbox" id="peak" style="width:auto;margin-right:6px;vertical-align:middle">Peak-hold marker</label>
     </div>
   </div>
 
@@ -144,13 +146,14 @@
 
 <footer>HONEYBADGER SOFTWARE INC · gauge builder (growing toward ~50 styles per type) · what you configure ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=5"></script>
+<script src="assets/js/gauges.js?v=7"></script>
+<script src="assets/js/anim.js?v=3"></script>
 <script>
 const {RENDER,UNITS,PALETTES,STYLES}=window.HBG;
 const $=id=>document.getElementById(id);
 STYLES.forEach(function(p){var op=document.createElement('option');op.value=p[0];op.textContent=p[1];$('style').appendChild(op);});
 function render(){
-  const o={style:$('style').value,bezel:$('bezel').value,face:$('face').value,needle:$('needle').value,accent:$('accent').value,unit:$('units').value,value:+$('value').value};
+  const o={style:$('style').value,bezel:$('bezel').value,face:$('face').value,needle:$('needle').value,accent:$('accent').value,unit:$('units').value,value:+$('value').value,gear:window.HBANIM?HBANIM.gear():3,peak:($('peak')&&$('peak').checked&&window.HBANIM)?HBANIM.peak($('units').value):null};
   $('gauge').innerHTML=RENDER[o.style](o);
   $('vlabel').textContent=o.value;
   $('matrow').style.opacity=o.style==='round'?'1':'0.4';
@@ -158,9 +161,17 @@ function render(){
 function onUnit(){const U=UNITS[$('units').value],v=$('value'),mn=U.min||0,rng=U.max-mn,cur=+v.value;v.min=mn;v.max=U.max;v.step=rng<=40?0.1:Math.max(1,Math.round(rng/160));if(cur<mn||cur>U.max)v.value=mn+rng*0.52;render();}
 ['style','bezel','face','needle','accent','value'].forEach(id=>$(id).addEventListener('input',render));
 $('units').addEventListener('change',onUnit);
+// live demo animation (slider drag pauses it)
+let live=true;
+function setLiveBtn(){$('live').textContent=live?'⏸ Pause live demo':'▶ Play live demo';}
+function liveTick(){ if(!live||!window.HBANIM)return; $('value').value=HBANIM.disp($('units').value); render(); }
+$('live').addEventListener('click',()=>{live=!live;setLiveBtn();});
+$('value').addEventListener('input',()=>{live=false;setLiveBtn();});
+$('peak').addEventListener('change',render);
+if(window.HBANIM)HBANIM.start(liveTick);
 function applyPreset(d){if(d.unit){$('units').value=d.unit;onUnit();}if(d.style)$('style').value=d.style;if(d.bezel)$('bezel').value=d.bezel;if(d.face)$('face').value=d.face;if(d.needle)$('needle').value=d.needle;if(d.accent)$('accent').value=d.accent;if(d.val)$('value').value=d.val;render();}
 document.querySelectorAll('.tpl').forEach(b=>b.addEventListener('click',()=>applyPreset(b.dataset)));
-[['#ff7a00','#ffae00'],['#39ff9a','#bfe9cf'],['#1ae7ff','#9fe7ff'],['#3b82f6','#bcd3ff'],['#ff2bd6','#ff8be9'],['#ff3b30','#ffd0cc'],['#e8b04b','#f0d79a'],['#e8edf2','#cdd5de'],['#b8ff00','#e3ff9a'],['#8a5cff','#c9b4ff']].forEach(([nd,ac])=>{const b=document.createElement('button');b.className='sw';b.style.background=`linear-gradient(135deg,${nd} 60%,${ac} 60%)`;b.addEventListener('click',()=>{$('needle').value=nd;$('accent').value=ac;render();});$('swrow').appendChild(b);});
+PALETTES.forEach(p=>{const b=document.createElement('button');b.className='sw';b.title=p.name;b.style.background=`linear-gradient(135deg,${p.needle} 60%,${p.accent} 60%)`;b.addEventListener('click',()=>{$('needle').value=p.needle;$('accent').value=p.accent;render();});$('swrow').appendChild(b);});
 onUnit();
 </script>
 </body>
