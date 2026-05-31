@@ -33,6 +33,9 @@
   .tpl-label{font-size:11px;letter-spacing:1.5px;color:var(--mut);text-transform:uppercase;margin-right:6px}
   .tpl{background:#10141a;color:#cfd6dd;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:border-color .15s,color .15s}
   .tpl:hover{border-color:var(--amber);color:#fff}
+  .sw-row{display:flex;flex-wrap:wrap;gap:7px}
+  .sw{width:26px;height:26px;border-radius:50%;border:2px solid #222b36;cursor:pointer;padding:0;transition:transform .1s,border-color .1s}
+  .sw:hover{transform:scale(1.12);border-color:#fff}
 </style>
 </head>
 <body>
@@ -41,7 +44,8 @@
   <h1>Honeybadger Gauge Builder</h1>
   <span class="pill">CREATE YOUR OWN</span>
   <span class="tag">live · what you build is what ships on your dash</span>
-  <a href="/" style="margin-left:auto;color:#8b949e;font-size:12px;text-decoration:none">← honeybadger.software</a>
+  <a href="cluster.html" style="margin-left:auto;color:var(--amber);font-size:12px;text-decoration:none;font-weight:700">▦ Full cluster builder →</a>
+  <a href="/" style="margin-left:14px;color:#8b949e;font-size:12px;text-decoration:none">← honeybadger.software</a>
 </header>
 
 <div class="tpl-strip">
@@ -103,6 +107,7 @@
       <div><label>Needle / fill</label><input type="color" id="needle" value="#ff3b30"></div>
       <div><label>Accent</label><input type="color" id="accent" value="#cdd5de"></div>
     </div>
+    <div class="ctl"><label>Color theme</label><div class="sw-row" id="swrow"></div></div>
     <div class="ctl">
       <div class="valrow"><label>Value</label><b id="vlabel">4200</b></div>
       <input type="range" id="value" min="0" max="8000" step="50" value="4200">
@@ -232,6 +237,7 @@ function onUnit(){const U=UNITS[$('units').value],v=$('value');v.max=U.max;v.ste
 $('units').addEventListener('change',onUnit);
 function applyPreset(d){if(d.unit){$('units').value=d.unit;onUnit();}if(d.style)$('style').value=d.style;if(d.bezel)$('bezel').value=d.bezel;if(d.face)$('face').value=d.face;if(d.needle)$('needle').value=d.needle;if(d.accent)$('accent').value=d.accent;if(d.val)$('value').value=d.val;render();}
 document.querySelectorAll('.tpl').forEach(b=>b.addEventListener('click',()=>applyPreset(b.dataset)));
+[['#ff7a00','#ffae00'],['#39ff9a','#bfe9cf'],['#1ae7ff','#9fe7ff'],['#3b82f6','#bcd3ff'],['#ff2bd6','#ff8be9'],['#ff3b30','#ffd0cc'],['#e8b04b','#f0d79a'],['#e8edf2','#cdd5de'],['#b8ff00','#e3ff9a'],['#8a5cff','#c9b4ff']].forEach(([nd,ac])=>{const b=document.createElement('button');b.className='sw';b.style.background=`linear-gradient(135deg,${nd} 60%,${ac} 60%)`;b.addEventListener('click',()=>{$('needle').value=nd;$('accent').value=ac;render();});$('swrow').appendChild(b);});
 onUnit();
 </script>
 </body>
