@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Honeybadger Nitrous Control — a software-managed, seven-gate safety-interlocked N₂O system for the C7 Corvette dashboard. Your set points (RPM window, WOT, coolant, bottle temp), programmable purge, bottle-heater thermostat, and fail-safe relays that never touch your ECU. Off-road / track use.">
+<meta name="theme-color" content="#05080C">
+<title>Nitrous Control — Seven-Gate Safety | HONEYBADGER SOFTWARE INC</title>
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="stylesheet" href="assets/css/style.css?v=8">
+<style>
+  /* Nitrous showcase — scoped. Symbols are original parametric SVG (HBSYM). */
+  .nos-stage{display:flex;justify-content:center;padding:6px 0}
+  .nos-stage svg{width:100%;height:auto;max-width:680px;filter:drop-shadow(0 18px 46px rgba(0,0,0,.6))}
+  .nos-stage.sm svg{max-width:560px}
+  .nos-parts{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-top:10px}
+  .nos-part{background:#10141a;border:1px solid #1d2530;border-radius:14px;padding:18px 16px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+  .nos-part svg{width:100%;height:auto;max-width:150px;display:block;margin:0 auto;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
+  .nos-part .cap{margin-top:11px;font-size:12px;color:#9aa3ad;font-weight:700;letter-spacing:.4px}
+  .nos-gates{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:8px}
+  .gate{background:#10141a;border:1px solid #1d2530;border-radius:14px;padding:18px 20px}
+  .gate .g-num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:#1a1107;color:#ffae00;font-weight:800;font-size:14px;border:1px solid #3a2a08;margin-bottom:10px}
+  .gate h4{margin:0 0 6px;font-size:15px;color:#fff;letter-spacing:.3px}
+  .gate p{margin:0;font-size:13.5px;color:#9aa3ad;line-height:1.5}
+  .nos-note{margin-top:18px;font-size:13.5px;color:#79818b;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
+    <span class="topbar-links">
+      <a href="community.html">Community</a>
+      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+      <a href="downloads.html">Downloads</a>
+    </span>
+  </div>
+</div>
+<header class="site-header">
+  <div class="container header-row">
+    <a href="/" class="brand">
+      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
+      <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
+    </a>
+    <nav class="site-nav" id="siteNav">
+      <a href="/">Home</a>
+      <div class="nav-dropdown">
+        <a href="products.html" class="nav-dropdown-trigger">Products ▾</a>
+        <div class="nav-dropdown-menu">
+          <a href="j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
+          <a href="c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
+          <a href="nitrous.html"><strong>Nitrous Control</strong><span>Seven-gate safety-interlocked N₂O</span></a>
+          <a href="gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
+          <a href="industrial.html"><strong>Industrial</strong><span>Plant monitoring &amp; dashboards</span></a>
+        </div>
+      </div>
+      <a href="community.html">Community</a>
+      <a href="support.html">Support</a>
+      <a href="downloads.html">Downloads</a>
+      <a href="news.html">News</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="header-actions">
+      <a href="builder.html" class="btn btn-gold btn-sm">Try the Dash Builder</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / <a href="products.html">Products</a> / Nitrous Control</div>
+    <div class="eyebrow-chip gold">🏁 TRACK BUILD · SAFETY-INTERLOCKED</div>
+    <h1>Nitrous Control</h1>
+    <p class="lede">A software-managed N₂O system with <strong>seven independent safety interlocks</strong>, your own set points, programmable purge, and a bottle-heater thermostat — driving its own <strong>fail-safe relays, never touching your ECU.</strong> Built for the track, framed for off-road.</p>
+    <div class="hero-cta" style="margin-top:24px">
+      <a href="community.html" class="btn btn-primary">Join the waitlist</a>
+      <a href="designer.html" class="btn btn-ghost">Design it in the Dash Builder →</a>
+    </div>
+    <div class="pill-row">
+      <span class="pill">7-gate interlock</span>
+      <span class="pill">Fail-safe default-OFF</span>
+      <span class="pill">Relay-driven · no ECU write</span>
+      <span class="pill">Off-road / track use</span>
+    </div>
+  </div>
+</section>
+
+<!-- The controller — set points front and center -->
+<section class="section-tight">
+  <div class="container">
+    <div class="nos-stage"><div id="nos-controller" aria-label="Honeybadger N₂O controller with live set points"></div></div>
+    <p class="proof-fineprint" style="text-align:center">The controller, live. Every set point — RPM window, WOT minimum, coolant minimum, purge program, bottle-heater target &amp; cutoff — right where your thumb is.</p>
+  </div>
+</section>
+
+<!-- Set points -->
+<section class="section">
+  <div class="container">
+    <div class="section-head center"><div class="kicker">YOUR SET POINTS</div><h2>You decide when it's allowed to fire.</h2><p class="lede center-narrow">Nothing is hard-coded. Dial in the window your engine likes, and the interlocks hold the line.</p></div>
+    <div class="feature-row">
+      <div>
+        <h3>⚙️ The activation window</h3>
+        <p>Set the <strong>RPM window</strong> the system will arm inside (e.g. 3000–6500), the <strong>WOT / TPS minimum</strong> so it only fires at full throttle, and a <strong>coolant minimum</strong> so it never hits a cold engine. Outside the window, the run solenoid simply can't energize.</p>
+        <ul class="checklist"><li>RPM low / high window</li><li>WOT / TPS minimum</li><li>Coolant warm-up minimum</li></ul>
+      </div>
+      <div class="feature-media"><div class="nos-part" style="max-width:none;background:transparent;border:0;padding:0"><div id="nos-arm" aria-label="Guarded arm switch"></div></div></div>
+    </div>
+    <div class="feature-row flip">
+      <div class="feature-media"><div class="nos-stage sm"><div id="nos-panel" aria-label="N₂O system flow panel"></div></div></div>
+      <div>
+        <h3>💨 Purge program &amp; bottle heater</h3>
+        <p>Program the <strong>purge</strong> — number of bursts, duration each, and the interval between — to clear the lines and put on a show. The <strong>bottle-heater thermostat</strong> holds your target bottle temperature with a hard cutoff, so pressure stays in the sweet spot without ever cooking the bottle.</p>
+        <ul class="checklist"><li>Purge: count · each · interval</li><li>Heater: mode · target · hard cutoff</li><li>Live bottle level, temp &amp; pressure</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Seven gates -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head center"><div class="kicker">THE INTERLOCK STACK</div><h2>Seven gates. All must pass.</h2><p class="lede center-narrow">Every one of these has to be true, at the same time, before a single relay clicks. Any one false, and the run solenoid stays dark.</p></div>
+    <div class="nos-gates">
+      <div class="gate"><div class="g-num">1</div><h4>Hardware arm switch</h4><p>A physical, guarded toggle in the cabin — hardware-true and independent of any software state.</p></div>
+      <div class="gate"><div class="g-num">2</div><h4>Software armed</h4><p>A deliberate touchscreen arm, separate from the hardware switch. Two hands on the safety.</p></div>
+      <div class="gate"><div class="g-num">3</div><h4>Gear ≠ P / N</h4><p>Read from CAN. Nitrous on an unloaded driveline is an instant over-rev — so it's blocked in Park or Neutral.</p></div>
+      <div class="gate"><div class="g-num">4</div><h4>RPM in window</h4><p>Inside your configured low/high band only. Too low to bog, too high to risk — your call on the edges.</p></div>
+      <div class="gate"><div class="g-num">5</div><h4>TPS at WOT</h4><p>Throttle at or above your wide-open threshold. No part-throttle surprises.</p></div>
+      <div class="gate"><div class="g-num">6</div><h4>Coolant warmed</h4><p>At or above your minimum temperature. A cold engine never sees a hit.</p></div>
+      <div class="gate"><div class="g-num">7</div><h4>Bottle temp safe</h4><p>At or below the heater cutoff, so bottle pressure stays in spec before anything fires.</p></div>
+    </div>
+    <p class="nos-note">Purge has its own, separate gate — it only needs the software arm, because purge vapor never reaches the engine. And every relay is <strong>fail-safe default-OFF</strong>: lose power, lose a signal, drop a wire — it closes.</p>
+  </div>
+</section>
+
+<!-- The parts -->
+<section class="section">
+  <div class="container">
+    <div class="section-head center"><div class="kicker">ORIGINAL PARTS</div><h2>Skeuomorphic, animated, recolorable.</h2><p class="lede center-narrow">Every part is original parametric SVG — live values, heater glow, purge vapor, flow particles. Nothing scraped. Drop any of them onto your screen in the <a href="designer.html">Dash Builder</a>.</p></div>
+    <div class="nos-parts">
+      <div class="nos-part"><div data-sym="bottle" data-opts='{"state":"heating","level":48}'></div><div class="cap">N₂O bottle · heater</div></div>
+      <div class="nos-part"><div data-sym="purge" data-opts='{"state":"open"}'></div><div class="cap">Purge solenoid · flow</div></div>
+      <div class="nos-part"><div data-sym="armswitch" data-opts='{"state":"armed"}'></div><div class="cap">Arm switch · armed</div></div>
+      <div class="nos-part"><div data-sym="indicator" data-opts='{"icon":"wot","state":"on"}'></div><div class="cap">WOT telltale</div></div>
+      <div class="nos-part"><div data-sym="indicator" data-opts='{"icon":"purge","state":"on"}'></div><div class="cap">Purge telltale</div></div>
+      <div class="nos-part"><div data-sym="indicator" data-opts='{"icon":"armed","state":"on"}'></div><div class="cap">Armed telltale</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Built safe -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head"><div class="kicker">BUILT SAFE · FRAMED HONEST</div><h2>It drives its own relays. It never touches your ECU.</h2><p class="lede">The dashboard reads your Corvette passively over CAN, then switches <strong>its own relays and solenoids</strong> to control the kit. Your factory tune is untouched, your warranty intact. No reflash, no CAN injection into safety-critical systems.</p></div>
+    <table class="spec-table">
+      <tr><th>Control method</th><td>Pi-driven relays / solenoids — fail-safe default-OFF. Never writes to the ECU.</td></tr>
+      <tr><th>Engine data</th><td>Passive CAN read (RPM, TPS, gear, coolant) + bottle temp (DS18B20). Read-only.</td></tr>
+      <tr><th>Interlocks</th><td>Seven independent gates evaluated continuously; any failure latches the run solenoid OFF.</td></tr>
+      <tr><th>Use</th><td>Off-road / track use, framed accordingly. Built to order, per car — we confirm feasibility first.</td></tr>
+    </table>
+    <p class="nos-note">Wet or dry, single-stage — we scope your setup with you before anything ships. We don't claim what we can't put on a real car.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section track-build">
+  <div class="container">
+    <div class="section-head center">
+      <div class="kicker">⚡ PART OF THE C7 DASHBOARD · THE WORKS BUILD</div>
+      <h2>Send it — safely.</h2>
+      <p class="lede center-narrow">Nitrous Control ships as part of the C7 Dashboard's built-to-order Track build, alongside relay exhaust control, track gauges, and telemetry. Want to see it on a screen first? Lay it out in the Dash Builder.</p>
+    </div>
+    <div class="hero-cta" style="justify-content:center;margin-top:8px">
+      <a href="c7-dashboard.html" class="btn btn-primary">See the C7 Dashboard kit</a>
+      <a href="designer.html" class="btn btn-ghost">Open the Dash Builder →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
+        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
+      </div>
+      <div class="footer-col"><h4>Products</h4><a href="j1-bridge.html">J1 Bridge</a><a href="c7-dashboard.html">C7 Dashboard</a><a href="nitrous.html">Nitrous Control</a><a href="builder.html">Dash Builder</a><a href="industrial.html">Industrial</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="support.html">Support &amp; Docs</a><a href="downloads.html">Downloads</a><a href="news.html">News</a><a href="about.html">About</a></div>
+      <div class="footer-col"><h4>Community</h4><a href="community.html">Forums</a><a href="community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
+    </div>
+    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools. · Nitrous features are for off-road / track use.</small></div>
+  </div>
+</footer>
+<script src="assets/js/nav.js?v=4"></script>
+<script src="assets/js/symbols.js?v=4"></script>
+<script>
+  (function(){
+    var S = window.HBSYM && window.HBSYM.SYMBOLS;
+    if(!S) return;
+    var c = document.getElementById('nos-controller'); if(c) c.innerHTML = S.nitrouscontroller({state:'armed'});
+    var p = document.getElementById('nos-panel');      if(p) p.innerHTML = S.nitrouspanel({state:'purging', level:64});
+    var a = document.getElementById('nos-arm');        if(a) a.innerHTML = S.armswitch({state:'armed'});
+    document.querySelectorAll('[data-sym]').forEach(function(el){
+      try { el.innerHTML = S[el.dataset.sym](JSON.parse(el.dataset.opts || '{}')); } catch(e){}
+    });
+  })();
+</script>
+</body>
+</html>
