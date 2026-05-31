@@ -29,6 +29,10 @@
   .hint{margin-top:14px;color:var(--mut);font-size:12px;font-weight:500;text-align:center}
   footer{padding:14px 20px;color:var(--mut);font-size:11px;border-top:1px solid var(--line)}
   .pill{display:inline-block;font-size:10px;color:#06070a;background:var(--amber);border-radius:20px;padding:2px 9px;font-weight:800;letter-spacing:.5px}
+  .tpl-strip{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);background:#0b0e13}
+  .tpl-label{font-size:11px;letter-spacing:1.5px;color:var(--mut);text-transform:uppercase;margin-right:6px}
+  .tpl{background:#10141a;color:#cfd6dd;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:border-color .15s,color .15s}
+  .tpl:hover{border-color:var(--amber);color:#fff}
 </style>
 </head>
 <body>
@@ -40,6 +44,16 @@
   <a href="/" style="margin-left:auto;color:#8b949e;font-size:12px;text-decoration:none">← honeybadger.software</a>
 </header>
 
+<div class="tpl-strip">
+  <span class="tpl-label">Templates</span>
+  <button class="tpl" data-style="race" data-unit="rpm" data-needle="#1ae7ff" data-accent="#1ae7ff" data-val="6200">🏁 IndyCar Race</button>
+  <button class="tpl" data-style="round" data-unit="rpm" data-needle="#39ff9a" data-accent="#bfe9cf" data-bezel="black" data-face="solid" data-val="3600">Green Analog</button>
+  <button class="tpl" data-style="round" data-unit="mph" data-needle="#ff3b30" data-accent="#cdd5de" data-bezel="chrome" data-face="carbon" data-val="80">Carbon OEM</button>
+  <button class="tpl" data-style="segarc" data-unit="rpm" data-needle="#1ae7ff" data-accent="#9fe7ff" data-val="5200">Sim / F1</button>
+  <button class="tpl" data-style="bar" data-unit="rpm" data-needle="#ff7a00" data-accent="#ffae00" data-val="5600">Muscle Bar</button>
+  <button class="tpl" data-style="neon" data-unit="rpm" data-needle="#ff2bd6" data-accent="#ff2bd6" data-val="5000">Neon</button>
+</div>
+
 <div class="app">
   <div class="controls">
     <h2>Customize</h2>
@@ -50,6 +64,7 @@
         <option value="halfarc">Half arc — digital</option>
         <option value="ring">Minimal ring</option>
         <option value="segarc">Segmented arc — sim/F1</option>
+        <option value="race">Race dash — shift bar 🏁</option>
         <option value="neon">Neon outline</option>
         <option value="bar">Horizontal bar — LED</option>
         <option value="vbar">Vertical bar — LED</option>
@@ -193,7 +208,18 @@ function vbar(o){const U=UNITS[o.unit],w=180,h=380,bw=58,bx=(w-bw)/2,by=54,bh=h-
     s+=`<rect x="${f1(bx)}" y="${f1(y)}" width="${bw}" height="${f1(seg)}" rx="3" fill="${lit?c:'#232a33'}"/>`;if(lit)s+=`<rect x="${f1(bx)}" y="${f1(y)}" width="${bw}" height="${f1(seg)}" rx="3" fill="url(#sg)"/>`;}
   s+=`<text x="${w/2}" y="36" fill="#fff" font-size="30" font-weight="800" text-anchor="middle">${val}</text><text x="${w/2}" y="${h-20}" fill="${o.accent}" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="2">${U.label}</text></svg>`;return s;}
 
-const RENDER={round,arc,halfarc,ring,segarc,neon,bar,vbar};
+function race(o){const U=UNITS[o.unit],w=560,h=300,rmax=U.max,redline=U.redline??(rmax+1),val=o.value,n=18,pad=24,gap=5,bw=w-2*pad,seg=(bw-(n-1)*gap)/n,by=22,bh=30,ratio=Math.min(1,val/rmax);
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="'Rajdhani','Consolas',monospace"><defs><filter id="rg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.6"/></filter></defs>`;
+  s+=`<rect width="${w}" height="${h}" rx="14" fill="#06080b"/><rect x="3" y="3" width="${w-6}" height="${h-6}" rx="12" fill="none" stroke="#171d26" stroke-width="2"/>`;
+  for(let i=0;i<n;i++){const frac=(i+0.5)/n,lit=frac<=ratio,c=frac>0.93?'#8a5cff':frac>0.82?'#ff3b30':frac>0.58?'#ffd23f':'#27e36a',x=pad+i*(seg+gap);
+    s+=`<rect x="${f1(x)}" y="${by}" width="${f1(seg)}" height="${bh}" rx="2" fill="${lit?c:'#11161d'}"${lit?' filter="url(#rg)"':''}/>`;}
+  s+=`<text x="${w/2}" y="${by+bh+24}" fill="${ratio>=0.88?'#ff3b30':'#2b333e'}" font-size="14" font-weight="800" text-anchor="middle" letter-spacing="6">▲ SHIFT ▲</text>`;
+  s+=`<text x="${w/2}" y="${h/2+46}" fill="#fff" font-size="116" font-weight="800" text-anchor="middle" dominant-baseline="middle">${val}</text>`;
+  s+=`<text x="${w/2}" y="${h-24}" fill="${o.accent}" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="5">${U.label}${U.sub?' · '+U.sub:''}</text>`;
+  s+=`<text x="${pad}" y="${h-24}" fill="#1ae7ff" font-size="20" font-weight="700">${Math.round(ratio*100)}<tspan font-size="11" fill="#5b6772"> %</tspan></text>`;
+  s+=`<text x="${w-pad}" y="${h-24}" fill="#27e36a" font-size="20" font-weight="700" text-anchor="end">${Math.round((U.redline?redline:rmax)/U.div)}<tspan font-size="11" fill="#5b6772"> RL</tspan></text>`;
+  s+=`</svg>`;return s;}
+const RENDER={round,arc,halfarc,ring,segarc,neon,bar,vbar,race};
 const $=id=>document.getElementById(id);
 function render(){
   const o={style:$('style').value,bezel:$('bezel').value,face:$('face').value,needle:$('needle').value,accent:$('accent').value,unit:$('units').value,value:+$('value').value};
@@ -204,6 +230,8 @@ function render(){
 function onUnit(){const U=UNITS[$('units').value],v=$('value');v.max=U.max;v.step=Math.max(1,Math.round(U.max/160));if(+v.value>U.max)v.value=Math.round(U.max*0.52);render();}
 ['style','bezel','face','needle','accent','value'].forEach(id=>$(id).addEventListener('input',render));
 $('units').addEventListener('change',onUnit);
+function applyPreset(d){if(d.unit){$('units').value=d.unit;onUnit();}if(d.style)$('style').value=d.style;if(d.bezel)$('bezel').value=d.bezel;if(d.face)$('face').value=d.face;if(d.needle)$('needle').value=d.needle;if(d.accent)$('accent').value=d.accent;if(d.val)$('value').value=d.val;render();}
+document.querySelectorAll('.tpl').forEach(b=>b.addEventListener('click',()=>applyPreset(b.dataset)));
 onUnit();
 </script>
 </body>
