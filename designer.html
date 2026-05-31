@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Honeybadger Screen Designer — Lay Out Your Dash</title>
+<style>
+  :root{--bg:#07090c;--panel:#10141a;--line:#1d2530;--amber:#ffae00;--txt:#cfd6dd;--mut:#8b949e;--danger:#e0504a;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:600 15px/1.4 'Segoe UI',system-ui,sans-serif}
+  header{padding:12px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  header h1{font-size:17px;margin:0;letter-spacing:.5px;color:var(--amber)}
+  header .tag{font-size:11px;color:var(--mut);font-weight:500}
+  .pill{display:inline-block;font-size:10px;color:#06070a;background:var(--amber);border-radius:20px;padding:2px 9px;font-weight:800;letter-spacing:.5px}
+  a.home{color:var(--mut);font-size:12px;text-decoration:none}a.home:hover{color:var(--amber)}
+  .app{display:flex;flex-wrap:wrap;gap:20px;padding:18px;align-items:flex-start}
+  .controls{flex:0 0 280px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .controls h2{font-size:12px;letter-spacing:2px;color:var(--mut);margin:0 0 12px;text-transform:uppercase}
+  .ctl{margin-bottom:13px}
+  .ctl label{display:block;font-size:11px;color:var(--mut);margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
+  select,input[type=range]{width:100%}
+  select{background:#0b0e13;color:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 9px;font:inherit;font-size:13.5px}
+  input[type=color]{width:100%;height:34px;background:#0b0e13;border:1px solid var(--line);border-radius:8px;padding:3px;cursor:pointer}
+  .row{display:flex;gap:9px}.row>*{flex:1}
+  .btn{display:block;width:100%;text-align:center;background:var(--amber);color:#06070a;border:0;border-radius:9px;padding:11px;font:inherit;font-weight:800;cursor:pointer;margin-bottom:9px}
+  .btn.ghost{background:#10141a;color:var(--txt);border:1px solid var(--line);font-weight:600}
+  .btn.danger{color:var(--danger);border-color:#3a2326}
+  hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+  .sw-row{display:flex;flex-wrap:wrap;gap:6px}
+  .sw{width:24px;height:24px;border-radius:50%;border:2px solid #222b36;cursor:pointer;padding:0}
+  .sw:hover{border-color:#fff}
+  .stagewrap{flex:1 1 560px;min-width:340px}
+  .screenbox{position:relative;max-width:960px;margin:0 auto}
+  .screen{position:relative;width:100%;aspect-ratio:1024/600;background:
+     linear-gradient(#0a0d12,#070a0e);
+     border:2px solid #2a323d;border-radius:12px;overflow:hidden;
+     background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+     background-size:5% 8.5%;}
+  .widget{position:absolute;transform:translate(-50%,-50%);cursor:grab;touch-action:none}
+  .widget:active{cursor:grabbing}
+  .widget svg{display:block;width:100%;height:auto;pointer-events:none}
+  .widget.sel{outline:2px dashed var(--amber);outline-offset:4px;border-radius:6px}
+  .dims{position:absolute;top:8px;right:12px;font-family:'Consolas',monospace;font-size:11px;color:var(--mut);background:rgba(6,8,12,.6);padding:3px 8px;border-radius:5px}
+  .hint{margin-top:14px;color:var(--mut);font-size:12px;font-weight:500;text-align:center}
+  .hint2{color:var(--mut);font-size:12px;font-weight:500}
+  footer{padding:13px 20px;color:var(--mut);font-size:11px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header>
+  <a href="/" style="font-size:20px;text-decoration:none">🦡</a>
+  <h1>Honeybadger Screen Designer</h1>
+  <span class="pill">DRAG &amp; DROP</span>
+  <span class="tag">lay gauges onto your real screen footprint · what you build is what ships</span>
+  <a class="home" href="cluster.html" style="margin-left:auto">presets →</a>
+  <a class="home" href="builder.html" style="margin-left:14px">single gauge →</a>
+  <a class="home" href="/" style="margin-left:14px">← honeybadger.software</a>
+</header>
+
+<div class="app">
+  <div class="controls">
+    <h2>Screen</h2>
+    <div class="ctl"><label>Footprint (real screen)</label>
+      <select id="foot">
+        <option value="r1">10.1" touchscreen · 1024 × 600</option>
+        <option value="r2">Ultrawide cluster · 1280 × 400</option>
+        <option value="r3">12.3" widescreen · 1920 × 720</option>
+        <option value="r4">Square · 800 × 800</option>
+      </select></div>
+    <button class="btn" id="add">+ Add gauge</button>
+    <button class="btn ghost" id="clear">Clear screen</button>
+    <hr>
+    <div id="props">
+      <h2>Selected gauge</h2>
+      <div class="ctl"><label>Reads</label><select id="p-unit"></select></div>
+      <div class="ctl"><label>Style</label><select id="p-style"></select></div>
+      <div class="ctl"><label>Color theme</label><div class="sw-row" id="p-sw"></div></div>
+      <div class="ctl row">
+        <div><label>Needle</label><input type="color" id="p-needle" value="#ff3b30"></div>
+        <div><label>Accent</label><input type="color" id="p-accent" value="#cdd5de"></div>
+      </div>
+      <div class="ctl"><label>Size</label><input type="range" id="p-size" min="8" max="50" value="22"></div>
+      <button class="btn ghost danger" id="del">Delete this gauge</button>
+    </div>
+    <div id="noProps" class="hint2" style="display:none">Add a gauge, then click it to edit.</div>
+  </div>
+
+  <div class="stagewrap">
+    <div class="screenbox">
+      <div id="screen" class="screen"></div>
+      <div class="dims" id="dims">1024 × 600</div>
+    </div>
+    <div class="hint">Click <b>+ Add gauge</b>, then <b>drag</b> it onto the screen and set its <b>Size</b>. Add as many as fit — this is your real dash, to scale.</div>
+  </div>
+</div>
+
+<footer>HONEYBADGER SOFTWARE INC · screen designer · your gauges are the symbol library — same engine as the builders, so the layout ships pixel-identical to your dash.</footer>
+
+<script src="assets/js/gauges.js?v=4"></script>
+<script>
+const {RENDER,UNITS,PALETTES}=window.HBG;
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const FOOT={r1:[1024,600],r2:[1280,400],r3:[1920,720],r4:[800,800]};
+const STYLES=[['round','Round dial — needle'],['arc','Sweep arc — digital'],['halfarc','Half arc'],['ring','Minimal ring'],['segarc','Segmented arc'],['neon','Neon outline'],['bar','Horizontal bar'],['vbar','Vertical bar'],['race','Race shift-bar 🏁'],['digit','Numeric readout'],['trend','Trend chart']];
+const DEMO={rpm:4200,mph:78,kmh:120,boost:15,map:95,maf:14,tps:22,coolant:200,oiltemp:215,transtemp:178,iat:104,oilpress:55,fuelpsi:58,fuel:64,volts:14.2,afr:14.2,afrcmd:14.7,o2b1:445,o2b2:430,stftb1:2,stftb2:-1,ltftb1:3,ltftb2:1,injb1:42,injb2:41,timing:24,knock:0};
+function demoVal(u){const U=UNITS[u],mn=U.min||0;return DEMO[u]!=null?DEMO[u]:Math.round(mn+(U.max-mn)*0.55);}
+
+let widgets=[], selId=null, nid=1, drag=null;
+const screen=$('screen');
+
+function byId(id){return widgets.find(w=>w.id===id);}
+function widgetHTML(w){return RENDER[w.style]({unit:w.unit,style:w.style,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,value:demoVal(w.unit)});}
+function draw(){
+  screen.innerHTML='';
+  widgets.forEach(w=>{
+    const d=document.createElement('div');
+    d.className='widget'+(w.id===selId?' sel':'');
+    d.dataset.id=w.id;
+    d.style.left=(w.fx*100)+'%'; d.style.top=(w.fy*100)+'%'; d.style.width=(w.size*100)+'%';
+    d.innerHTML=widgetHTML(w);
+    screen.appendChild(d);
+  });
+}
+function syncProps(){
+  const w=byId(selId);
+  $('props').style.display=w?'block':'none';
+  $('noProps').style.display=w?'none':'block';
+  if(!w)return;
+  $('p-unit').value=w.unit; $('p-style').value=w.style;
+  $('p-needle').value=w.needle; $('p-accent').value=w.accent;
+  $('p-size').value=Math.round(w.size*100);
+}
+function select(id){selId=id;draw();syncProps();}
+function add(opts){
+  const w=Object.assign({id:nid++,unit:'rpm',style:'round',needle:'#ff3b30',accent:'#cdd5de',bezel:'metal',face:'solid',fx:0.5,fy:0.5,size:0.22},opts||{});
+  widgets.push(w); select(w.id);
+}
+
+// build dropdowns
+Object.keys(UNITS).forEach(k=>{const U=UNITS[k];const o=document.createElement('option');o.value=k;o.textContent=U.label+(U.sub?' — '+U.sub:'');$('p-unit').appendChild(o);});
+STYLES.forEach(([v,n])=>{const o=document.createElement('option');o.value=v;o.textContent=n;$('p-style').appendChild(o);});
+PALETTES.forEach(p=>{const b=document.createElement('button');b.className='sw';b.title=p.name;b.style.background=`linear-gradient(135deg,${p.needle} 60%,${p.accent} 60%)`;b.addEventListener('click',()=>{const w=byId(selId);if(!w)return;w.needle=p.needle;w.accent=p.accent;$('p-needle').value=p.needle;$('p-accent').value=p.accent;draw();});$('p-sw').appendChild(b);});
+
+['p-unit','p-style','p-needle','p-accent'].forEach(id=>$(id).addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.unit=$('p-unit').value;w.style=$('p-style').value;w.needle=$('p-needle').value;w.accent=$('p-accent').value;draw();}));
+$('p-size').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.size=+$('p-size').value/100;draw();});
+$('del').addEventListener('click',()=>{widgets=widgets.filter(w=>w.id!==selId);selId=null;draw();syncProps();});
+$('add').addEventListener('click',()=>add());
+$('clear').addEventListener('click',()=>{widgets=[];selId=null;draw();syncProps();});
+function setFoot(){const [fw,fh]=FOOT[$('foot').value];screen.style.aspectRatio=fw+'/'+fh;$('dims').textContent=fw+' × '+fh;}
+$('foot').addEventListener('change',setFoot);
+
+// drag to place
+screen.addEventListener('pointerdown',e=>{
+  const el=e.target.closest('.widget'); if(!el)return;
+  const id=+el.dataset.id; select(id);
+  const r=screen.getBoundingClientRect(), w=byId(id);
+  drag={id,dx:(e.clientX-r.left)/r.width-w.fx,dy:(e.clientY-r.top)/r.height-w.fy};
+  e.preventDefault();
+});
+window.addEventListener('pointermove',e=>{
+  if(!drag)return;
+  const r=screen.getBoundingClientRect(), w=byId(drag.id); if(!w){drag=null;return;}
+  w.fx=clamp((e.clientX-r.left)/r.width-drag.dx,0.02,0.98);
+  w.fy=clamp((e.clientY-r.top)/r.height-drag.dy,0.04,0.96);
+  const el=screen.querySelector('.widget[data-id="'+drag.id+'"]');
+  if(el){el.style.left=(w.fx*100)+'%';el.style.top=(w.fy*100)+'%';}
+});
+window.addEventListener('pointerup',()=>{drag=null;});
+
+// starter dash: a tach + speedo + two numeric readouts
+setFoot();
+add({unit:'rpm',style:'round',needle:'#1ae7ff',accent:'#cdd5de',fx:0.27,fy:0.42,size:0.30});
+add({unit:'mph',style:'round',needle:'#1ae7ff',accent:'#cdd5de',fx:0.73,fy:0.42,size:0.30});
+add({unit:'afr',style:'digit',needle:'#1ae7ff',accent:'#1ae7ff',fx:0.30,fy:0.84,size:0.20});
+add({unit:'coolant',style:'digit',needle:'#1ae7ff',accent:'#1ae7ff',fx:0.70,fy:0.84,size:0.20});
+selId=null; draw(); syncProps();
+</script>
+</body>
+</html>
