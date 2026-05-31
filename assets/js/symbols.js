@@ -120,9 +120,58 @@ function indicator(o){o=o||{};const k=o.icon||'armed',on=o.state!=='off',t=TELL[
   return svg(w,h,d+b);
 }
 
-const SYMBOLS={bottle,purge,armswitch,controller,indicator};
+// ── NITROUS PANEL — the whole system as ONE linked unit: bottle → purge →
+//    run → intake, joined by animated plumbing flow. Mirrors the Pi nitrous
+//    screen. Drop it as a single widget; move/size it as one. ───────────────
+function nitrouspanel(o){o=o||{};
+  const st=o.state||'armed', col=o.color||'#ff5b00',
+        armed=st!=='off'&&st!=='safe', flow=armed||st==='purging'||st==='firing',
+        w=560,h=300, ok='#39ff80', hi=shade('#1f6bd6',1.5), lvl=o.level!=null?o.level:64;
+  const valve=(x,y,label,active)=>{
+    let s=`<circle cx="${x}" cy="${y}" r="16" fill="#161b21" stroke="url(#np_chr)" stroke-width="2.5"/>`;
+    s+=`<circle cx="${x}" cy="${y}" r="8" fill="${active?col:'#2a313a'}"${active?' filter="url(#np_g)"':''}>${active?'<animate attributeName="opacity" values="0.6;1;0.6" dur="1s" repeatCount="indefinite"/>':''}</circle>`;
+    s+=`<rect x="${x-6}" y="${y-32}" width="12" height="15" rx="2" fill="url(#np_chr)"/>`;
+    s+=`<text x="${x}" y="${y+33}" fill="${active?col:'#5b6772'}" font-size="10" font-weight="800" text-anchor="middle">${label}</text>`;
+    return s;
+  };
+  let d=`<defs>
+    <linearGradient id="np_bdy" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${shade('#1f6bd6',0.55)}"/><stop offset="0.5" stop-color="#2f86e6"/><stop offset="1" stop-color="${shade('#1f6bd6',0.4)}"/></linearGradient>
+    <radialGradient id="np_heat" cx="50%" cy="60%" r="60%"><stop offset="0" stop-color="#ff7a00" stop-opacity="0.5"/><stop offset="1" stop-color="#ff7a00" stop-opacity="0"/></radialGradient>
+    <linearGradient id="np_chr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfd4d8"/><stop offset="0.5" stop-color="#7d848b"/><stop offset="1" stop-color="#3c4248"/></linearGradient>
+    <filter id="np_g" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"/></filter></defs>`;
+  let b=`<rect x="2" y="2" width="${w-4}" height="${h-4}" rx="16" fill="#0b0e12" stroke="${col}" stroke-width="2"/>`;
+  b+=`<text x="20" y="30" fill="${col}" font-size="15" font-weight="800" letter-spacing="2">HONEYBADGER · N₂O SYSTEM</text>`;
+  b+=`<text x="${w-20}" y="30" fill="${armed?'#ff3b30':'#5b6772'}" font-size="13" font-weight="800" text-anchor="end" letter-spacing="2">${armed?'● ARMED':'○ SAFE'}</text>`;
+  // bottle
+  const bx=28,by=58,bw=78,bh=150,fy=by+bh-(lvl/100)*bh;
+  if(st==='heating'||st==='firing')b+=`<ellipse cx="${bx+bw/2}" cy="${by+bh*0.6}" rx="70" ry="100" fill="url(#np_heat)"><animate attributeName="opacity" values="0.4;1;0.4" dur="1.6s" repeatCount="indefinite"/></ellipse>`;
+  b+=`<clipPath id="np_bc"><rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="14"/></clipPath>`;
+  b+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="14" fill="url(#np_bdy)" stroke="#13315a"/>`;
+  b+=`<rect x="${bx}" y="${f1(fy)}" width="${bw}" height="${f1(by+bh-fy)}" fill="${shade('#1f6bd6',0.85)}" clip-path="url(#np_bc)"/>`;
+  b+=`<rect x="${bx}" y="${f1(fy)}" width="${bw}" height="3" fill="#fff" opacity="0.5" clip-path="url(#np_bc)"/>`;
+  b+=`<rect x="${bx-2}" y="${f1(by+bh*0.32)}" width="${bw+4}" height="42" fill="#0b0e12" opacity="0.9"/>`;
+  b+=`<text x="${bx+bw/2}" y="${f1(by+bh*0.32+21)}" fill="#fff" font-size="20" font-weight="800" text-anchor="middle">N₂O</text>`;
+  b+=`<text x="${bx+bw/2}" y="${f1(by+bh*0.32+35)}" fill="${hi}" font-size="8" font-weight="700" text-anchor="middle" letter-spacing="2">HONEYBADGER</text>`;
+  b+=`<text x="${bx+bw/2}" y="${by+bh-9}" fill="#fff" font-size="12" font-weight="800" text-anchor="middle">${Math.round(lvl)}%</text>`;
+  b+=`<rect x="${bx+bw/2-12}" y="${by-18}" width="24" height="20" rx="4" fill="url(#np_chr)"/><circle cx="${bx+bw/2}" cy="${by-24}" r="11" fill="url(#np_chr)" stroke="#6b7176"/>`;
+  // plumbing  bottle -> purge -> run -> intake
+  const ly=by+52,x1=bx+bw,xP=210,xR=330,xI=440;
+  const pipe=(a,z)=>`<line x1="${a}" y1="${ly}" x2="${z}" y2="${ly}" stroke="#2a323d" stroke-width="8" stroke-linecap="round"/>`;
+  b+=pipe(x1,xP)+pipe(xP,xR)+pipe(xR,xI);
+  if(flow)for(let i=0;i<4;i++){const bg=(i*0.22).toFixed(2);b+=`<circle cy="${ly}" r="4" fill="${col}" filter="url(#np_g)"><animate attributeName="cx" values="${x1};${xI}" dur="0.9s" begin="${bg}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="0.9s" begin="${bg}s" repeatCount="indefinite"/></circle>`;}
+  b+=valve(xP,ly,'PURGE',st==='purging'||armed)+valve(xR,ly,'RUN',st==='firing');
+  b+=`<rect x="${xI}" y="${ly-26}" width="92" height="52" rx="8" fill="#161b21" stroke="#2a323d"/><text x="${xI+46}" y="${ly-4}" fill="#9aa3ad" font-size="11" font-weight="800" text-anchor="middle">INTAKE</text><text x="${xI+46}" y="${ly+15}" fill="${flow?ok:'#3a4450'}" font-size="10" font-weight="700" text-anchor="middle">${flow?'FLOW':'—'}</text>`;
+  // controller display
+  b+=`<rect x="210" y="150" width="170" height="50" rx="7" fill="#05140c" stroke="#0a0c0e"/><text x="295" y="183" fill="${armed?ok:'#1f3a2c'}" font-family="'Consolas',monospace" font-size="26" font-weight="800" text-anchor="middle">${o.display||(armed?'ARMED':'SAFE')}</text>`;
+  // telltale row
+  [['ARM',armed,'#ff3b30'],['PRG',st==='purging','#39c5ff'],['WOT',st==='firing','#ffd23f'],['RDY',armed&&st!=='firing',ok]].forEach((t,i)=>{const tx=410+i*38,ty=162;b+=`<circle cx="${tx}" cy="${ty}" r="9" fill="${t[1]?t[2]:shade(t[2],0.28)}">${t[1]?'<animate attributeName="opacity" values="0.6;1;0.6" dur="1.1s" repeatCount="indefinite"/>':''}</circle><text x="${tx}" y="${ty+24}" fill="#9aa3ad" font-size="8" font-weight="700" text-anchor="middle">${t[0]}</text>`;});
+  return svg(w,h,d+b);
+}
+
+const SYMBOLS={bottle,purge,armswitch,controller,indicator,nitrouspanel};
 window.HBSYM={SYMBOLS,
   list:[
+    {sym:'nitrouspanel',name:'Nitrous panel (linked)',opts:{state:'armed',level:64}},
     {sym:'bottle',name:'N₂O bottle',opts:{state:'idle',level:62}},
     {sym:'purge',name:'Purge solenoid',opts:{state:'closed'}},
     {sym:'armswitch',name:'Arm switch',opts:{state:'armed'}},

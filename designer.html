@@ -41,6 +41,7 @@
   .widget:active{cursor:grabbing}
   .widget svg{display:block;width:100%;height:auto;pointer-events:none}
   .widget.sel{outline:2px dashed var(--amber);outline-offset:4px;border-radius:6px}
+  .widget.redline svg{filter:drop-shadow(0 0 6px #ff3b30) drop-shadow(0 0 13px rgba(255,59,48,.7))}
   .dims{position:absolute;top:8px;right:12px;font-family:'Consolas',monospace;font-size:11px;color:var(--mut);background:rgba(6,8,12,.6);padding:3px 8px;border-radius:5px}
   .hint{margin-top:14px;color:var(--mut);font-size:12px;font-weight:500;text-align:center}
   .hint2{color:var(--mut);font-size:12px;font-weight:500}
@@ -69,8 +70,23 @@
         <option value="r3">12.3" widescreen · 1920 × 720</option>
         <option value="r4">Square · 800 × 800</option>
       </select></div>
+    <div class="ctl"><label>Background</label>
+      <select id="bg">
+        <option value="carbon">Carbon fiber</option>
+        <option value="dark" selected>Dark gradient</option>
+        <option value="hex">Hex-grid tech</option>
+        <option value="stripes">Racing stripes</option>
+        <option value="glow">Ambient glow</option>
+        <option value="brushed">Brushed metal</option>
+        <option value="solid">Solid colour</option>
+      </select></div>
+    <div class="ctl"><label>Background colour</label><input type="color" id="bgcol" value="#1ae7ff"></div>
     <button class="btn" id="add">+ Add gauge</button>
     <button class="btn ghost" id="clear">Clear screen</button>
+    <button class="btn ghost" id="resetpk" style="font-size:12px;padding:8px">⟲ Reset peak marks</button>
+    <div class="ctl" style="margin-top:11px"><label>Add part / nitrous symbol</label>
+      <select id="symtype"></select></div>
+    <button class="btn" id="addsym" style="background:#ff5b00;color:#fff">+ Add part</button>
     <hr>
     <div id="props">
       <h2>Selected gauge</h2>
@@ -82,9 +98,24 @@
         <div><label>Accent</label><input type="color" id="p-accent" value="#cdd5de"></div>
       </div>
       <div class="ctl"><label>Size</label><input type="range" id="p-size" min="8" max="50" value="22"></div>
+      <div class="ctl"><label><input type="checkbox" id="p-peak" style="width:auto;margin-right:6px;vertical-align:middle">Peak-hold marker</label></div>
+      <div class="ctl"><label><input type="checkbox" id="p-cond" style="width:auto;margin-right:6px;vertical-align:middle">Only show when active</label>
+        <div class="row" style="margin-top:6px">
+          <select id="p-condop"><option value="gt">value &gt;</option><option value="ge">value ≥</option><option value="lt">value &lt;</option><option value="le">value ≤</option></select>
+          <input type="number" id="p-condval" value="0" style="background:#0b0e13;color:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 8px;font:inherit">
+        </div>
+      </div>
       <button class="btn ghost danger" id="del">Delete this gauge</button>
     </div>
-    <div id="noProps" class="hint2" style="display:none">Add a gauge, then click it to edit.</div>
+    <div id="symProps" style="display:none">
+      <h2>Selected part</h2>
+      <div class="ctl"><label>State</label><select id="s-state"></select></div>
+      <div class="ctl" id="s-iconwrap" style="display:none"><label>Telltale icon</label><select id="s-icon"></select></div>
+      <div class="ctl"><label>Colour</label><input type="color" id="s-color" value="#ff5b00"></div>
+      <div class="ctl"><label>Size</label><input type="range" id="s-size" min="10" max="90" value="45"></div>
+      <button class="btn ghost danger" id="s-del">Delete this part</button>
+    </div>
+    <div id="noProps" class="hint2" style="display:none">Add a gauge or part, then click it to edit.</div>
   </div>
 
   <div class="stagewrap">
@@ -98,9 +129,14 @@
 
 <footer>HONEYBADGER SOFTWARE INC · screen designer · your gauges are the symbol library — same engine as the builders, so the layout ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=5"></script>
+<script src="assets/js/gauges.js?v=7"></script>
+<script src="assets/js/anim.js?v=3"></script>
+<script src="assets/js/symbols.js?v=2"></script>
 <script>
 const {RENDER,UNITS,PALETTES}=window.HBG;
+const SYM=window.HBSYM?window.HBSYM.SYMBOLS:{}, SYMLIST=window.HBSYM?window.HBSYM.list:[];
+const SYMSTATES={nitrouspanel:['armed','purging','firing','heating','off'],bottle:['idle','heating','purging','cold'],purge:['closed','open'],armswitch:['armed','safe'],controller:['on','purging','off'],indicator:['on','off']};
+const TELLICONS=['armed','purge','wot','shift','boost','ready','oil','temp','fuel','batt','check','knock'];
 const $=id=>document.getElementById(id);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const FOOT={r1:[1024,600],r2:[1280,400],r3:[1920,720],r4:[800,800]};
@@ -112,7 +148,10 @@ let widgets=[], selId=null, nid=1, drag=null;
 const screen=$('screen');
 
 function byId(id){return widgets.find(w=>w.id===id);}
-function widgetHTML(w){return RENDER[w.style]({unit:w.unit,style:w.style,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,value:demoVal(w.unit)});}
+function liveVal(w){return window.HBANIM?HBANIM.disp(w.unit):demoVal(w.unit);}
+function symHTML(w){return (SYM[w.sym]||(()=>''))({state:w.state,color:w.color,level:w.level,icon:w.icon,label:w.label,display:w.display});}
+function gaugeOpts(w){return {unit:w.unit,style:w.style,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,value:liveVal(w),gear:window.HBANIM?HBANIM.gear():3,peak:w.peakhold&&window.HBANIM?HBANIM.peak(w.unit):null};}
+function widgetHTML(w){return w.kind==='symbol'?symHTML(w):RENDER[w.style](gaugeOpts(w));}
 function draw(){
   screen.innerHTML='';
   widgets.forEach(w=>{
@@ -124,18 +163,36 @@ function draw(){
     screen.appendChild(d);
   });
 }
+function fillStates(sym,cur){const sel=$('s-state');sel.innerHTML='';(SYMSTATES[sym]||['on','off']).forEach(st=>{const o=document.createElement('option');o.value=st;o.textContent=st;sel.appendChild(o);});sel.value=cur;}
 function syncProps(){
-  const w=byId(selId);
-  $('props').style.display=w?'block':'none';
+  const w=byId(selId), isSym=w&&w.kind==='symbol';
+  $('props').style.display=(w&&!isSym)?'block':'none';
+  $('symProps').style.display=isSym?'block':'none';
   $('noProps').style.display=w?'none':'block';
   if(!w)return;
-  $('p-unit').value=w.unit; $('p-style').value=w.style;
-  $('p-needle').value=w.needle; $('p-accent').value=w.accent;
-  $('p-size').value=Math.round(w.size*100);
+  if(isSym){
+    fillStates(w.sym,w.state);
+    $('s-color').value=w.color||'#ff5b00';
+    $('s-size').value=Math.round(w.size*100);
+    $('s-iconwrap').style.display=w.sym==='indicator'?'block':'none';
+    if(w.sym==='indicator')$('s-icon').value=w.icon||'armed';
+  } else {
+    $('p-unit').value=w.unit; $('p-style').value=w.style;
+    $('p-needle').value=w.needle; $('p-accent').value=w.accent;
+    $('p-size').value=Math.round(w.size*100);
+    $('p-peak').checked=!!w.peakhold;
+    $('p-cond').checked=!!(w.cond&&w.cond.on);
+    if(w.cond){$('p-condop').value=w.cond.op||'gt';$('p-condval').value=w.cond.val!=null?w.cond.val:0;}
+  }
 }
 function select(id){selId=id;draw();syncProps();}
 function add(opts){
   const w=Object.assign({id:nid++,unit:'rpm',style:'round',needle:'#ff3b30',accent:'#cdd5de',bezel:'metal',face:'solid',fx:0.5,fy:0.5,size:0.22},opts||{});
+  widgets.push(w); select(w.id);
+}
+function addSymbol(sym){
+  const meta=(SYMLIST.find(s=>s.sym===sym)||{}).opts||{};
+  const w=Object.assign({id:nid++,kind:'symbol',sym:sym,color:sym==='nitrouspanel'?'#ff5b00':'#39ff9a',fx:0.5,fy:0.5,size:sym==='nitrouspanel'?0.5:0.16},meta);
   widgets.push(w); select(w.id);
 }
 
@@ -146,11 +203,55 @@ PALETTES.forEach(p=>{const b=document.createElement('button');b.className='sw';b
 
 ['p-unit','p-style','p-needle','p-accent'].forEach(id=>$(id).addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.unit=$('p-unit').value;w.style=$('p-style').value;w.needle=$('p-needle').value;w.accent=$('p-accent').value;draw();}));
 $('p-size').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.size=+$('p-size').value/100;draw();});
+$('p-peak').addEventListener('change',()=>{const w=byId(selId);if(!w)return;w.peakhold=$('p-peak').checked;draw();});
+$('p-cond').addEventListener('change',()=>{const w=byId(selId);if(!w)return;w.cond=w.cond||{};w.cond.on=$('p-cond').checked;w.cond.op=$('p-condop').value;w.cond.val=+$('p-condval').value;draw();});
+['p-condop','p-condval'].forEach(id=>$(id).addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.cond=w.cond||{on:$('p-cond').checked};w.cond.op=$('p-condop').value;w.cond.val=+$('p-condval').value;}));
+$('resetpk').addEventListener('click',()=>{if(window.HBANIM)HBANIM.resetPeaks();});
 $('del').addEventListener('click',()=>{widgets=widgets.filter(w=>w.id!==selId);selId=null;draw();syncProps();});
 $('add').addEventListener('click',()=>add());
 $('clear').addEventListener('click',()=>{widgets=[];selId=null;draw();syncProps();});
 function setFoot(){const [fw,fh]=FOOT[$('foot').value];screen.style.aspectRatio=fw+'/'+fh;$('dims').textContent=fw+' × '+fh;}
 $('foot').addEventListener('change',setFoot);
+
+// nitrous symbols / parts
+SYMLIST.forEach(s=>{const o=document.createElement('option');o.value=s.sym;o.textContent=s.name;$('symtype').appendChild(o);});
+TELLICONS.forEach(ic=>{const o=document.createElement('option');o.value=ic;o.textContent=ic;$('s-icon').appendChild(o);});
+$('addsym').addEventListener('click',()=>addSymbol($('symtype').value));
+$('s-state').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.state=$('s-state').value;draw();});
+$('s-color').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.color=$('s-color').value;draw();});
+$('s-icon').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.icon=$('s-icon').value;draw();});
+$('s-size').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.size=+$('s-size').value/100;draw();});
+$('s-del').addEventListener('click',()=>{widgets=widgets.filter(w=>w.id!==selId);selId=null;draw();syncProps();});
+
+// selectable, colour-customisable background
+function hexA(h,a){const n=h.replace('#','');return`rgba(${parseInt(n.substr(0,2),16)},${parseInt(n.substr(2,2),16)},${parseInt(n.substr(4,2),16)},${a})`;}
+function setBg(){
+  const t=$('bg').value,c=$('bgcol').value,s=screen.style;
+  s.backgroundColor='';s.backgroundImage='';s.backgroundSize='auto';s.backgroundRepeat='repeat';
+  if(t==='dark'){s.backgroundColor='#080b0f';s.backgroundImage='linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px)';s.backgroundSize='5% 8.5%';}
+  else if(t==='carbon'){s.backgroundColor='#0c0e12';s.backgroundImage='radial-gradient(circle at 1px 1px,#1b1f26 1px,transparent 0),radial-gradient(circle at 5px 5px,#14171c 1px,transparent 0)';s.backgroundSize='8px 8px';}
+  else if(t==='hex'){s.backgroundColor='#070a0e';s.backgroundImage="url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48'%3E%3Cpath d='M14 0l14 8v16l-14 8L0 24V8z' fill='none' stroke='"+encodeURIComponent(c)+"' stroke-opacity='0.16' stroke-width='1'/%3E%3C/svg%3E\")";s.backgroundSize='56px 48px';}
+  else if(t==='stripes'){s.backgroundColor='#0a0d12';s.backgroundImage='linear-gradient(90deg,transparent 0 46%,'+hexA(c,.5)+' 46% 48%,transparent 48% 52%,'+hexA(c,.5)+' 52% 54%,transparent 54%),repeating-linear-gradient(-50deg,#0a0d12 0 26px,#0e131a 26px 52px)';}
+  else if(t==='glow'){s.backgroundColor='#07090c';s.backgroundImage='radial-gradient(ellipse at 50% 38%,'+hexA(c,.22)+',transparent 60%)';}
+  else if(t==='brushed'){s.backgroundColor='#262b31';s.backgroundImage='repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px)';}
+  else {s.backgroundColor=c;}
+}
+['bg','bgcol'].forEach(id=>$(id).addEventListener('input',setBg));
+
+// live animation tick: only re-render gauges whose display value changed
+function condMet(v,c){if(!c||!c.on)return true;const t=c.val;return c.op==='gt'?v>t:c.op==='ge'?v>=t:c.op==='lt'?v<t:c.op==='le'?v<=t:true;}
+function tick(){
+  if(!window.HBANIM)return;
+  widgets.forEach(w=>{
+    const el=screen.querySelector('.widget[data-id="'+w.id+'"]'); if(!el)return;
+    if(w.cond&&w.cond.on){const show=condMet(HBANIM.value(w.unit),w.cond);el.style.display=show?'':'none';if(!show)return;}
+    else if(el.style.display==='none'){el.style.display='';}
+    if(w.kind==='symbol')return; // symbols animate via their own SMIL — never re-render
+    const v=HBANIM.disp(w.unit);
+    if(w._lv!==v){w._lv=v;el.innerHTML=widgetHTML(w);}
+    el.classList.toggle('redline',HBANIM.isRed(w.unit));
+  });
+}
 
 // drag to place
 screen.addEventListener('pointerdown',e=>{
@@ -177,6 +278,8 @@ add({unit:'mph',style:'round',needle:'#1ae7ff',accent:'#cdd5de',fx:0.73,fy:0.42,
 add({unit:'afr',style:'digit',needle:'#1ae7ff',accent:'#1ae7ff',fx:0.30,fy:0.84,size:0.20});
 add({unit:'coolant',style:'digit',needle:'#1ae7ff',accent:'#1ae7ff',fx:0.70,fy:0.84,size:0.20});
 selId=null; draw(); syncProps();
+setBg();
+if(window.HBANIM)HBANIM.start(tick);
 </script>
 </body>
 </html>
