@@ -69,7 +69,7 @@
 
 <div class="app">
   <div class="controls">
-    <h2>Screen</h2>
+    <h2>1 · Screen</h2>
     <div class="ctl"><label>Footprint (real screen)</label>
       <select id="foot">
         <option value="r1">10.1" touchscreen · 1024 × 600</option>
@@ -88,15 +88,15 @@
         <option value="solid">Solid colour</option>
       </select></div>
     <div class="ctl"><label>Background colour</label><input type="color" id="bgcol" value="#1ae7ff"></div>
+    <hr>
+    <h2>2 · Add to this page</h2>
     <button class="btn" id="add">+ Add gauge</button>
-    <button class="btn ghost" id="clear">Clear page</button>
-    <button class="btn ghost" id="resetpk" style="font-size:12px;padding:8px">⟲ Reset peak marks</button>
-    <div class="ctl" style="margin-top:11px"><label>Add part / nitrous symbol</label>
+    <div class="ctl" style="margin-top:11px"><label>…or a part / nitrous symbol</label>
       <select id="symtype"></select></div>
     <button class="btn" id="addsym" style="background:#ff5b00;color:#fff">+ Add part</button>
     <hr>
     <div id="props">
-      <h2>Selected gauge</h2>
+      <h2>3 · Selected gauge</h2>
       <div class="ctl"><label>Reads</label><select id="p-unit"></select></div>
       <div class="ctl"><label>Style</label><select id="p-style"></select></div>
       <div class="ctl"><label>Color theme</label><div class="sw-row" id="p-sw"></div></div>
@@ -115,7 +115,7 @@
       <button class="btn ghost danger" id="del">Delete this gauge</button>
     </div>
     <div id="symProps" style="display:none">
-      <h2>Selected part</h2>
+      <h2>3 · Selected part</h2>
       <div class="ctl"><label>State</label><select id="s-state"></select></div>
       <div class="ctl" id="s-iconwrap" style="display:none"><label>Telltale icon</label><select id="s-icon"></select></div>
       <div class="ctl"><label>Colour</label><input type="color" id="s-color" value="#ff5b00"></div>
@@ -123,6 +123,10 @@
       <button class="btn ghost danger" id="s-del">Delete this part</button>
     </div>
     <div id="noProps" class="hint2" style="display:none">Add a gauge or part, then click it to edit.</div>
+    <hr>
+    <h2>Page tools</h2>
+    <button class="btn ghost" id="clear">Clear page</button>
+    <button class="btn ghost" id="resetpk" style="font-size:12px;padding:8px">⟲ Reset peak marks</button>
   </div>
 
   <div class="stagewrap">
