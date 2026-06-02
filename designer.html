@@ -43,6 +43,13 @@
   .widget.sel{outline:2px dashed var(--amber);outline-offset:4px;border-radius:6px}
   .widget.redline svg{filter:drop-shadow(0 0 6px #ff3b30) drop-shadow(0 0 13px rgba(255,59,48,.7))}
   .dims{position:absolute;top:8px;right:12px;font-family:'Consolas',monospace;font-size:11px;color:var(--mut);background:rgba(6,8,12,.6);padding:3px 8px;border-radius:5px}
+  .pagetabs{display:flex;gap:6px;align-items:center;max-width:960px;margin:0 auto 10px;flex-wrap:wrap}
+  .ptab{display:flex;align-items:center;gap:8px;background:#10141a;color:var(--txt);border:1px solid var(--line);border-bottom:none;border-radius:9px 9px 0 0;padding:7px 13px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+  .ptab.active{border-color:var(--amber);color:#fff;background:#161b22}
+  .ptab .x{color:var(--mut);font-weight:800;line-height:1}
+  .ptab .x:hover{color:var(--danger)}
+  .ptab.add{color:var(--amber);font-weight:800}
+  .ptab.add:hover{border-color:var(--amber)}
   .hint{margin-top:14px;color:var(--mut);font-size:12px;font-weight:500;text-align:center}
   .hint2{color:var(--mut);font-size:12px;font-weight:500}
   footer{padding:13px 20px;color:var(--mut);font-size:11px;border-top:1px solid var(--line)}
@@ -82,7 +89,7 @@
       </select></div>
     <div class="ctl"><label>Background colour</label><input type="color" id="bgcol" value="#1ae7ff"></div>
     <button class="btn" id="add">+ Add gauge</button>
-    <button class="btn ghost" id="clear">Clear screen</button>
+    <button class="btn ghost" id="clear">Clear page</button>
     <button class="btn ghost" id="resetpk" style="font-size:12px;padding:8px">⟲ Reset peak marks</button>
     <div class="ctl" style="margin-top:11px"><label>Add part / nitrous symbol</label>
       <select id="symtype"></select></div>
@@ -119,11 +126,12 @@
   </div>
 
   <div class="stagewrap">
+    <div class="pagetabs" id="pagetabs"></div>
     <div class="screenbox">
       <div id="screen" class="screen"></div>
       <div class="dims" id="dims">1024 × 600</div>
     </div>
-    <div class="hint">Click <b>+ Add gauge</b>, then <b>drag</b> it onto the screen and set its <b>Size</b>. Add as many as fit — this is your real dash, to scale.</div>
+    <div class="hint"><b>Pages</b> are the screens you swipe between on the dash — tap a tab to switch, <b>+ Page</b> to add one, double-click a tab to rename. On <i>every</i> page you can mix <b>+ Add gauge</b> and <b>+ Add part</b> (nitrous), then <b>drag</b> to place. This is your real dash, to scale.</div>
   </div>
 </div>
 
@@ -144,7 +152,7 @@ const STYLES=window.HBG.STYLES;
 const DEMO={rpm:4200,mph:78,kmh:120,boost:15,map:95,maf:14,tps:22,coolant:200,oiltemp:215,transtemp:178,iat:104,oilpress:55,fuelpsi:58,fuel:64,volts:14.2,afr:14.2,afrcmd:14.7,o2b1:445,o2b2:430,stftb1:2,stftb2:-1,ltftb1:3,ltftb2:1,injb1:42,injb2:41,timing:24,knock:0};
 function demoVal(u){const U=UNITS[u],mn=U.min||0;return DEMO[u]!=null?DEMO[u]:Math.round(mn+(U.max-mn)*0.55);}
 
-let widgets=[], selId=null, nid=1, drag=null;
+let pages=[], curPage=0, widgets=[], selId=null, nid=1, drag=null;
 const screen=$('screen');
 
 function byId(id){return widgets.find(w=>w.id===id);}
@@ -186,15 +194,60 @@ function syncProps(){
   }
 }
 function select(id){selId=id;draw();syncProps();}
+// Cascade new widgets so they never spawn stacked on the exact center
+// (otherwise a second big panel lands fully on top of the first and the
+//  one underneath looks un-draggable). Steps diagonally, wraps after 8.
+function nextSpawn(){
+  const k=widgets.length%8;
+  return {fx:clamp(0.30+k*0.055,0.1,0.9), fy:clamp(0.30+k*0.05,0.1,0.9)};
+}
 function add(opts){
-  const w=Object.assign({id:nid++,unit:'rpm',style:'round',needle:'#ff3b30',accent:'#cdd5de',bezel:'metal',face:'solid',fx:0.5,fy:0.5,size:0.22},opts||{});
+  const sp=nextSpawn();
+  const w=Object.assign({id:nid++,unit:'rpm',style:'round',needle:'#ff3b30',accent:'#cdd5de',bezel:'metal',face:'solid',fx:sp.fx,fy:sp.fy,size:0.22},opts||{});
   widgets.push(w); select(w.id);
 }
 function addSymbol(sym){
   const meta=(SYMLIST.find(s=>s.sym===sym)||{}).opts||{};
   const big=sym==='nitrouspanel'||sym==='nitrouscontroller';
-  const w=Object.assign({id:nid++,kind:'symbol',sym:sym,color:big?'#ff5b00':'#39ff9a',fx:0.5,fy:0.5,size:big?0.52:0.16},meta);
+  const sp=nextSpawn();
+  const w=Object.assign({id:nid++,kind:'symbol',sym:sym,color:big?'#ff5b00':'#39ff9a',fx:sp.fx,fy:sp.fy,size:big?0.52:0.16},meta);
   widgets.push(w); select(w.id);
+}
+
+// ── multi-page model: each page is a full screen of its own widgets ─────────
+function renderTabs(){
+  const t=$('pagetabs'); t.innerHTML='';
+  pages.forEach((p,i)=>{
+    const tab=document.createElement('div'); tab.className='ptab'+(i===curPage?' active':'');
+    const nm=document.createElement('span'); nm.textContent=p.name; nm.title='Double-click to rename';
+    nm.addEventListener('dblclick',e=>{e.stopPropagation();renamePage(i);});
+    tab.appendChild(nm);
+    if(pages.length>1){const x=document.createElement('span');x.className='x';x.textContent='×';x.title='Delete page';
+      x.addEventListener('click',e=>{e.stopPropagation();delPage(i);});tab.appendChild(x);}
+    tab.addEventListener('click',()=>setPage(i));
+    t.appendChild(tab);
+  });
+  const a=document.createElement('div'); a.className='ptab add'; a.textContent='+ Page'; a.title='Add a page';
+  a.addEventListener('click',addPage); t.appendChild(a);
+}
+function setPage(i){
+  curPage=i; const p=pages[i]; widgets=p.widgets; selId=null;
+  $('bg').value=p.bg; $('bgcol').value=p.bgcol;
+  renderTabs(); draw(); setBg(); syncProps();
+}
+function addPage(){
+  if(pages.length>=8)return;
+  pages.push({name:'Page '+(pages.length+1),bg:'dark',bgcol:'#1ae7ff',widgets:[]});
+  setPage(pages.length-1);
+}
+function delPage(i){
+  if(pages.length<=1)return;
+  if(pages[i].widgets.length && !confirm('Delete "'+pages[i].name+'" and its '+pages[i].widgets.length+' item(s)?'))return;
+  pages.splice(i,1); if(curPage>=pages.length)curPage=pages.length-1; setPage(curPage);
+}
+function renamePage(i){
+  const n=prompt('Page name:',pages[i].name); if(n==null)return;
+  pages[i].name=n.trim()||pages[i].name; renderTabs();
 }
 
 // build dropdowns
@@ -208,9 +261,9 @@ $('p-peak').addEventListener('change',()=>{const w=byId(selId);if(!w)return;w.pe
 $('p-cond').addEventListener('change',()=>{const w=byId(selId);if(!w)return;w.cond=w.cond||{};w.cond.on=$('p-cond').checked;w.cond.op=$('p-condop').value;w.cond.val=+$('p-condval').value;draw();});
 ['p-condop','p-condval'].forEach(id=>$(id).addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.cond=w.cond||{on:$('p-cond').checked};w.cond.op=$('p-condop').value;w.cond.val=+$('p-condval').value;}));
 $('resetpk').addEventListener('click',()=>{if(window.HBANIM)HBANIM.resetPeaks();});
-$('del').addEventListener('click',()=>{widgets=widgets.filter(w=>w.id!==selId);selId=null;draw();syncProps();});
+$('del').addEventListener('click',()=>{pages[curPage].widgets=widgets=widgets.filter(w=>w.id!==selId);selId=null;draw();syncProps();});
 $('add').addEventListener('click',()=>add());
-$('clear').addEventListener('click',()=>{widgets=[];selId=null;draw();syncProps();});
+$('clear').addEventListener('click',()=>{pages[curPage].widgets=widgets=[];selId=null;draw();syncProps();});
 function setFoot(){const [fw,fh]=FOOT[$('foot').value];screen.style.aspectRatio=fw+'/'+fh;$('dims').textContent=fw+' × '+fh;}
 $('foot').addEventListener('change',setFoot);
 
@@ -222,12 +275,13 @@ $('s-state').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.st
 $('s-color').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.color=$('s-color').value;draw();});
 $('s-icon').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.icon=$('s-icon').value;draw();});
 $('s-size').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.size=+$('s-size').value/100;draw();});
-$('s-del').addEventListener('click',()=>{widgets=widgets.filter(w=>w.id!==selId);selId=null;draw();syncProps();});
+$('s-del').addEventListener('click',()=>{pages[curPage].widgets=widgets=widgets.filter(w=>w.id!==selId);selId=null;draw();syncProps();});
 
 // selectable, colour-customisable background
 function hexA(h,a){const n=h.replace('#','');return`rgba(${parseInt(n.substr(0,2),16)},${parseInt(n.substr(2,2),16)},${parseInt(n.substr(4,2),16)},${a})`;}
 function setBg(){
   const t=$('bg').value,c=$('bgcol').value,s=screen.style;
+  if(pages[curPage]){pages[curPage].bg=t;pages[curPage].bgcol=c;}
   s.backgroundColor='';s.backgroundImage='';s.backgroundSize='auto';s.backgroundRepeat='repeat';
   if(t==='dark'){s.backgroundColor='#080b0f';s.backgroundImage='linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px)';s.backgroundSize='5% 8.5%';}
   else if(t==='carbon'){s.backgroundColor='#0c0e12';s.backgroundImage='radial-gradient(circle at 1px 1px,#1b1f26 1px,transparent 0),radial-gradient(circle at 5px 5px,#14171c 1px,transparent 0)';s.backgroundSize='8px 8px';}
@@ -272,14 +326,32 @@ window.addEventListener('pointermove',e=>{
 });
 window.addEventListener('pointerup',()=>{drag=null;});
 
-// starter dash: a tach + speedo + two numeric readouts
+// starter: THREE pre-seeded pages. Page 3 mixes a gauge + nitrous controller
+// on the SAME screen to show they coexist. Add/rename/delete pages freely.
 setFoot();
-add({unit:'rpm',style:'round',needle:'#1ae7ff',accent:'#cdd5de',fx:0.27,fy:0.42,size:0.30});
-add({unit:'mph',style:'round',needle:'#1ae7ff',accent:'#cdd5de',fx:0.73,fy:0.42,size:0.30});
-add({unit:'afr',style:'digit',needle:'#1ae7ff',accent:'#1ae7ff',fx:0.30,fy:0.84,size:0.20});
-add({unit:'coolant',style:'digit',needle:'#1ae7ff',accent:'#1ae7ff',fx:0.70,fy:0.84,size:0.20});
-selId=null; draw(); syncProps();
-setBg();
+function seedPages(){
+  pages=[
+    {name:'Main',    bg:'dark', bgcol:'#1ae7ff', widgets:[]},
+    {name:'Tuning',  bg:'dark', bgcol:'#1ae7ff', widgets:[]},
+    {name:'Nitrous', bg:'glow', bgcol:'#ff5b00', widgets:[]},
+  ];
+  curPage=0; widgets=pages[0].widgets;
+  add({unit:'rpm',style:'round',needle:'#1ae7ff',accent:'#cdd5de',fx:0.27,fy:0.42,size:0.30});
+  add({unit:'mph',style:'round',needle:'#1ae7ff',accent:'#cdd5de',fx:0.73,fy:0.42,size:0.30});
+  add({unit:'coolant',style:'digit',needle:'#1ae7ff',accent:'#1ae7ff',fx:0.30,fy:0.84,size:0.20});
+  add({unit:'fuel',style:'digit',needle:'#1ae7ff',accent:'#1ae7ff',fx:0.70,fy:0.84,size:0.20});
+  curPage=1; widgets=pages[1].widgets;
+  add({unit:'boost',style:'round',needle:'#ff7a00',accent:'#ffae00',fx:0.27,fy:0.42,size:0.30});
+  add({unit:'afr',style:'round',needle:'#39ff9a',accent:'#bfe9cf',fx:0.73,fy:0.42,size:0.30});
+  add({unit:'iat',style:'digit',needle:'#39ff9a',accent:'#39ff9a',fx:0.30,fy:0.84,size:0.20});
+  add({unit:'timing',style:'digit',needle:'#39ff9a',accent:'#39ff9a',fx:0.70,fy:0.84,size:0.20});
+  curPage=2; widgets=pages[2].widgets;
+  add({unit:'rpm',style:'arc',needle:'#ff5b00',accent:'#ffae00',fx:0.76,fy:0.30,size:0.34});
+  widgets.push({id:nid++,kind:'symbol',sym:'nitrouscontroller',color:'#ff5b00',state:'armed',fx:0.33,fy:0.42,size:0.60});
+  widgets.push({id:nid++,kind:'symbol',sym:'armswitch',color:'#ff5b00',state:'armed',fx:0.85,fy:0.76,size:0.15});
+}
+seedPages();
+setPage(0);
 if(window.HBANIM)HBANIM.start(tick);
 </script>
 </body>
