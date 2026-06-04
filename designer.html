@@ -69,6 +69,11 @@
 
 <div class="app">
   <div class="controls">
+    <div id="liveBar" style="display:none;margin:-2px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)">
+      <h2 style="color:#3aff80;margin-bottom:10px">● Live dash · on your Pi</h2>
+      <button class="btn" id="savelive" style="background:#3aff80;color:#04130a">💾 Save as live dash</button>
+      <button class="btn ghost" id="openlive">▶ Open live dash →</button>
+    </div>
     <h2>1 · Screen</h2>
     <div class="ctl"><label>Footprint (real screen)</label>
       <select id="foot">
@@ -357,6 +362,20 @@ function seedPages(){
 seedPages();
 setPage(0);
 if(window.HBANIM)HBANIM.start(tick);
+
+// ── live-dash bridge: these controls appear ONLY when the Pi telemetry feed exists ──
+fetch('feed.json',{cache:'no-store'}).then(r=>{if(r.ok)$('liveBar').style.display='block';}).catch(()=>{});
+function serializeDesign(){
+  return {foot:$('foot').value,bg:$('bg').value,bgcol:$('bgcol').value,
+    widgets:widgets.map(w=>({kind:w.kind||'gauge',unit:w.unit,style:w.style,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,fx:w.fx,fy:w.fy,size:w.size,sym:w.sym,state:w.state,color:w.color,level:w.level,icon:w.icon,label:w.label,display:w.display,peakhold:w.peakhold,cond:w.cond}))};
+}
+$('savelive').addEventListener('click',()=>{
+  const b=$('savelive');
+  fetch('save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(serializeDesign())})
+    .then(r=>r.json()).then(j=>{b.textContent=j.ok?'✓ Saved — it’s your live dash':'⚠ save failed';setTimeout(()=>b.textContent='💾 Save as live dash',2600);})
+    .catch(()=>{b.textContent='⚠ save failed';setTimeout(()=>b.textContent='💾 Save as live dash',2600);});
+});
+$('openlive').addEventListener('click',()=>{location.href='live.html';});
 </script>
 </body>
 </html>

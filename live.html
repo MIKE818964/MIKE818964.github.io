@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Live Dash — Honeybadger</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:'Rajdhani','Segoe UI',system-ui,sans-serif}
+  #screen{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .w{position:absolute;transform:translate(-50%,-50%)}
+  .w svg{display:block;width:100%;height:auto}
+  .w.redline svg{filter:drop-shadow(0 0 7px #ff3b30) drop-shadow(0 0 16px rgba(255,59,48,.7))}
+  #src{position:absolute;top:8px;right:10px;font:700 11px/1 'Consolas',monospace;color:#3aff80;background:rgba(6,8,12,.6);padding:5px 10px;border-radius:6px;letter-spacing:1px;z-index:5}
+  #edit{position:absolute;bottom:8px;left:10px;font:700 11px/1 sans-serif;color:#7a8590;background:rgba(6,8,12,.6);padding:6px 11px;border-radius:6px;text-decoration:none;z-index:5}
+  #empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#8b949e;text-align:center;font-size:16px;padding:20px}
+  #empty a{color:#ffae00;font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+<div id="screen"></div>
+<div id="src">● LIVE</div>
+<a id="edit" href="designer.html">✎ EDIT</a>
+<script src="assets/js/gauges.js?v=7"></script>
+<script src="assets/js/symbols.js?v=4"></script>
+<script src="assets/js/anim.js?v=3"></script>
+<script>
+const HBG=window.HBG, RENDER=HBG.RENDER, UNITS=HBG.UNITS;
+const SYM=(window.HBSYM&&window.HBSYM.SYMBOLS)||{};
+const $=id=>document.getElementById(id);
+const screen=$('screen');
+let design=null, targets={}, vals={}, useFeed=true, peaks={};
+
+function hexA(h,a){const n=h.replace('#','');return`rgba(${parseInt(n.substr(0,2),16)},${parseInt(n.substr(2,2),16)},${parseInt(n.substr(4,2),16)},${a})`;}
+function setBg(d){const t=d.bg||'dark',c=d.bgcol||'#1ae7ff',s=screen.style;
+  s.backgroundColor='';s.backgroundImage='';s.backgroundSize='auto';
+  if(t==='dark'){s.backgroundColor='#080b0f';s.backgroundImage='linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px)';s.backgroundSize='5% 8.5%';}
+  else if(t==='carbon'){s.backgroundColor='#0c0e12';s.backgroundImage='radial-gradient(circle at 1px 1px,#1b1f26 1px,transparent 0),radial-gradient(circle at 5px 5px,#14171c 1px,transparent 0)';s.backgroundSize='8px 8px';}
+  else if(t==='hex'){s.backgroundColor='#070a0e';s.backgroundImage="url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48'%3E%3Cpath d='M14 0l14 8v16l-14 8L0 24V8z' fill='none' stroke='"+encodeURIComponent(c)+"' stroke-opacity='0.16' stroke-width='1'/%3E%3C/svg%3E\")";s.backgroundSize='56px 48px';}
+  else if(t==='stripes'){s.backgroundColor='#0a0d12';s.backgroundImage='linear-gradient(90deg,transparent 0 46%,'+hexA(c,.5)+' 46% 48%,transparent 48% 52%,'+hexA(c,.5)+' 52% 54%,transparent 54%),repeating-linear-gradient(-50deg,#0a0d12 0 26px,#0e131a 26px 52px)';}
+  else if(t==='glow'){s.backgroundColor='#07090c';s.backgroundImage='radial-gradient(ellipse at 50% 38%,'+hexA(c,.22)+',transparent 60%)';}
+  else if(t==='brushed'){s.backgroundColor='#262b31';s.backgroundImage='repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px)';}
+  else {s.backgroundColor=c;}
+}
+function dispVal(u,v){const U=UNITS[u];if(!U)return Math.round(v);const mn=U.min||0,rng=U.max-mn;return rng<=40?Math.round(v*10)/10:Math.round(v);}
+
+function build(){
+  screen.innerHTML='';
+  if(!design||!design.widgets||!design.widgets.length){
+    screen.innerHTML='<div id="empty"><div>No live dash saved yet.</div><div>Open the <a href="designer.html">Dash Builder</a>, lay out your gauges, then tap <b style="color:#3aff80">💾 Save as live dash</b>.</div></div>';
+    return;
+  }
+  setBg(design);
+  design.widgets.forEach((w,i)=>{
+    const d=document.createElement('div'); d.className='w'; d.dataset.i=i;
+    d.style.left=(w.fx*100)+'%'; d.style.top=(w.fy*100)+'%'; d.style.width=(w.size*100)+'%';
+    if(w.kind==='symbol') d.innerHTML=(SYM[w.sym]||(()=>''))({state:w.state,color:w.color,level:w.level,icon:w.icon,label:w.label,display:w.display});
+    screen.appendChild(d);
+  });
+}
+function gaugeHTML(w){
+  const raw=vals[w.unit]||0;
+  const o={unit:w.unit,style:w.style,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,value:dispVal(w.unit,raw),gear:Math.round(targets.gear||1)};
+  if(w.peakhold){const t=targets[w.unit]!=null?targets[w.unit]:raw; if(t>(peaks[w.unit]||-1e9))peaks[w.unit]=t; o.peak=dispVal(w.unit,peaks[w.unit]);}
+  return RENDER[w.style](o);
+}
+function condMet(v,c){if(!c||!c.on)return true;const t=c.val;return c.op==='gt'?v>t:c.op==='ge'?v>=t:c.op==='lt'?v<t:c.op==='le'?v<=t:true;}
+
+function tick(){
+  if(!design||!design.widgets)return;
+  Object.keys(targets).forEach(u=>{ if(u!=='gear'&&typeof targets[u]==='number'){ vals[u]=(vals[u]==null)?targets[u]:vals[u]+(targets[u]-vals[u])*0.3; } });
+  vals.gear=targets.gear;
+  design.widgets.forEach((w,i)=>{
+    const el=screen.querySelector('.w[data-i="'+i+'"]'); if(!el)return;
+    if(w.kind==='symbol')return;
+    const raw=vals[w.unit]||0;
+    if(w.cond&&w.cond.on){const show=condMet(targets[w.unit]||0,w.cond);el.style.display=show?'':'none';if(!show)return;}
+    else if(el.style.display==='none')el.style.display='';
+    const dv=dispVal(w.unit,raw);
+    if(w._lv!==dv||w.peakhold){w._lv=dv;el.innerHTML=gaugeHTML(w);}
+    const U=UNITS[w.unit];
+    if(U&&U.redline!=null)el.classList.toggle('redline',raw>=U.redline);
+  });
+}
+
+function setSrc(t,c){$('src').textContent=t;$('src').style.color=c;}
+function pollFeed(){
+  fetch('feed.json',{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(j=>{
+    useFeed=true; targets=j;
+    setSrc(j._source==='can0'?'● LIVE · CAN':'● LIVE · DEMO', j._source==='can0'?'#3aff80':'#ffae00');
+  }).catch(()=>{
+    useFeed=false;
+    if(window.HBANIM){ if(!HBANIM.running)HBANIM.start(()=>{}); Object.keys(UNITS).forEach(u=>targets[u]=HBANIM.value(u)); targets.gear=HBANIM.gear?HBANIM.gear():3; }
+    setSrc('● DEMO','#ffae00');
+  });
+}
+
+fetch('dash.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{design=(d&&d.widgets)?d:null;build();}).catch(()=>{build();});
+setInterval(pollFeed,120);
+setInterval(tick,40);
+pollFeed();
+</script>
+</body>
+</html>
