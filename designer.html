@@ -15,8 +15,17 @@
   .pill{display:inline-block;font-size:10px;color:#06070a;background:var(--amber);border-radius:20px;padding:2px 9px;font-weight:800;letter-spacing:.5px}
   a.home{color:var(--mut);font-size:12px;text-decoration:none}a.home:hover{color:var(--amber)}
   .app{display:flex;flex-wrap:wrap;gap:20px;padding:18px;align-items:flex-start}
-  .controls{flex:0 0 280px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .controls{flex:0 0 280px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 16px;
+     position:sticky;top:12px;max-height:calc(100vh - 90px);overflow-y:auto;overscroll-behavior:contain}
   .controls h2{font-size:12px;letter-spacing:2px;color:var(--mut);margin:0 0 12px;text-transform:uppercase}
+  .controls details{border-bottom:1px solid var(--line);padding:2px 0 8px}
+  .controls details:last-of-type{border-bottom:0}
+  .controls summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;
+     font-size:12px;letter-spacing:2px;color:var(--mut);text-transform:uppercase;font-weight:600;
+     padding:11px 2px;user-select:none;-webkit-user-select:none}
+  .controls summary::after{content:'▸';color:var(--amber);font-size:14px;transition:transform .15s}
+  .controls details[open]>summary::after{transform:rotate(90deg)}
+  .controls summary::-webkit-details-marker{display:none}
   .ctl{margin-bottom:13px}
   .ctl label{display:block;font-size:11px;color:var(--mut);margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
   select,input[type=range]{width:100%}
@@ -30,7 +39,23 @@
   .sw-row{display:flex;flex-wrap:wrap;gap:6px}
   .sw{width:24px;height:24px;border-radius:50%;border:2px solid #222b36;cursor:pointer;padding:0}
   .sw:hover{border-color:#fff}
-  .stagewrap{flex:1 1 560px;min-width:340px}
+  .sw-row{display:block}
+  .palfam{border:1px solid var(--line);border-radius:9px;margin-bottom:7px;padding:0 7px 0}
+  .palfam[open]{padding-bottom:8px}
+  .palfam summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;
+     font-size:10.5px;letter-spacing:1.5px;color:var(--mut);text-transform:uppercase;font-weight:700;padding:9px 2px;
+     user-select:none;-webkit-user-select:none}
+  .palfam summary::after{content:'▸';color:var(--amber);font-size:12px;transition:transform .15s}
+  .palfam[open]>summary::after{transform:rotate(90deg)}
+  .palfam summary::-webkit-details-marker{display:none}
+  .palgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+  .palchip{background:none;border:1px solid var(--line);border-radius:8px;padding:3px 2px 2px;cursor:pointer;
+     display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0}
+  .palchip:hover{border-color:var(--amber)}
+  .palchip svg{width:100%;height:auto;border-radius:5px;display:block}
+  .palchip span{font-size:8.5px;color:var(--mut);font-weight:600;white-space:nowrap;overflow:hidden;
+     text-overflow:ellipsis;max-width:54px}
+  .stagewrap{flex:1 1 560px;min-width:340px;position:sticky;top:12px}
   .screenbox{position:relative;max-width:960px;margin:0 auto}
   .screen{position:relative;width:100%;aspect-ratio:1024/600;background:
      linear-gradient(#0a0d12,#070a0e);
@@ -50,6 +75,8 @@
   .ptab .x:hover{color:var(--danger)}
   .ptab.add{color:var(--amber);font-weight:800}
   .ptab.add:hover{border-color:var(--amber)}
+  .ptab.clearbtn{margin-left:auto;color:var(--danger);border-color:#3a2326;font-weight:800}
+  .ptab.clearbtn.armed{background:var(--danger);color:#fff;border-color:var(--danger)}
   .hint{margin-top:14px;color:var(--mut);font-size:12px;font-weight:500;text-align:center}
   .hint2{color:var(--mut);font-size:12px;font-weight:500}
   footer{padding:13px 20px;color:var(--mut);font-size:11px;border-top:1px solid var(--line)}
@@ -73,7 +100,7 @@
       <button class="btn" id="savelive" style="background:#3aff80;color:#04130a">💾 Save as live dash</button>
       <button class="btn ghost" id="openlive">▶ Open live dash →</button>
     </div>
-    <h2>1 · Screen</h2>
+    <details open><summary>1 · Screen</summary>
     <div class="ctl"><label>Footprint (real screen)</label>
       <select id="foot">
         <option value="r1">10.1" touchscreen · 1024 × 600</option>
@@ -92,17 +119,18 @@
         <option value="solid">Solid colour</option>
       </select></div>
     <div class="ctl"><label>Background colour</label><input type="color" id="bgcol" value="#1ae7ff"></div>
-    <hr>
-    <h2>2 · Add to this page</h2>
+    </details>
+    <details open><summary>2 · Add to this page</summary>
     <button class="btn" id="add">+ Add gauge</button>
     <div class="ctl" style="margin-top:11px"><label>…or a part / nitrous symbol</label>
       <select id="symtype"></select></div>
     <button class="btn" id="addsym" style="background:#ff5b00;color:#fff">+ Add part</button>
-    <hr>
+    </details>
+    <details open><summary>3 · Selected</summary>
     <div id="props">
-      <h2>3 · Selected gauge</h2>
       <div class="ctl"><label>Reads</label><select id="p-unit"></select></div>
       <div class="ctl"><label>Style</label><select id="p-style"></select></div>
+      <div class="ctl"><label>2nd signal · dual trend only</label><select id="p-unit2"></select></div>
       <div class="ctl"><label>Color theme</label><div class="sw-row" id="p-sw"></div></div>
       <div class="ctl row">
         <div><label>Needle</label><input type="color" id="p-needle" value="#ff3b30"></div>
@@ -119,7 +147,6 @@
       <button class="btn ghost danger" id="del">Delete this gauge</button>
     </div>
     <div id="symProps" style="display:none">
-      <h2>3 · Selected part</h2>
       <div class="ctl"><label>State</label><select id="s-state"></select></div>
       <div class="ctl" id="s-iconwrap" style="display:none"><label>Telltale icon</label><select id="s-icon"></select></div>
       <div class="ctl"><label>Colour</label><input type="color" id="s-color" value="#ff5b00"></div>
@@ -127,10 +154,11 @@
       <button class="btn ghost danger" id="s-del">Delete this part</button>
     </div>
     <div id="noProps" class="hint2" style="display:none">Add a gauge or part, then click it to edit.</div>
-    <hr>
-    <h2>Page tools</h2>
+    </details>
+    <details><summary>Page tools</summary>
     <button class="btn ghost" id="clear">Clear page</button>
     <button class="btn ghost" id="resetpk" style="font-size:12px;padding:8px">⟲ Reset peak marks</button>
+    </details>
   </div>
 
   <div class="stagewrap">
@@ -145,8 +173,8 @@
 
 <footer>HONEYBADGER SOFTWARE INC · screen designer · your gauges are the symbol library — same engine as the builders, so the layout ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=7"></script>
-<script src="assets/js/anim.js?v=3"></script>
+<script src="assets/js/gauges.js?v=14"></script>
+<script src="assets/js/anim.js?v=5"></script>
 <script src="assets/js/symbols.js?v=4"></script>
 <script>
 const {RENDER,UNITS,PALETTES}=window.HBG;
@@ -166,7 +194,8 @@ const screen=$('screen');
 function byId(id){return widgets.find(w=>w.id===id);}
 function liveVal(w){return window.HBANIM?HBANIM.disp(w.unit):demoVal(w.unit);}
 function symHTML(w){return (SYM[w.sym]||(()=>''))({state:w.state,color:w.color,level:w.level,icon:w.icon,label:w.label,display:w.display});}
-function gaugeOpts(w){return {unit:w.unit,style:w.style,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,value:liveVal(w),gear:window.HBANIM?HBANIM.gear():3,peak:w.peakhold&&window.HBANIM?HBANIM.peak(w.unit):null};}
+const CHART_STYLES=window.HBG.CHART_STYLES;  // history-driven styles (re-render when HIST gains a sample)
+function gaugeOpts(w){return {unit:w.unit,style:w.style,unit2:w.unit2,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,track:w.track,value:liveVal(w),gear:window.HBANIM?HBANIM.gear():3,peak:w.peakhold&&window.HBANIM?HBANIM.peak(w.unit):null};}
 function widgetHTML(w){return w.kind==='symbol'?symHTML(w):RENDER[w.style](gaugeOpts(w));}
 function draw(){
   screen.innerHTML='';
@@ -194,6 +223,7 @@ function syncProps(){
     if(w.sym==='indicator')$('s-icon').value=w.icon||'armed';
   } else {
     $('p-unit').value=w.unit; $('p-style').value=w.style;
+    $('p-unit2').value=w.unit2||(w.unit==='mph'?'rpm':'mph');
     $('p-needle').value=w.needle; $('p-accent').value=w.accent;
     $('p-size').value=Math.round(w.size*100);
     $('p-peak').checked=!!w.peakhold;
@@ -237,6 +267,14 @@ function renderTabs(){
   });
   const a=document.createElement('div'); a.className='ptab add'; a.textContent='+ Page'; a.title='Add a page';
   a.addEventListener('click',addPage); t.appendChild(a);
+  const c=document.createElement('div'); c.className='ptab clearbtn'; c.textContent='🗑 Clear';
+  c.title='Clear all gauges off this page (tap twice)';
+  c.addEventListener('click',()=>{
+    if(c.dataset.armed){clearPage();renderTabs();return;}
+    c.dataset.armed='1'; c.classList.add('armed'); c.textContent='TAP AGAIN';
+    setTimeout(()=>{if(c.isConnected){delete c.dataset.armed;c.classList.remove('armed');c.textContent='🗑 Clear';}},2500);
+  });
+  t.appendChild(c);
 }
 function setPage(i){
   curPage=i; const p=pages[i]; widgets=p.widgets; selId=null;
@@ -259,19 +297,51 @@ function renamePage(i){
 }
 
 // build dropdowns
-Object.keys(UNITS).forEach(k=>{const U=UNITS[k];const o=document.createElement('option');o.value=k;o.textContent=U.label+(U.sub?' — '+U.sub:'');$('p-unit').appendChild(o);});
+Object.keys(UNITS).forEach(k=>{const U=UNITS[k];const o=document.createElement('option');o.value=k;o.textContent=U.label+(U.sub?' — '+U.sub:'');$('p-unit').appendChild(o);const o2=o.cloneNode(true);$('p-unit2').appendChild(o2);});
 STYLES.forEach(([v,n])=>{const o=document.createElement('option');o.value=v;o.textContent=n;$('p-style').appendChild(o);});
-PALETTES.forEach(p=>{const b=document.createElement('button');b.className='sw';b.title=p.name;b.style.background=`linear-gradient(135deg,${p.needle} 60%,${p.accent} 60%)`;b.addEventListener('click',()=>{const w=byId(selId);if(!w)return;w.needle=p.needle;w.accent=p.accent;$('p-needle').value=p.needle;$('p-accent').value=p.accent;draw();});$('p-sw').appendChild(b);});
+$('p-unit2').addEventListener('input',()=>{const w=byId(selId);if(!w)return;
+  const v=$('p-unit2').value;
+  if(v===w.unit){delete w.unit2;syncProps();}else{w.unit2=v;}  // same-as-primary -> fall back, keep dropdown honest
+  draw();});
+// 48-palette library: family accordion + mini-gauge preview chips
+(function buildPalettePicker(){
+  const wrap=$('p-sw');wrap.innerHTML='';
+  const FAMS=[...new Set(PALETTES.map(p=>p.family||'Other'))];
+  const lastFam=localStorage.getItem('hb_pal_fam')||FAMS[0];
+  FAMS.forEach(f=>{
+    const members=PALETTES.filter(p=>(p.family||'Other')===f);
+    const d=document.createElement('details');d.className='palfam';d.open=(f===lastFam);
+    const su=document.createElement('summary');su.textContent=`${f} · ${members.length}`;d.appendChild(su);
+    d.addEventListener('toggle',()=>{if(d.open){localStorage.setItem('hb_pal_fam',f);[...wrap.children].forEach(x=>{if(x!==d)x.open=false;});}});
+    const grid=document.createElement('div');grid.className='palgrid';
+    members.forEach(p=>{
+      const T=window.HBG.deriveTheme(p);
+      const b=document.createElement('button');b.className='palchip';b.title=`${p.name} — ${f}`;
+      b.innerHTML=`<svg viewBox="0 0 58 44"><rect width="58" height="44" rx="7" fill="${T.face}"/>`+
+        `<path d="M 13 33 A 17 17 0 1 1 45 33" fill="none" stroke="${T.track}" stroke-width="5" stroke-linecap="round"/>`+
+        `<path d="M 13 33 A 17 17 0 1 1 41.5 24.5" fill="none" stroke="${p.needle}" stroke-width="5" stroke-linecap="round"/>`+
+        `<circle cx="29" cy="27" r="3.4" fill="${p.accent}"/></svg><span>${p.name}</span>`;
+      b.addEventListener('click',()=>{const w=byId(selId);if(!w)return;
+        w.needle=p.needle;w.accent=p.accent;
+        if(p.face)w.face=p.face;else delete w.face;
+        if(p.track)w.track=p.track;else delete w.track;
+        $('p-needle').value=p.needle;$('p-accent').value=p.accent;draw();});
+      grid.appendChild(b);
+    });
+    d.appendChild(grid);wrap.appendChild(d);
+  });
+})();
 
 ['p-unit','p-style','p-needle','p-accent'].forEach(id=>$(id).addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.unit=$('p-unit').value;w.style=$('p-style').value;w.needle=$('p-needle').value;w.accent=$('p-accent').value;draw();}));
 $('p-size').addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.size=+$('p-size').value/100;draw();});
 $('p-peak').addEventListener('change',()=>{const w=byId(selId);if(!w)return;w.peakhold=$('p-peak').checked;draw();});
 $('p-cond').addEventListener('change',()=>{const w=byId(selId);if(!w)return;w.cond=w.cond||{};w.cond.on=$('p-cond').checked;w.cond.op=$('p-condop').value;w.cond.val=+$('p-condval').value;draw();});
 ['p-condop','p-condval'].forEach(id=>$(id).addEventListener('input',()=>{const w=byId(selId);if(!w)return;w.cond=w.cond||{on:$('p-cond').checked};w.cond.op=$('p-condop').value;w.cond.val=+$('p-condval').value;}));
-$('resetpk').addEventListener('click',()=>{if(window.HBANIM)HBANIM.resetPeaks();});
+$('resetpk').addEventListener('click',()=>{if(window.HBANIM)HBANIM.resetPeaks();if(window.HBG&&HBG.PERF)HBG.PERF.reset();});
 $('del').addEventListener('click',()=>{pages[curPage].widgets=widgets=widgets.filter(w=>w.id!==selId);selId=null;draw();syncProps();});
 $('add').addEventListener('click',()=>add());
-$('clear').addEventListener('click',()=>{pages[curPage].widgets=widgets=[];selId=null;draw();syncProps();});
+function clearPage(){pages[curPage].widgets=widgets=[];selId=null;draw();syncProps();}
+$('clear').addEventListener('click',clearPage);
 function setFoot(){const [fw,fh]=FOOT[$('foot').value];screen.style.aspectRatio=fw+'/'+fh;$('dims').textContent=fw+' × '+fh;}
 $('foot').addEventListener('change',setFoot);
 
@@ -311,7 +381,10 @@ function tick(){
     else if(el.style.display==='none'){el.style.display='';}
     if(w.kind==='symbol')return; // symbols animate via their own SMIL — never re-render
     const v=HBANIM.disp(w.unit);
-    if(w._lv!==v){w._lv=v;el.innerHTML=widgetHTML(w);}
+    // charts redraw on a 300ms bucket (matches HIST's 400ms sampling) instead
+    // of every tick — full-SVG rebuilds each frame are too heavy for the Pi
+    const nowT=performance.now();
+    if(CHART_STYLES[w.style]?nowT-(w._ht||0)>=300:w._lv!==v){w._lv=v;w._ht=nowT;el.innerHTML=widgetHTML(w);}
     el.classList.toggle('redline',HBANIM.isRed(w.unit));
   });
 }
@@ -362,19 +435,27 @@ seedPages();
 setPage(0);
 if(window.HBANIM)HBANIM.start(tick);
 
-// ── live-dash bridge: these controls appear ONLY when the Pi telemetry feed exists ──
-fetch('feed.json',{cache:'no-store'}).then(r=>{if(r.ok)$('liveBar').style.display='block';}).catch(()=>{});
+// ── live-dash bridge: always visible; Pi server lights it up green when reachable ──
+$(‘liveBar’).style.display=’block’;
+const liveHead=$(‘liveBar’).querySelector(‘h2’);
+fetch(‘feed.json’,{cache:’no-store’}).then(r=>{
+  if(r.ok){liveHead.textContent=’● Live dash · connected to Pi’;liveHead.style.color=’#3aff80’;}
+}).catch(()=>{liveHead.textContent=’● Live dash · browser save’;liveHead.style.color=’#ffae00’;});
 function serializeDesign(){
-  return {foot:$('foot').value,bg:$('bg').value,bgcol:$('bgcol').value,
-    widgets:widgets.map(w=>({kind:w.kind||'gauge',unit:w.unit,style:w.style,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,fx:w.fx,fy:w.fy,size:w.size,sym:w.sym,state:w.state,color:w.color,level:w.level,icon:w.icon,label:w.label,display:w.display,peakhold:w.peakhold,cond:w.cond}))};
+  return {foot:$(‘foot’).value,bg:pages[curPage].bg,bgcol:pages[curPage].bgcol,
+    widgets:widgets.map(w=>({kind:w.kind||’gauge’,unit:w.unit,style:w.style,unit2:w.unit2,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,track:w.track,fx:w.fx,fy:w.fy,size:w.size,sym:w.sym,state:w.state,color:w.color,level:w.level,icon:w.icon,label:w.label,display:w.display,peakhold:w.peakhold,cond:w.cond}))};
 }
-$('savelive').addEventListener('click',()=>{
-  const b=$('savelive');
-  fetch('save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(serializeDesign())})
-    .then(r=>r.json()).then(j=>{b.textContent=j.ok?'✓ Saved — it’s your live dash':'⚠ save failed';setTimeout(()=>b.textContent='💾 Save as live dash',2600);})
-    .catch(()=>{b.textContent='⚠ save failed';setTimeout(()=>b.textContent='💾 Save as live dash',2600);});
+$(‘savelive’).addEventListener(‘click’,()=>{
+  const b=$(‘savelive’);
+  const design=serializeDesign();
+  // Always persist to localStorage so live.html can read it without the Pi server
+  try{localStorage.setItem(‘hb_dash_design’,JSON.stringify(design));}catch(e){}
+  // Also attempt to POST to the Pi server if it’s running
+  fetch(‘save’,{method:’POST’,headers:{‘Content-Type’:’application/json’},body:JSON.stringify(design)})
+    .then(r=>r.json()).then(j=>{b.textContent=j.ok?’✓ Saved — live dash updated’:’⚠ server save failed’;setTimeout(()=>b.textContent=’💾 Save as live dash’,2600);})
+    .catch(()=>{b.textContent=’✓ Saved to browser’;setTimeout(()=>b.textContent=’💾 Save as live dash’,2600);});
 });
-$('openlive').addEventListener('click',()=>{location.href='live.html';});
+$(‘openlive’).addEventListener(‘click’,()=>{location.href=’live.html’;});
 </script>
 </body>
 </html>

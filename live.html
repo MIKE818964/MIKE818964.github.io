@@ -22,15 +22,16 @@
 <div id="screen"></div>
 <div id="src">● LIVE</div>
 <a id="edit" href="designer.html">✎ EDIT</a>
-<script src="assets/js/gauges.js?v=7"></script>
+<script src="assets/js/gauges.js?v=14"></script>
 <script src="assets/js/symbols.js?v=4"></script>
-<script src="assets/js/anim.js?v=3"></script>
+<script src="assets/js/anim.js?v=5"></script>
 <script>
 const HBG=window.HBG, RENDER=HBG.RENDER, UNITS=HBG.UNITS;
 const SYM=(window.HBSYM&&window.HBSYM.SYMBOLS)||{};
 const $=id=>document.getElementById(id);
 const screen=$('screen');
 let design=null, targets={}, vals={}, useFeed=true, peaks={};
+const CHART_STYLES=HBG.CHART_STYLES;  // history-driven styles (re-render when HIST gains a sample)
 
 function hexA(h,a){const n=h.replace('#','');return`rgba(${parseInt(n.substr(0,2),16)},${parseInt(n.substr(2,2),16)},${parseInt(n.substr(4,2),16)},${a})`;}
 function setBg(d){const t=d.bg||'dark',c=d.bgcol||'#1ae7ff',s=screen.style;
@@ -61,7 +62,7 @@ function build(){
 }
 function gaugeHTML(w){
   const raw=vals[w.unit]||0;
-  const o={unit:w.unit,style:w.style,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,value:dispVal(w.unit,raw),gear:Math.round(targets.gear||1)};
+  const o={unit:w.unit,style:w.style,unit2:w.unit2,needle:w.needle,accent:w.accent,bezel:w.bezel,face:w.face,track:w.track,value:dispVal(w.unit,raw),gear:Math.round(targets.gear||1)};
   if(w.peakhold){const t=targets[w.unit]!=null?targets[w.unit]:raw; if(t>(peaks[w.unit]||-1e9))peaks[w.unit]=t; o.peak=dispVal(w.unit,peaks[w.unit]);}
   return RENDER[w.style](o);
 }
@@ -71,6 +72,9 @@ function tick(){
   if(!design||!design.widgets)return;
   Object.keys(targets).forEach(u=>{ if(u!=='gear'&&typeof targets[u]==='number'){ vals[u]=(vals[u]==null)?targets[u]:vals[u]+(targets[u]-vals[u])*0.3; } });
   vals.gear=targets.gear;
+  // NOTE: vals[] is display smoothing ONLY. HIST/PERF get RAW feed values in
+  // pollFeed (real mode) or from anim.js itself (demo mode) — never the lerp,
+  // so the perf timer times the car, not the animation.
   design.widgets.forEach((w,i)=>{
     const el=screen.querySelector('.w[data-i="'+i+'"]'); if(!el)return;
     if(w.kind==='symbol')return;
@@ -78,7 +82,10 @@ function tick(){
     if(w.cond&&w.cond.on){const show=condMet(targets[w.unit]||0,w.cond);el.style.display=show?'':'none';if(!show)return;}
     else if(el.style.display==='none')el.style.display='';
     const dv=dispVal(w.unit,raw);
-    if(w._lv!==dv||w.peakhold){w._lv=dv;el.innerHTML=gaugeHTML(w);}
+    // charts redraw on a 300ms bucket (matches HIST's 400ms sampling) — full
+    // SVG rebuilds every 40ms tick are too heavy for the Pi
+    const nowT=performance.now();
+    if(CHART_STYLES[w.style]?nowT-(w._ht||0)>=300:(w._lv!==dv||w.peakhold)){w._lv=dv;w._ht=nowT;el.innerHTML=gaugeHTML(w);}
     const U=UNITS[w.unit];
     if(U&&U.redline!=null)el.classList.toggle('redline',raw>=U.redline);
   });
@@ -87,16 +94,34 @@ function tick(){
 function setSrc(t,c){$('src').textContent=t;$('src').style.color=c;}
 function pollFeed(){
   fetch('feed.json',{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(j=>{
+    if(!useFeed){
+      // demo -> real transition: silence the demo driver and wipe its data so
+      // a feed blip can never leave fake history/bests on a LIVE dash
+      if(window.HBANIM&&HBANIM.stop)HBANIM.stop();
+      if(HBG.PERF)HBG.PERF.reset();
+      if(HBG.HIST)HBG.HIST.clear();
+    }
     useFeed=true; targets=j;
+    // RAW feed values into history + perf timer, at feed cadence
+    if(HBG.HIST)Object.keys(j).forEach(u=>{if(u!=='gear'&&u[0]!=='_'&&typeof j[u]==='number')HBG.HIST.push(u,j[u]);});
     setSrc(j._source==='can0'?'● LIVE · CAN':'● LIVE · DEMO', j._source==='can0'?'#3aff80':'#ffae00');
   }).catch(()=>{
+    if(useFeed){
+      // real -> demo transition: clear real data before sim values mix in
+      if(HBG.PERF)HBG.PERF.reset();
+      if(HBG.HIST)HBG.HIST.clear();
+    }
     useFeed=false;
     if(window.HBANIM){ if(!HBANIM.running)HBANIM.start(()=>{}); Object.keys(UNITS).forEach(u=>targets[u]=HBANIM.value(u)); targets.gear=HBANIM.gear?HBANIM.gear():3; }
     setSrc('● DEMO','#ffae00');
   });
 }
 
-fetch('dash.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{design=(d&&d.widgets)?d:null;build();}).catch(()=>{build();});
+fetch('dash.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{design=(d&&d.widgets)?d:null;build();}).catch(()=>{
+  // Pi server not reachable — fall back to whatever the designer saved in localStorage
+  try{const s=localStorage.getItem('hb_dash_design');if(s){const d=JSON.parse(s);design=(d&&d.widgets)?d:null;}}catch(e){}
+  build();
+});
 setInterval(pollFeed,120);
 setInterval(tick,40);
 pollFeed();
