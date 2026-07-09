@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Contact Honeybadger Software — questions, support, or a quote for a custom dashboard or industrial project.">
+<meta name="theme-color" content="#05080C">
+<title>Contact us | HONEYBADGER SOFTWARE INC</title>
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="stylesheet" href="assets/css/style.css?v=8">
+<style>
+  .contact-wrap{max-width:720px;margin:0 auto}
+  .contact-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:28px}
+  .contact-card label{display:block;font-size:13px;font-weight:700;margin:16px 0 6px;letter-spacing:.3px}
+  .contact-card input,.contact-card select,.contact-card textarea{
+    width:100%;padding:11px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.15);
+    background:rgba(0,0,0,.35);color:#e8eef4;font:inherit;font-size:14px}
+  .contact-card input:focus,.contact-card select:focus,.contact-card textarea:focus{outline:2px solid #E8B644;border-color:transparent}
+  .contact-card textarea{min-height:150px;resize:vertical}
+  .contact-actions{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .contact-note{font-size:12.5px;color:#8a97a8;margin-top:10px}
+  .fallback{display:none;margin-top:22px;border-top:1px solid rgba(255,255,255,.1);padding-top:18px}
+  .fallback.show{display:block}
+  .fallback .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .sent-ok{display:none;background:rgba(38,194,129,.12);border:1px solid rgba(38,194,129,.4);
+    border-radius:10px;padding:14px 16px;margin-top:18px;font-size:14px}
+  .sent-ok.show{display:block}
+  .hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="container">
+        <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
+        <span class="topbar-links">
+            <a href="community.html">Community</a>
+            <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+            <a href="downloads.html">Downloads</a>
+        </span>
+    </div>
+</div>
+<header class="site-header">
+    <div class="container header-row">
+        <a href="/" class="brand">
+            <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
+            <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
+        </a>
+        <nav class="site-nav" id="siteNav">
+            <a href="/">Home</a>
+            <a href="products.html">Products</a>
+            <a href="community.html">Community</a>
+            <a href="support.html">Support</a>
+            <a href="downloads.html">Downloads</a>
+            <a href="about.html">About</a>
+        </nav>
+        <div class="header-actions">
+            <a href="builder.html" class="btn btn-gold btn-sm">Try the Dash Builder</a>
+            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+    </div>
+</header>
+
+<section class="page-hero">
+    <div class="container">
+        <div class="breadcrumb"><a href="/">Home</a> / Contact</div>
+        <div class="eyebrow-chip">✉️ TALK TO US</div>
+        <h1>Contact us</h1>
+        <p class="lede">Questions, support, or a quote — fill this out and it lands straight in our inbox. A real human (the badger himself) reads every one.</p>
+    </div>
+</section>
+
+<section class="section">
+  <div class="container contact-wrap">
+    <form class="contact-card" id="contactForm" novalidate>
+      <label for="cName">Your name</label>
+      <input id="cName" name="name" type="text" autocomplete="name" required maxlength="120">
+
+      <label for="cEmail">Your email (so we can reply)</label>
+      <input id="cEmail" name="email" type="email" autocomplete="email" required maxlength="200">
+
+      <label for="cTopic">What's this about?</label>
+      <select id="cTopic" name="topic">
+        <option>General question</option>
+        <option>Get a quote — industrial dashboard</option>
+        <option>Get a quote — custom project</option>
+        <option>3D printing firmware / wiring help</option>
+        <option>Support — something's broken</option>
+        <option>Partnership / sponsorship</option>
+      </select>
+
+      <label for="cMsg">Your message</label>
+      <textarea id="cMsg" name="message" required maxlength="5000" placeholder="Tell us what you need — the more detail, the better the answer."></textarea>
+
+      <!-- honeypot: humans never see this; bots fill it and get ignored -->
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="contact-actions">
+        <button type="submit" class="btn btn-gold" id="sendBtn">Send message</button>
+        <span class="contact-note" id="statusNote"></span>
+      </div>
+
+      <div class="sent-ok" id="sentOk">✅ <b>Sent.</b> Your message is on its way — we'll reply to the email you gave. Thanks!</div>
+
+      <div class="fallback" id="fallback">
+        <b>Almost there — one more click.</b>
+        <p class="contact-note">Our in-page mailer is warming up, so pick whichever button suits you.
+        Your message below is already packaged into each option — nothing to retype.</p>
+        <div class="btnrow">
+          <a class="btn btn-gold btn-sm" id="fbGmail" href="#" target="_blank" rel="noopener">Open in Gmail</a>
+          <a class="btn btn-primary btn-sm" id="fbMailto" href="#">Open in my email app</a>
+          <button type="button" class="btn btn-ghost btn-sm" id="fbCopy">Copy address &amp; message</button>
+        </div>
+        <p class="contact-note">Or email us any time: <b>contact@honeybadger.software</b></p>
+      </div>
+    </form>
+    <p class="contact-note" style="margin-top:14px">We never share your email. No newsletters unless you ask. No telemetry, no tracking — just a reply.</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small></div>
+  </div>
+</footer>
+
+<script>
+// Contact form logic, in plain English:
+// 1) Try the site's own mail API (a Cloudflare Pages Function at /api/contact).
+// 2) If that isn't live yet (or errors), show three fallback buttons that carry
+//    the visitor's typed message with them — Gmail web compose (no app chooser!),
+//    a classic mailto, or copy-to-clipboard. Nobody ever loses what they typed.
+var ADDR = 'contact@honeybadger.software';
+
+document.getElementById('contactForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = document.getElementById('cName').value.trim();
+  var email = document.getElementById('cEmail').value.trim();
+  var topic = document.getElementById('cTopic').value;
+  var msg = document.getElementById('cMsg').value.trim();
+  var note = document.getElementById('statusNote');
+
+  if (!name || !email.includes('@') || !msg) {
+    note.textContent = 'Please fill in your name, a valid email, and a message.';
+    return;
+  }
+
+  var subject = '[' + topic + '] from ' + name + ' — honeybadger.software';
+  var body = 'Name: ' + name + '\nEmail: ' + email + '\nTopic: ' + topic + '\n\n' + msg;
+
+  note.textContent = 'Sending…';
+  document.getElementById('sendBtn').disabled = true;
+
+  fetch('/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: name, email: email, topic: topic, message: msg,
+      website: document.querySelector('[name="website"]').value // honeypot
+    })
+  }).then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function () {
+      note.textContent = '';
+      document.getElementById('sentOk').classList.add('show');
+      document.getElementById('fallback').classList.remove('show');
+    })
+    .catch(function () {
+      // API not live yet -> arm the three fallback buttons with the message baked in
+      note.textContent = '';
+      document.getElementById('sendBtn').disabled = false;
+      var enc = encodeURIComponent;
+      document.getElementById('fbGmail').href =
+        'https://mail.google.com/mail/?view=cm&to=' + ADDR + '&su=' + enc(subject) + '&body=' + enc(body);
+      document.getElementById('fbMailto').href =
+        'mailto:' + ADDR + '?subject=' + enc(subject) + '&body=' + enc(body);
+      document.getElementById('fbCopy').onclick = function () {
+        navigator.clipboard.writeText('To: ' + ADDR + '\nSubject: ' + subject + '\n\n' + body)
+          .then(function () { document.getElementById('fbCopy').textContent = 'Copied ✓'; });
+      };
+      document.getElementById('fallback').classList.add('show');
+    });
+});
+</script>
+<script src="assets/js/nav.js?v=4"></script>
+</body>
+</html>
