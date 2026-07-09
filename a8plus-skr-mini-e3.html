@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free ready-to-flash Marlin 2.1.2.8 firmware and a professional 11-sheet wiring guide for upgrading the Anet A8 Plus to the BigTreeTech SKR Mini E3 V2 board with a TFT35 E3 touchscreen. No VS Code, no PlatformIO — copy one file to the SD card.">
+<meta name="theme-color" content="#05080C">
+<link rel="canonical" href="https://honeybadger.software/a8plus-skr-mini-e3">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Anet A8 Plus × SKR Mini E3 V2 — free firmware + wiring guide">
+<meta property="og:description" content="Ready-to-flash Marlin firmware and a complete 11-sheet wiring package (official BTT schematic included). Skip VS Code entirely — one file on the SD card.">
+<meta property="og:url" content="https://honeybadger.software/a8plus-skr-mini-e3">
+<meta property="og:image" content="https://honeybadger.software/files/A8Plus_wiring_fix_card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anet A8 Plus × SKR Mini E3 V2 — free firmware + wiring guide">
+<meta name="twitter:image" content="https://honeybadger.software/files/A8Plus_wiring_fix_card.png">
+<title>Anet A8 Plus + SKR Mini E3 V2: Free Marlin Firmware &amp; Wiring Guide | HONEYBADGER SOFTWARE INC</title>
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="stylesheet" href="assets/css/style.css?v=8">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I flash the SKR Mini E3 V2 with the Arduino IDE?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No — and you don't need to. The SKR Mini E3 V2 is a 32-bit STM32 board; Marlin 2.x for it builds with PlatformIO, not Arduino. But flashing needs no computer tools at all: copy firmware.bin to the board's microSD card, power the printer on, wait about 30 seconds. If the file gets renamed to FIRMWARE.CUR, the flash worked. Our download skips the build step entirely — the firmware.bin is pre-built for the Anet A8 Plus." }
+    },
+    {
+      "@type": "Question",
+      "name": "Why don't my Anet A8 endstops trigger after swapping to the SKR Mini E3?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Anet endstop modules have three wires, but only two belong to the actual switch — the middle wire is 5 V for the module's indicator LED. The SKR's X/Y/Z-STOP ports are 2-pin (signal + ground). Land only the two switch wires on the port and insulate the 5 V wire. Find the right pair with a multimeter continuity beep test while clicking the switch, then verify with M119 before homing." }
+    },
+    {
+      "@type": "Question",
+      "name": "Why don't the fans spin on the SKR Mini E3 V2?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Usually nothing is broken. FAN0 is the part-cooling fan and stays off until commanded (test with M106 S255). FAN1 is a controller fan that only spins while stepper motors are enabled. The hotend heatsink fan has no board port in the stock Ender-style setup — wire it directly to the PSU so it is always on. Also check polarity (red to +) and never put a 12 V fan on the fan ports: they output PSU voltage, 24 V on the A8 Plus." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the BTT TFT35 E3 touchscreen work with the Anet A8 Plus conversion?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — the firmware here supports both of its modes. Connect the RS232 serial cable to the board's TFT port for touch mode (115200 baud), and the single EXP3 ribbon to EXP1 for classic Marlin knob mode. With both cables fitted, press and hold the encoder about two seconds to switch between modes." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to set VREF on the SKR Mini E3 V2 stepper drivers?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. The four TMC2209 drivers are controlled over UART and motor current is set in firmware — there is no trimpot to adjust. This build sets 580 mA RMS on X/Y/Z and 650 mA on the extruder, with near-silent StealthChop enabled." }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="container">
+        <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
+        <span class="topbar-links">
+            <a href="community.html">Community</a>
+            <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+            <a href="downloads.html">Downloads</a>
+        </span>
+    </div>
+</div>
+<header class="site-header">
+    <div class="container header-row">
+        <a href="/" class="brand">
+            <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
+            <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
+        </a>
+        <nav class="site-nav" id="siteNav">
+            <a href="/">Home</a>
+            <div class="nav-dropdown">
+                <a href="products.html" class="nav-dropdown-trigger">Products ▾</a>
+                <div class="nav-dropdown-menu">
+                    <a href="eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
+                    <a href="j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
+                    <a href="c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
+                    <a href="nitrous.html"><strong>Nitrous Control</strong><span>Seven-gate safety-interlocked N₂O</span></a>
+                    <a href="gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
+                    <a href="industrial.html"><strong>Industrial</strong><span>Industrial monitoring</span></a>
+                </div>
+            </div>
+            <a href="community.html">Community</a>
+            <a href="support.html">Support</a>
+            <a href="downloads.html">Downloads</a>
+            <a href="news.html">News</a>
+            <a href="about.html">About</a>
+        </nav>
+        <div class="header-actions">
+            <a href="builder.html" class="btn btn-gold btn-sm">Try the Dash Builder</a>
+            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+    </div>
+</header>
+
+<section class="page-hero">
+    <div class="container">
+        <div class="breadcrumb"><a href="/">Home</a> / <a href="downloads.html">Downloads</a> / Anet A8 Plus × SKR Mini E3 V2</div>
+        <div class="eyebrow-chip">🖨️ FREE CONVERSION KIT</div>
+        <h1>Anet A8 Plus × BTT SKR Mini E3 V2</h1>
+        <p class="lede">Ready-to-flash Marlin firmware and a professional wiring package for putting a BigTreeTech SKR Mini E3 V2 (and TFT35 E3 touchscreen) into an Anet A8 Plus. No VS Code. No PlatformIO. No guesswork. Free.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="dl-card">
+            <div class="dl-os">🖨️</div>
+            <div>
+                <h3>Ready-to-flash Marlin 2.1.2.8 firmware <span class="pill" style="vertical-align:middle">FREE</span></h3>
+                <p>Pre-built firmware.bin for the exact combo: Anet A8 Plus geometry (300×300 bed, Anet thermistors, Anet endstop logic) on the SKR Mini E3 V2's TMC2209 drivers, with the TFT35 E3 supported in both touch and knob modes. The zip includes the flash guide, a first-power-up safety checklist, and the exact Configuration files it was built from.</p>
+                <div class="dl-meta">MARLIN 2.1.2.8 · SD-CARD FLASH · FREE</div>
+            </div>
+            <a href="files/A8Plus_SKR_Mini_E3_V2_Marlin_2.1.2.8.zip" class="btn btn-primary">Download firmware .zip</a>
+        </div>
+
+        <div class="dl-card">
+            <div class="dl-os">📐</div>
+            <div>
+                <h3>Wiring &amp; interconnect package <span class="pill" style="vertical-align:middle">FREE</span></h3>
+                <p>An 11-sheet engineering document: every connector pinout on the SKR Mini E3 V2, the Anet endstop rewire, fan architecture, motor and driver reference, TFT35 E3 cabling, a full hookup map with commissioning checklist — and the official BigTreeTech schematic as an appendix. Every pin verified against BTT's official documentation.</p>
+                <div class="dl-meta">PDF · 11 SHEETS · OFFICIAL BTT SOURCES · FREE</div>
+            </div>
+            <a href="files/A8Plus_SKR_Mini_E3_V2_Wiring_Package.pdf" class="btn btn-primary">Download wiring .pdf</a>
+        </div>
+
+        <h2 style="margin:34px 0 6px">The five things no YouTube guide tells you</h2>
+        <p>These are the exact walls people hit doing this conversion — each one is covered in depth in the wiring package.</p>
+
+        <div class="dl-card">
+            <div class="dl-os">1️⃣</div>
+            <div>
+                <h3>There is no "upload" step</h3>
+                <p>Forget Arduino IDE and forget clicking Upload in VS Code. This board flashes itself: put firmware.bin on the microSD card, power on, wait ~30 seconds. The file renaming itself to FIRMWARE.CUR is your proof it worked.</p>
+            </div>
+        </div>
+        <div class="dl-card">
+            <div class="dl-os">2️⃣</div>
+            <div>
+                <h3>Anet endstops have one wire too many</h3>
+                <p>Anet's 3-wire endstop modules meet the SKR's 2-pin ports. Only the two switch wires connect — the middle 5 V wire is for the module's LED and must be insulated. Beep-test the pair, then check with M119 before you ever home.</p>
+            </div>
+        </div>
+        <div class="dl-card">
+            <div class="dl-os">3️⃣</div>
+            <div>
+                <h3>The "dead" fans are on purpose</h3>
+                <p>FAN0 (part cooling) is off until the slicer or M106 commands it. FAN1 only spins while motors are enabled. The hotend heatsink fan gets hardwired to the PSU, always on — that's factory practice on Ender 3s, and skipping it causes heat-creep jams.</p>
+            </div>
+        </div>
+        <div class="dl-card">
+            <div class="dl-os">4️⃣</div>
+            <div>
+                <h3>The fan ports output 24 V</h3>
+                <p>Fan headers pass PSU voltage straight through. On a 24 V machine like the A8 Plus, a 12 V fan on those ports burns out. Keep 12 V fans and LED strips on a separate 24→12 V module.</p>
+            </div>
+        </div>
+        <div class="dl-card">
+            <div class="dl-os">5️⃣</div>
+            <div>
+                <h3>The TFT35 E3 is two screens in one</h3>
+                <p>RS232 cable to the TFT port = touchscreen mode (115200 baud). EXP3 ribbon to EXP1 = classic Marlin knob mode. Wire both, hold the knob ~2 seconds to switch. This firmware supports both out of the box.</p>
+            </div>
+        </div>
+
+        <p class="proof-fineprint">Free for personal use. Built from official Marlin 2.1.2.8 release source and official BigTreeTech documentation. Questions or a different printer/board combo? <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a> or find us on the <a href="community.html">community page</a>.</p>
+    </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
+        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
+      </div>
+      <div class="footer-col"><h4>Products</h4><a href="eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="j1-bridge.html">J1 Bridge</a><a href="c7-dashboard.html">C7 Dashboard</a><a href="nitrous.html">Nitrous Control</a><a href="builder.html">Dash Builder</a><a href="industrial.html">Industrial</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="support.html">Support &amp; Docs</a><a href="downloads.html">Downloads</a><a href="news.html">News</a><a href="about.html">About</a></div>
+      <div class="footer-col"><h4>Community</h4><a href="community.html">Forums</a><a href="community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
+    </div>
+    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small></div>
+  </div>
+</footer>
+<script src="assets/js/nav.js?v=4"></script>
+</body>
+</html>
