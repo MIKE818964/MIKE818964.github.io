@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free deep-dive knowledge base for 3D printer control boards: measured pinouts with polarity, real schematics explained in plain English, pre-compiled Klipper and Marlin firmware, and cable-by-cable wiring guides. Starting with the BigTreeTech SKR Pico.">
+<meta name="keywords" content="SKR Pico pinout, BigTreeTech wiring guide, SKR Pico Klipper firmware, SKR Pico Marlin, Voron V0 board, 3D printer control board guide, BTT knowledge base">
+<meta name="theme-color" content="#05080C">
+<link rel="canonical" href="https://honeybadger.software/3d-printing/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="3D Printing Knowledge Base — control boards, made clear">
+<meta property="og:description" content="Measured pinouts with polarity, real schematics in plain English, compiled Klipper + Marlin firmware, cable-by-cable wiring. Free, verified, no guesswork.">
+<meta property="og:url" content="https://honeybadger.software/3d-printing/">
+<meta property="og:image" content="https://honeybadger.software/3d-printing/skr-pico/wire_sixteen_motors.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="3D Printing Knowledge Base — control boards, made clear">
+<meta name="twitter:image" content="https://honeybadger.software/3d-printing/skr-pico/wire_sixteen_motors.png">
+<title>3D Printing Knowledge Base — Board Hubs, Wiring &amp; Firmware | HONEYBADGER SOFTWARE INC</title>
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="stylesheet" href="/assets/css/style.css?v=8">
+<style>
+/* section-scoped: the BTT-blue engineering accents inside the site's dark chrome */
+.kb-band{background:linear-gradient(140deg,#05091F 0%,#0A1134 45%,#16226B 100%);position:relative;overflow:hidden}
+.kb-band .container{position:relative}
+.kb-streak{position:absolute;width:40%;height:2px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(63,216,255,.5),rgba(46,123,255,.3),transparent);
+  animation:kbdrift 18s linear infinite}
+@keyframes kbdrift{from{transform:translateX(-60%)}to{transform:translateX(260%)}}
+.kb-flag{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;background:rgba(8,14,40,.7);
+  border:1px solid rgba(63,216,255,.3);border-radius:18px;padding:30px;box-shadow:0 0 40px rgba(46,123,255,.22)}
+.kb-flag img{width:100%;border-radius:12px;background:#fff;
+  filter:drop-shadow(0 0 16px rgba(63,216,255,.45))}
+.kb-live{display:inline-block;background:#123B22;border:1px solid #2C7A47;color:#7FE2A2;font-size:11px;
+  font-weight:800;letter-spacing:1.6px;border-radius:7px;padding:4px 11px;margin-bottom:12px}
+.kb-flag h2{color:#fff;font-size:28px;margin:0 0 10px}
+.kb-flag p{color:#A9B6D6;font-size:15px;line-height:1.65}
+.kb-feats{margin:16px 0 20px;padding:0;list-style:none;color:#BFD7FF;font-size:13.5px;line-height:2}
+.kb-feats li:before{content:"✔  ";color:#3FD8FF;font-weight:800}
+.kb-cta{display:inline-block;background:#E1252B;color:#fff;font-weight:800;border-radius:10px;
+  padding:13px 26px;text-decoration:none;font-size:15px;letter-spacing:.4px;transition:all .2s}
+.kb-cta:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(225,37,43,.4)}
+.kb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+.kb-card{background:rgba(8,14,40,.6);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:22px;position:relative}
+.kb-card h3{color:#fff;font-size:17px;margin:0 0 8px}
+.kb-card p{color:#8FA3CC;font-size:13px;line-height:1.6;margin:0}
+.kb-soon{position:absolute;top:16px;right:16px;font-size:9.5px;font-weight:800;letter-spacing:1.4px;
+  color:#3FD8FF;border:1px solid rgba(63,216,255,.45);border-radius:6px;padding:3px 8px}
+.kb-mission{background:linear-gradient(90deg,rgba(225,37,43,.12),rgba(46,123,255,.12));
+  border:1px solid rgba(63,216,255,.25);border-radius:14px;padding:22px 26px;margin-top:34px;text-align:center}
+.kb-mission b{color:#fff;font-size:18px;display:block;margin-bottom:6px}
+.kb-mission span{color:#A9B6D6;font-size:14px}
+.kb-h2{color:#fff;font-size:22px;margin:44px 0 4px}
+.kb-sub{color:#8FA3CC;font-size:13.5px;margin:0 0 8px}
+@media (max-width:900px){.kb-flag{grid-template-columns:1fr}.kb-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="container">
+        <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
+        <span class="topbar-links">
+            <a href="/community.html">Community</a>
+            <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+            <a href="/downloads.html">Downloads</a>
+        </span>
+    </div>
+</div>
+<header class="site-header">
+    <div class="container header-row">
+        <a href="/" class="brand">
+            <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
+            <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
+        </a>
+        <nav class="site-nav" id="siteNav">
+            <a href="/">Home</a>
+            <div class="nav-dropdown">
+                <a href="/products.html" class="nav-dropdown-trigger">Products ▾</a>
+                <div class="nav-dropdown-menu">
+                    <a href="/eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
+                    <a href="/j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
+                    <a href="/c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
+                    <a href="/nitrous.html"><strong>Nitrous Control</strong><span>Seven-gate safety-interlocked N₂O</span></a>
+                    <a href="/gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
+                    <a href="/industrial.html"><strong>Industrial</strong><span>Industrial monitoring</span></a>
+                </div>
+            </div>
+            <a href="/3d-printing/" style="color:#3FD8FF">3D Printing</a>
+            <a href="/community.html">Community</a>
+            <a href="/support.html">Support</a>
+            <a href="/downloads.html">Downloads</a>
+            <a href="/about.html">About</a>
+        </nav>
+        <div class="header-actions">
+            <a href="/builder.html" class="btn btn-gold btn-sm">Try the Dash Builder</a>
+            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+    </div>
+</header>
+
+<section class="page-hero kb-band" style="padding-bottom:10px">
+    <div class="kb-streak" style="top:24%"></div>
+    <div class="kb-streak" style="top:66%;animation-delay:7s"></div>
+    <div class="container">
+        <div class="breadcrumb" style="color:#8FA3CC"><a href="/">Home</a> / 3D Printing Knowledge Base</div>
+        <div class="eyebrow-chip" style="border-color:#3FD8FF;color:#3FD8FF">🔧 ENGINEER'S NOTEBOOK · 3D PRINTING</div>
+        <h1 style="color:#fff">3D printer control boards, made clear.</h1>
+        <p class="lede" style="color:#A9B6D6">We build honest, deep-dive guides for powerful hardware. Everything you
+        need to go from a box of parts to a perfect first layer — no fluff, no guesswork. Just clear instructions
+        and verified files. Free.</p>
+    </div>
+</section>
+
+<section class="section kb-band" style="padding-top:26px">
+    <div class="container">
+        <div class="kb-flag">
+            <div>
+                <span class="kb-live">● LIVE NOW</span>
+                <h2>Deep-Dive Hub: BTT SKR Pico</h2>
+                <p>Our complete guide to BigTreeTech's Voron-V0 favorite — from unboxing to printing,
+                with total confidence.</p>
+                <ul class="kb-feats">
+                    <li>THE COMPLETE PINOUT — every pin measured, every + and − marked</li>
+                    <li>BTT's real schematics with plain-English reading guides</li>
+                    <li>Klipper AND Marlin firmware — compiled by us, one-click downloads</li>
+                    <li>Raspberry Pi setup for every model (Pi 3 → Pi 5, even BTT's CB1)</li>
+                    <li>8-motor and 16-motor expansion, drawn cable by cable</li>
+                    <li>The official films, and the honest limits no datasheet prints</li>
+                </ul>
+                <a class="kb-cta" href="/3d-printing/skr-pico/">Enter the hub →</a>
+            </div>
+            <img src="/3d-printing/skr-pico/pico_official_1.jpg" alt="BigTreeTech SKR Pico V1.0 — official product photo">
+        </div>
+
+        <h2 class="kb-h2">Coming next — the catalog grows</h2>
+        <p class="kb-sub">Same depth, same verification, board by board.</p>
+        <div class="kb-grid">
+            <div class="kb-card"><span class="kb-soon">IN THE LAB</span><h3>SKR Mini E3 V3</h3>
+                <p>The definitive deep-dive for the world's most popular Ender 3 upgrade.</p></div>
+            <div class="kb-card"><span class="kb-soon">IN THE LAB</span><h3>Octopus Pro</h3>
+                <p>Taming the beast: complete wiring and configuration for multi-motor builds.</p></div>
+            <div class="kb-card"><span class="kb-soon">IN THE LAB</span><h3>Manta M8P + CB1</h3>
+                <p>The all-in-one Klipper guide, from first flash to input shaping.</p></div>
+        </div>
+
+        <h2 class="kb-h2">Already free on this site</h2>
+        <div class="kb-grid">
+            <div class="kb-card"><h3>Anet A8 Plus × SKR Mini E3 V2</h3>
+                <p>Ready-to-flash Marlin firmware + an 11-sheet professional wiring package for the classic
+                budget conversion. <a href="/a8plus-skr-mini-e3" style="color:#3FD8FF">Get the kit →</a></p></div>
+            <div class="kb-card"><span class="kb-soon">COMING</span><h3>The Wiring Masterclass</h3>
+                <p>Polarity, crimping, endstop logic, multimeter habits — industrial-controls discipline,
+                translated for printer people.</p></div>
+            <div class="kb-card"><span class="kb-soon">COMING</span><h3>YouTube: builds on camera</h3>
+                <p>Real boards, real wiring, real first prints — the hubs in motion.</p></div>
+        </div>
+
+        <div class="kb-mission">
+            <b>Powerful hardware shouldn't be intimidating. We build the resources to prove it.</b>
+            <span>It's not a scary thing — the average human can do this. Every page exists to make that true.</span>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
+        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
+      </div>
+      <div class="footer-col"><h4>Products</h4><a href="/eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="/j1-bridge.html">J1 Bridge</a><a href="/c7-dashboard.html">C7 Dashboard</a><a href="/nitrous.html">Nitrous Control</a><a href="/builder.html">Dash Builder</a><a href="/industrial.html">Industrial</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="/support.html">Support &amp; Docs</a><a href="/downloads.html">Downloads</a><a href="/news.html">News</a><a href="/about.html">About</a></div>
+      <div class="footer-col"><h4>Community</h4><a href="/community.html">Forums</a><a href="/community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
+    </div>
+    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · Base board photography © BigTreeTech, used with credit · No telemetry. No tracking. Just tools.</small></div>
+  </div>
+</footer>
+<script src="/assets/js/nav.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+================================================================================
+ SKR PICO <-> RASPBERRY PI — UART SETUP
+ FOR:      Raspberry Pi 3 Model B  ·  Pi 3 Model B+  ·  Pi Zero 2 W
+ NOT FOR:  Pi 4/400 (own file) · Pi 5/500 (own file — DIFFERENT steps!) · CB1 (own file)
+ P5 POWER VERDICT: OK — the Pico's P5 header (5 V, 3.5 A fuse) can power these
+                   Pis headless. Keep USB peripherals off the Pi; never connect
+                   the Pi's own PSU at the same time as P5 power.
+ Source-verified 2026-07-10 against raspberrypi.com official documentation,
+ klipper3d.org, and BigTreeTech's SKR-Pico repository. honeybadger.software
+================================================================================
+
+WHY THIS IS NEEDED
+On these models Bluetooth owns the good UART (the PL011). One overlay frees it
+for the printer link. (BTT's manual says "dtoverlay=pi3-miniuart-bt" — that name
+is officially deprecated; the lines below are the current ones and do the same.)
+
+STEP 1 — edit config.txt
+File on current Raspberry Pi OS (Bookworm):   /boot/firmware/config.txt
+(on older images the same file lives at:      /boot/config.txt)
+
+Add ONE of these two options at the end:
+
+  # Option A (recommended for a headless printer — Bluetooth off):
+  dtoverlay=disable-bt
+
+  # Option B (keep Bluetooth working):
+  dtoverlay=miniuart-bt
+  core_freq=250          # REQUIRED with option B (official docs) — BTT's manual omits it
+
+If you chose Option A, also run once after boot:
+  sudo systemctl disable hciuart
+
+STEP 2 — edit cmdline.txt
+File (Bookworm):   /boot/firmware/cmdline.txt     (older images: /boot/cmdline.txt)
+DELETE this one token from the single long line (leave everything else):
+  console=serial0,115200
+
+(TUI alternative for steps 1+2:  sudo raspi-config  ->  3 Interface Options ->
+ I6 Serial Port -> login shell over serial? NO -> serial hardware enabled? YES)
+
+STEP 3 — printer.cfg
+  [mcu]
+  serial: /dev/ttyAMA0
+  restart_method: command
+
+STEP 4 — the wiring (BTT's 5-wire lead)
+  Pico P5:  5V · 5V · GND · RX0(IO1) · TX0(IO0)
+  Pi pins:   2  ·  4 ·  6  ·  8 TXD   ·  10 RXD     (TX crosses to RX both ways)
+  Firmware on the Pico: klipper-UART0.uf2 (NOT the USB build).
+
+POWER MATH (why the verdict is OK)
+  P5 rail = TPS5450 buck (5 A cont.) behind a 3.5 A fuse, shared with the board's
+  own 5 V loads. Headless draw: Pi 3B ~0.4 A typ / 1.34 A stress · 3B+ ~0.5 A typ
+  · Zero 2 W ~0.35 A typ. All comfortably under the fuse.
+  After first boot, run `vcgencmd get_throttled` — 0x0 means power is clean.
+
+CLASSIC TRAPS
+  * Editing /boot/config.txt on Bookworm does nothing — the real file is under
+    /boot/firmware/.  * Option B without core_freq=250 breaks Bluetooth quietly.
+  * Powering the Pi from P5 AND its own PSU together — never do both.
+================================================================================

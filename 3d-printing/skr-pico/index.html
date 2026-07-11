@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTT SKR Pico V1.0 — The Complete Board Hub | Honeybadger 3D Printing</title>
+<style>
+  :root{
+    --red:#E1252B; --red-dark:#B31B20; --ink:#15181D; --mut:#5D6570;
+    --bg:#FFFFFF; --soft:#F6F7F9; --line:#E4E7EB; --ok:#188A54; --okbg:#EDF8F2; --dark:#0C0D10;
+    --blue:#1D5FA8; --vio:#7A4A9E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:1560px;margin:0 auto;padding:0 36px}
+  .rv{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}
+    .cur,.chip .dot,.lnk .wire i,.streak{animation:none !important}}
+
+  .top{border-bottom:1px solid var(--line);background:rgba(255,255,255,.92);backdrop-filter:blur(8px);position:sticky;top:0;z-index:50}
+  .top .wrap{display:flex;justify-content:space-between;align-items:center;height:56px}
+  .brand{font-weight:800;letter-spacing:2.5px;font-size:13px}
+  .brand span{color:var(--red)}
+  .topnav{display:flex;gap:18px;font-size:12px;font-weight:700}
+  .topnav a{color:var(--mut);text-decoration:none;transition:color .15s}
+  .topnav a:hover{color:var(--red)}
+
+  .hero{padding:60px 0 46px;position:relative;overflow:hidden;background:linear-gradient(180deg,#FFFFFF,#F8F9FB)}
+  .hero:before{content:'';position:absolute;inset:-20%;background:
+        radial-gradient(1000px 460px at 85% 0%, rgba(225,37,43,.12), transparent 60%),
+        radial-gradient(800px 400px at 5% 30%, rgba(29,95,168,.10), transparent 55%),
+        radial-gradient(700px 340px at 55% 110%, rgba(122,74,158,.08), transparent 60%);
+        animation:breathe 9s ease-in-out infinite alternate}
+  @keyframes breathe{from{transform:translateY(0) scale(1)}to{transform:translateY(-14px) scale(1.03)}}
+  .hero .wrap{display:grid;grid-template-columns:1.02fr .98fr;gap:52px;align-items:center;position:relative}
+  .chip{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--red);color:var(--red);
+        font-size:11px;font-weight:800;letter-spacing:1.8px;border-radius:999px;padding:5px 14px;margin-bottom:16px;background:#fff}
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(225,37,43,.35)}50%{box-shadow:0 0 0 6px rgba(225,37,43,0)}}
+  h1{font-size:46px;line-height:1.05;font-weight:850;letter-spacing:-.5px}
+  h1 .r{color:var(--red)}
+  .lede{margin-top:14px;font-size:16.5px;line-height:1.6;color:var(--mut);max-width:54ch}
+  .lede b{color:var(--ink)}
+  .quirks{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+  .quirk{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:12px;
+         font-weight:700;color:#3A424C;transition:all .2s}
+  .quirk:hover{border-color:var(--red);transform:translateY(-1px)}
+  .quirk span{color:var(--red);margin-right:6px}
+  .verify{margin-top:22px;background:var(--okbg);border:1px solid #BFE6D2;border-radius:12px;
+          padding:13px 16px;font-size:13px;line-height:1.55;max-width:60ch}
+  .verify b{color:var(--ok)}
+  .heroimg{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;
+           box-shadow:0 0 0 1px rgba(225,37,43,.05),0 24px 60px rgba(21,24,29,.10),0 0 90px rgba(29,95,168,.10);
+           transition:transform .35s ease, box-shadow .35s ease}
+  .heroimg:hover{transform:translateY(-4px) rotate(-.3deg)}
+  .heroimg img{width:100%;height:auto;display:block}
+  .heroimg figcaption{text-align:center;font-size:11.5px;color:var(--mut);padding-top:12px}
+
+  section{padding:58px 0}
+  .kicker{font-size:11.5px;font-weight:800;letter-spacing:2.2px;color:var(--red);margin-bottom:8px}
+  h2{font-size:30px;font-weight:850;letter-spacing:-.3px;margin-bottom:10px}
+  .sub{color:var(--mut);font-size:15px;max-width:78ch;line-height:1.6}
+  .soft{background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
+  .maprow{display:flex;gap:0;margin-top:30px;align-items:stretch;justify-content:center}
+  .node{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:18px 22px;width:260px;transition:all .25s}
+  .node:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 12px 28px rgba(21,24,29,.09)}
+  .node h3{font-size:15px;font-weight:800;margin-bottom:4px}
+  .node .role{color:var(--red);font-size:11px;font-weight:800;letter-spacing:1.2px;margin-bottom:8px}
+  .node p{font-size:12.5px;color:var(--mut);line-height:1.5}
+  .lnk{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 12px}
+  .lnk .wl{font-size:10.5px;color:var(--mut);font-weight:700;margin-bottom:4px}
+  .lnk .wire{width:80px;height:2.5px;background:var(--red);position:relative}
+  .lnk .wire:after{content:'';position:absolute;right:-1px;top:-3.5px;border-left:8px solid var(--red);
+        border-top:4.5px solid transparent;border-bottom:4.5px solid transparent}
+  .lnk .wire i{position:absolute;top:-2.2px;left:0;width:7px;height:7px;border-radius:50%;background:#fff;
+        border:2px solid var(--red);animation:travel 2.2s linear infinite}
+  @keyframes travel{from{left:-2px}to{left:68px}}
+
+  .tour{display:grid;grid-template-columns:280px 205px minmax(0,1fr) 205px 280px;gap:16px;margin-top:36px;align-items:start}
+  .rail{display:flex;flex-direction:column;gap:14px}
+  .railcard{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:all .25s}
+  .railcard:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(21,24,29,.10)}
+  .railcard img{width:100%;display:block}
+  .railcard .rc{padding:12px 14px}
+  .railcard h4{font-size:13px;font-weight:800;margin-bottom:4px}
+  .railcard p{font-size:11.5px;color:var(--mut);line-height:1.5}
+  .railcard .rtag{font-size:9.5px;font-weight:800;letter-spacing:1.4px;color:var(--red)}
+  .demo{position:relative;background:var(--dark)}
+  .demo h4,.demo p{color:#E8EBF0}
+  .demo p{color:#9AA3B2}
+  .demo .play{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--red);
+      display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;animation:pulse 2.4s infinite}
+  .chipcol{display:flex;flex-direction:column;gap:9px;padding-top:26px}
+  .callout{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 11px;cursor:pointer;
+           font-size:12px;font-weight:750;transition:all .16s;text-align:left}
+  .callout small{display:block;font-weight:500;color:var(--mut);font-size:10.5px;margin-top:1px}
+  .callout:hover,.callout.active{border-color:var(--red);box-shadow:0 5px 16px rgba(225,37,43,.16);transform:translateY(-1px)}
+  .callout.active{background:#FFF6F6}
+  .boardpanel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;
+              box-shadow:0 0 0 1px rgba(225,37,43,.06),0 24px 56px rgba(21,24,29,.12),
+                         0 0 80px rgba(29,95,168,.10),0 0 60px rgba(225,37,43,.08);position:relative}
+  .stagewrap{position:relative}
+  .boardpanel img{width:100%;height:auto;display:block;border-radius:8px}
+  .boardpanel svg.ov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .boardpanel line{stroke:var(--red);stroke-width:.5;opacity:0;transition:opacity .2s}
+  .boardpanel circle{fill:none;stroke:var(--red);stroke-width:.6;opacity:0;transition:opacity .2s}
+  .boardpanel line.on,.boardpanel circle.on{opacity:1}
+  .boardpanel figcaption{font-size:11px;color:var(--mut);text-align:center;padding-top:10px}
+  .toprowchips,.botrowchips{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+  .toprowchips{margin-bottom:12px}.botrowchips{margin-top:12px}
+  .detail{margin-top:18px;border:1.5px solid var(--line);border-left:5px solid var(--red);
+          border-radius:0 14px 14px 0;padding:18px 22px;background:#fff;min-height:110px}
+  .detail h3{font-size:17px;font-weight:800;margin-bottom:2px}
+  .detail .gp{font-family:Consolas,monospace;color:var(--red);font-size:13px;font-weight:700}
+  .detail p{font-size:14px;line-height:1.6;margin-top:8px;max-width:100ch}
+  .detail .tech{margin-top:10px;background:var(--soft);border-radius:8px;padding:10px 14px;
+                font-size:12.5px;line-height:1.65;color:#3A424C}
+  .warn{display:inline-block;background:#FDF0EF;border:1px solid #F3C2C0;color:#9E1B1F;border-radius:7px;
+        padding:2px 9px;font-size:11.5px;font-weight:700;margin-top:8px}
+
+  /* ===== WIRING CHAPTER — animated schematics ===== */
+  .wgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:32px}
+  .wcard{background:#fff;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;transition:all .25s}
+  .wcard:hover{box-shadow:0 16px 40px rgba(21,24,29,.10);border-color:#CBD3DC}
+  .wcard .whead{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+  .wcard .whead h3{font-size:15.5px;font-weight:800}
+  .wcard .whead .gp{font-family:Consolas,monospace;color:var(--red);font-size:12px;font-weight:700}
+  .wcard .art{background:linear-gradient(180deg,#FBFCFE,#F4F6F9);padding:14px}
+  .wcard .art img{width:100%;height:auto;display:block;border-radius:8px}
+  .wcard svg{width:100%;height:auto;display:block}
+  .wcard .wtxt{padding:14px 18px 16px;font-size:13px;line-height:1.6;color:#3A424C}
+  .wcard .wtxt b{color:var(--ink)}
+  .mm{display:inline-block;background:#EFF4FB;border:1px solid #C9DAF0;color:#174E8C;border-radius:7px;
+      padding:3px 10px;font-size:11.5px;font-weight:700;margin-top:8px}
+  /* schematic drawing conventions */
+  .sc-wire{stroke:#3A424C;stroke-width:1.6;fill:none}
+  .sc-hot{stroke:var(--red);stroke-width:1.8;fill:none}
+  .sc-sig{stroke:var(--blue);stroke-width:1.6;fill:none}
+  .cur{stroke-dasharray:5 4;animation:cur 1.1s linear infinite}
+  @keyframes cur{to{stroke-dashoffset:-9}}
+  .sc-box{fill:#fff;stroke:#5D6570;stroke-width:1.3}
+  .sc-boxr{fill:#fff;stroke:var(--red);stroke-width:1.5}
+  .sc-boxb{fill:#fff;stroke:var(--blue);stroke-width:1.5}
+  .sc-t{font-size:9.5px;font-weight:700;fill:#15181D}
+  .sc-m{font-size:8px;fill:#5D6570}
+  .sc-pin{font-size:8.5px;font-weight:800;fill:var(--red);font-family:Consolas,monospace}
+
+  /* downloads */
+  .dlgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px}
+  .dl{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:22px;transition:all .25s;position:relative}
+  .dl:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(21,24,29,.10);border-color:var(--red)}
+  .dl .tag{font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--red)}
+  .dl h3{font-size:17px;font-weight:800;margin:8px 0 6px}
+  .dl p{font-size:12.5px;color:var(--mut);line-height:1.55;min-height:58px}
+  .dl a.btn{display:inline-block;margin-top:12px;background:var(--red);color:#fff;font-weight:800;font-size:13px;
+     border-radius:10px;padding:10px 18px;text-decoration:none;transition:all .2s}
+  .dl a.btn:hover{background:var(--red-dark);transform:translateY(-1px)}
+  .dl .meta{font-size:10.5px;color:var(--mut);margin-top:8px;font-family:Consolas,monospace}
+  .steps{counter-reset:s;margin-top:26px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .step{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px;font-size:12.5px;line-height:1.5;color:#3A424C;position:relative}
+  .step:before{counter-increment:s;content:counter(s);position:absolute;top:-12px;left:12px;width:24px;height:24px;
+     border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .step b{display:block;margin-bottom:3px;color:var(--ink);padding-top:4px}
+
+  /* knowledge base */
+  .kb{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;margin-top:30px;align-items:start}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  th{background:var(--dark);color:#fff;text-align:left;font-size:11px;letter-spacing:1.2px;padding:10px 12px}
+  td{padding:8px 12px;font-size:12.5px;border-top:1px solid var(--line)}
+  td.mono{font-family:Consolas,monospace;color:var(--red);font-weight:700;font-size:12px}
+  tr:nth-child(even) td{background:#FAFBFC}
+  .faq{display:flex;flex-direction:column;gap:10px}
+  details{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:0;overflow:hidden;transition:border-color .2s}
+  details:hover{border-color:var(--red)}
+  summary{cursor:pointer;font-weight:750;font-size:13.5px;padding:14px 16px;list-style:none;position:relative}
+  summary:after{content:'+';position:absolute;right:16px;color:var(--red);font-weight:800}
+  details[open] summary:after{content:'–'}
+  details .a{padding:0 16px 14px;font-size:13px;color:#3A424C;line-height:1.6}
+
+  .cine{background:var(--dark);color:#EDEFF3;padding:64px 0;position:relative;overflow:hidden}
+  .cine:before{content:'';position:absolute;inset:0;background:
+      radial-gradient(700px 300px at 20% 30%, rgba(225,37,43,.18), transparent 60%),
+      radial-gradient(600px 300px at 85% 75%, rgba(29,95,168,.14), transparent 60%),
+      radial-gradient(500px 260px at 60% 10%, rgba(122,74,158,.12), transparent 60%)}
+  .streak{position:absolute;width:38%;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);
+      transform:rotate(-14deg);animation:sweep 6s linear infinite}
+  @keyframes sweep{from{left:-40%;opacity:0}15%{opacity:1}85%{opacity:1}to{left:110%;opacity:0}}
+  .cine .wrap{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center;position:relative}
+  .cine img{width:100%;border-radius:14px;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+  .cine .kicker{color:#FF6B70}
+  .cine h2{color:#fff}
+  .cine p{color:#A7AEBB;font-size:15px;line-height:1.65;margin-top:10px}
+  .cine .spec{display:flex;gap:26px;margin-top:24px}
+  .cine .spec b{display:block;font-size:20px;color:#fff}
+  .cine .spec span{font-size:10.5px;letter-spacing:1.4px;color:#8A93A3;font-weight:700}
+
+  .paths{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+  .path{border:1.5px solid var(--line);border-radius:14px;padding:20px;background:#fff;transition:all .25s}
+  .path:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(21,24,29,.09)}
+  .path.rec{border-color:var(--red)}
+  .path .tag{font-size:10.5px;font-weight:800;letter-spacing:1.5px;color:var(--mut)}
+  .path.rec .tag{color:var(--red)}
+  .path h3{font-size:17px;font-weight:800;margin:6px 0 8px}
+  .path p{font-size:13px;color:var(--mut);line-height:1.55}
+  .path .status{margin-top:10px;font-size:12px;font-weight:700}
+  .s-ok{color:var(--ok)} .s-dev{color:#B97800} .s-no{color:#9E1B1F}
+
+  .sig{border-top:1px solid var(--line);background:var(--soft);padding:34px 0}
+  .sig .wrap{display:flex;justify-content:space-between;align-items:center;gap:24px}
+  .sigbadge{display:flex;align-items:center;gap:14px}
+  .sigmark{width:44px;height:44px;border-radius:12px;background:var(--dark);color:#fff;display:flex;
+           align-items:center;justify-content:center;font-size:20px}
+  .sigbadge b{display:block;font-size:14px}
+  .sigbadge span{font-size:12px;color:var(--mut)}
+  .sig .src{font-size:11.5px;color:var(--mut);text-align:right;line-height:1.6}
+
+  /* ===== v8: lightbox inspector ===== */
+  .lb{position:fixed;inset:0;background:rgba(8,9,12,.92);z-index:200;display:none;align-items:center;justify-content:center}
+  .lb.open{display:flex}
+  .lb img{max-width:none;cursor:grab;user-select:none;box-shadow:0 40px 120px rgba(0,0,0,.6);border-radius:6px;background:#fff}
+  .lb img:active{cursor:grabbing}
+  .lb .lbbar{position:fixed;top:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);
+      color:#E8EBF0;font-size:12px;font-weight:700;border-radius:999px;padding:8px 18px;z-index:201}
+  .lb .lbbar b{color:#FF6B70}
+  .lb .lbx{position:fixed;top:16px;right:20px;width:38px;height:38px;border-radius:50%;background:var(--red);
+      color:#fff;border:none;font-size:16px;font-weight:800;cursor:pointer;z-index:201}
+  .zoomhint{position:absolute;bottom:10px;right:10px;background:rgba(12,13,16,.78);color:#fff;font-size:10.5px;
+      font-weight:700;letter-spacing:.8px;border-radius:7px;padding:4px 10px;pointer-events:none;opacity:0;transition:opacity .2s}
+  .art{position:relative}
+  .art:hover .zoomhint{opacity:1}
+  .art img{cursor:zoom-in}
+  /* ===== v8: hero circuit traces ===== */
+  .tracebg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.5}
+  .tracebg path{fill:none;stroke:#D8DEE7;stroke-width:1.5}
+  .tracebg .tcur{stroke:var(--red);stroke-width:1.5;stroke-dasharray:3 140;animation:tflow 7s linear infinite;opacity:.8}
+  .tracebg .tcur.b{stroke:var(--blue);animation-duration:9s;animation-delay:1.2s}
+  .tracebg .tcur.v{stroke:var(--vio);animation-duration:11s;animation-delay:2.4s}
+  .tracebg circle{fill:#D8DEE7}
+  @keyframes tflow{to{stroke-dashoffset:-286}}
+  /* ===== v8: progress rail ===== */
+  .rail-nav{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:14px}
+  .rail-nav a{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--mut)}
+  .rail-nav .rdot{width:9px;height:9px;border-radius:50%;border:2px solid #C6CDD6;background:#fff;transition:all .2s}
+  .rail-nav .rlab{font-size:10px;font-weight:800;letter-spacing:1.2px;opacity:0;transform:translateX(6px);transition:all .2s}
+  .rail-nav a:hover .rlab,.rail-nav a.on .rlab{opacity:1;transform:none}
+  .rail-nav a.on .rdot{border-color:var(--red);background:var(--red);box-shadow:0 0 0 4px rgba(225,37,43,.15)}
+  /* ===== v8: gpio toolbar ===== */
+  .kbtools{display:flex;gap:10px;margin-bottom:10px}
+  .kbtools input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;font:inherit;font-size:13px}
+  .kbtools input:focus{outline:2px solid var(--red);border-color:transparent}
+  td.mono{cursor:copy;position:relative}
+  td.mono:hover{background:#FFF3F3 !important}
+  .copied{position:fixed;background:var(--dark);color:#fff;font-size:11px;font-weight:700;border-radius:6px;
+      padding:4px 10px;z-index:300;pointer-events:none;animation:fadeup 1s forwards}
+  @keyframes fadeup{0%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translateY(-8px)}}
+  .bootfig{margin:26px 0 4px;background:#fff;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;
+      display:grid;grid-template-columns:1.3fr .7fr;align-items:center}
+  .bootfig img{width:100%;display:block}
+  .bootfig .bt{padding:22px 26px}
+  .bootfig h3{font-size:17px;font-weight:800;margin-bottom:8px}
+  .bootfig p{font-size:13.5px;color:#3A424C;line-height:1.65}
+
+  /* ===== v9: max-it-out ===== */
+  .ceil{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;margin-top:30px;align-items:start}
+  .ceilcard{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:22px}
+  .ceilcard h3{font-size:16.5px;font-weight:800;margin-bottom:10px}
+  .portmap{width:100%;border-collapse:collapse;font-size:12.5px}
+  .portmap td{padding:7px 10px;border-top:1px solid var(--line)}
+  .portmap td:first-child{font-weight:750}
+  .portmap .cap{font-family:Consolas,monospace;color:var(--red);font-weight:700;white-space:nowrap}
+  .match{width:100%;border-collapse:collapse;font-size:13px}
+  .match th{background:var(--dark);color:#fff;font-size:10.5px;letter-spacing:1.2px;padding:9px 12px;text-align:left}
+  .match td{padding:9px 12px;border-top:1px solid var(--line)}
+  .fit-y{color:var(--ok);font-weight:800}
+  .fit-n{color:#9E1B1F;font-weight:800}
+  .fit-m{color:#B97800;font-weight:800}
+  .growgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+  .grow{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:20px;transition:all .25s;position:relative;overflow:hidden}
+  .grow:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(21,24,29,.10);border-color:var(--red)}
+  .grow .gtag{font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--red)}
+  .grow h3{font-size:16px;font-weight:800;margin:8px 0 8px}
+  .grow p{font-size:12.5px;color:#3A424C;line-height:1.6}
+  .grow .parts{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+  .grow .part{background:var(--soft);border:1px solid var(--line);border-radius:7px;padding:3px 9px;font-size:11px;font-weight:700}
+  .grow .motors{position:absolute;top:16px;right:16px;font-size:20px;font-weight:850;color:var(--red)}
+  .grow .motors small{display:block;font-size:9px;letter-spacing:1.2px;color:var(--mut);text-align:right}
+
+  /* ===== v10: movie pass ===== */
+  .heroimg{will-change:transform}
+  .cine img.rv{animation:drift 14s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:scale(1) translateY(0)}to{transform:scale(1.045) translateY(-8px)}}
+  .dl a.btn{animation:breathebtn 3.6s ease-in-out infinite}
+  @keyframes breathebtn{0%,100%{box-shadow:0 0 0 0 rgba(225,37,43,0)}50%{box-shadow:0 6px 22px rgba(225,37,43,.35)}}
+  .detail.swap{animation:cardin .35s ease}
+  @keyframes cardin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .divider-trace{height:64px;overflow:hidden;position:relative}
+  .divider-trace svg{width:100%;height:100%}
+  .divider-trace path{fill:none;stroke:#E2E7ED;stroke-width:1.5}
+  .divider-trace .dcur{stroke:var(--red);stroke-width:1.5;stroke-dasharray:4 220;animation:dflow 6s linear infinite}
+  .divider-trace .dcur.b{stroke:var(--blue);animation-delay:2s}
+  @keyframes dflow{to{stroke-dashoffset:-448}}
+  .statline{display:flex;gap:34px;margin-top:24px}
+  .stat2 b{display:block;font-size:26px;font-weight:850;color:var(--ink);font-variant-numeric:tabular-nums}
+  .stat2 b .plus{color:var(--red)}
+  .stat2 span{font-size:10.5px;letter-spacing:1.5px;color:var(--mut);font-weight:800}
+  .kicker{position:relative;display:inline-block}
+  .kicker:after{content:'';position:absolute;left:0;bottom:-4px;height:2px;width:100%;
+    background:linear-gradient(90deg,var(--red),transparent);transform:scaleX(0);transform-origin:left;transition:transform .8s ease .2s}
+  .rv.in .kicker:after, .kicker.in:after{transform:scaleX(1)}
+
+  /* ===== v11: expansion deep-dive ===== */
+  .xp{margin-top:52px}
+  .xp>h3{font-size:19px;font-weight:850;margin-top:6px}
+  .xfig{background:#fff;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;margin-top:18px}
+  .xfig img{width:100%;display:block;cursor:zoom-in}
+  .xfig figcaption{padding:12px 18px;font-size:12px;color:var(--mut);border-top:1px solid var(--line);line-height:1.5}
+  .xfig2{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:18px;align-items:start}
+  .xfig2 .xfig{margin-top:0}
+  .xsplit{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:16px;align-items:start}
+  .cfgcard{background:var(--dark);border-radius:14px;overflow:hidden}
+  .cfgcard .ch{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+  .cfgcard .ch span{font-size:10.5px;letter-spacing:1.4px;font-weight:800;color:#9AA4B2}
+  .cfgcard button{background:var(--red);color:#fff;border:0;border-radius:7px;padding:5px 12px;font-size:11px;
+      font-weight:800;cursor:pointer;letter-spacing:.5px}
+  .cfgcard pre{margin:0;padding:16px 18px;font-family:Consolas,monospace;font-size:11.8px;line-height:1.62;
+      color:#D7DEE7;overflow-x:auto;white-space:pre}
+  .xgot{display:flex;flex-direction:column;gap:10px}
+  .xgot .g{background:#fff;border:1.5px solid var(--line);border-left:4px solid var(--red);border-radius:10px;
+      padding:11px 14px;font-size:12.5px;line-height:1.55;color:#3A424C}
+  .xgot .g b{color:var(--ink)}
+  .btsch{margin-top:14px;border:1px solid var(--line);border-radius:10px;cursor:zoom-in;width:100%}
+  /* v11 fix: the absolute "+N motors" badge overlaid the path-card titles at narrow widths —
+     float it into the flow so the text wraps around it instead of running underneath */
+  .grow .motors{position:static;float:right;margin:0 0 6px 14px;text-align:right}
+  /* v11 fix: the board tour hard-codes 1034px of side columns — at Michael's 980 window the
+     center board collapsed to 0px. Below 1140px: board first (full width), chips under it, rails last. */
+  @media (max-width:1140px){
+    .tour{grid-template-columns:1fr 1fr}
+    .tour>div:nth-child(3){grid-column:1/-1;grid-row:1}
+    .tour>.chipcol{grid-row:2;padding-top:0}
+    .tour>.rail{grid-row:3}
+  }
+
+  /* ===== v12: engineering depth ===== */
+  .cabsched{width:100%;border-collapse:collapse;font-size:12px;margin-top:14px;background:#fff;
+      border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  .cabsched th{background:var(--dark);color:#fff;font-size:10px;letter-spacing:1.3px;padding:8px 12px;text-align:left}
+  .cabsched td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:top;line-height:1.5}
+  .cabsched td.t{font-family:Consolas,monospace;font-size:11.5px;font-weight:700;white-space:nowrap}
+  .cabsched td.t small{display:block;font-weight:400;color:var(--mut);font-family:inherit}
+  .cabsched .w{color:var(--red);font-weight:800}
+  .howit{background:#F4F7FA;border:1.5px solid var(--line);border-left:4px solid var(--blue,#1D5FA8);
+      border-radius:10px;padding:13px 16px;font-size:13px;line-height:1.65;color:#2E3640;margin-top:14px}
+  .howit b{color:var(--ink)}
+  .schedwrap{overflow-x:auto}
+
+  /* ===== v13: downloads annunciation ===== */
+  .ann{display:block;font-size:11.5px;font-weight:800;letter-spacing:.4px;border-radius:8px;
+      padding:7px 11px;margin-top:10px;line-height:1.45}
+  .ann.ok{background:#EDF7EE;border:1.5px solid #BFE3C2;color:#1E7A2E}
+  .ann.no{background:#FDF0EF;border:1.5px solid #F3C2C0;color:#9E1B1F}
+  .ann.warn{background:#FFF7E8;border:1.5px solid #EDD9A3;color:#8A6400}
+  .pickone{background:#fff;border:2px solid var(--red);border-radius:14px;padding:16px 20px;
+      margin:26px 0 18px;font-size:13.5px;line-height:1.6;color:#2E3640}
+  .pickone b{color:var(--red);font-size:14.5px;letter-spacing:.4px}
+  .pickone em{font-style:normal;font-family:Consolas,monospace;font-weight:700;background:var(--soft);
+      border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+  .pitabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+  .pitabs .pt{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 18px;
+      font-weight:800;font-size:13px;cursor:pointer;transition:all .15s}
+  .pitabs .pt:hover{border-color:#CBD3DC;transform:translateY(-1px)}
+  .pitabs .pt.on{border-color:var(--red);background:#FFF6F6;color:var(--red)}
+  .pipanel{display:none;margin-top:16px}
+  .pipanel.on{display:block}
+  .pv{font-size:13px;font-weight:800;border-radius:10px;padding:12px 15px;margin-bottom:14px;line-height:1.55}
+  .pv.ok{background:#EDF7EE;border:1.5px solid #BFE3C2;color:#1E7A2E}
+  .pv.warn{background:#FFF7E8;border:1.5px solid #EDD9A3;color:#8A6400}
+  .pv.no{background:#FDF0EF;border:1.5px solid #F3C2C0;color:#9E1B1F}
+  .pipanel .dlrow{margin-top:14px}
+  .pipanel .dlrow a{display:inline-block;background:var(--dark);color:#fff;border-radius:9px;
+      padding:9px 16px;font-size:12.5px;font-weight:800;text-decoration:none}
+
+  /* ===== v14: two-lane map + engine parity ===== */
+  .lanetag{font-size:10.5px;font-weight:800;letter-spacing:1.6px;color:var(--red);margin:26px 0 -18px;text-align:center}
+  .lanetag small{color:var(--mut);font-weight:700;letter-spacing:.6px;text-transform:none}
+  .node .chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:8px}
+  .node .chips span{background:var(--soft);border:1px solid var(--line);border-radius:6px;
+      padding:2px 8px;font-size:10.5px;font-weight:700;color:#3A424C}
+  .node .chips span.oc{border-color:#B7D3B9;background:#F0F8F0}
+
+  /* ===== v15: get-the-OS + polarity ===== */
+  .getos{background:#fff;border:2px solid var(--dark);border-radius:14px;padding:16px 20px;margin:22px 0 6px;
+      font-size:13.5px;line-height:1.65;color:#2E3640}
+  .getos b{font-size:14px;letter-spacing:.4px}
+  .getos .lane{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:1px;border-radius:6px;
+      padding:2px 8px;margin-right:6px;background:var(--soft);border:1px solid var(--line)}
+  .getos a{color:var(--red);font-weight:700}
+  .pol{display:inline-block;font-family:Consolas,monospace;font-weight:700;font-size:11px;border-radius:6px;
+      padding:1px 7px;margin:0 2px}
+  .pol.p{background:#FDF0EF;border:1px solid #F3C2C0;color:#9E1B1F}
+  .pol.n{background:#EEF1F5;border:1px solid #CBD3DC;color:#2E3640}
+  .pol.x{background:#EDF7EE;border:1px solid #BFE3C2;color:#1E7A2E}
+
+  /* ===== v16: the blues + the official films (Michael's BTT-site references) ===== */
+  :root{--navy:#0A1134;--navy2:#16226B;--elec:#2E7BFF;--cyan:#3FD8FF}
+  /* cine band goes full BTT-space: deep navy + electric streaks */
+  .cine{background:linear-gradient(135deg,#060B24 0%,var(--navy) 38%,var(--navy2) 72%,#0A1445 100%)}
+  .cine:after{content:'';position:absolute;inset:0;pointer-events:none;background:
+      radial-gradient(60% 90% at 82% 30%,rgba(46,123,255,.22),transparent 60%),
+      radial-gradient(45% 70% at 12% 78%,rgba(63,216,255,.10),transparent 60%)}
+  .streak{background:linear-gradient(90deg,transparent,rgba(63,216,255,.55),rgba(46,123,255,.35),transparent);height:2.5px}
+  .streak.warm{background:linear-gradient(90deg,transparent,rgba(255,80,86,.45),transparent)}
+  /* the cyan neon rim from BTT's hero boards */
+  .glowrim{filter:drop-shadow(0 0 14px rgba(63,216,255,.55)) drop-shadow(0 0 40px rgba(46,123,255,.35));
+      animation:rimpulse 5s ease-in-out infinite}
+  @keyframes rimpulse{0%,100%{filter:drop-shadow(0 0 14px rgba(63,216,255,.55)) drop-shadow(0 0 40px rgba(46,123,255,.35))}
+      50%{filter:drop-shadow(0 0 22px rgba(63,216,255,.8)) drop-shadow(0 0 60px rgba(46,123,255,.5))}}
+  .heroimg{box-shadow:0 0 0 1px rgba(63,216,255,.25),0 0 34px rgba(46,123,255,.28),0 24px 56px rgba(21,24,29,.12)}
+  /* the films */
+  .films{margin-top:34px;display:grid;grid-template-columns:1.35fr 1fr;gap:22px;position:relative}
+  .film{background:rgba(6,11,36,.55);border:1px solid rgba(63,216,255,.30);border-radius:16px;overflow:hidden;
+      box-shadow:0 0 24px rgba(46,123,255,.22)}
+  .film .vwrap{position:relative;width:100%;padding-top:56.25%}
+  .film iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .film .vt{padding:12px 16px;font-size:12px;color:#BFD7FF;line-height:1.5}
+  .film .vt b{color:#fff;display:block;font-size:13px}
+  .cine .kicker{color:var(--cyan)}
+  @media (max-width:1140px){.films{grid-template-columns:1fr}}
+  /* navy engineering-table headers (were flat charcoal) */
+  .match th,.cabsched th,.cfgcard .ch{background:linear-gradient(120deg,#0B1238,#1A2C74)}
+  .cfgcard{background:linear-gradient(160deg,#0B1130,#141B3E)}
+  .divider-trace .dcur.b{stroke:var(--cyan)}
+
+  /* ===== v17: full-cinema hero (Gemini-directed: slow, atmospheric) ===== */
+  .hero{background:
+      radial-gradient(70% 100% at 78% 14%, rgba(46,123,255,.30), transparent 56%),
+      radial-gradient(50% 80% at 8% 88%, rgba(63,216,255,.13), transparent 60%),
+      linear-gradient(140deg,#05091F 0%,#0A1134 42%,#16226B 80%,#0B1445 100%);
+      padding-bottom:104px}
+  .hero h1{color:#fff}
+  .hero h1 .r{color:#FF4A50}
+  .hero .lede{color:#A9B6D6}
+  .hero .lede b{color:#DCE6FF}
+  .hero .chip{border-color:var(--cyan);color:var(--cyan);background:rgba(63,216,255,.06)}
+  .hero .chip .dot{background:var(--cyan)}
+  .hero .quirk{background:rgba(10,17,52,.65);border-color:rgba(63,216,255,.28);color:#BFD7FF}
+  .hero .quirk span{color:var(--cyan)}
+  .hero .stat2 b{color:#fff}
+  .hero .stat2 span{color:#7E8BB0}
+  .hero .verify{background:rgba(26,84,48,.30);border:1.5px solid rgba(96,200,132,.35);color:#BAE8C9}
+  .hero .verify b{color:#7FE2A2}
+  .hero .tracebg{opacity:.42}
+  .hero .tracebg path{stroke:#22305E}
+  .hero .tracebg circle{fill:#22305E}
+  .hero .tracebg .tcur{stroke:var(--cyan);animation-duration:16s}
+  .hero .tracebg .tcur.b{stroke:var(--elec);animation-duration:19s}
+  .hero .tracebg .tcur.v{stroke:var(--elec);animation-duration:22s}
+  .hero .streak{opacity:.75}
+  .hero .streak.slow{animation-duration:18s}
+  .hero .streak.glint{background:linear-gradient(90deg,transparent,rgba(255,80,86,.6),transparent);
+      animation:glint 11s ease-in-out infinite}
+  @keyframes glint{0%,86%,100%{opacity:0}91%{opacity:.85}96%{opacity:0}}
+  .heroimg{background:#fff}
+  .heroimg figcaption{color:var(--mut)}
+  /* hero -> light content: asymmetric curve with a cyan glow tracing it (Gemini d) */
+  .curve{position:absolute;left:0;right:0;bottom:-1px;height:72px;pointer-events:none}
+  .curve svg{width:100%;height:100%;display:block}
+  /* watch-it-run facade (Gemini e): still + pulsing red play, video loads ONLY on click */
+  .facade{position:relative;margin-top:14px;border-radius:14px;overflow:hidden;cursor:pointer;
+      border:1px solid rgba(63,216,255,.35);box-shadow:0 0 24px rgba(46,123,255,.25)}
+  .facade img{width:100%;display:block;filter:brightness(.82)}
+  .facade .fplay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;
+      border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;
+      font-size:20px;padding-left:4px;animation:fpulse 2.6s ease-in-out infinite}
+  @keyframes fpulse{0%,100%{box-shadow:0 0 0 0 rgba(225,37,43,.55)}55%{box-shadow:0 0 0 16px rgba(225,37,43,0)}}
+  .facade .ftxt{position:absolute;left:0;right:0;bottom:0;padding:10px 14px;font-size:11px;color:#DCE6FF;
+      background:linear-gradient(transparent,rgba(5,9,31,.9));letter-spacing:.4px}
+  .facade .ftxt b{color:#fff;letter-spacing:1.2px}
+  .fmodal{display:none;position:fixed;inset:0;background:rgba(4,7,22,.88);z-index:900;align-items:center;justify-content:center}
+  .fmodal.open{display:flex}
+  .fbox{width:min(1100px,92vw);position:relative}
+  .fbox .vwrap16{position:relative;padding-top:56.25%;border-radius:14px;overflow:hidden;
+      box-shadow:0 0 60px rgba(46,123,255,.4)}
+  .fbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .fbox .fx{position:absolute;top:-42px;right:0;background:none;border:1.5px solid rgba(255,255,255,.4);
+      color:#fff;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+  /* screens chapter */
+  .noport{background:#FDF0EF;border:2px solid #F3C2C0;border-radius:14px;padding:16px 20px;
+      font-size:13.5px;line-height:1.65;color:#5A2222;margin-top:20px}
+  .noport b{color:#9E1B1F}
+  .scrgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+  @media (max-width:1140px){.scrgrid{grid-template-columns:1fr}}
+
+  /* ===== v17 part 2: the complete pinout ===== */
+  .pinout{background:linear-gradient(150deg,#05091F,#0A1134 45%,#101B52 100%);padding:64px 0 56px;position:relative;overflow:hidden}
+  .pgrid{display:grid;gap:16px;margin-top:32px;grid-template-columns:255px minmax(0,1fr) 255px;
+      grid-template-areas:"top top top" "left stage right" "bottom bottom bottom";align-items:start}
+  .pz-top{grid-area:top;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .pz-left{grid-area:left;display:flex;flex-direction:column;gap:10px}
+  .pz-right{grid-area:right;display:flex;flex-direction:column;gap:10px}
+  .pz-bottom{grid-area:bottom;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .pstage{grid-area:stage;position:relative;background:#fff;border-radius:16px;padding:10px;
+      box-shadow:0 0 0 1px rgba(63,216,255,.30),0 0 44px rgba(46,123,255,.30)}
+  .pstage img{width:100%;display:block;border-radius:8px}
+  .ring{position:absolute;transform:translate(-50%,-50%);border:2px solid var(--zc);border-radius:9px;
+      box-shadow:0 0 10px var(--zc);transition:all .2s;cursor:pointer}
+  .ring span{position:absolute;top:-9px;left:-9px;background:var(--zc);color:#06102A;font-size:10px;
+      font-weight:800;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
+  .pchip{background:rgba(8,14,40,.78);border:1px solid rgba(255,255,255,.10);border-left:3px solid var(--zc);
+      border-radius:10px;padding:9px 11px;transition:all .2s}
+  .pchip .ph{display:flex;align-items:baseline;gap:7px;margin-bottom:5px}
+  .pchip .ph em{font-style:normal;background:var(--zc);color:#06102A;font-size:9.5px;font-weight:800;border-radius:5px;padding:1px 5px}
+  .pchip .ph b{color:#fff;font-size:11.5px;letter-spacing:.3px}
+  .pchip .ph code{color:#8FA3CC;font-size:9px;margin-left:auto;text-align:right}
+  .prow{display:flex;gap:7px;align-items:baseline;font-family:Consolas,monospace;font-size:11px;line-height:1.7}
+  .prow b{color:#DCE6FF;min-width:54px;font-weight:700}
+  .prow span{color:#8FA3CC;font-size:10px}
+  .prow i,.pleg i{font-style:normal;width:15px;height:15px;border-radius:4px;display:inline-flex;align-items:center;
+      justify-content:center;font-size:9.5px;font-weight:900;flex:none;position:relative;top:1px}
+  .sp{background:#3A1518;color:#FF6B70;border:1px solid #7A2A2E}
+  .sg{background:#1E2430;color:#9AA6B8;border:1px solid #3A4354}
+  .ss{background:#12263F;color:#5EA0FF;border:1px solid #274F80}
+  .sd{background:#0E2E38;color:#3FD8FF;border:1px solid #1F5D70}
+  .sn{background:#242B3D;color:#8FA3CC;border:1px solid #3A4354}
+  .pnote{font-size:9.5px;color:#7E8BB0;margin-top:5px;line-height:1.5;border-top:1px dashed rgba(255,255,255,.08);padding-top:5px}
+  .pgrid.focusing .pchip:not(.focus){opacity:.22}
+  .pgrid.focusing .ring:not(.focus){opacity:.15}
+  .pchip.focus{border-color:var(--zc);box-shadow:0 0 18px rgba(63,216,255,.28);transform:translateY(-2px)}
+  .ring.focus{box-shadow:0 0 18px var(--zc),0 0 36px var(--zc);border-width:3px}
+  .pleg{display:flex;gap:18px;flex-wrap:wrap;margin-top:20px;font-size:11px;color:#A9B6D6;align-items:center}
+  .pleg span{display:inline-flex;gap:6px;align-items:center}
+  .pleg .zl{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .pleg .zl em{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:1px;color:var(--zc);
+      border:1px solid var(--zc);border-radius:6px;padding:2px 8px;opacity:.9}
+  @media (max-width:1140px){
+    .pgrid{grid-template-columns:1fr;grid-template-areas:"stage" "top" "left" "right" "bottom"}
+    .pz-top,.pz-bottom{grid-template-columns:1fr 1fr}
+    .pz-left,.pz-right{display:grid;grid-template-columns:1fr 1fr}
+  }
+
+  /* ===== v18: twin facades + relocated stats ===== */
+  .facades{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .facades .facade{margin-top:0}
+  .facades .fplay{width:44px;height:44px;font-size:15px}
+  .facades .ftxt{padding:7px 10px;font-size:9.5px}
+  .pinout .statline{margin:26px 0 0}
+  .pinout .stat2 b{color:#fff}
+  .pinout .stat2 b .plus{color:#FF6B70}
+  .pinout .stat2 span{color:#7E8BB0}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="wrap">
+  <div class="brand">HONEYBADGER <span>3D PRINTING HUB</span></div>
+  <nav class="topnav">
+    <a href="#pinout">Pinout</a><a href="#board">The board</a><a href="#wiring">Wiring</a><a href="#flash">Flash</a>
+    <a href="#downloads">Downloads</a><a href="#maxout">Max it out</a><a href="#kb">Knowledge base</a>
+  </nav>
+</div></div>
+
+<nav class="rail-nav" id="railnav">
+  <a href="#top"><span class="rdot"></span><span class="rlab">TOP</span></a>
+  <a href="#board"><span class="rdot"></span><span class="rlab">BOARD</span></a>
+  <a href="#wiring"><span class="rdot"></span><span class="rlab">WIRING</span></a>
+  <a href="#flash"><span class="rdot"></span><span class="rlab">FLASH</span></a>
+  <a href="#maxout"><span class="rdot"></span><span class="rlab">MAX IT OUT</span></a>
+  <a href="#kb"><span class="rdot"></span><span class="rlab">KNOW-HOW</span></a>
+</nav>
+<div class="hero" id="top">
+<div class="streak slow" style="top:18%"></div>
+<div class="streak slow" style="top:58%;animation-delay:6s"></div>
+<div class="streak glint" style="top:38%"></div>
+<svg class="tracebg" viewBox="0 0 1400 520" preserveAspectRatio="xMidYMid slice">
+  <path d="M-20 80 H300 L340 120 H700"/><path class="tcur" d="M-20 80 H300 L340 120 H700"/>
+  <path d="M-20 200 H180 L220 160 H520 L560 200 H820"/><path class="tcur b" d="M-20 200 H180 L220 160 H520 L560 200 H820"/>
+  <path d="M60 520 V400 L100 360 H360"/><path class="tcur v" d="M60 520 V400 L100 360 H360"/>
+  <path d="M1420 60 H1150 L1110 100 V240"/><path class="tcur b" d="M1420 60 H1150 L1110 100 V240"/>
+  <path d="M1420 320 H1240 L1200 360 V520"/><path class="tcur" d="M1420 320 H1240 L1200 360 V520"/>
+  <circle cx="700" cy="120" r="3.5"/><circle cx="820" cy="200" r="3.5"/><circle cx="360" cy="360" r="3.5"/>
+  <circle cx="1110" cy="240" r="3.5"/><circle cx="1200" cy="520" r="0"/>
+</svg>
+<div class="wrap">
+  <div class="rv">
+    <span class="chip"><span class="dot"></span>BOARD HUB · VORON V0 FAVORITE</span>
+    <h1>BTT <span class="r">SKR Pico</span> V1.0<br>wired right, first try.</h1>
+    <p class="lede">The Voron V0 has zero room for a wiring mess. This board is the purpose-built fix:
+    <b>palm-sized, four silent drivers already soldered on, and a one-cable Pi hookup</b> — power and
+    data down the same five wires — engineered for the V0's cramped skirt from day one.</p>
+    <div class="quirks">
+      <span class="quirk"><span>◆</span>Purpose-built for the Voron V0 skirt</span>
+      <span class="quirk"><span>◆</span>Silent drivers — tuned in firmware, no pots</span>
+      <span class="quirk"><span>◆</span>Powers your Pi over one cable</span>
+    </div>
+    <div class="verify"><b>✔ VERIFICATION STATUS</b> — every pin verified against BTT's official schematic,
+    pin diagram, and shipped Klipper config (2026-07-11). Physical bench run: pending — and we say so,
+    because that's the difference between us and a guess.</div>
+  </div>
+  <div class="rv">
+    <figure class="heroimg" style="margin:0">
+      <img src="pico_official_1.jpg" alt="BTT SKR Pico V1.0 — official product photo">
+      <figcaption>The real board — official BigTreeTech product photography, used with credit.</figcaption>
+    </figure>
+    <div class="facades">
+      <div class="facade" data-vid="YigDTtVaG-g" role="button" tabindex="0" aria-label="Watch a Voron V0 speed-printing on this exact board">
+        <img src="https://i.ytimg.com/vi/YigDTtVaG-g/hqdefault.jpg" alt="A Voron V0 speed benchy on the SKR Pico — click to play" style="aspect-ratio:4/3">
+        <div class="fplay">▶</div>
+        <div class="ftxt"><b>IN ACTION · SPEED BENCHY</b> — a V0 racing on this exact board · © Vector 3D</div>
+      </div>
+      <div class="facade" data-vid="_a4opXVtmBY" role="button" tabindex="0" aria-label="Watch BigTreeTech's official SKR Pico film">
+        <img src="https://i.ytimg.com/vi/_a4opXVtmBY/hqdefault.jpg" alt="BigTreeTech's official SKR Pico film — click to play" style="aspect-ratio:4/3">
+        <div class="fplay">▶</div>
+        <div class="ftxt"><b>THE OFFICIAL FILM</b> — © BIGTREETECH · plays on click</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="curve"><svg viewBox="0 0 1440 72" preserveAspectRatio="none">
+  <path d="M0,72 L0,30 C380,64 920,-10 1440,42 L1440,72 Z" fill="#F4F6F9"/>
+  <path d="M0,30 C380,64 920,-10 1440,42" fill="none" stroke="rgba(63,216,255,.55)" stroke-width="1.5"
+        style="filter:drop-shadow(0 0 7px rgba(63,216,255,.8))"/>
+</svg></div>
+</div>
+
+<!-- ============ THE COMPLETE PINOUT (original Honeybadger artwork) ============ -->
+<section class="pinout" id="pinout">
+<div class="streak slow" style="top:12%"></div><div class="streak slow" style="top:78%;animation-delay:8s"></div>
+<div class="wrap">
+  <div class="kicker rv" style="color:var(--cyan)">THE COMPLETE PINOUT — OURS, NOT A COPY</div>
+  <h2 class="rv" style="color:#fff">Every pin. Every polarity. Measured, drawn and verified by us.</h2>
+  <p class="sub rv" style="color:#A9B6D6">The diagram no datasheet draws: every connector located on the real
+  board to the pixel, every pin in true physical order, and the thing BTT's own pinout never shows — <b
+  style="color:#DCE6FF">which wire is + and which is −</b>. Hover any panel: the board answers.
+  Base photo © BigTreeTech · measurements, polarity engineering &amp; layout © Honeybadger.</p>
+
+  <div class="statline rv">
+      <div class="stat2"><b data-count="22">0</b><span>CONNECTORS MEASURED</span></div>
+      <div class="stat2"><b data-count="105">0</b><span>FACTS VERIFIED</span></div>
+      <div class="stat2"><b data-count="7">0</b><span>OFFICIAL SOURCES</span></div>
+      <div class="stat2"><b data-count="0">0</b><span>GUESSES. EVER.</span></div>
+  </div>
+  <div class="pgrid rv" id="pingrid">
+    <div class="pzone pz-top"><div class="pchip" data-k="emotor" style="--zc:#7ADF8E"><div class="ph"><em>18</em><b>E · EXTRUDER</b><code>2B·1B·1A·2A</code></div><div class="prow"><i class="sn">·</i><b>coil 1</b><span>middle pair 1B+1A</span></div><div class="prow"><i class="sn">·</i><b>coil 2</b><span>outer pair 2B+2A</span></div><div class="pnote">runs backwards? flip dir_pin in firmware, not wires</div></div><div class="pchip" data-k="xmotor" style="--zc:#7ADF8E"><div class="ph"><em>19</em><b>X MOTOR</b><code>2B·1B·1A·2A</code></div><div class="prow"><i class="sn">·</i><b>coil 1</b><span>middle pair</span></div><div class="prow"><i class="sn">·</i><b>coil 2</b><span>outer pair</span></div><div class="pnote">TMC2209 addr 0 · silent UART drive</div></div><div class="pchip" data-k="ymotor" style="--zc:#7ADF8E"><div class="ph"><em>20</em><b>Y MOTOR</b><code>2B·1B·1A·2A</code></div><div class="prow"><i class="sn">·</i><b>coil 1</b><span>middle pair</span></div><div class="prow"><i class="sn">·</i><b>coil 2</b><span>outer pair</span></div><div class="pnote">TMC2209 addr 2</div></div><div class="pchip" data-k="z1" style="--zc:#7ADF8E"><div class="ph"><em>21</em><b>Z1 MOTOR</b><code>2B·1B·1A·2A</code></div><div class="prow"><i class="sn">·</i><b>coil 1</b><span>middle pair</span></div><div class="prow"><i class="sn">·</i><b>coil 2</b><span>outer pair</span></div><div class="pnote">ONE driver twinned across Z1+Z2 (addr 1)</div></div><div class="pchip" data-k="z2" style="--zc:#7ADF8E"><div class="ph"><em>22</em><b>Z2 MOTOR</b><code>2B·1B·1A·2A</code></div><div class="prow"><i class="sn">·</i><b>coil 1</b><span>same driver as Z1</span></div><div class="prow"><i class="sn">·</i><b>coil 2</b><span>identical motors only</span></div><div class="pnote">both Z move as one — wire both identically</div></div></div>
+    <div class="pzone pz-left"><div class="pchip" data-k="fan1" style="--zc:#3FD8FF"><div class="ph"><em>7</em><b>FAN1 · PART FAN</b><code>12/24V · IO17</code></div><div class="prow"><i class="sp">+</i><b>12/24V</b><span>fan + (red wire)</span></div><div class="prow"><i class="ss">~</i><b>IO17</b><span>fan − · switched</span></div><div class="pnote">reversed fan = never spins</div></div><div class="pchip" data-k="fan2" style="--zc:#3FD8FF"><div class="ph"><em>8</em><b>FAN2 · HOTEND FAN</b><code>12/24V · IO18</code></div><div class="prow"><i class="sp">+</i><b>12/24V</b><span>fan + (red wire)</span></div><div class="prow"><i class="ss">~</i><b>IO18</b><span>fan − · switched</span></div><div class="pnote">auto-on at 50 °C in the shipped config</div></div><div class="pchip" data-k="fan3" style="--zc:#3FD8FF"><div class="ph"><em>9</em><b>FAN3 · BOARD FAN</b><code>12/24V · IO20</code></div><div class="prow"><i class="sp">+</i><b>12/24V</b><span>fan + (red wire)</span></div><div class="prow"><i class="ss">~</i><b>IO20</b><span>fan − · shared with Laser</span></div><div class="pnote">FAN3 or Laser — one GPIO, pick one</div></div><div class="pchip" data-k="rgb" style="--zc:#3FD8FF"><div class="ph"><em>10</em><b>RGB · NEOPIXEL</b><code>GND · IO24 · 5V</code></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span>outer pin</span></div><div class="prow"><i class="sd">D</i><b>IO24</b><span>DATA — center pin</span></div><div class="prow"><i class="sp">+</i><b>5V</b><span>outer pin · 3.5 A shared fuse</span></div><div class="pnote">flip the plug = reversed 5V/GND = dead strip</div></div></div>
+    <div class="pstage">
+      <img src="pico_flat_official.jpg" alt="SKR Pico — official flat view with Honeybadger's measured pinout rings">
+      <div class="ring" data-k="power" style="left:91.1%;top:83.1%;width:7.6%;height:18.1%;--zc:#FF5A60"><span>1</span></div><div class="ring" data-k="he" style="left:91.1%;top:50.3%;width:7.6%;height:17.4%;--zc:#FF5A60"><span>2</span></div><div class="ring" data-k="hb" style="left:91.1%;top:66.8%;width:7.6%;height:17.7%;--zc:#FF5A60"><span>3</span></div><div class="ring" data-k="laser" style="left:91.5%;top:34.3%;width:9.4%;height:17.3%;--zc:#FF5A60"><span>4</span></div><div class="ring" data-k="usbc" style="left:91.2%;top:19.6%;width:9.8%;height:15.6%;--zc:#C08CFF"><span>5</span></div><div class="ring" data-k="p5" style="left:7.0%;top:29.4%;width:11.8%;height:24.3%;--zc:#C08CFF"><span>6</span></div><div class="ring" data-k="fan1" style="left:6.1%;top:50.6%;width:9.4%;height:13.5%;--zc:#3FD8FF"><span>7</span></div><div class="ring" data-k="fan2" style="left:6.1%;top:63.1%;width:9.4%;height:13.6%;--zc:#3FD8FF"><span>8</span></div><div class="ring" data-k="fan3" style="left:6.1%;top:75.5%;width:9.4%;height:13.8%;--zc:#3FD8FF"><span>9</span></div><div class="ring" data-k="rgb" style="left:52.0%;top:72.9%;width:12.2%;height:11.1%;--zc:#3FD8FF"><span>10</span></div><div class="ring" data-k="xstop" style="left:37.3%;top:91.6%;width:12.6%;height:12.7%;--zc:#FFC24B"><span>11</span></div><div class="ring" data-k="ystop" style="left:48.8%;top:91.6%;width:12.5%;height:12.7%;--zc:#FFC24B"><span>12</span></div><div class="ring" data-k="zstop" style="left:60.7%;top:91.6%;width:12.5%;height:12.7%;--zc:#FFC24B"><span>13</span></div><div class="ring" data-k="e0stop" style="left:62.5%;top:72.9%;width:12.5%;height:11.0%;--zc:#FFC24B"><span>14</span></div><div class="ring" data-k="th0" style="left:27.1%;top:91.6%;width:10.0%;height:12.7%;--zc:#FFC24B"><span>15</span></div><div class="ring" data-k="thb" style="left:18.2%;top:91.6%;width:10.1%;height:12.7%;--zc:#FFC24B"><span>16</span></div><div class="ring" data-k="probe" style="left:79.8%;top:55.9%;width:8.0%;height:29.3%;--zc:#FFC24B"><span>17</span></div><div class="ring" data-k="emotor" style="left:19.8%;top:7.1%;width:15.3%;height:11.6%;--zc:#7ADF8E"><span>18</span></div><div class="ring" data-k="xmotor" style="left:33.2%;top:7.1%;width:15.1%;height:11.6%;--zc:#7ADF8E"><span>19</span></div><div class="ring" data-k="ymotor" style="left:46.8%;top:7.1%;width:15.1%;height:11.6%;--zc:#7ADF8E"><span>20</span></div><div class="ring" data-k="z1" style="left:60.3%;top:7.6%;width:15.1%;height:12.6%;--zc:#7ADF8E"><span>21</span></div><div class="ring" data-k="z2" style="left:79.6%;top:7.6%;width:15.5%;height:12.6%;--zc:#7ADF8E"><span>22</span></div>
+    </div>
+    <div class="pzone pz-right"><div class="pchip" data-k="power" style="--zc:#FF5A60"><div class="ph"><em>1</em><b>POWER IN</b><code>12/24V · GND</code></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span>top pole — PSU V−</span></div><div class="prow"><i class="sp">+</i><b>12/24V</b><span>bottom pole — PSU V+</span></div><div class="pnote">poles top→bottom · reversed = crowbar through the 20 A fuse</div></div><div class="pchip" data-k="he" style="--zc:#FF5A60"><div class="ph"><em>2</em><b>HE · HOTEND HEATER</b><code>IO23 · 12/24V</code></div><div class="prow"><i class="ss">~</i><b>IO23</b><span>switched − leg (low-side)</span></div><div class="prow"><i class="sp">+</i><b>12/24V</b><span>PSU rail</span></div><div class="pnote">NON-POLARIZED for the cartridge — either wire, either screw</div></div><div class="pchip" data-k="hb" style="--zc:#FF5A60"><div class="ph"><em>3</em><b>HB · BED HEATER</b><code>IO21 · 12/24V</code></div><div class="prow"><i class="ss">~</i><b>IO21</b><span>switched − leg (low-side)</span></div><div class="prow"><i class="sp">+</i><b>12/24V</b><span>PSU rail</span></div><div class="pnote">NON-POLARIZED — but both screws sit at PSU+ when idle</div></div><div class="pchip" data-k="laser" style="--zc:#FF5A60"><div class="ph"><em>4</em><b>LASER (PWM)</b><code>12/24V · GND · IO20</code></div><div class="prow"><i class="sp">+</i><b>12/24V</b><span>constant PSU</span></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span></span></div><div class="prow"><i class="ss">~</i><b>IO20</b><span>TTL-PWM — shared with FAN3</span></div><div class="pnote">pins top→bottom · use Laser OR FAN3, never both</div></div><div class="pchip" data-k="usbc" style="--zc:#C08CFF"><div class="ph"><em>5</em><b>USB-C</b><code>data</code></div><div class="prow"><i class="sd">D</i><b>D+ / D−</b><span>Klipper/Marlin host link</span></div><div class="prow"><i class="sn">·</i><b>5V</b><span>only with USB-Power jumper — OFF on main power</span></div><div class="pnote">right edge, top corner</div></div><div class="pchip" data-k="p5" style="--zc:#C08CFF"><div class="ph"><em>6</em><b>P5 · RASPBERRY PI LINK</b><code>5V·5V·GND·RX·TX</code></div><div class="prow"><i class="sp">+</i><b>5V ×2</b><span>powers the Pi (3.5 A fuse)</span></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span></span></div><div class="prow"><i class="sd">D</i><b>IO1</b><span>RXD ← Pi TX</span></div><div class="prow"><i class="sd">D</i><b>IO0</b><span>TXD → Pi RX</span></div><div class="pnote">pins top→bottom · BTT’s pinout mislabels this “Laser” — it isn’t</div></div></div>
+    <div class="pzone pz-bottom"><div class="pchip" data-k="xstop" style="--zc:#FFC24B"><div class="ph"><em>11</em><b>X-STOP</b><code>IO4 · GND · 5V</code></div><div class="prow"><i class="ss">~</i><b>IO4</b><span>signal · buffered</span></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span>switch here + signal</span></div><div class="prow"><i class="sp">+</i><b>5V</b><span>powered sensors ONLY</span></div><div class="pnote">pins left→right · switch across GND+5V shorts the rail</div></div><div class="pchip" data-k="ystop" style="--zc:#FFC24B"><div class="ph"><em>12</em><b>Y-STOP</b><code>IO3 · GND · 5V</code></div><div class="prow"><i class="ss">~</i><b>IO3</b><span>signal · buffered</span></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span></span></div><div class="prow"><i class="sp">+</i><b>5V</b><span>sensors only</span></div><div class="pnote">pins left→right</div></div><div class="pchip" data-k="zstop" style="--zc:#FFC24B"><div class="ph"><em>13</em><b>Z-STOP</b><code>IO25 · GND · 5V</code></div><div class="prow"><i class="ss">~</i><b>IO25</b><span>signal · buffered</span></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span></span></div><div class="prow"><i class="sp">+</i><b>5V</b><span>sensors only</span></div><div class="pnote">pins left→right</div></div><div class="pchip" data-k="e0stop" style="--zc:#FFC24B"><div class="ph"><em>14</em><b>E0-STOP · RUNOUT</b><code>IO16 · GND · 5V</code></div><div class="prow"><i class="ss">~</i><b>IO16</b><span>signal · buffered</span></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span></span></div><div class="prow"><i class="sp">+</i><b>5V</b><span>smart sensors</span></div><div class="pnote">interior header, left→right</div></div><div class="pchip" data-k="th0" style="--zc:#FFC24B"><div class="ph"><em>15</em><b>TH0 · HOTEND TEMP</b><code>GND · IO27</code></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span></span></div><div class="prow"><i class="ss">~</i><b>IO27</b><span>ADC · 4.7 k pull-up</span></div><div class="pnote">NON-POLARIZED — either way round</div></div><div class="pchip" data-k="thb" style="--zc:#FFC24B"><div class="ph"><em>16</em><b>THB · BED TEMP</b><code>GND · IO26</code></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span></span></div><div class="prow"><i class="ss">~</i><b>IO26</b><span>ADC · 4.7 k pull-up</span></div><div class="pnote">NON-POLARIZED</div></div><div class="pchip" data-k="probe" style="--zc:#FFC24B"><div class="ph"><em>17</em><b>PROBE · BLTOUCH</b><code>5-pin block</code></div><div class="prow"><i class="ss">~</i><b>PROBE</b><span>Z signal — UNBUFFERED, never 5 V</span></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span>probe pair return</span></div><div class="prow"><i class="ss">~</i><b>IO29</b><span>servo control</span></div><div class="prow"><i class="sp">+</i><b>5V</b><span>servo power</span></div><div class="prow"><i class="sg">⏚</i><b>GND</b><span>servo return</span></div><div class="pnote">pins top→bottom · white/black + orange/red/brown</div></div></div>
+  </div>
+  <div class="pleg"><span><i class="sp">+</i> supply / positive</span><span><i class="sg">⏚</i> ground / negative</span><span><i class="ss">~</i> signal / switched</span><span><i class="sd">D</i> data</span><span class="zl"><em style="--zc:#7ADF8E">MOTION</em> <em style="--zc:#3FD8FF">AIR & LIGHT</em> <em style="--zc:#FF5A60">POWER & HEAT</em> <em style="--zc:#C08CFF">LINKS</em> <em style="--zc:#FFC24B">SENSING</em></span></div>
+</div></section>
+
+<section class="soft"><div class="wrap">
+  <div class="kicker rv">STEP 1 · THE 60-SECOND MAP</div>
+  <h2 class="rv">What runs where — the picture nobody draws for you</h2>
+  <p class="sub rv">Two honest ways to run this board — the difference is WHERE the brain lives.
+  Neither is wrong; the page covers both to the same depth.</p>
+
+  <div class="lanetag rv">LANE A · THE KLIPPER WAY <small>— brain on the Pi (the V0 crowd's favorite)</small></div>
+  <div class="maprow rv">
+    <div class="node"><div class="role">YOUR PC</div><h3>Slicer</h3><p>OrcaSlicer / Cura turns models into G-code. Uploads over Wi-Fi.</p></div>
+    <div class="lnk"><div class="wl">Wi-Fi</div><div class="wire"><i></i></div></div>
+    <div class="node"><div class="role">THE BRAIN · RASPBERRY PI</div><h3>Klipper</h3><p>Does the motion math. The control screen is YOUR pick:</p>
+      <div class="chips"><span>Mainsail</span><span>Fluidd</span><span class="oc">OctoPrint</span><span>KlipperScreen</span></div></div>
+    <div class="lnk"><div class="wl">one 5-wire cable (P5)</div><div class="wire"><i></i></div></div>
+    <div class="node"><div class="role">THE REFLEXES · THIS BOARD</div><h3>SKR Pico</h3><p>Executes every step pulse with microsecond timing. Motors, heaters, fans, sensors.</p></div>
+  </div>
+
+  <div class="lanetag rv">LANE B · THE MARLIN WAY <small>— the whole brain on the board, classic and self-contained</small></div>
+  <div class="maprow rv">
+    <div class="node"><div class="role">YOUR PC</div><h3>Slicer</h3><p>Same slicers, same G-code — sent over Wi-Fi. (No SD slot on this board: a host feeds it.)</p></div>
+    <div class="lnk"><div class="wl">Wi-Fi</div><div class="wire"><i></i></div></div>
+    <div class="node"><div class="role">THE REMOTE CONTROL · RASPBERRY PI</div><h3>OctoPrint</h3><p>Marlin's classic partner — uploads, camera, the plugin universe. The brain stays on the board.</p>
+      <div class="chips"><span class="oc">works with Marlin natively</span><span class="oc">works with Klipper too</span></div></div>
+    <div class="lnk"><div class="wl">USB — or the same 5-wire P5 link</div><div class="wire"><i></i></div></div>
+    <div class="node"><div class="role">THE WHOLE BRAIN · THIS BOARD</div><h3>SKR Pico + Marlin</h3><p>Thinks AND executes onboard — motion math, temps, safety, all on the RP2040.</p></div>
+  </div>
+</div></section>
+
+<section id="board"><div class="wrap">
+  <div class="kicker rv">STEP 2 · KNOW YOUR BOARD — THE REAL ONE, FLAT</div>
+  <h2 class="rv">Every label is a doorway — the whole screen works for you</h2>
+  <p class="sub rv">Center: the real board, flat — BigTreeTech's own official top view, straight from their
+  manual. Sides: real circuits from the schematic, macro details, and live demos as this page grows.</p>
+
+  <div class="tour rv">
+    <div class="rail">
+      <div class="railcard">
+        <div style="background:linear-gradient(180deg,#FBFCFE,#F4F6F9);padding:12px 12px 6px">
+          <div class="rtag" style="padding:2px 2px 6px">FROM THE SCHEMATIC · ENDSTOP INPUT</div>
+          <svg viewBox="0 0 240 96">
+            <rect x="6" y="30" width="44" height="34" rx="5" class="sc-boxr"/>
+            <text x="28" y="50" class="sc-t" text-anchor="middle">X-STOP</text>
+            <path d="M50 40 H96" class="sc-sig cur"/>
+            <rect x="96" y="34" width="26" height="12" class="sc-boxb"/>
+            <text x="109" y="30" class="sc-m" text-anchor="middle">100 Ω</text>
+            <path d="M122 40 H168" class="sc-sig cur"/>
+            <path d="M140 40 V18" class="sc-sig"/>
+            <rect x="134" y="6" width="12" height="12" class="sc-boxb"/>
+            <text x="152" y="14" class="sc-m">10 kΩ → 3.3 V</text>
+            <rect x="168" y="26" width="62" height="28" rx="5" class="sc-box"/>
+            <text x="199" y="41" class="sc-t" text-anchor="middle">RP2040</text>
+            <text x="199" y="50" class="sc-pin" text-anchor="middle">gpio4</text>
+            <text x="120" y="88" class="sc-m" text-anchor="middle">buffered · pulled-up · powered-sensor friendly</text>
+          </svg>
+        </div>
+        <div class="rc"><h4>Real circuit, real answer</h4><p>Why a bare switch just works — and why 5 V sensors are welcome too. Every snippet drawn from the actual schematic.</p></div>
+      </div>
+      <div class="railcard">
+        <img src="pico_official_4.jpg" alt="Macro — screw terminals and USB-C">
+        <div class="rc"><div class="rtag">UP CLOSE · REAL HARDWARE</div><h4>Know it when you hold it</h4><p>Screw terminals for power and heaters, USB-C on the corner. Macro shots for every port below.</p></div>
+      </div>
+    </div>
+    <div class="chipcol" id="chipsL"></div>
+    <div>
+      <div class="toprowchips" id="chipsT"></div>
+      <figure class="boardpanel">
+        <div class="stagewrap" id="stage">
+          <img src="pico_flat_official.jpg" alt="SKR Pico — official flat top view, BigTreeTech manual">
+          <svg class="ov" viewBox="0 0 100 100" preserveAspectRatio="none" id="lines"></svg>
+        </div>
+        <figcaption>The real board, flat — BigTreeTech's own official top view (from their manual, credited). Exactly what's in your hands.</figcaption>
+      </figure>
+      <div class="botrowchips" id="chipsB"></div>
+      <div class="detail" id="detail">
+        <h3>Click any label <span class="gp"></span></h3>
+        <p>The full connector card appears here — plain English first, engineering depth underneath. Both lanes, never mixed.</p>
+      </div>
+    </div>
+    <div class="chipcol" id="chipsR"></div>
+    <div class="rail">
+      <div class="railcard demo">
+        <img src="pico_official_6.jpg" alt="SKR Pico with cover" style="opacity:.85">
+        <div class="play" id="demoplay" style="cursor:pointer">▶</div>
+        <div class="rc"><div class="rtag" style="color:#FF6B70">LIVE DEMO · LANDING SOON</div>
+        <h4>See the wiring move</h4><p>Wire the X motor, tap "jog +10" — watch a photoreal printer respond on screen. The relay-trainer engine, pointed at 3D printing. Built from real CAD, not cartoons.</p></div>
+      </div>
+      <div class="railcard">
+        <div class="rc"><div class="rtag">WHY THIS BOARD</div><h4>The V0's sweetheart</h4>
+        <p>Tiny footprint, silent drivers, one-cable Pi pairing. If you're building a V0, this page IS your wiring chapter.</p></div>
+      </div>
+      <div class="railcard">
+        <div class="rc"><div class="rtag">TESTED PROMISE</div><h4>What we verified — and how</h4>
+        <p>Schematic ✓ pin map ✓ shipped firmware config ✓ — three official sources, zero disagreements.
+        Bench run on real hardware: pending, and the page says so until it's done.</p></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<div class="divider-trace" aria-hidden="true"><svg viewBox="0 0 1400 64" preserveAspectRatio="none">
+  <path d="M-10 32 H420 L450 12 H700 L730 52 H1000 L1030 32 H1410"/>
+  <path class="dcur" d="M-10 32 H420 L450 12 H700 L730 52 H1000 L1030 32 H1410"/>
+  <path class="dcur b" d="M-10 32 H420 L450 12 H700 L730 52 H1000 L1030 32 H1410"/>
+</svg></div>
+<!-- ============ WIRING CHAPTER — THE REAL SCHEMATICS ============ -->
+<section class="soft" id="wiring"><div class="wrap">
+  <div class="kicker rv">STEP 3 · WIRE IT — THE ENGINEERING CHAPTER</div>
+  <h2 class="rv">The real schematics — BigTreeTech's own engineering sheet</h2>
+  <div class="getos rv" style="border-color:var(--red)"><b>POLARITY LEGEND — every card below marks it:</b>
+  <span class="pol p">+</span>= supply side (red wire) · <span class="pol n">−/GND</span>= return (black wire) ·
+  <span class="pol x">NON-POLARIZED</span>= either wire, either terminal, stated outright.
+  Pin orders read off BTT's flat view (motors on the top edge) — if your board is mounted rotated,
+  <b>trust the printed silkscreen, never the position.</b></div>
+  <p class="sub rv">No redrawn approximations. These are print-resolution sections of the manufacturer's
+  actual schematic — the same drawing their engineers built the board from — with our plain-English
+  reading guide and the multimeter checks that keep hardware alive. Full sheet downloadable below.</p>
+
+  <div class="wgrid rv">
+    <div class="wcard">
+      <div class="whead"><h3>Stepper driver — the complete X circuit</h3><span class="gp">XM1 · TMC2209 · gpio11/10/12</span></div>
+      <div class="art"><img src="sch/sch_driver_x.png" alt="Real schematic — X axis TMC2209 driver circuit" loading="lazy"></div>
+      <div class="wtxt"><b>Read it like this:</b> step/dir/enable arrive from the RP2040 (left), the TMC2209
+      does the silent-drive magic, and coil pairs leave on XM1 pins 1A/2A and 1B/2B (right). The P2 header is
+      the X-DIAG jumper for sensorless homing. Y, Z and E0 are this exact circuit with different UART addresses.
+      <div class="mm">⚡ MULTIMETER — coil pairing on an unknown motor cable: a coil pair reads ~1–5 Ω across
+      it; across different coils = open. Verify before first power if wire colors look nonstandard.</div>
+      <div class="mm">⚠ Motor backwards? Flip it in firmware (Klipper: add/remove <b>!</b> on dir_pin) — don't re-crimp.</div></div>
+    </div>
+    <div class="wcard">
+      <div class="whead"><h3>Endstops, probe & servo — the input bank</h3><span class="gp">X/Y/Z-STOP · E0-STOP · gpio4/3/25/16</span></div>
+      <div class="art"><img src="sch/sch_endstop.png" alt="Real schematic — endstop input circuits" loading="lazy"></div>
+      <div class="wtxt"><b>Read it like this:</b> each 3-pin port (P1/P4/P6/P8) carries 5 V, GND and a signal
+      that's pulled to 3.3 V through 10 kΩ, RC-filtered, then buffered through the 74LVC gates before the
+      RP2040 ever sees it. That's why a bare switch just works — and why powered 5 V sensors are welcome.
+      SERVOS and PROBE (bottom) feed the BLTouch port.
+      <div class="mm"><span class="pol n">PIN ORDER</span> left→right: <b>SIGNAL · GND · 5V</b> (silkscreen IO4/3/25/16 · GND · 5V).
+      A plain switch goes on <b>SIGNAL + GND</b> — either way round, no polarity. The 5 V pin is ONLY for powered sensors.
+      ⚠ A switch wired across GND + 5V dead-shorts the fused 5 V rail on every trigger — brownouts, reboots, and it kills a Pi powered from this board.</div>
+      <div class="mm">⚡ MULTIMETER — continuity beep across a switch: silent open, beep pressed = wired right.
+      Then QUERY_ENDSTOPS before the first home. Always.</div></div>
+    </div>
+    <div class="wcard">
+      <div class="whead"><h3>Thermistors — the sensing circuit</h3><span class="gp">TH0 gpio27 · THB gpio26</span></div>
+      <div class="art"><img src="sch/sch_thermistor.png" alt="Real schematic — thermistor input circuits" loading="lazy"></div>
+      <div class="wtxt"><b>Read it like this:</b> your 100 k NTC pulls against the 4.7 kΩ reference (R11/R25),
+      the 2.37 k + 0.1 µF pair cleans the signal, and BAV99 diodes clamp anything nasty before the ADC pin.
+      <span class="pol x">NON-POLARIZED</span> — either wire, either pin. BTT's config ships expecting the EPCOS 100K — swapping sensors is one config line.
+      <div class="mm">⚡ MULTIMETER — a healthy 100 k thermistor reads ≈100 kΩ at 25 °C and drops as it warms.
+      0 Ω or open = replace it before it lies to your heater.</div></div>
+    </div>
+    <div class="wcard">
+      <div class="whead"><h3>Heaters — bed & hotend muscle</h3><span class="gp">HB gpio21 · HE gpio23</span></div>
+      <div class="art"><img src="sch/sch_heaters.png" alt="Real schematic — bed and extruder heater circuits" loading="lazy"></div>
+      <div class="wtxt"><b>Read it like this:</b> the + screw sits at PSU voltage whenever the printer is on;
+      the low-side MOSFETs (APG120N04NF for the bed's amps, HY1904C2 for the hotend) switch the return leg on
+      firmware PWM. LED4/LED5 glow when each output fires — your first free diagnostic.
+      <div class="mm"><span class="pol x">NON-POLARIZED</span> — a heater cartridge has no + or −: either wire, either screw.
+      ⚠ But because switching is LOW-SIDE, <b>both screws sit at PSU voltage whenever the printer is on</b> — even with the heater "off".
+      Power down before touching heater wiring.</div>
+      <div class="mm">⚡ MULTIMETER — cold sanity check: a 24 V/40 W cartridge ≈14 Ω; a 24 V/60 W bed pad ≈10 Ω
+      (V²÷P). Wildly off or open = don't power it. And re-torque bed screws after the first heat cycle.</div></div>
+    </div>
+    <div class="wcard">
+      <div class="whead"><h3>Fans — three outputs, one circuit</h3><span class="gp">FAN1/2/3 · gpio17/18/20</span></div>
+      <div class="art"><img src="sch/sch_fan.png" alt="Real schematic — the three fan output circuits" loading="lazy"></div>
+      <div class="wtxt"><b>Read it like this:</b> three identical low-side switches (ES3400) with DSS14 flyback
+      diodes and indicator LEDs. In BTT's shipped config: FAN1 = part fan (M106), FAN2 = hotend fan (auto at
+      50 °C), FAN3 = board fan (tied to bed) — and FAN3's gpio20 is shared with the Laser header: one or the other.
+      <div class="mm"><span class="pol p">PIN ORDER</span> top→bottom: <b>12/24V (+, red) · IO17/18/20 (−, black, switched)</b>.
+      POLARIZED: a reversed fan simply never spins — if it won't start, flip the plug before blaming the board.</div>
+      <div class="mm">⚡ CHECK FIRST — fan ports pass YOUR PSU voltage. On a 24 V machine, a 12 V fan cooks in
+      seconds. The sticker on the fan hub tells the truth. Red to +.</div></div>
+    </div>
+    <div class="wcard">
+      <div class="whead"><h3>Power — from PSU to Pi, the whole story</h3><span class="gp">P25 in · TPS5450 · P5 out</span></div>
+      <div class="art"><img src="sch/sch_power.png" alt="Real schematic — power input, 5V buck, Pi power header" loading="lazy"></div>
+      <div class="wtxt"><b>Read it like this:</b> 12/24 V enters through the 20 A fuse (F2) past the S5BBF
+      reverse-polarity diode. The TPS5450 buck makes the 5 V rail; F4 (3.5 A) guards the P5 header that powers
+      your Pi — the RXD0/TXD0 lines beside it are the UART conversation. AMS1117 makes 3.3 V for the brain.
+      <div class="mm"><span class="pol p">WHICH SCREW IS + :</span> the one printed <b>12/24V</b> (bottom pole in the flat view);
+      <b>GND</b> is the top pole. Anchor to the silkscreen, not the position. ⚠ Reversed power is a crowbar event —
+      the protection diode conducts hard through the 20 A fuse. Best case a blown fuse; don't find out.</div>
+      <div class="mm">⚡ HONEST LIMIT — 3.5 A on P5 runs a Pi Zero 2 W / 3A+ happily. A Pi 4 under load can
+      exceed it: own supply, connect GND+TX+RX only.</div></div>
+    </div>
+  </div>
+
+  <div class="kicker rv" style="margin-top:44px">REAL INSTALLS · STRAIGHT FROM THE FACTORY MANUAL</div>
+  <h2 class="rv">Wire it exactly like this</h2>
+  <p class="sub rv">Real board, real components, real wires — BigTreeTech's own installation photography,
+  each cross-checked against the schematic above and our verified pin table.</p>
+  <div class="wgrid rv">
+    <div class="wcard">
+      <div class="whead"><h3>Raspberry Pi — one cable, power + data</h3><span class="gp">P5 ↔ Pi GPIO · /dev/ttyAMA0</span></div>
+      <div class="art" style="background:#fff"><img src="wire_pi_uart.png" alt="Real photo — SKR Pico wired to a Raspberry Pi with the 5-wire UART cable" loading="lazy"></div>
+      <div class="wtxt"><b>The actual harness:</b> five wires from P5 to the Pi's header — two 5 V, ground, and
+      the crossed TX/RX pair. Enable the Pi's UART (one line in config.txt — flash guide below) and the brain
+      meets the reflexes. <span style="color:var(--mut);font-size:11.5px">Photo © BigTreeTech, official manual.</span>
+      <div class="mm"><span class="pol n">PIN ORDER</span> top→bottom: <b>5V · 5V · GND · RXD(IO1) · TXD(IO0)</b>.
+      Crossed TX/RX just means no comms — swap and retry, harmless. But never land 5 V on the IO pins: RP2040 pins are not 5 V-tolerant.
+      ⚠ NAMING TRAP: BTT's own pinout diagram captions BOTH this header AND the real laser output "Laser" — the actual laser port
+      is the 3-pin by the HE terminal. Never wire a laser module here.</div></div>
+    </div>
+    <div class="wcard">
+      <div class="whead"><h3>BLTouch — auto bed leveling</h3><span class="gp">probe gpio22 · servo gpio29</span></div>
+      <div class="art" style="background:#fff"><img src="wire_bltouch.jpg" alt="Real illustration — BLTouch wired to the SKR Pico probe and servo ports" loading="lazy"></div>
+      <div class="wtxt"><b>Five wires, two plugs:</b> probe signal + GND to the probe pair; servo, 5 V and GND
+      to the servo pins — and mind the <b>BLTouch jumper</b> BTT marks in red. Klipper block is one uncomment
+      away in the shipped config. <span style="color:var(--mut);font-size:11.5px">Illustration © BigTreeTech, official manual.</span>
+      <div class="mm"><span class="pol n">PIN ORDER</span> top→bottom: <b>PROBE · GND · SERVO(IO29) · 5V · GND</b> —
+      BLTouch: white→PROBE, black→GND beside it; orange→SERVO, red→5V, brown→bottom GND.
+      ⚠ The PROBE pin is UNBUFFERED (straight to the RP2040, unlike the endstops) — 5 V on it risks the chip. Match the colors, then meter it.</div></div>
+    </div>
+    <div class="wcard">
+      <div class="whead"><h3>Inductive proximity sensor</h3><span class="gp">probe gpio22 · NPN/PNP jumper</span></div>
+      <div class="art" style="background:#fff"><img src="wire_proximity.jpg" alt="Real illustration — proximity switch wiring with NPN/PNP jumper settings" loading="lazy"></div>
+      <div class="wtxt"><b>Three wires:</b> Vcc, GND, and the probe signal — then set the two jumpers BTT marks:
+      one selects the proximity-switch path, the other picks <b>NPN (fitted) or PNP (removed)</b>. Wrong jumper =
+      probe that never triggers; now you know why. <span style="color:var(--mut);font-size:11.5px">Illustration © BigTreeTech, official manual.</span></div>
+    </div>
+    <div class="wcard">
+      <div class="whead"><h3>RGB / Neopixel strip</h3><span class="gp">gpio24 · 5 V · GND</span></div>
+      <div class="art" style="background:#fff"><img src="wire_rgb.jpg" alt="Real illustration — Neopixel strip wired to the RGB port" loading="lazy"></div>
+      <div class="wtxt"><b>Three wires to glow:</b> 5 V, GND, and data (gpio24) to the strip's DIN. The board's
+      own RGB LED sits first in the chain — count it in your config. Short runs only: the 5 V rail is shared
+      and fused at 3.5 A. <span style="color:var(--mut);font-size:11.5px">Illustration © BigTreeTech, official manual.</span>
+      <div class="mm"><span class="pol p">PIN ORDER</span> left→right: <b>GND · DATA(IO24) · 5V</b> — data rides the CENTER pin.
+      ⚠ POLARIZED, and it bites: flipping the plug end-for-end keeps data centered but swaps 5 V and GND —
+      reverse polarity destroys WS2812/Neopixel strips. Map the STRIP's wire order to the silkscreen; never assume they match.</div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ FLASH WALKTHROUGH + DOWNLOADS ============ -->
+<section id="flash"><div class="wrap">
+  <div class="kicker rv">STEP 4 · FLASH IT — YOUR WAY</div>
+  <h2 class="rv">Fifteen minutes from box to talking board</h2>
+  <p class="sub rv">The recommended Klipper path, exactly as we'd do it. Marlin and other roads below —
+  every one verified, none assumed.</p>
+  <div class="steps rv">
+    <div class="step"><b>Get the firmware</b>Download klipper-USB.uf2 (or UART0 if using the 5-wire link) right below. Pre-built by BTT for this exact board.</div>
+    <div class="step"><b>BOOTSEL mode</b>Hold the BOOT button, plug USB-C into your Pi/PC, release. The Pico appears as a USB drive named RPI-RP2.</div>
+    <div class="step"><b>Drag. Drop. Done.</b>Copy the .uf2 onto the drive — it reboots itself as a Klipper board. No compiler, no terminal, no drama.</div>
+    <div class="step"><b>Point the Pi at it</b>Install Mainsail OS on the Pi, drop in BTT's printer.cfg (below), set the serial line (guide covers UART vs USB).</div>
+    <div class="step"><b>First-boot checks</b>Temps read room-temp sane → QUERY_ENDSTOPS → jog each axis 10 mm → first home with a finger on the power switch.</div>
+  </div>
+
+  <figure class="bootfig rv">
+    <img src="boot_reset.jpg" alt="Real board — BOOT, RESET and USB-power jumper locations, marked by BigTreeTech">
+    <div class="bt"><h3>Where BOOT and RESET actually live</h3>
+    <p>The real board, marked by BigTreeTech themselves: <b>Boot</b> center, <b>Reset</b> lower-left,
+    and the <b>USB-Power</b> jumper by the USB-C corner (fit it ONLY when powering the board from USB alone
+    on the bench). Hold Boot, plug in, release — the board becomes a USB drive. That's the whole trick.
+    <span style="color:var(--mut);font-size:11.5px;display:block;margin-top:6px">Photo © BigTreeTech, official manual.</span></p>
+    <img class="btsch" src="sch/sch_usb.png" alt="The USB power circuit — cut from BigTreeTech's official SKR Pico schematic">
+    <div style="font-size:11px;color:var(--mut);margin-top:6px">The actual circuit behind that jumper — cut straight
+    from BTT's engineering schematic. Click to inspect.</div></div>
+  </figure>
+  <h2 class="rv" style="margin-top:52px">The files — read the label before you flash</h2>
+  <p class="sub rv">Every file below announces exactly what it is and which hardware it belongs to.
+  The two firmware builds are mutually exclusive — that's the #1 wrong-download on this board.</p>
+  <div class="pickone rv"><b>⚡ PICK ONE — how does your Pico talk to the Pi?</b><br>
+  USB-C cable → <em>klipper-USB.uf2</em> &nbsp;·&nbsp; 5-wire P5 lead → <em>klipper-UART0.uf2</em>.
+  Different builds, not interchangeable: a UART-flashed board will NOT show up on USB, and a
+  USB-flashed board is deaf on the 5-wire link. Flash the one that matches your cable.</div>
+  <div id="downloads" class="dlgrid rv">
+    <div class="dl">
+      <div class="tag">FIRMWARE · PRE-BUILT BY BTT</div>
+      <h3>Klipper firmware (USB)</h3>
+      <div class="ann ok">✔ FOR: SKR Pico V1.0 · USB-C cable to the Pi</div>
+      <div class="ann no">✕ NOT for the 5-wire P5/UART link — that's the other file</div>
+      <p>BTT's official pre-built klipper.uf2 for USB-C connection to the Pi. The simplest path — one cable does data.</p>
+      <a class="btn" href="downloads/klipper-USB.uf2" download>⬇ Download klipper-USB.uf2</a>
+      <div class="meta">43 KB · mirrored with credit · <a href="https://github.com/bigtreetech/SKR-Pico" style="color:var(--red)">official source ↗</a></div>
+    </div>
+    <div class="dl">
+      <div class="tag">FIRMWARE · PRE-BUILT BY BTT</div>
+      <h3>Klipper firmware (UART)</h3>
+      <div class="ann ok">✔ FOR: SKR Pico V1.0 · the 5-wire P5/UART lead</div>
+      <div class="ann no">✕ NOT for USB — this build never enumerates on USB-C</div>
+      <p>The 5-wire P5 version — power and data in one lead, the classic V0 way. Pair with the wiring diagram above.</p>
+      <a class="btn" href="downloads/klipper-UART0.uf2" download>⬇ Download klipper-UART0.uf2</a>
+      <div class="meta">40 KB · mirrored with credit · <a href="https://github.com/bigtreetech/SKR-Pico" style="color:var(--red)">official source ↗</a></div>
+    </div>
+    <div class="dl">
+      <div class="tag">CONFIG · READY TO EDIT</div>
+      <h3>printer.cfg starting point</h3>
+      <div class="ann warn">⚠ EDIT BEFORE USE — ships expecting the UART link (serial: /dev/ttyAMA0).
+      USB users: swap in your /dev/serial/by-id line. Pi model matters — the picker below gives your exact line.</div>
+      <p>BTT's shipped Klipper config for this board — every pin pre-mapped. Ender-3-shaped defaults; V0 users swap in the Voron config (guide below).</p>
+      <a class="btn" href="downloads/SKR-Pico-klipper.cfg" download>⬇ Download SKR-Pico-klipper.cfg</a>
+      <div class="meta">2.5 KB · every pin verified against this page</div>
+    </div>
+    <div class="dl">
+      <div class="tag">THE SOURCE OF TRUTH</div>
+      <h3>Official schematic (PDF)</h3>
+      <div class="ann ok">✔ FOR: every SKR Pico V1.0 · reference document — nothing to flash, nothing to edit</div>
+      <p>BigTreeTech's complete engineering schematic — the sheet every circuit on this page was cut from. For the engineers who want it all.</p>
+      <a class="btn" href="downloads/SKR-Pico-official-schematic.pdf" download>⬇ Download the schematic</a>
+      <div class="meta">102 KB · © BigTreeTech · mirrored with credit</div>
+    </div>
+  </div>
+
+  <h2 class="rv" style="margin-top:52px">The Marlin lane + config variants — same board, no favorites</h2>
+  <p class="sub rv">Marlin isn't in a stable release for this board yet — so we compiled it ourselves from
+  Marlin's own development branch and published the exact configuration we used. Honest status on every label.</p>
+  <div class="dlgrid rv">
+    <div class="dl">
+      <div class="tag">FIRMWARE · COMPILED BY HONEYBADGER</div>
+      <h3>Marlin firmware — USB &amp; UART builds</h3>
+      <div class="ann ok">✔ FOR: SKR Pico V1.0 · Marlin lane — same PICK-ONE rule as Klipper:
+      USB-C cable → USB build · 5-wire P5 lead → UART0 build</div>
+      <div class="ann warn">⚠ HONEST STATUS: built from Marlin's dev branch (bugfix-2.1.x, commit f44cb94) —
+      compile-verified 2026-07-10, bench-run pending. Generic geometry: set YOUR machine's sizes and test
+      endstops (M119) before first motion.</div>
+      <p>Marlin's own SKR_Pico target: BOARD_BTT_SKR_PICO, four TMC2209s in UART mode (addresses identical
+      to BTT's own map). Flash exactly like Klipper: hold BOOT, plug in, drop the .uf2.</p>
+      <a class="btn" href="downloads/Marlin-SKR-Pico-USB-bugfix21x-20260710.uf2" download>⬇ Marlin USB .uf2</a>
+      <a class="btn" href="downloads/Marlin-SKR-Pico-UART0-bugfix21x-20260710.uf2" download style="margin-top:8px">⬇ Marlin UART0 .uf2</a>
+      <div class="meta">dev-branch builds · exact config in the next card · <a href="https://github.com/MarlinFirmware/Marlin/tree/bugfix-2.1.x" style="color:var(--red)">source ↗</a></div>
+    </div>
+    <div class="dl">
+      <div class="tag">CONFIG · THE EXACT BUILD RECIPE</div>
+      <h3>Marlin config bundle</h3>
+      <div class="ann warn">⚠ EDIT BEFORE USE — this is the exact Configuration.h behind the build above:
+      board/drivers/serial are set; bed size, endstop polarity and geometry are Marlin defaults awaiting YOUR machine.</div>
+      <p>Configuration.h + Configuration_adv.h + a build README (branch, commit, every line we changed).
+      Rebuild it yourself or tune from a known-good base.</p>
+      <a class="btn" href="downloads/Marlin-SKR-Pico-config-20260710.zip" download>⬇ Download config bundle</a>
+      <div class="meta">reproducible: same files = same firmware</div>
+    </div>
+    <div class="dl">
+      <div class="tag">CONFIG · OFFICIAL VORON</div>
+      <h3>Voron V0.2 printer.cfg</h3>
+      <div class="ann ok">✔ FOR: Klipper lane · Voron V0.2 builds on this exact board</div>
+      <div class="ann warn">⚠ EDIT BEFORE USE — Voron's own starting point: serial line + per-build tuning still yours.</div>
+      <p>The Voron team's official SKR Pico config for the V0.2 — the board's home-turf printer, straight
+      from VoronDesign, mirrored with credit.</p>
+      <a class="btn" href="downloads/Voron-V0.2-SKR-Pico-printer.cfg" download>⬇ Download Voron V0.2 cfg</a>
+      <div class="meta">© VoronDesign · <a href="https://github.com/VoronDesign/Voron-0" style="color:var(--red)">official source ↗</a></div>
+    </div>
+    <div class="dl">
+      <div class="tag">CONTROL SCREENS · NOTHING TO FLASH</div>
+      <h3>Mainsail · Fluidd · OctoPrint · KlipperScreen</h3>
+      <div class="ann ok">✔ These live on the Pi, not the board — install there, nothing downloads here</div>
+      <p><b>Mainsail / Fluidd / KlipperScreen:</b> Klipper-only (they speak Moonraker).
+      <b>OctoPrint:</b> the engine-agnostic one — Marlin's native partner over USB, and it runs with
+      Klipper too via Klipper's virtual serial port.</p>
+      <div class="meta">get them: <a href="https://docs.mainsail.xyz/setup/mainsail-os" style="color:var(--red)">MainsailOS ↗</a> ·
+      <a href="https://octoprint.org/download/" style="color:var(--red)">OctoPi ↗</a> ·
+      <a href="https://github.com/dw-0/kiauh" style="color:var(--red)">KIAUH ↗</a></div>
+    </div>
+  </div>
+
+  <h2 class="rv" style="margin-top:52px">Set up YOUR Pi — pick the exact model</h2>
+  <p class="sub rv">The UART lives in a different place on different Pis, the config files moved in
+  Raspberry Pi OS Bookworm, and BTT's manual recipe is Pi-3-era. Wrong recipe = a link that silently
+  does nothing. Every line below is verified against the official Raspberry Pi documentation and
+  BTT's own repos — pick your board, copy, done.</p>
+  <div class="getos rv"><b>STEP 0 · FIRST TIME? BUILD THE SD CARD BEFORE ANY OF THIS.</b><br>
+  Grab the official <a href="https://www.raspberrypi.com/software/" target="_blank" rel="noopener">Raspberry Pi
+  Imager ↗</a> — it downloads AND flashes the OS in one tool.
+  <span class="lane">KLIPPER LANE</span>inside the Imager choose <b>Other specific-purpose OS → 3D printing →
+  MainsailOS</b> (or get it direct: <a href="https://docs.mainsail.xyz/setup/mainsail-os" target="_blank" rel="noopener">MainsailOS ↗</a>).
+  <span class="lane">MARLIN LANE</span>same menu, pick <b>OctoPi</b> (direct:
+  <a href="https://octoprint.org/download/" target="_blank" rel="noopener">octoprint.org/download ↗</a>).
+  <span class="lane">BTT CB1</span>not a Raspberry Pi — use BTT's own image from the
+  <a href="https://github.com/bigtreetech/CB1" target="_blank" rel="noopener">CB1 repo ↗</a>.
+  Then come back here, pick your board below, and make the UART link work.</div>
+  <div class="pipick rv">
+    <div class="pitabs" role="tablist">
+      <button type="button" class="pt on" data-p="p3">Pi 3B · 3B+ · Zero 2 W</button>
+      <button type="button" class="pt" data-p="p4">Pi 4 · 400</button>
+      <button type="button" class="pt" data-p="p5">Pi 5 · 500</button>
+      <button type="button" class="pt" data-p="cb">BTT CB1 · CB2</button>
+    </div>
+
+    <div class="pipanel on" id="pp-p3">
+      <div class="pv ok">✔ P5 POWER: OK — the Pico's fused 5 V rail (3.5 A) comfortably feeds these headless
+      (~0.4–0.5 A typical). Keep USB peripherals off the Pi, and NEVER connect the Pi's own PSU at the same time.</div>
+      <div class="xsplit">
+        <div class="cfgcard"><div class="ch"><span>PI 3B / 3B+ / ZERO 2 W — THE VERIFIED RECIPE</span><button type="button">COPY</button></div>
+<pre># /boot/firmware/config.txt      (older images: /boot/config.txt)
+dtoverlay=disable-bt             # headless printer (recommended)
+#  -- OR, to keep Bluetooth: --
+# dtoverlay=miniuart-bt
+# core_freq=250                  # REQUIRED with miniuart-bt
+
+# /boot/firmware/cmdline.txt — DELETE this token:
+#   console=serial0,115200
+
+# after first boot, if you chose disable-bt:
+#   sudo systemctl disable hciuart
+
+# printer.cfg
+[mcu]
+serial: /dev/ttyAMA0
+restart_method: command</pre></div>
+        <div class="xgot">
+          <div class="g"><b>Why any of this?</b> On these models Bluetooth owns the good UART.
+          One overlay frees it for the printer link.</div>
+          <div class="g"><b>Bookworm moved the files.</b> Editing /boot/config.txt on current
+          Raspberry Pi OS does nothing — the live file is under /boot/firmware/.</div>
+          <div class="g"><b>BTT's "pi3-miniuart-bt" still works</b> but is officially deprecated —
+          the names above are current.</div>
+          <div class="g"><b>Prove the power is clean:</b> vcgencmd get_throttled → 0x0.</div>
+        </div>
+      </div>
+      <div class="dlrow"><a href="downloads/pi-setup/pi3-3bplus-zero2w-uart-setup.txt" download>⬇ Download this recipe (txt)</a></div>
+    </div>
+
+    <div class="pipanel" id="pp-p4">
+      <div class="pv warn">◐ P5 POWER: CAUTION — a lean headless Pi 4 runs fine (~1.25 A stress vs the 3.5 A fuse),
+      but P5 can't honor the Pi 4's full 3 A envelope: no cameras, screens or USB drives. Pi 400: use its own USB-C supply, period.</div>
+      <div class="xsplit">
+        <div class="cfgcard"><div class="ch"><span>PI 4 / 400 — THE VERIFIED RECIPE</span><button type="button">COPY</button></div>
+<pre># /boot/firmware/config.txt      (older images: /boot/config.txt)
+dtoverlay=disable-bt             # headless printer (recommended)
+#  -- OR, to keep Bluetooth: --
+# dtoverlay=miniuart-bt
+# core_freq=250                  # REQUIRED with miniuart-bt
+
+# /boot/firmware/cmdline.txt — DELETE this token:
+#   console=serial0,115200
+
+# after first boot, if you chose disable-bt:
+#   sudo systemctl disable hciuart
+
+# printer.cfg
+[mcu]
+serial: /dev/ttyAMA0
+restart_method: command</pre></div>
+        <div class="xgot">
+          <div class="g"><b>Same trap, same fix as the Pi 3 family:</b> Bluetooth owns the PL011 until
+          the overlay frees it. The Pi 4 has six UARTs — the one on the header pins is what we're claiming.</div>
+          <div class="g"><b>BTT's manual is Pi-3-era three ways:</b> deprecated overlay name, pre-Bookworm
+          file paths, and the missing core_freq line. The recipe above is current.</div>
+          <div class="g"><b>Prove the power is clean:</b> vcgencmd get_throttled → 0x0.</div>
+        </div>
+      </div>
+      <div class="dlrow"><a href="downloads/pi-setup/pi4-400-uart-setup.txt" download>⬇ Download this recipe (txt)</a></div>
+    </div>
+
+    <div class="pipanel" id="pp-p5">
+      <div class="pv no">✕ P5 POWER: NO — a Pi 5 demands a 5 A / 27 W supply; the Pico's fused rail tops out
+      at 3.5 A / 17.5 W shared. Power the Pi 5 from ITS OWN USB-C supply and run only TX · RX · GND to P5.</div>
+      <div class="xsplit">
+        <div class="cfgcard"><div class="ch"><span>PI 5 / 500 — THE VERIFIED RECIPE (DIFFERENT FROM EVERY OTHER PI)</span><button type="button">COPY</button></div>
+<pre># /boot/firmware/config.txt — add BOTH lines:
+enable_uart=1
+dtparam=uart0=on                 # (documented alternative: dtoverlay=uart0-pi5)
+
+# /boot/firmware/cmdline.txt — DELETE this token:
+#   console=serial0,115200
+
+# printer.cfg
+[mcu]
+serial: /dev/ttyAMA0             # NEVER /dev/serial0 on a Pi 5 — that
+restart_method: command          # shortcut points at the DEBUG connector!</pre></div>
+        <div class="xgot">
+          <div class="g"><b>The /dev/serial0 trap:</b> on Pi 5 that shortcut points at the tiny 3-pin
+          DEBUG port, not the 40-pin header. Guides that say "use serial0" silently aim Klipper at the
+          wrong socket. Hardcode /dev/ttyAMA0.</div>
+          <div class="g"><b>The Pi-3/4 overlays do NOTHING here.</b> Bluetooth has its own dedicated UART
+          on the Pi 5 — copying BTT's old recipe adds a no-op and misses the uart0 enable that actually matters.</div>
+          <div class="g"><b>Wiring is data-only:</b> GND + TX + RX. Do not connect P5's 5 V pins to a Pi 5.</div>
+        </div>
+      </div>
+      <div class="dlrow"><a href="downloads/pi-setup/pi5-500-uart-setup.txt" download>⬇ Download this recipe (txt)</a></div>
+    </div>
+
+    <div class="pipanel" id="pp-cb">
+      <div class="pv ok">✔ P5 POWER: OK — CB1/CB2 max input is 5 V / 2 A vs the 3.5 A fused rail: 1.5 A headroom.
+      Applies on a CM4 carrier (PI4B Adapter); socketed on a Manta board none of this applies — the Manta wires it internally.</div>
+      <div class="xsplit">
+        <div class="cfgcard"><div class="ch"><span>BTT CB1 / CB2 — THE VERIFIED RECIPE (NOT A RASPBERRY PI!)</span><button type="button">COPY</button></div>
+<pre># BOOT partition (FAT32 — editable from Windows).
+# V3.0.0 images: armbianEnv.txt   (V2.3.x images: BoardEnv.txt)
+# change this line:
+#   console=display
+# to:
+console=serial                   # yes — 'serial' FREES the UART on BTT images
+                                 # (stock-Armbian docs describe the opposite; BTT inverts it)
+
+# printer.cfg — CB1:
+[mcu]
+serial: /dev/ttyS0               # header pins 8 (TX) / 10 (RX) on the PI4B Adapter
+restart_method: command
+
+# printer.cfg — CB2 instead:
+#   serial: /dev/ttyS2</pre></div>
+        <div class="xgot">
+          <div class="g"><b>No config.txt, no cmdline.txt, no dtoverlay.</b> Those are Raspberry Pi files —
+          they don't exist here. One line in armbianEnv.txt is the whole job.</div>
+          <div class="g"><b>File-name drift:</b> older V2.3.x images call it BoardEnv.txt. Check which one
+          your BOOT partition actually has.</div>
+          <div class="g"><b>CB2 only:</b> never add overlays=disable_uart2 — that removes the very UART
+          you're trying to use.</div>
+        </div>
+      </div>
+      <div class="dlrow"><a href="downloads/pi-setup/btt-cb1-cb2-uart-setup.txt" download>⬇ Download this recipe (txt)</a></div>
+    </div>
+  </div>
+
+  <div class="paths rv">
+    <div class="path rec">
+      <div class="tag">RECOMMENDED · NATIVE PATH</div>
+      <h3>Klipper</h3>
+      <p>Everything above, fifteen minutes flat. Kalico fork: identical steps, same files.</p>
+      <div class="status s-ok">✔ Fully supported</div>
+    </div>
+    <div class="path">
+      <div class="tag">THE CLASSIC</div>
+      <h3>Marlin</h3>
+      <p>Supported in Marlin's development branch — and it covers BOTH host links, just like Klipper:
+      USB (SERIAL_PORT -1) or the 5-wire P5/UART0 link (SERIAL_PORT 0). Not in a stable release yet —
+      our compiled dev-branch builds are in Downloads above.</p>
+      <div class="status s-dev">◐ Dev-branch only (verified in source)</div>
+    </div>
+    <div class="path">
+      <div class="tag">CHECKED SO YOU DON'T HAVE TO</div>
+      <h3>RepRapFirmware</h3>
+      <p>Not available for this board — RRF's ports cover STM32/LPC mainboards; RP2040 isn't among them. Verified against the maintainers' own list so you don't burn an evening finding out.</p>
+      <div class="status s-no">✕ Not available (verified)</div>
+    </div>
+  </div>
+</div></section>
+
+<div class="divider-trace" aria-hidden="true"><svg viewBox="0 0 1400 64" preserveAspectRatio="none">
+  <path d="M-10 32 H420 L450 12 H700 L730 52 H1000 L1030 32 H1410"/>
+  <path class="dcur" d="M-10 32 H420 L450 12 H700 L730 52 H1000 L1030 32 H1410"/>
+  <path class="dcur b" d="M-10 32 H420 L450 12 H700 L730 52 H1000 L1030 32 H1410"/>
+</svg></div>
+<!-- ============ MAX IT OUT ============ -->
+<section class="soft" id="maxout"><div class="wrap">
+  <div class="kicker rv">STEP 5 · MAX IT OUT — THE HONEST CEILING & EVERY PATH PAST IT</div>
+  <h2 class="rv">"What if I want 8 motors? 16?" — here's exactly where this board ends, and how to go further</h2>
+  <p class="sub rv">Most guides pretend a board has no limits. Engineers plan around real ones. Below:
+  the Pico completely maxed out, the printer-matchmaking math, and the verified expansion paths when your
+  ambitions outgrow four drivers.</p>
+
+  <div class="ceil rv">
+    <div class="ceilcard">
+      <h3>The fully-loaded SKR Pico — every port populated at once</h3>
+      <table class="portmap">
+        <tr><td>Motion</td><td>X + Y + Z×2 (parallel) + E</td><td class="cap">4 drivers · 5 motors</td></tr>
+        <tr><td>Heat</td><td>Hotend + bed, both thermistors</td><td class="cap">2 outputs · 2 ADC</td></tr>
+        <tr><td>Air</td><td>Part fan + hotend fan + board fan</td><td class="cap">3 PWM outputs</td></tr>
+        <tr><td>Sensing</td><td>X/Y/Z endstops + filament runout</td><td class="cap">4 inputs (5 V capable)</td></tr>
+        <tr><td>Leveling</td><td>BLTouch or inductive probe</td><td class="cap">probe + servo</td></tr>
+        <tr><td>Light</td><td>Neopixel chain (onboard LED first)</td><td class="cap">gpio24 · 5 V fused</td></tr>
+        <tr><td>Brain link</td><td>Raspberry Pi — powered + connected</td><td class="cap">P5 · 5 V @ 3.5 A</td></tr>
+        <tr><td>Alt. duty</td><td>Laser PWM (engraver conversions)</td><td class="cap">shares gpio20 — FAN3 off</td></tr>
+        <tr><td colspan="2"><b>The hard ceiling</b> — no 5th driver socket exists; Z's two sockets are one
+        driver twinned. Past this point you ADD A BOARD, not wishes.</td><td class="cap">4 drivers. Period.</td></tr>
+      </table>
+    </div>
+    <div class="ceilcard">
+      <h3>Voron matchmaking — motor math, not marketing</h3>
+      <table class="match">
+        <tr><th>PRINTER</th><th>MOTORS NEEDED</th><th>ON ONE PICO?</th></tr>
+        <tr><td>Voron V0 / V0.2</td><td>A + B + Z + E = <b>4</b></td><td class="fit-y">✔ PERFECT — the board's home turf</td></tr>
+        <tr><td>Voron Switchwire</td><td>A + B (CoreXZ) + Y + E = <b>4</b></td><td class="fit-m">◐ Fits electrically (4 drivers) — check your endstop plan</td></tr>
+        <tr><td>Voron Trident</td><td>A + B + Z×3 + E = <b>6</b></td><td class="fit-n">✕ Independent Z×3 needs 6 drivers — that's Octopus / Manta M8P territory</td></tr>
+        <tr><td>Voron 2.4</td><td>A + B + Z×4 + E = <b>7</b></td><td class="fit-n">✕ Seven drivers — Octopus's job (hub coming)</td></tr>
+        <tr><td>+ ERCF multi-material</td><td>+ gear + selector</td><td class="fit-m">◐ Yes — via its own MMB board (path 3 below)</td></tr>
+      </table>
+      <p style="font-size:12px;color:var(--mut);margin-top:10px;line-height:1.55">Independent Z leveling
+      (Trident/2.4) can't use the Pico's twinned Z sockets — those move as ONE. Motor counts from the
+      official Voron specs; when a printer outgrows this board, we'll tell you which board it grows into.</p>
+    </div>
+  </div>
+
+  <h2 class="rv" style="margin-top:40px">Three verified roads past four drivers</h2>
+  <div class="growgrid rv">
+    <div class="grow">
+      <div class="motors">+4<small>MORE DRIVERS</small></div>
+      <div class="gtag">PATH 1 · KLIPPER MULTI-MCU</div>
+      <h3>Add a second board — same printer</h3>
+      <p>Klipper natively runs multiple controller boards in ONE printer config — a second Pico over USB
+      gives four more drivers, more heaters, more fans, all coordinated by the same Pi. Two lines of config
+      per extra MCU. This is Klipper's superpower and most people never learn it.</p>
+      <div class="parts"><span class="part">2nd SKR Pico</span><span class="part">USB cable</span><span class="part">[mcu pico2] in config</span></div>
+    </div>
+    <div class="grow">
+      <div class="motors">+1<small>AT THE TOOLHEAD</small></div>
+      <div class="gtag">PATH 2 · CAN / USB TOOLHEAD</div>
+      <h3>Move the extruder brain to the head</h3>
+      <p>An EBB toolhead board puts the extruder driver, hotend heater, fans, probe and accelerometer AT the
+      toolhead — your whole harness collapses to a few wires. EBB SB2209 runs USB or CAN; add BTT's U2C
+      adapter on the Pi if you go CAN.</p>
+      <div class="parts"><span class="part">EBB36 / EBB42</span><span class="part">EBB SB2209 (CAN/USB)</span><span class="part">U2C adapter</span></div>
+    </div>
+    <div class="grow">
+      <div class="motors">+2<small>FOR MULTI-MATERIAL</small></div>
+      <div class="gtag">PATH 3 · ERCF ON THE MMB</div>
+      <h3>The 8+ motor dream — multi-material without touching the Pico</h3>
+      <p>The Enraged Rabbit Carrot Feeder (multi-color!) brings its own controller — BTT's MMB CAN board
+      drives the ERCF's gear and selector motors as another Klipper MCU. Your Pico keeps its four drivers;
+      the filament factory runs itself.</p>
+      <div class="parts"><span class="part">MMB CAN V2.0</span><span class="part">ERCF kit</span><span class="part">Happy Hare config</span></div>
+    </div>
+  </div>
+  <h2 class="rv" style="margin-top:56px">The wire schematics — every path, drawn on the real hardware</h2>
+  <p class="sub rv">Not "trust us, it works" — here is each expansion path with the actual boards, the actual
+  connectors, and the exact config lines, all read off BigTreeTech's own files and the official Klipper docs.</p>
+
+  <!-- PATH 0: the 16-motor answer -->
+  <div class="xp rv" id="xp0">
+    <div class="gtag">THE BIG ONE · "WHAT IF I HAVE 16 MOTORS?" — HERE IS EXACTLY HOW THEY WIRE UP</div>
+    <h3>Four SKR Picos · one Raspberry Pi · one printer.cfg — 16 drivers, drawn cable by cable</h3>
+    <div class="howit"><b>How it actually works:</b> Klipper's brain lives on the Raspberry Pi, and the Pi
+    doesn't care how many controller boards report to it — each board is just another <b>[mcu]</b> section
+    in the same config file. Board #1 keeps the stock 5-wire UART link; boards #2–#4 each take ONE ordinary
+    USB-C cable into the Pi's own USB-A ports — a Pi 4 has exactly four, so a four-board machine needs no
+    hub at all. USB carries <b>data only</b> here: every board still eats from the 12/24&nbsp;V DC bus, which is
+    why the power pairs below are drawn as real wires — they are not optional.</div>
+    <figure class="xfig">
+      <img src="wire_sixteen_motors.png" alt="Sixteen motors for real: four SKR Picos wired to one Raspberry Pi — one UART link, three USB cables, and a 12/24 V power pair to every board">
+      <figcaption>The full 16-driver machine, every cord drawn where it actually lands: Pico&nbsp;#1 on the stock
+      UART link (BTT's own install photo), Picos #2–#4 into the Pi's USB-A ports, and a red/black 12/24&nbsp;V
+      pair from the DC bus into every board's POWER terminal. Base photography © BigTreeTech, official
+      manual/store · cable overlay drawn to the measured port positions by Honeybadger.</figcaption>
+    </figure>
+    <div class="schedwrap"><table class="cabsched">
+      <tr><th>#</th><th>FROM</th><th>TO</th><th>CABLE</th><th>CARRIES</th></tr>
+      <tr><td class="w">C1</td><td class="t">Pico #1 · P5 header<small>5-pin JST</small></td>
+          <td class="t">Pi · GPIO pins 2/4/6/8/10<small>5V·5V·GND·TXD·RXD</small></td>
+          <td>BTT's included 5-wire lead</td><td>UART data + 5&nbsp;V <b>to</b> the Pi (TPS5450 buck, 3.5&nbsp;A fuse)</td></tr>
+      <tr><td class="w">C2–C4</td><td class="t">Pico #2/#3/#4 · USB-C</td>
+          <td class="t">Pi · USB-A ports<small>one each</small></td>
+          <td>USB-A → USB-C, any data-rated cable</td><td>Klipper data ONLY — USB-Power jumpers stay OFF</td></tr>
+      <tr><td class="w">P1–P4</td><td class="t"><span class="pol p">V+</span> <span class="pol n">V−</span> PSU DC bus</td>
+          <td class="t">each Pico · POWER<small>12/24V · GND screw terminals</small></td>
+          <td>2-cond, 18&nbsp;AWG min per board</td><td>Board + motors + heaters power — every board, no exceptions</td></tr>
+    </table></div>
+    <div class="xsplit">
+      <div class="cfgcard"><div class="ch"><span>PRINTER.CFG — FOUR BOARDS, ONE FILE</span><button type="button">COPY</button></div>
+<pre># ---- Board 1: the stock UART link — Klipper's timing master ----
+[mcu]
+serial: /dev/ttyAMA0
+restart_method: command
+
+# ---- Boards 2-4: one USB cable each; find IDs with ----
+#   ls /dev/serial/by-id/*
+# (each RP2040's serial number is inside its ID string)
+[mcu picoB]
+serial: /dev/serial/by-id/usb-Klipper_rp2040_E66138A512345678-if00
+[mcu picoC]
+serial: /dev/serial/by-id/usb-Klipper_rp2040_E66138A587654321-if00
+[mcu picoD]
+serial: /dev/serial/by-id/usb-Klipper_rp2040_E66138A511223344-if00
+
+# ---- Then any pin, anywhere, gets a prefix ----
+#   step_pin: picoB:gpio11        (X socket on board 2)
+#   uart_pin: picoB:gpio9         (that board's own TMC UART bus)
+#   tx_pin:   picoB:gpio8
+#
+# THE ONE LAW OF SPLITTING AXES (klipper3d.org, Multi-MCU Homing):
+#   every stepper of a homed axis stays on ONE board when its
+#   endstop/probe lives elsewhere. Split machines by FUNCTION:
+#   board1 = X+Y+E, board2 = all Z, board3 = tools, board4 = aux.</pre></div>
+      <div class="xgot">
+        <div class="g"><b>Who actually needs 16?</b> Real, documented builds: a Voron 2.4 is 7 motors
+        (2 CoreXY + 4 Z + extruder); add ERCF multi-material = 9; a six-tool StealthChanger Voron = 12
+        (a per-tool extruder each); bolt AWD and ERCF onto that and you're brushing 16. Verified against
+        each project's own configs.</div>
+        <div class="g"><b>One PSU is fine — size it honestly.</b> Four boards can share one properly-rated
+        12/24&nbsp;V supply, each on its OWN wire pair to the terminals. Add every heater + motor's draw;
+        drivers above 0.8&nbsp;A want a cooling fan (BTT's own manual caution).</div>
+        <div class="g"><b>The Pi's USB power budget survives</b> because the boards are self-powered:
+        with 12/24&nbsp;V connected and the USB-Power jumper OFF, the USB lead carries data, not the board.</div>
+        <div class="g"><b>Past ~2 boards, also price an Octopus.</b> 8 drivers on one board beats 2 Picos
+        on wiring, mounting and money — the honest engineering call. (Octopus hub is next in line.)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATH 1: two Picos -->
+  <div class="xp rv" id="xp1">
+    <div class="gtag">PATH 1 · TWO PICOS, ONE PRINTER — THE FULL PICTURE</div>
+    <h3>8 drivers · 4 heat outputs · 6 fans — for the price of a second Pico</h3>
+    <figure class="xfig">
+      <img src="wire_two_picos.png" alt="Two SKR Picos on one Raspberry Pi: Pico 1 on the stock 5-wire UART link, Pico 2 over a plain USB-C cable">
+      <figcaption>Pico #1 rides the stock 5-wire UART link — that half is BTT's own install photo. Pico #2 joins over
+      one plain USB-C cable into any Pi USB port. Base photography © BigTreeTech, official manual · cable overlay
+      drawn to the measured port positions by Honeybadger.</figcaption>
+    </figure>
+    <div class="howit"><b>How it actually works:</b> Klipper treats the second board as four more sockets on the
+    same printer — not a second printer. The Pi keeps ONE printer.cfg; every pin on board&nbsp;#2 is addressed as
+    <b>pico2:gpioN</b>. The USB cable is a data lead: board&nbsp;#2 still powers itself (and its motors and heaters)
+    from its own 12/24&nbsp;V pair on the POWER terminals.</div>
+    <div class="schedwrap"><table class="cabsched">
+      <tr><th>#</th><th>FROM</th><th>TO</th><th>CABLE</th><th>CARRIES</th></tr>
+      <tr><td class="w">C1</td><td class="t">Pico #1 · P5 header<small>5-pin JST</small></td>
+          <td class="t">Pi · GPIO pins 2/4/6/8/10<small>5V·5V·GND·TXD·RXD</small></td>
+          <td>BTT's included 5-wire lead</td><td>UART data + 5&nbsp;V to the Pi</td></tr>
+      <tr><td class="w">C2</td><td class="t">Pico #2 · USB-C</td><td class="t">Pi · any USB-A port</td>
+          <td>USB-A → USB-C data cable</td><td>Klipper data only</td></tr>
+      <tr><td class="w">P1, P2</td><td class="t"><span class="pol p">V+</span> <span class="pol n">V−</span> PSU</td>
+          <td class="t">each Pico · POWER<small>12/24V · GND</small></td>
+          <td>2-cond, 18&nbsp;AWG min</td><td>All board/motor/heater power</td></tr>
+    </table></div>
+    <div class="xsplit">
+      <div class="cfgcard"><div class="ch"><span>PRINTER.CFG — PINS FROM BTT'S OWN SHIPPED CONFIG</span><button type="button">COPY</button></div>
+<pre># ---- Pico #1 — the stock UART link (BTT README) ----
+[mcu]
+serial: /dev/ttyAMA0
+restart_method: command
+
+# ---- Pico #2 — plain USB-C to the Pi ----
+# Flash klipper-USB.uf2, then find its ID:  ls /dev/serial/by-id/*
+[mcu pico2]
+serial: /dev/serial/by-id/usb-Klipper_rp2040_E66094A027831922-if00
+
+# ---- Any pin on board 2: just add the prefix ----
+[manual_stepper aux_motor]           # X socket on the second Pico
+step_pin: pico2:gpio11
+dir_pin: !pico2:gpio10
+enable_pin: !pico2:gpio12
+microsteps: 16
+rotation_distance: 8
+
+[tmc2209 manual_stepper aux_motor]   # driver UART needs the prefix too
+uart_pin: pico2:gpio9
+tx_pin: pico2:gpio8
+uart_address: 0                      # X=0 · Y=2 · Z=1 · E=3
+run_current: 0.580</pre></div>
+      <div class="xgot">
+        <div class="g"><b>Homing across boards overshoots.</b> Klipper caps the inter-board delay at 25 ms —
+        at 10 mm/s that is up to 0.25 mm past the switch. Home slow; the frame must tolerate it.</div>
+        <div class="g"><b>Never split a homed axis.</b> If the endstop lives on another board, stepper_z and
+        stepper_z1 must stay on the SAME board — Klipper's own rule, not ours.</div>
+        <div class="g"><b>USB-Power jumper stays OFF</b> whenever 12/24 V is connected. BTT's exact words:
+        "it is best to remove the jumper."</div>
+        <div class="g"><b>/dev/serial/by-id/ only.</b> ttyACM0 can shuffle on every replug; the by-id path
+        survives because the RP2040's serial number is in it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATH 2: CAN toolhead -->
+  <div class="xp rv" id="xp2">
+    <div class="gtag">PATH 2 · CAN TOOLHEAD — BTT'S OWN TOPOLOGY DIAGRAM</div>
+    <h3>Four wires to the toolhead. That's the whole harness.</h3>
+    <div class="xfig2">
+      <figure class="xfig">
+        <img src="u2c_wiring_diagram.jpg" alt="BigTreeTech's official CAN wiring diagram: Raspberry Pi to U2C over USB, mainboard and EBB toolhead on the CAN bus">
+        <figcaption>The official wiring diagram from BTT's U2C manual: Pi → U2C over USB-C, the mainboard on the
+        CAN_OUT* port, and the EBB toolhead on the 4-wire power+CAN lead. © BigTreeTech, official manual.</figcaption>
+      </figure>
+      <figure class="xfig">
+        <img src="ebb_board.png" alt="EBB36 official pin map — GND, VIN, CAN-L, CAN-H connector and every toolhead output">
+        <figcaption>The toolhead end of those four wires — EBB36 official pin map: GND · VIN · CAN-L · CAN-H,
+        plus hotend, fans, probe and accelerometer on the head. © BigTreeTech.</figcaption>
+      </figure>
+    </div>
+    <div class="howit"><b>How it actually works:</b> CAN is a two-wire party line, not a point-to-point cable —
+    the U2C turns one Pi USB port into that line (<b>can0</b>), and every CAN board on the machine hangs off the
+    same twisted pair, each answering to its own <b>canbus_uuid</b>. The EBB's whole umbilical is four
+    conductors: two carry 12/24&nbsp;V power, two carry the CAN pair. The bus needs exactly two 120&nbsp;Ω
+    terminators — one at each END — and nothing in the middle.</div>
+    <div class="schedwrap"><table class="cabsched">
+      <tr><th>#</th><th>FROM</th><th>TO</th><th>CABLE</th><th>CARRIES</th></tr>
+      <tr><td class="w">C1</td><td class="t">Pi · USB-A</td><td class="t">U2C · Type-C (CAN_IN)</td>
+          <td>USB-A → USB-C</td><td>The whole can0 interface</td></tr>
+      <tr><td class="w">P1</td><td class="t">PSU · V+ / V−</td><td class="t">U2C · screw terminal VIN / GND</td>
+          <td>2-cond 18&nbsp;AWG</td><td>12/24&nbsp;V onto the U2C's power rail</td></tr>
+      <tr><td class="w">C2</td><td class="t">U2C · 4-pin out<small><span class="pol p">VIN+</span> <span class="pol n">GND−</span> <span class="pol x">CAN-H/L = data pair</span></small></td>
+          <td class="t">EBB · VIN·GND·CANH·CANL<small>silkscreen order!</small></td>
+          <td>4-cond toolhead umbilical, CAN pair twisted</td><td>24&nbsp;V power + CAN data to the head</td></tr>
+      <tr><td class="w">T</td><td class="t">120R jumper: U2C end</td><td class="t">120R jumper: EBB end</td>
+          <td>—</td><td>Termination. Prove it: ~60&nbsp;Ω across CAN-H/L, power off</td></tr>
+    </table></div>
+    <div class="xsplit">
+      <div class="cfgcard"><div class="ch"><span>PI + PRINTER.CFG — PER THE OFFICIAL MANUALS</span><button type="button">COPY</button></div>
+<pre># ---- On the Pi: /etc/network/interfaces.d/can0 ----
+allow-hotplug can0
+iface can0 can static
+    bitrate 1000000          # must match EVERY node's firmware
+    up ip link set $IFACE txqueuelen 128
+
+# ---- Find the toolhead's ID ----
+#   ~/klippy-env/bin/python ~/klipper/scripts/canbus_query.py can0
+
+# ---- printer.cfg ----
+[mcu EBBCan]
+canbus_uuid: 0e0d81e4210c    # yours, from the query above
+
+[extruder]                   # pins: BTT's sample-bigtreetech-ebb-canbus cfg
+step_pin: EBBCan: PD0
+dir_pin: !EBBCan: PD1
+enable_pin: !EBBCan: PD2
+heater_pin: EBBCan: PA2      # V1.2 boards: PB13
+
+[tmc2209 extruder]
+uart_pin: EBBCan: PA15
+run_current: 0.650</pre></div>
+      <div class="xgot">
+        <div class="g"><b>Exactly TWO 120R terminators</b> on the whole bus, one per end — then prove it:
+        multimeter across CAN-H/CAN-L, power off, should read ~60 Ω.</div>
+        <div class="g"><b>Bitrate is baked into every node's firmware.</b> 1M everywhere (Klipper's current
+        recommendation) or the bus silently dies. BTT's older manual says 500K — pick ONE, rebuild all.</div>
+        <div class="g"><b>EBB V1.1 DFU trap:</b> the bootloader drives the hotend pin HIGH while flashing —
+        disconnect hotend main power before entering DFU. (V1.2 moved the pin and fixed it.)</div>
+        <div class="g"><b>The U2C's USB-A ports are NOT real USB.</b> They carry raw CAN signals for
+        mainboards only — toolheads wire to the screw-terminal / 4-pin outputs instead.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATH 3: MMB / ERCF -->
+  <div class="xp rv" id="xp3">
+    <div class="gtag">PATH 3 · ERCF ON THE MMB — THE 8-MOTOR PRINTER, FOR REAL</div>
+    <h3>Multi-material brings its own brain: 4 Pico drivers + 4 MMB sockets = 8</h3>
+    <figure class="xfig">
+      <img src="btt_mmb_can_v2.0_pinout.png" alt="BigTreeTech MMB CAN V2.0 official pinout — XT30 power+CAN input, four EZ-driver motor sockets, servo and endstop rows">
+      <figcaption>BTT's official MMB CAN V2.0 pinout — one XT30 carries everything in (VIN · GND · CAN-H · CAN-L),
+      four EZ-driver sockets M1–M4, servo ports and the STOP row. It joins the same can0 bus as the toolhead. © BigTreeTech.</figcaption>
+    </figure>
+    <div class="howit"><b>How it actually works:</b> the MMB is just another citizen on the same can0 line the
+    toolhead uses — one more <b>[mcu ercf]</b> with its own uuid. Its single XT30 connector is the whole hookup:
+    two pins of 12/24&nbsp;V power, two pins of CAN. The ERCF's gear and selector motors plug into the MMB's own
+    driver sockets, so your Pico never gives up a driver to multi-material.</div>
+    <div class="schedwrap"><table class="cabsched">
+      <tr><th>#</th><th>FROM</th><th>TO</th><th>CABLE</th><th>CARRIES</th></tr>
+      <tr><td class="w">C1</td><td class="t">can0 bus<small>U2C out or EBB daisy-chain</small></td>
+          <td class="t">MMB · XT30<small><span class="pol p">VIN+</span> <span class="pol n">GND−</span> <span class="pol x">CAN-H/L = data pair</span></small></td>
+          <td>4-cond, CAN pair twisted</td><td>Power + CAN in one plug</td></tr>
+      <tr><td class="w">M1</td><td class="t">ERCF gear motor<small>NEMA14</small></td><td class="t">MMB · M1 socket</td>
+          <td>4-wire stepper lead</td><td>Filament drive</td></tr>
+      <tr><td class="w">M2</td><td class="t">ERCF selector motor<small>NEMA17</small></td><td class="t">MMB · M2 socket</td>
+          <td>4-wire stepper lead</td><td>Lane selection</td></tr>
+      <tr><td class="w">T</td><td class="t" colspan="2">MMB mid-bus → its 120R jumper comes OFF (terminators live at the two ENDS)</td>
+          <td>—</td><td>Bus stays ~60&nbsp;Ω end-to-end</td></tr>
+    </table></div>
+    <div class="xsplit">
+      <div class="cfgcard"><div class="ch"><span>PRINTER.CFG — BTT'S SHIPPED ERCF CONFIG (V1.x PINS)</span><button type="button">COPY</button></div>
+<pre># ---- The ERCF's own brain — same can0 bus, its own UUID ----
+[mcu ercf]
+canbus_uuid: 245eacba2ba4    # yours, from canbus_query.py
+
+[manual_extruder_stepper gear_stepper]    # M1 socket
+step_pin: ercf:PB15
+dir_pin: ercf:PB14
+enable_pin: !ercf:PA8        # V1.1 boards: !ercf:PB8
+
+[tmc2209 manual_extruder_stepper gear_stepper]
+uart_pin: ercf:PA10
+run_current: 0.9             # NEMA14
+
+[manual_stepper selector_stepper]         # M2 socket
+step_pin: ercf:PD2
+dir_pin: ercf:PB13
+enable_pin: !ercf:PD1
+endstop_pin: ^ercf:PA3
+
+[tmc2209 manual_stepper selector_stepper]
+uart_pin: ercf:PC7
+run_current: 0.8             # NEMA17</pre></div>
+      <div class="xgot">
+        <div class="g"><b>V1.x and V2.0 are different boards.</b> CAN moved (PB0/PB1 → PD0/PD1) and the
+        M1/M2 pins changed — the config above is V1.x; V2.0 users remap or use Happy Hare's V2 template.</div>
+        <div class="g"><b>Even V1.0 vs V1.1 differ by one pin:</b> M1 enable is PA8 on V1.0, PB8 on V1.1 —
+        BTT's own sample calls it out in comments. Check your silkscreen.</div>
+        <div class="g"><b>One XT30 does it all:</b> board power AND the CAN pair ride the same 4-pin
+        connector — VIN · GND · CAN-H · CAN-L.</div>
+        <div class="g"><b>MMB sitting mid-bus?</b> Pull its 120R jumper — the two terminators belong at the
+        two ENDS of the bus, nowhere else.</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub rv" style="margin-top:26px;font-size:13px">Every pin above was read off BigTreeTech's own sample
+  configs, manuals and pinout sheets, cross-checked against klipper3d.org — sources credited on each figure.
+  EBB, MMB and Octopus each get their own full hub next.</p>
+</div></section>
+
+<!-- ============ CINEMATIC ============ -->
+<section class="cine"><div class="streak" style="top:16%"></div><div class="streak" style="top:44%;animation-delay:2s"></div>
+<div class="streak warm" style="top:70%;animation-delay:4s"></div><div class="streak" style="top:88%;animation-delay:1s"></div>
+<div class="wrap" style="display:block">
+  <div class="rv" style="display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center">
+    <div>
+      <div class="kicker">THE HARDWARE DESERVES THE DRAMA</div>
+      <h2>Small board. V0-sized ambitions.</h2>
+      <p>BigTreeTech built the SKR Pico for one job: fit inside a Voron V0 and run it flawlessly — RP2040
+      brain, four whisper-quiet TMC2209 drivers, a footprint smaller than your palm. Add the optional cover
+      and it even dresses the part.</p>
+      <div class="spec">
+        <div><b>RP2040</b><span>DUAL-CORE MCU</span></div>
+        <div><b>4× TMC2209</b><span>UART · SILENT</span></div>
+        <div><b>85 × 56</b><span>MM PCB (BTT DIM. DRAWING)</span></div>
+        <div><b>12–24 V</b><span>SINGLE RAIL · 20 A FUSED</span></div>
+      </div>
+    </div>
+    <img class="glowrim" src="pico_official_6.jpg" alt="SKR Pico with the optional cover — official BTT photo" style="width:100%;border-radius:14px">
+  </div>
+
+  <div class="rv" style="margin-top:44px">
+    <div class="kicker">🎬 THE OFFICIAL FILMS — STRAIGHT FROM BIGTREETECH</div>
+    <h2>See the board move — their cameras, our wiring</h2>
+    <p>BigTreeTech's own two films for this exact board, embedded the same privacy-friendly way their
+    support hub embeds them. Watch the product run, then watch their install — then scroll back up to
+    our schematics and do it with the pin-verified depth they didn't have room for.</p>
+  </div>
+  <div class="films rv">
+    <div class="film">
+      <div class="vwrap"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/_a4opXVtmBY"
+        title="Meet BIGTREETECH powerful motherboard SKR PICO V1.0" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+      <div class="vt"><b>Meet the SKR PICO V1.0 — the official product film</b>
+      © BIGTREETECH, official channel · the board in motion</div>
+    </div>
+    <div class="film">
+      <div class="vwrap"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/idOwH4TXAH8"
+        title="Guide: how to install the SKR PICO motherboard on the Voron 0.1" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+      <div class="vt"><b>Their install guide — SKR PICO into a Voron 0.1</b>
+      © BIGTREETECH, official channel · pair it with our wiring chapter above</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ SCREENS ============ -->
+<section class="soft"><div class="wrap">
+  <div class="kicker rv">THE QUESTION EVERYONE ASKS</div>
+  <h2 class="rv">"Where does the touchscreen plug in?"</h2>
+  <div class="noport rv"><b>Straight answer: nowhere — and that's by design.</b> Walk the full pinout:
+  the SKR Pico has <b>no screen header at all</b> — no EXP, no TFT serial port, no display connector.
+  BigTreeTech cut it on purpose to hit the V0 footprint. Any guide that shows a screen wired to this
+  board is describing a different board.</div>
+  <p class="sub rv" style="margin-top:16px">What you actually do instead — all three are how real V0s run:</p>
+  <div class="scrgrid rv">
+    <div class="grow"><div class="gtag">OPTION 1 · THE KLIPPER WAY</div>
+      <h3>Touchscreen on the Pi</h3>
+      <p>The screen belongs to the brain, not the reflexes: hang an HDMI/DSI/USB touchscreen off the
+      Raspberry Pi and run <b>KlipperScreen</b>. Full touch control — heaters, moves, prints — and the
+      Pico never knows it exists.</p>
+      <div class="parts"><span class="part">Pi touchscreen (HDMI/DSI)</span><span class="part">KlipperScreen</span></div></div>
+    <div class="grow"><div class="gtag">OPTION 2 · THE ONE IN YOUR POCKET</div>
+      <h3>Your phone IS the screen</h3>
+      <p>Mainsail and Fluidd are full touch interfaces already — open the printer's address on your
+      phone or any browser. This is how most V0 owners actually drive: zero extra hardware, zero wiring.</p>
+      <div class="parts"><span class="part">Mainsail / Fluidd</span><span class="part">any browser</span></div></div>
+    <div class="grow"><div class="gtag">OPTION 3 · THE MARLIN LANE</div>
+      <h3>OctoPrint is the interface</h3>
+      <p>Running Marlin on this board? There are no display pins to wire a classic LCD to — the host is
+      your control panel: OctoPrint's web UI (plus its phone apps) carries the whole job.</p>
+      <div class="parts"><span class="part">OctoPrint web UI</span><span class="part">plugin apps</span></div></div>
+  </div>
+</div></section>
+
+<!-- ============ KNOWLEDGE BASE ============ -->
+<section id="kb"><div class="wrap">
+  <div class="kicker rv">STEP 6 · THE KNOWLEDGE BASE</div>
+  <h2 class="rv">Every pin. Every answer. One table you can trust.</h2>
+  <p class="sub rv">The complete GPIO map, triple-verified (schematic · pin diagram · shipped config), plus
+  the questions everyone asks — answered with sources, not vibes.</p>
+  <div class="kb rv">
+    <div>
+      <div class="kbtools"><input id="pinsearch" type="search" placeholder="Filter the pin table — try  fan , endstop , gpio2 …  (click any red pin to copy it)"></div>
+      <table id="pintable">
+        <tr><th>FUNCTION</th><th>PORT / SILKSCREEN</th><th>RP2040 GPIO</th><th>NOTES</th></tr>
+        <tr><td>X motor</td><td>XM1</td><td class="mono">11 / 10 / 12</td><td>step / dir / enable · TMC addr 0</td></tr>
+        <tr><td>Y motor</td><td>YM1</td><td class="mono">6 / 5 / 7</td><td>TMC addr 2</td></tr>
+        <tr><td>Z motors ×2</td><td>ZAM1 + ZBM1</td><td class="mono">19 / 28 / 2</td><td>parallel, one driver · addr 1</td></tr>
+        <tr><td>Extruder</td><td>EM1</td><td class="mono">14 / 13 / 15</td><td>TMC addr 3</td></tr>
+        <tr><td>Driver UART</td><td>—</td><td class="mono">9 rx · 8 tx</td><td>all four drivers, one bus</td></tr>
+        <tr><td>X / Y / Z endstop</td><td>X/Y/Z-STOP</td><td class="mono">4 · 3 · 25</td><td>3-pin, 5 V available, buffered</td></tr>
+        <tr><td>Filament runout</td><td>E0-STOP</td><td class="mono">16</td><td>pause_on_runout shipped on</td></tr>
+        <tr><td>Hotend heater / sensor</td><td>HE · TH0</td><td class="mono">23 · 27</td><td>max 300 °C enforced</td></tr>
+        <tr><td>Bed heater / sensor</td><td>HB · THB</td><td class="mono">21 · 26</td><td>max 130 °C enforced</td></tr>
+        <tr><td>Part fan</td><td>FAN1</td><td class="mono">17</td><td>M106 / slicer</td></tr>
+        <tr><td>Hotend fan</td><td>FAN2</td><td class="mono">18</td><td>auto ≥ 50 °C</td></tr>
+        <tr><td>Board fan / Laser</td><td>FAN3 · Laser</td><td class="mono">20</td><td>shared pin — one or the other</td></tr>
+        <tr><td>Probe / servo</td><td>PROBE · SERVOS</td><td class="mono">22 · 29</td><td>BLTouch-ready, block in config</td></tr>
+        <tr><td>RGB / Neopixel</td><td>RGB</td><td class="mono">24</td><td>onboard LED first in chain</td></tr>
+        <tr><td>Pi UART</td><td>P5</td><td class="mono">0 tx · 1 rx</td><td>+ 5 V ×2 + GND · /dev/ttyAMA0</td></tr>
+      </table>
+    </div>
+    <div class="faq">
+      <details open><summary>Does the Pico power my Raspberry Pi?</summary><div class="a">Yes — verified in the
+      schematic: an onboard TPS5450 buck makes 5 V from your PSU, fused at 3.5 A, on the P5 header. Perfect
+      for a Pi Zero 2 W or 3A+. A Pi 4 under load can want more — give it its own supply and connect GND+TX+RX only.</div></details>
+      <details><summary>Can I run Marlin on this board?</summary><div class="a">In Marlin's development branch, yes —
+      dedicated SKR_Pico build targets exist (we checked the source). It's not in a stable Marlin release yet,
+      so our beginner recommendation stays Klipper. Honest Marlin guide ships with the full build.</div></details>
+      <details><summary>Why won't my fans spin?</summary><div class="a">They're behaving: FAN1 waits for a command
+      (M106 S255 to test), FAN2 waits for the hotend to hit 50 °C, FAN3 waits for the bed. Backwards polarity
+      is the other classic — red to +. And remember: ports output PSU voltage.</div></details>
+      <details><summary>Where's the RP2040 and the drivers? I don't see them on top.</summary><div class="a">Flip it
+      over — the SKR Pico is a two-sided design: silicon underneath, connectors on top. That's why it mounts on
+      standoffs with airflow below. Both faces are documented on this page.</div></details>
+      <details><summary>Sensorless homing — can this board do it?</summary><div class="a">Yes: X/Y/Z/E0-DIAG jumper
+      headers connect the TMC2209 DIAG outputs. BTT's config carries a commented example for Y. Physical
+      switches stay our beginner default; the sensorless guide is in the full build.</div></details>
+      <details><summary>What did you actually verify on this page?</summary><div class="a">Every pin against three
+      official BTT sources (schematic, pin diagram, shipped Klipper config) — zero disagreements found. What we
+      haven't done yet: a physical bench run — that's stated, dated, and coming. When we can't verify a thing,
+      we tell you how to check it yourself (usually: multimeter).</div></details>
+    </div>
+  </div>
+</div></section>
+
+<div class="sig"><div class="wrap">
+  <div class="sigbadge">
+    <div class="sigmark">🦡</div>
+    <div><b>Engineered by a human × AI team.</b>
+    <span>Every pin verified against three official sources. Every word intentional. No slop — that's the whole point.</span></div>
+  </div>
+  <div class="src">Sources: BTT schematic · BTT pin diagram · BTT shipped Klipper config · BTT manual<br>
+  Product photography &amp; firmware © BigTreeTech, mirrored with credit · honeybadger.software</div>
+</div></div>
+
+<script>
+var CARDS = {
+  motors:{t:"Stepper motors — E · X · Y · Z1 · Z2", g:"pin order 2B·1B·1A·2A",
+    p:"Five identical sockets across the top. Motors plug straight in — Z1 and Z2 share one driver (parallel), exactly what a V0 wants.",
+    x:"<b>Drivers:</b> 4× onboard TMC2209, UART mode — current set in firmware, no pots. <b>BTT defaults:</b> X/Y 0.8 A · Z 0.58 A · E 0.65 A RMS. Full circuit in the wiring chapter below.", w:"Never plug or unplug a motor with power on.", side:"T", cx:48, cy:8},
+  usb:{t:"USB-C", g:"native RP2040 USB",
+    p:"Firmware flashing (hold BOOT, drag one file) and an alternative Pi link.",
+    x:"<b>Flashing:</b> BOOTSEL mounts the board as a USB drive — copy BTT's uf2, done. ESD-protected, 0.75 A fused.", w:"", side:"T", cx:92, cy:13},
+  pi:{t:"Raspberry Pi link — the P5 header", g:"5V·5V·GND·TX·RX",
+    p:"One 5-pin lead powers the Pi AND carries their conversation. Full diagram in the wiring chapter.",
+    x:"<b>From the schematic:</b> TPS5450 buck, 5 V fused 3.5 A; UART ↔ Pi GPIO14/15; /dev/ttyAMA0 in BTT's config.", w:"Pi 4 under load wants its own supply.", side:"L", cx:5, cy:22},
+  fan1:{t:"FAN1 — part-cooling fan", g:"gpio17",
+    p:"The fan that blows on your print. Off until commanded — normal.",
+    x:"<b>Electrical:</b> low-side MOSFET, flyback, LED. Red to +.", w:"PSU-voltage port — 24 V system needs 24 V fans.", side:"L", cx:5, cy:44},
+  fan2:{t:"FAN2 — hotend fan", g:"gpio18",
+    p:"Automatic at 50 °C in BTT's config. Heat creep handled, no switch to forget.",
+    x:"<b>Shipped behavior:</b> heater_fan tied to the extruder.", w:"", side:"L", cx:5, cy:58},
+  fan3:{t:"FAN3 — board fan", g:"gpio20 (shared w/ Laser)",
+    p:"Cools the drivers; tied to bed activity. Quiet when idle on purpose.",
+    x:"<b>Shared pin:</b> the Laser port rides the same gpio20 — one or the other.", w:"", side:"L", cx:5, cy:73},
+  heaters:{t:"Heater outputs — HE + HB", g:"gpio23 · gpio21",
+    p:"Hotend and bed on screw terminals. No polarity — snug screws matter more.",
+    x:"<b>Shipped safety:</b> 300 °C / 130 °C ceilings enforced. Full MOSFET circuit in the wiring chapter.", w:"Re-torque bed screws after first heat cycle.", side:"R", cx:93, cy:50},
+  power:{t:"Power input — 12 or 24 V DC", g:"20 A fused",
+    p:"Feed it 12 or 24 volts. Thick wires, ferrules welcome.",
+    x:"<b>Protection:</b> 20 A fuse + reverse-polarity diode + surge suppressor.", w:"+ goes to the screw PRINTED 12/24V (GND = top pole in the flat view) — trust the silkscreen, not position. Reversed = crowbar through the 20 A fuse.", side:"R", cx:93, cy:80},
+  probe:{t:"Probe / BLTouch port", g:"gpio22 · servo gpio29",
+    p:"BLTouch or inductive probe for auto bed leveling — wired and waiting.",
+    x:"<b>Port provides:</b> probe input, servo control, 5 V, ground. Config block one uncomment away.", w:"", side:"R", cx:77, cy:47},
+  therm:{t:"Thermistors — TH0 + THB", g:"gpio27 · gpio26",
+    p:"Two-pin temperature senses, no polarity. Crazy reading at room temp? Stop before heating.",
+    x:"<b>Electrical:</b> 4.7 kΩ pullup, clamp diodes. <b>Default sensor:</b> EPCOS 100K.", w:"Zero tension on the leads.", side:"B", cx:21, cy:91},
+  stops:{t:"Endstops — X · Y · Z", g:"gpio4 · 3 · 25",
+    p:"Three-pin ports with 5 V available — powered sensors welcome; plain switches use two pins.",
+    x:"<b>Electrical:</b> 3.3 V logic, pullups, buffers. Full circuit in the wiring chapter.", w:"QUERY_ENDSTOPS before your first home.", side:"B", cx:50, cy:91},
+  runout:{t:"Filament runout — E0-STOP", g:"gpio16",
+    p:"Plug a sensor and Klipper pauses instead of air-printing your night away.",
+    x:"<b>Shipped behavior:</b> filament_switch_sensor, pause_on_runout on.", w:"", side:"B", cx:52, cy:66}
+};
+var cols = {L:document.getElementById('chipsL'), R:document.getElementById('chipsR'),
+            T:document.getElementById('chipsT'), B:document.getElementById('chipsB')};
+var svg = document.getElementById('lines');
+Object.keys(CARDS).forEach(function(k){
+  var c = CARDS[k];
+  var b = document.createElement('button');
+  b.className = 'callout'; b.dataset.k = k;
+  b.innerHTML = c.t.split(' — ')[0] + '<small>' + c.g + '</small>';
+  cols[c.side].appendChild(b);
+  var dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  dot.setAttribute('cx', c.cx); dot.setAttribute('cy', c.cy); dot.setAttribute('r', 1.1);
+  dot.id = 'dot-' + k; svg.appendChild(dot);
+  var edge = c.side === 'L' ? [0, c.cy] : c.side === 'R' ? [100, c.cy] : c.side === 'T' ? [c.cx, 0] : [c.cx, 100];
+  var ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+  ln.setAttribute('x1', edge[0]); ln.setAttribute('y1', edge[1]);
+  ln.setAttribute('x2', c.cx); ln.setAttribute('y2', c.cy);
+  ln.id = 'ln-' + k; svg.appendChild(ln);
+});
+function activate(k){
+  document.querySelectorAll('.callout').forEach(function(x){x.classList.toggle('active', x.dataset.k===k)});
+  document.querySelectorAll('#lines line, #lines circle').forEach(function(x){x.classList.remove('on')});
+  var l = document.getElementById('ln-'+k), d = document.getElementById('dot-'+k);
+  if(l) l.classList.add('on'); if(d) d.classList.add('on');
+  var c = CARDS[k], el = document.getElementById('detail');
+  el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap');
+  el.innerHTML = '<h3>' + c.t + ' <span class="gp">' + c.g + '</span></h3><p>' + c.p + '</p>' +
+    '<div class="tech">' + c.x + '</div>' + (c.w ? '<span class="warn">⚠ ' + c.w + '</span>' : '');
+}
+document.querySelectorAll('.chipcol, .toprowchips, .botrowchips').forEach(function(col){
+  col.addEventListener('click', function(e){
+    var b = e.target.closest('.callout'); if(b) activate(b.dataset.k);
+  });
+});
+/* hero parallax */
+(function(){
+  var h = document.querySelector('.heroimg');
+  if (h && location.hash !== '#noanim' && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    addEventListener('scroll', function(){
+      var y = Math.min(600, scrollY);
+      h.style.transform = 'translateY(' + (y * 0.07) + 'px) rotate(' + (-0.3 + y * 0.0006) + 'deg)';
+    }, {passive:true});
+  }
+})();
+/* count-up stats */
+(function(){
+  var done = false;
+  function run(instant){
+    if (done) return; done = true;
+    document.querySelectorAll('.stat2 b').forEach(function(b){
+      var target = parseInt(b.dataset.count, 10);
+      var plus = b.querySelector('.plus') ? '<span class="plus">+</span>' : '';
+      function set(v){ b.innerHTML = v + plus; }
+      if (instant){ set(target); return; }
+      var t0 = null;
+      function tick(ts){
+        if (!t0) t0 = ts;
+        var p = Math.min(1, (ts - t0) / 1200), eased = 1 - Math.pow(1 - p, 3);
+        set(Math.round(target * eased));
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      /* rAF is suspended in background tabs — guarantee the real number lands regardless */
+      setTimeout(function(){ set(target); }, 1500);
+    });
+  }
+  if (location.hash === '#noanim'){ run(true); }
+  else {
+    var so = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) run(); }); }, {threshold:.4});
+    var sl = document.querySelector('.statline'); if (sl) so.observe(sl);
+    setTimeout(run, 2500);
+  }
+})();
+if (location.hash === '#noanim') {
+  var st = document.createElement('style'); st.textContent = '*{animation:none !important;transition:none !important}';
+  document.head.appendChild(st);
+  document.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')});
+} else {
+  var io = new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target);}})},{threshold:.1});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+  setTimeout(function(){document.querySelectorAll('.rv:not(.in)').forEach(function(el){el.classList.add('in')})}, 1100);
+}
+</script>
+<div class="fmodal" id="fmodal"><div class="fbox">
+  <button class="fx" type="button">✕ close</button>
+  <div class="vwrap16"><iframe id="fframe" src="" title="BigTreeTech official SKR Pico film"
+    allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+</div></div>
+<div class="lb" id="lb">
+  <div class="lbbar">scroll to <b>zoom</b> · drag to <b>pan</b> · <b>Esc</b> to close</div>
+  <button class="lbx" id="lbx">✕</button>
+  <img id="lbimg" src="" alt="inspector">
+</div>
+<script>
+// ---- lightbox inspector ----
+(function(){
+  var lb = document.getElementById('lb'), im = document.getElementById('lbimg');
+  var scale = 1, px = 0, py = 0, drag = null;
+  function apply(){ im.style.transform = 'translate(' + px + 'px,' + py + 'px) scale(' + scale + ')'; }
+  function open(srcUrl){ im.src = srcUrl; scale = 1; px = py = 0; apply(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+  document.querySelectorAll('.wcard .art img, .bootfig img, .xfig img').forEach(function(img){
+    img.addEventListener('click', function(){ open(img.src); });
+    var hint = document.createElement('span'); hint.className = 'zoomhint'; hint.textContent = '🔍 CLICK TO INSPECT';
+    if (img.parentElement.classList.contains('art')) img.parentElement.appendChild(hint);
+  });
+  document.getElementById('lbx').addEventListener('click', close);
+  lb.addEventListener('click', function(e){ if (e.target === lb) close(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+  lb.addEventListener('wheel', function(e){
+    e.preventDefault();
+    var s = Math.min(8, Math.max(.4, scale * (e.deltaY < 0 ? 1.15 : .87)));
+    scale = s; apply();
+  }, {passive:false});
+  im.addEventListener('mousedown', function(e){ drag = {x: e.clientX - px, y: e.clientY - py}; e.preventDefault(); });
+  window.addEventListener('mousemove', function(e){ if (drag){ px = e.clientX - drag.x; py = e.clientY - drag.y; apply(); } });
+  window.addEventListener('mouseup', function(){ drag = null; });
+})();
+// ---- complete-pinout focus mode (Gemini direction: diagnostic-interface dimming) ----
+// inline styles, not classes: wins every cascade, every browser
+(function(){
+  var grid = document.getElementById('pingrid');
+  if (!grid) return;
+  var parts = grid.querySelectorAll('.pchip, .ring');
+  function setFocus(k){
+    parts.forEach(function(x){
+      var hit = x.dataset.k === k;
+      var zc = getComputedStyle(x).getPropertyValue('--zc').trim() || '#3FD8FF';
+      if (k && !hit){
+        x.style.opacity = x.classList.contains('ring') ? '0.15' : '0.22';
+        x.style.boxShadow = ''; x.style.transform = '';
+      } else if (k && hit){
+        x.style.opacity = '1';
+        x.style.boxShadow = '0 0 18px ' + zc + (x.classList.contains('ring') ? ', 0 0 36px ' + zc : '');
+        if (!x.classList.contains('ring')) x.style.transform = 'translateY(-2px)';
+      } else {
+        x.style.opacity = ''; x.style.boxShadow = ''; x.style.transform = '';
+      }
+    });
+  }
+  parts.forEach(function(el){
+    el.addEventListener('mouseenter', function(){ setFocus(el.dataset.k); });
+    el.addEventListener('mouseleave', function(){ setFocus(null); });
+  });
+})();
+// ---- watch-it-run facade -> modal (video loads only on demand) ----
+(function(){
+  var mo = document.getElementById('fmodal'), fr = document.getElementById('fframe');
+  if (mo && fr){
+    function openVid(id){ fr.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1'; mo.classList.add('open'); }
+    function close(){ mo.classList.remove('open'); fr.src = 'about:blank'; }
+    document.querySelectorAll('.facade[data-vid]').forEach(function(fa){
+      fa.addEventListener('click', function(){ openVid(fa.dataset.vid); });
+      fa.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openVid(fa.dataset.vid); } });
+    });
+    mo.querySelector('.fx').addEventListener('click', close);
+    mo.addEventListener('click', function(e){ if (e.target === mo) close(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+  }
+})();
+// ---- live-demo card: honest answer instead of a dead button ----
+(function(){
+  var p = document.getElementById('demoplay');
+  if (p){
+    p.closest('.railcard').style.cursor = 'pointer';
+    p.closest('.railcard').addEventListener('click', function(){
+      var ex = document.getElementById('demonote');
+      if (ex){ ex.remove(); return; }
+      var note = document.createElement('div');
+      note.id = 'demonote';
+      note.style.cssText = 'padding:12px 14px;background:#FFF6F6;border-top:2px solid var(--red);font-size:11.5px;line-height:1.6;color:#3A424C';
+      note.innerHTML = '<b style="color:var(--red)">In production — no fake demos.</b> This becomes the live wiring simulator: ' +
+        'wire the X motor on screen, tap jog +10, watch a photoreal printer respond (our relay-trainer engine pointed at 3D printing, built from real CAD). ' +
+        'It ships when it\'s real, and this card will say TESTED when it is.';
+      p.closest('.railcard').appendChild(note);
+    });
+  }
+})();
+// ---- Pi-model picker tabs ----
+document.querySelectorAll('.pitabs .pt').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.pitabs .pt').forEach(function(x){ x.classList.remove('on'); });
+    document.querySelectorAll('.pipanel').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    document.getElementById('pp-' + b.dataset.p).classList.add('on');
+  });
+});
+// ---- copy buttons on config cards ----
+document.querySelectorAll('.cfgcard button').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var txt = btn.closest('.cfgcard').querySelector('pre').innerText;
+    function ok(){ btn.textContent = '✔ COPIED'; setTimeout(function(){ btn.textContent = 'COPY'; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(ok, function(){ fallback(); });
+    } else { fallback(); }
+    function fallback(){
+      var ta = document.createElement('textarea'); ta.value = txt;
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch(e){}
+      ta.remove(); ok();
+    }
+  });
+});
+// ---- progress rail ----
+(function(){
+  var links = document.querySelectorAll('#railnav a');
+  var ids = ['top','board','wiring','flash','kb'];
+  var obs = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting){
+        links.forEach(function(l){ l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id); });
+      }
+    });
+  }, {rootMargin:'-40% 0px -55% 0px'});
+  ids.forEach(function(id){ var el = document.getElementById(id); if (el) obs.observe(el); });
+})();
+// ---- pin table: filter + copy ----
+(function(){
+  var q = document.getElementById('pinsearch'), rows = document.querySelectorAll('#pintable tr');
+  if (q) q.addEventListener('input', function(){
+    var v = q.value.toLowerCase();
+    rows.forEach(function(r, i){ if (i === 0) return; r.style.display = r.innerText.toLowerCase().indexOf(v) > -1 ? '' : 'none'; });
+  });
+  document.querySelectorAll('#pintable td.mono').forEach(function(td){
+    td.title = 'click to copy';
+    td.addEventListener('click', function(e){
+      navigator.clipboard.writeText(td.innerText.trim()).then(function(){
+        var t = document.createElement('div'); t.className = 'copied'; t.textContent = 'copied: ' + td.innerText.trim();
+        t.style.left = e.clientX + 'px'; t.style.top = (e.clientY - 30) + 'px';
+        document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 1000);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
