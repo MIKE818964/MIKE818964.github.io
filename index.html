@@ -298,18 +298,19 @@ body{background:#070D2A}
       <div class="nav-dropdown">
         <a href="products.html" class="nav-dropdown-trigger">Products ▾</a>
         <div class="nav-dropdown-menu">
-          <a href="eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
+          <a href="industrial.html"><strong>Industrial</strong><span>Plant-floor dashboards, troubleshooters, ERP hand-off</span></a>
           <a href="j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
+          <a href="/3d-printing/"><strong>3D Printing Hub</strong><span>Board wiring, firmware & pinouts</span></a>
+          <a href="eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
           <a href="c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
           <a href="nitrous.html"><strong>Nitrous Control</strong><span>Seven-gate safety-interlocked N₂O</span></a>
           <a href="gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
-          <a href="industrial.html"><strong>Industrial</strong><span>Industrial monitoring</span></a>
         </div>
       </div>
+      <a href="industrial.html">Industrial</a>
+      <a href="/3d-printing/">3D Printing</a>
       <a href="community.html">Community</a>
-      <a href="support.html">Support</a>
       <a href="downloads.html">Downloads</a>
-      <a href="news.html">News</a>
       <a href="about.html">About</a>
     </nav>
     <div class="header-actions">
@@ -371,6 +372,41 @@ body{background:#070D2A}
   <span><b>No telemetry</b></span><span class="dot">•</span>
   <span><b>Built &amp; tested</b> on real hardware</span>
 </div>
+
+<!-- ===== INDUSTRIAL SUPERPOWER BAND (the identity: studio-first + industrial power) ===== -->
+<style>
+.cx-ind-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
+.cx-ind-card{background:rgba(8,14,40,.62);border:1px solid rgba(63,216,255,.2);border-radius:14px;padding:20px 18px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.cx-ind-card:hover{transform:translateY(-3px);border-color:rgba(63,216,255,.5);box-shadow:0 14px 34px rgba(46,123,255,.26)}
+.cx-ind-card b{display:block;color:#fff;font-size:14.5px;margin-bottom:8px}
+.cx-ind-card span{color:#A9B6D6;font-size:12.5px;line-height:1.6}
+.cx-ind-h em{color:#3FD8FF;font-style:normal}
+@media(max-width:900px){.cx-ind-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.cx-ind-grid{grid-template-columns:1fr}}
+</style>
+<section class="cx-band cx-products" id="industrial-band" style="padding:66px 0 76px">
+  <div class="cx-streak" style="top:18%"></div>
+  <div class="cx-glint" style="top:70%"></div>
+  <div class="container">
+    <div class="cx-shead cx-rv">
+      <div class="cx-kicker">THE INDUSTRIAL SIDE</div>
+      <h2 class="cx-h2 cx-ind-h">We get <em>inside</em> the machines that run a plant floor.</h2>
+      <p class="cx-lede">A software studio first — and quietly, an industrial superpower. The hardware that keeps a
+      plant running rarely gives up its data easily. We reverse-engineer the protocol, pull the real numbers off the
+      controller, and put them on a screen an operator actually wants to look at. Live dashboards, shift-cost
+      reporting, machine troubleshooters, and ERP hand-off — polished like everything else we ship.</p>
+    </div>
+    <div class="cx-ind-grid cx-rv">
+      <div class="cx-ind-card"><b>Speaks the floor's protocols</b><span>Modbus, OPC UA, MQTT, serial/RS-485, plus Allen-Bradley &amp; Siemens tooling — even proprietary buses like Maguire's MLAN.</span></div>
+      <div class="cx-ind-card"><b>Maguire blender fleets, instrumented</b><span>Live dashboards, per-shift cost analytics, batch-drop logging, and clean hand-off into eIQ / DELMIAWorks.</span></div>
+      <div class="cx-ind-card"><b>Troubleshooters for real machines</b><span>Fault libraries, live PLC monitors, I/O maps and searchable ladder knowledge — built private, per plant.</span></div>
+      <div class="cx-ind-card"><b>Engineering deliverables, not just apps</b><span>JIC electrical prints, PLC code recovery, and an AI search engine across ~1,000 plant manuals.</span></div>
+    </div>
+    <div class="cx-rv" style="text-align:center;margin-top:34px">
+      <a href="industrial.html" class="cx-btn cx-btn-honey">Explore the industrial stack →</a>
+    </div>
+  </div>
+</section>
 
 <!-- ===== PRODUCT SHOWCASE — dark cinematic band, alternating feature rows ===== -->
 <section class="cx-band cx-products" id="products">
