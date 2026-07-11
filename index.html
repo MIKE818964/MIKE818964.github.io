@@ -21,15 +21,220 @@
 <title>HONEYBADGER SOFTWARE INC — Polished Tools for the Stubborn Few</title>
 <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
 <link rel="stylesheet" href="assets/css/style.css?v=8">
+<style>
+/* =====================================================================
+   CINEMA PREVIEW — homepage elevated to the /3d-printing/ standard.
+   Shared chrome (topbar/header/nav/footer/buttons) comes from style.css.
+   Everything below is scoped with a cx- prefix so it never fights the
+   base cascade. Navy space bands + slow electric-blue/cyan streaks +
+   cyan neon glow rims + glowing curve transitions + count-up evidence.
+   Honey-amber is the RARE warm glint (our take on their one red glint)
+   and the single warm CTA — the honey in the electric dark.
+   ===================================================================== */
+:root{
+  --nx1:#05091F; --nx2:#0A1134; --nx3:#16226B; --nx-deep:#0B1445;
+  --elec:#2E7BFF; --cyan:#3FD8FF;
+  --honey:#ed7a06; --honey-hi:#ffb84d;
+  --ink-nav:#0A1134;
+  --txt-hi:#DCE6FF; --txt-mid:#A9B6D6; --txt-dim:#7E8BB0;
+}
+
+/* ---- reveal (own class so it doesn't collide with nav.js .reveal) ---- */
+.cx-rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.cx-rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .cx-rv{opacity:1!important;transform:none!important;transition:none}
+  .cx-streak,.cx-glint,.cx-shot,.cx-badger-anim,.cx-curveglow{animation:none!important}
+}
+
+/* ===================== DARK CINEMATIC BAND ===================== */
+.cx-band{position:relative;overflow:hidden;color:#fff;
+  background:linear-gradient(150deg,var(--nx1) 0%,var(--nx2) 46%,var(--nx3) 100%)}
+.cx-band .container{position:relative;z-index:3}
+/* slow drifting light streaks */
+.cx-streak{position:absolute;height:2px;width:42%;pointer-events:none;z-index:1;opacity:.72;
+  background:linear-gradient(90deg,transparent,rgba(63,216,255,.55),rgba(46,123,255,.32),transparent);
+  animation:cxdrift 18s linear infinite}
+.cx-streak.s2{animation-duration:22s;animation-delay:6s;
+  background:linear-gradient(90deg,transparent,rgba(46,123,255,.5),rgba(63,216,255,.25),transparent)}
+.cx-streak.s3{animation-duration:26s;animation-delay:11s;opacity:.5}
+@keyframes cxdrift{from{transform:translateX(-60%)}to{transform:translateX(260%)}}
+/* the rare honey glint — a warm flash in the cold */
+.cx-glint{position:absolute;height:2px;width:30%;pointer-events:none;z-index:1;
+  background:linear-gradient(90deg,transparent,rgba(237,122,6,.65),rgba(255,184,77,.4),transparent);
+  animation:cxglint 15s ease-in-out infinite}
+@keyframes cxglint{0%,82%,100%{opacity:0;transform:translateX(-40%)}88%{opacity:.9}
+  94%{opacity:0;transform:translateX(240%)}}
+
+/* ===================== HERO ===================== */
+.cx-hero{padding:66px 0 118px}
+.cx-hero:before{content:"";position:absolute;inset:-15%;z-index:0;pointer-events:none;
+  background:radial-gradient(760px 460px at 82% 8%,rgba(46,123,255,.30),transparent 58%),
+            radial-gradient(620px 520px at 4% 92%,rgba(63,216,255,.13),transparent 60%);
+  animation:cxbreathe 16s ease-in-out infinite alternate}
+@keyframes cxbreathe{from{transform:translateY(0) scale(1)}to{transform:translateY(-16px) scale(1.04)}}
+.cx-herogrid{display:grid;grid-template-columns:1.08fr .92fr;gap:52px;align-items:center;position:relative;z-index:3}
+.cx-eyebrow{display:inline-block;font-family:"JetBrains Mono","Consolas",monospace;font-size:11px;
+  letter-spacing:3px;color:var(--cyan);border:1px solid rgba(63,216,255,.4);border-radius:999px;
+  padding:6px 14px;margin-bottom:22px;background:rgba(63,216,255,.06)}
+.cx-h1{font-family:"Space Grotesk","Inter",sans-serif;font-weight:700;color:#fff;
+  font-size:clamp(40px,6.4vw,76px);line-height:1.02;letter-spacing:-1.8px;margin:0 0 22px;text-transform:uppercase}
+.cx-h1 .hl{background:linear-gradient(100deg,var(--cyan),var(--elec) 78%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.cx-sub{font-size:18px;line-height:1.62;color:var(--txt-mid);max-width:560px;margin:0 0 30px}
+.cx-sub strong{color:var(--txt-hi)}
+.cx-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+.cx-btn{display:inline-block;padding:14px 28px;border-radius:9px;font-weight:700;font-size:15px;
+  letter-spacing:.3px;border:1.5px solid transparent;cursor:pointer;text-decoration:none;text-align:center;
+  transition:transform .12s ease,box-shadow .2s ease,background .15s,border-color .15s,color .15s}
+.cx-btn:hover{transform:translateY(-2px)}
+/* the single warm CTA — brand-signature honey, the actionable glint */
+.cx-btn-honey{background:linear-gradient(120deg,#ffab3d,var(--honey));color:#1a1206;
+  box-shadow:0 10px 28px rgba(237,122,6,.34)}
+.cx-btn-honey:hover{box-shadow:0 14px 38px rgba(237,122,6,.5);color:#1a1206}
+.cx-btn-ghost{background:rgba(63,216,255,.04);color:var(--cyan);border-color:rgba(63,216,255,.5)}
+.cx-btn-ghost:hover{background:rgba(63,216,255,.12);border-color:var(--cyan);
+  box-shadow:0 8px 26px rgba(46,123,255,.35)}
+.cx-pills{display:flex;flex-wrap:wrap;gap:10px}
+.cx-pill{font-family:"JetBrains Mono","Consolas",monospace;font-size:11px;letter-spacing:.5px;
+  color:var(--txt-mid);background:rgba(10,17,52,.55);border:1px solid rgba(63,216,255,.24);
+  border-radius:999px;padding:6px 14px}
+
+/* hero product photo — the glow IS the frame */
+.cx-heroart{position:relative;z-index:3}
+.cx-shot{position:relative;border-radius:14px;overflow:hidden;background:#0d0f16;
+  box-shadow:0 0 0 1px rgba(63,216,255,.25),0 0 34px rgba(46,123,255,.34),0 26px 64px rgba(3,6,20,.6);
+  transform:rotate(-1.3deg);transition:transform .4s ease,box-shadow .4s ease;cursor:zoom-in;
+  animation:cxrim 6.5s ease-in-out infinite}
+@keyframes cxrim{0%,100%{box-shadow:0 0 0 1px rgba(63,216,255,.25),0 0 34px rgba(46,123,255,.30),0 26px 64px rgba(3,6,20,.6)}
+  50%{box-shadow:0 0 0 1px rgba(63,216,255,.4),0 0 52px rgba(46,123,255,.5),0 26px 64px rgba(3,6,20,.6)}}
+.cx-shot:hover{transform:rotate(0deg) translateY(-6px) rotate3d(1,-1,0,5deg)}
+.cx-shot img{display:block;width:100%;height:auto}
+.cx-shot:after{content:"RUNNING LIVE ON A 2014 STINGRAY";position:absolute;left:14px;bottom:13px;
+  font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:1.4px;color:#fff;
+  background:rgba(5,9,31,.78);border:1px solid rgba(63,216,255,.35);padding:5px 10px;border-radius:6px}
+
+/* count-up evidence row */
+.cx-stats{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;
+  column-gap:34px;row-gap:18px;margin:30px 0 4px}
+.cx-stat b{display:block;font-family:"Space Grotesk","Inter",sans-serif;font-size:34px;font-weight:700;
+  color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.cx-stat b .u{color:var(--cyan)}
+.cx-stat span{display:block;margin-top:7px;font-size:10.5px;letter-spacing:1.6px;font-weight:700;
+  color:var(--txt-dim);text-transform:uppercase}
+
+/* glowing asymmetric curve transition */
+.cx-curve{position:absolute;left:0;right:0;bottom:-1px;height:74px;z-index:2;pointer-events:none}
+.cx-curve svg{width:100%;height:100%;display:block}
+.cx-curveglow{filter:drop-shadow(0 0 7px rgba(63,216,255,.85));animation:cxcglow 7s ease-in-out infinite}
+@keyframes cxcglow{0%,100%{opacity:.65}50%{opacity:1}}
+/* glowing divider line at the top of a dark band */
+.cx-topline{position:absolute;top:0;left:0;right:0;height:2px;z-index:2;
+  background:linear-gradient(90deg,transparent,rgba(63,216,255,.6),rgba(46,123,255,.3),transparent);
+  filter:drop-shadow(0 0 6px rgba(63,216,255,.6))}
+
+/* ===================== TRUST STRIP (light) ===================== */
+/* uses base .trust-strip from style.css — no override needed */
+
+/* ===================== PRODUCT SHOWCASE (dark band) ===================== */
+.cx-products{padding:70px 0 90px}
+.cx-shead{text-align:center;max-width:760px;margin:0 auto 20px}
+.cx-kicker{font-family:"JetBrains Mono","Consolas",monospace;font-size:12px;letter-spacing:4px;
+  color:var(--cyan);margin-bottom:14px}
+.cx-h2{font-family:"Space Grotesk","Inter",sans-serif;font-size:clamp(28px,4vw,44px);font-weight:700;
+  color:#fff;letter-spacing:-.5px;line-height:1.14;margin:0 0 14px}
+.cx-lede{font-size:17px;color:var(--txt-mid);margin:0 auto;max-width:640px;line-height:1.6}
+
+.cx-feat{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center;
+  padding:46px 0;border-top:1px solid rgba(63,216,255,.14)}
+.cx-feat:first-of-type{border-top:0}
+.cx-feat.flip .cx-fmedia{order:2}
+.cx-fmedia{position:relative;border-radius:14px;overflow:hidden;background:#0d0f16;cursor:zoom-in;
+  box-shadow:0 0 0 1px rgba(63,216,255,.22),0 0 26px rgba(46,123,255,.28),0 22px 52px rgba(3,6,20,.55);
+  transition:transform .4s ease,box-shadow .4s ease}
+.cx-fmedia:hover{transform:translateY(-6px) rotate3d(1,-1,0,4deg);
+  box-shadow:0 0 0 1px rgba(63,216,255,.4),0 0 44px rgba(46,123,255,.5),0 22px 52px rgba(3,6,20,.55)}
+.cx-fmedia img{display:block;width:100%;height:auto}
+.cx-fmedia.contain{background:radial-gradient(130% 120% at 30% 18%,#141b32,#080b16);
+  display:flex;align-items:center;justify-content:center;min-height:230px}
+.cx-fmedia.contain img{width:auto;height:180px;object-fit:contain;padding:24px}
+.cx-zoomhint{position:absolute;bottom:10px;right:10px;background:rgba(5,9,31,.8);color:var(--cyan);
+  font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;letter-spacing:.8px;
+  border:1px solid rgba(63,216,255,.35);border-radius:7px;padding:4px 9px;opacity:0;transition:opacity .2s}
+.cx-fmedia:hover .cx-zoomhint{opacity:1}
+
+.cx-fbadge{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:1.5px;
+  font-weight:700;padding:5px 11px;border-radius:6px;margin-bottom:14px}
+.cx-fbadge.live{background:rgba(63,216,255,.13);color:var(--cyan);border:1px solid rgba(63,216,255,.4)}
+.cx-fbadge.beta{background:rgba(46,123,255,.14);color:#6fa8ff;border:1px solid rgba(46,123,255,.45)}
+.cx-fbadge.kit{background:rgba(237,122,6,.13);color:var(--honey-hi);border:1px solid rgba(237,122,6,.42)}
+.cx-fbadge.free{background:rgba(46,190,120,.14);color:#5fe0a0;border:1px solid rgba(46,190,120,.4)}
+.cx-ftext h3{font-family:"Space Grotesk","Inter",sans-serif;font-size:27px;font-weight:700;color:#fff;margin:0 0 12px}
+.cx-ftext p{font-size:15.5px;line-height:1.65;color:var(--txt-mid);margin:0 0 18px}
+.cx-ftext p strong{color:var(--txt-hi)}
+.cx-flink{display:inline-block;font-weight:700;font-size:14.5px;color:var(--cyan);text-decoration:none;
+  transition:color .15s,transform .15s}
+.cx-flink:hover{color:#fff;transform:translateX(3px)}
+
+/* ===================== STUDIO DISCIPLINES (light, SVG icons) ===================== */
+.cx-disc-sec{background:var(--bg-light);padding:80px 0}
+.cx-disc-sec .cx-kicker{color:#c2790a}
+.cx-disc-sec .cx-h2{color:#16120c}
+.cx-disc-sec .cx-lede{color:#5c544a}
+.cx-disc{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:44px}
+.cx-disccard{background:#fffdf9;border:1px solid rgba(20,16,10,.10);border-radius:16px;padding:28px 24px;
+  box-shadow:0 12px 34px rgba(40,30,10,.06);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.cx-disccard:hover{transform:translateY(-5px);border-color:rgba(46,123,255,.35);
+  box-shadow:0 20px 46px rgba(20,40,90,.14)}
+.cx-icon{width:46px;height:46px;margin-bottom:16px}
+.cx-icon svg{width:46px;height:46px;stroke:var(--ink-nav);stroke-width:1.5;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;transition:stroke .25s ease}
+.cx-disccard:hover .cx-icon svg{stroke:var(--elec)}
+.cx-disccard h3{font-family:"Space Grotesk","Inter",sans-serif;font-size:18px;font-weight:700;
+  color:#16120c;margin:0 0 8px}
+.cx-disccard p{font-size:14px;line-height:1.55;color:#6a6155;margin:0}
+
+/* ===================== responsive ===================== */
+/* collapse at 880 to match the base site (keeps the two-column hero at
+   Michael's ~980 app width, image top-right and above the fold) */
+@media (max-width:880px){
+  .cx-herogrid{grid-template-columns:1fr;gap:38px}
+  .cx-shot{transform:none;max-width:520px}
+  .cx-feat{grid-template-columns:1fr;gap:26px;padding:36px 0}
+  .cx-feat.flip .cx-fmedia{order:0}
+  .cx-disc{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .cx-h1{font-size:36px}
+  .cx-stats{grid-template-columns:repeat(2,auto);column-gap:30px}
+  .cx-disc{grid-template-columns:1fr}
+  .cx-btn{width:100%}
+  .cx-cta{flex-direction:column}
+}
+
+/* ===================== LIGHTBOX ===================== */
+.cx-lb{position:fixed;inset:0;background:rgba(5,9,31,.9);backdrop-filter:blur(8px);z-index:900;
+  display:none;align-items:center;justify-content:center;padding:40px}
+.cx-lb.open{display:flex}
+.cx-lb img{max-width:92vw;max-height:88vh;border-radius:10px;
+  box-shadow:0 40px 120px rgba(0,0,0,.7),0 0 60px rgba(46,123,255,.4);animation:cxpop .28s ease}
+@keyframes cxpop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.cx-lbx{position:fixed;top:18px;right:22px;width:42px;height:42px;border-radius:50%;
+  background:rgba(63,216,255,.15);border:1.5px solid rgba(63,216,255,.5);color:#fff;font-size:18px;
+  font-weight:800;cursor:pointer;z-index:901}
+.cx-lbx:hover{background:rgba(63,216,255,.3)}
+.cx-lbcap{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);color:var(--txt-mid);
+  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.8px;z-index:901}
+</style>
 </head>
 <body>
 
-<!-- ===== WORK-IN-PROGRESS BANNER ===== -->
+<!-- ===== WORK-IN-PROGRESS BANNER (unchanged) ===== -->
 <div style="background:linear-gradient(90deg,#3a1f00,#5a3210,#3a1f00);color:#f4c441;padding:6px 0;text-align:center;font-size:12px;font-weight:700;letter-spacing:3px;border-bottom:1px solid #d4a017;">
   🚧 &nbsp; SITE IN ACTIVE DEVELOPMENT &nbsp;·&nbsp; some pages + polish still being built &nbsp;·&nbsp; check back often &nbsp; 🦡
 </div>
 
-<!-- ===== TOP UTILITY STRIP ===== -->
+<!-- ===== TOP UTILITY STRIP (copied exactly from current homepage) ===== -->
 <div class="topbar">
   <div class="container">
     <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
@@ -42,7 +247,7 @@
   </div>
 </div>
 
-<!-- ===== HEADER / NAV ===== -->
+<!-- ===== HEADER / NAV (copied exactly from current homepage, relay line included) ===== -->
 <header class="site-header">
   <div class="container header-row">
     <a href="/" class="brand">
@@ -78,32 +283,52 @@
   </div>
 </header>
 
-<!-- ===== HERO ===== -->
-<section class="hero">
+<!-- ===== HERO — dark cinematic band ===== -->
+<section class="cx-band cx-hero">
+  <div class="cx-streak" style="top:20%"></div>
+  <div class="cx-streak s2" style="top:52%"></div>
+  <div class="cx-streak s3" style="top:78%"></div>
+  <div class="cx-glint" style="top:36%"></div>
   <div class="container">
-    <div class="hero-grid">
-      <div class="hero-text">
-        <div class="hero-eyebrow">HONEYBADGER SOFTWARE INC · 3D PRINTING · AUTOMOTIVE · INDUSTRIAL</div>
-        <h1 class="hero-title">We build the tools.<br><span class="hl">You own the gear.</span></h1>
-        <p class="hero-sub">HONEYBADGER SOFTWARE INC builds software and open hardware across the things you tinker with — your <strong>3D printer</strong>, the <strong>car in your garage</strong>, the <strong>machines at your plant</strong>. Real installers. No "convert your firmware first." No "pip install" for end users. Just tools that work.</p>
-        <div class="hero-cta">
-          <a href="products.html" class="btn btn-primary">Explore the products</a>
-          <a href="builder.html" class="btn btn-ghost">Build a gauge cluster →</a>
+    <div class="cx-herogrid">
+      <div class="cx-rv">
+        <div class="cx-eyebrow">HONEYBADGER SOFTWARE INC · 3D PRINTING · AUTOMOTIVE · INDUSTRIAL</div>
+        <h1 class="cx-h1">We build the tools.<br><span class="hl">You own the gear.</span></h1>
+        <p class="cx-sub">HONEYBADGER SOFTWARE INC builds software and open hardware across the things you tinker with — your <strong>3D printer</strong>, the <strong>car in your garage</strong>, the <strong>machines at your plant</strong>. Real installers. No "convert your firmware first." No "pip install" for end users. Just tools that work.</p>
+        <div class="cx-stats" id="cxStats">
+          <div class="cx-stat"><b data-count="4">0</b><span>Products built</span></div>
+          <div class="cx-stat"><b data-count="3">0</b><span>Disciplines</span></div>
+          <div class="cx-stat"><b data-count="0">0</b><span>Telemetry channels</span></div>
+          <div class="cx-stat"><b data-count="1">0</b><span>Stubborn studio</span></div>
         </div>
-        <div class="pill-row">
-          <span class="pill">No telemetry</span>
-          <span class="pill">No tracking</span>
-          <span class="pill">Honest Known-Issues pages</span>
-          <span class="pill">Free where it makes sense</span>
+        <div class="cx-cta">
+          <a href="products.html" class="cx-btn cx-btn-honey">Explore the products</a>
+          <a href="builder.html" class="cx-btn cx-btn-ghost">Build a gauge cluster →</a>
+        </div>
+        <div class="cx-pills">
+          <span class="cx-pill">No telemetry</span>
+          <span class="cx-pill">No tracking</span>
+          <span class="cx-pill">Honest Known-Issues pages</span>
+          <span class="cx-pill">Free where it makes sense</span>
         </div>
       </div>
-      <div class="hero-art">
-        <div class="hero-shot"><img src="assets/images/c7-tuning-dash.png?v=2" alt="The Honeybadger C7 dashboard running live — six tuning gauges and 24 live data cells"></div>
+      <div class="cx-heroart cx-rv">
+        <figure class="cx-shot" style="margin:0" data-full="assets/images/c7-tuning-dash.png?v=2">
+          <img src="assets/images/c7-tuning-dash.png?v=2" alt="The Honeybadger C7 dashboard running live — six tuning gauges and 24 live data cells">
+        </figure>
       </div>
     </div>
   </div>
+  <!-- glowing asymmetric curve into the light trust strip (#f1e8d8) -->
+  <div class="cx-curve">
+    <svg viewBox="0 0 1440 74" preserveAspectRatio="none">
+      <path d="M0,74 L0,34 C360,70 940,-6 1440,44 L1440,74 Z" fill="#f1e8d8"/>
+      <path class="cx-curveglow" d="M0,34 C360,70 940,-6 1440,44" fill="none" stroke="#3FD8FF" stroke-width="1.6"/>
+    </svg>
+  </div>
 </section>
 
+<!-- ===== TRUST STRIP (light, unchanged content) ===== -->
 <div class="trust-strip">
   <span><b>Raw CAN</b> — no reflash</span><span class="dot">•</span>
   <span><b>Stock firmware</b> — warranty intact</span><span class="dot">•</span>
@@ -111,75 +336,118 @@
   <span><b>Built &amp; tested</b> on real hardware</span>
 </div>
 
-<!-- ===== PRODUCT SHOWCASE (equal weight) ===== -->
-<section id="products" class="section">
+<!-- ===== PRODUCT SHOWCASE — dark cinematic band, alternating feature rows ===== -->
+<section class="cx-band cx-products" id="products">
+  <div class="cx-topline"></div>
+  <div class="cx-streak" style="top:14%"></div>
+  <div class="cx-streak s2" style="top:60%"></div>
+  <div class="cx-glint" style="top:84%"></div>
   <div class="container">
-    <div class="section-head center">
-      <div class="kicker">THE PRODUCTS</div>
-      <h2>The products. One stubborn studio.</h2>
-      <p class="lede center-narrow">Each one solves a problem the big vendors left on the table — and each ships polished, or it doesn't ship.</p>
+    <div class="cx-shead cx-rv">
+      <div class="cx-kicker">THE PRODUCTS</div>
+      <h2 class="cx-h2">The products. One stubborn studio.</h2>
+      <p class="cx-lede">Each one solves a problem the big vendors left on the table — and each ships polished, or it doesn't ship.</p>
     </div>
 
-    <div class="showcase-grid">
-      <div class="showcase-card">
-        <div class="sc-media"><img src="assets/images/screenshots/eve-what-to-mine.png" alt="EVE Fleet Foreman ranking ore by ISK per cubic meter"></div>
-        <span class="sc-badge tool">FREE · LIVE NOW</span>
+    <!-- EVE Fleet Foreman -->
+    <div class="cx-feat cx-rv">
+      <figure class="cx-fmedia" style="margin:0" data-full="assets/images/screenshots/eve-what-to-mine.png">
+        <img src="assets/images/screenshots/eve-what-to-mine.png" alt="EVE Fleet Foreman ranking ore by ISK per cubic meter">
+        <span class="cx-zoomhint">🔍 CLICK TO INSPECT</span>
+      </figure>
+      <div class="cx-ftext">
+        <span class="cx-fbadge free">FREE · LIVE NOW</span>
         <h3>EVE Fleet Foreman</h3>
         <p>A free, open-source fleet-mining tool for EVE Online. See what to mine by <strong>ISK per m³</strong> from live Jita prices, get a refine-or-sell verdict, and auto-split your fleet's Mining Ledger — fairly. Read-only and 100% EULA-safe.</p>
-        <a href="eve-fleet-foreman.html" class="sc-link">About EVE Fleet Foreman →</a>
+        <a href="eve-fleet-foreman.html" class="cx-flink">About EVE Fleet Foreman →</a>
       </div>
-      <div class="showcase-card">
-        <div class="sc-media"><img src="assets/images/screenshots/monitor.webp" alt="J1 Bridge live print monitor"></div>
-        <span class="sc-badge beta">ACTIVE BETA</span>
+    </div>
+
+    <!-- J1 Bridge -->
+    <div class="cx-feat flip cx-rv">
+      <figure class="cx-fmedia" style="margin:0" data-full="assets/images/screenshots/monitor.webp">
+        <img src="assets/images/screenshots/monitor.webp" alt="J1 Bridge live print monitor">
+        <span class="cx-zoomhint">🔍 CLICK TO INSPECT</span>
+      </figure>
+      <div class="cx-ftext">
+        <span class="cx-fbadge beta">ACTIVE BETA</span>
         <h3>J1 Bridge</h3>
-        <p>OrcaSlicer + Snapmaker J1, finally talking to each other. Drag-drop slicing, live print monitoring, built-in camera — all on stock firmware. No Klipper, no Pi, warranty intact.</p>
-        <a href="j1-bridge.html" class="sc-link">Learn about J1 Bridge →</a>
+        <p>OrcaSlicer + Snapmaker J1, finally talking to each other. Drag-drop slicing, live print monitoring, built-in camera — all on <strong>stock firmware</strong>. No Klipper, no Pi, warranty intact.</p>
+        <a href="j1-bridge.html" class="cx-flink">Learn about J1 Bridge →</a>
       </div>
-      <div class="showcase-card">
-        <div class="sc-media"><img src="assets/images/c7-tuning-dash.png?v=2" alt="C7 tuning dashboard with six live gauges"></div>
-        <span class="sc-badge kit">COMMERCIAL KIT · PRE-LAUNCH</span>
+    </div>
+
+    <!-- C7 Dashboard -->
+    <div class="cx-feat cx-rv">
+      <figure class="cx-fmedia" style="margin:0" data-full="assets/images/c7-tuning-dash.png?v=2">
+        <img src="assets/images/c7-tuning-dash.png?v=2" alt="C7 tuning dashboard with six live gauges">
+        <span class="cx-zoomhint">🔍 CLICK TO INSPECT</span>
+      </figure>
+      <div class="cx-ftext">
+        <span class="cx-fbadge kit">COMMERCIAL KIT · PRE-LAUNCH</span>
         <h3>C7 Dashboard</h3>
-        <p>The aftermarket touchscreen head unit GM never gave the C7 Corvette. Live tuning gauges, a 250-app multimedia center, and a safety-interlocked nitrous controller — reading the OEM CAN bus passively, no reflash.</p>
-        <a href="c7-dashboard.html" class="sc-link">See the C7 Dashboard →</a>
+        <p>The aftermarket touchscreen head unit GM never gave the C7 Corvette. Live tuning gauges, a 250-app multimedia center, and a safety-interlocked nitrous controller — reading the OEM CAN bus <strong>passively, no reflash</strong>.</p>
+        <a href="c7-dashboard.html" class="cx-flink">See the C7 Dashboard →</a>
       </div>
-      <div class="showcase-card">
-        <div class="sc-media contain"><img src="assets/images/gauge-hero.svg" alt="A premium digital gauge designed in the Dash Builder"></div>
-        <span class="sc-badge tool">LIVE · TRY IT NOW</span>
+    </div>
+
+    <!-- Dash Builder -->
+    <div class="cx-feat flip cx-rv">
+      <figure class="cx-fmedia contain" style="margin:0" data-full="assets/images/gauge-hero.svg">
+        <img src="assets/images/gauge-hero.svg" alt="A premium digital gauge designed in the Dash Builder">
+        <span class="cx-zoomhint">🔍 CLICK TO INSPECT</span>
+      </figure>
+      <div class="cx-ftext">
+        <span class="cx-fbadge live">LIVE · TRY IT NOW</span>
         <h3>Dash Builder</h3>
         <p>Design a <strong>whole dash</strong>, not just one gauge. A drag-and-drop screen designer, <strong>19+ gauge styles</strong> (dials, numeric readouts, trend charts, race strips), 27 live signals, 12 color themes, plus an animated symbol library — nitrous bottle, controller, telltales. What you build ships pixel-identical to your dash.</p>
-        <a href="designer.html" class="sc-link">Open the screen designer →</a>
+        <a href="designer.html" class="cx-flink">Open the screen designer →</a>
       </div>
     </div>
   </div>
+  <!-- curve into the light studio section (#ffffff) -->
+  <div class="cx-curve">
+    <svg viewBox="0 0 1440 74" preserveAspectRatio="none">
+      <path d="M0,74 L0,44 C520,-8 1020,72 1440,30 L1440,74 Z" fill="#ffffff"/>
+      <path class="cx-curveglow" d="M0,44 C520,-8 1020,72 1440,30" fill="none" stroke="#3FD8FF" stroke-width="1.6"/>
+    </svg>
+  </div>
 </section>
 
-<!-- ===== STUDIO INTRO ===== -->
-<section id="studio" class="section section-light">
+<!-- ===== STUDIO DISCIPLINES — light, minimal SVG icons (emoji removed) ===== -->
+<section class="cx-disc-sec" id="studio">
   <div class="container">
-    <div class="section-head center">
-      <div class="kicker">THE STUDIO</div>
-      <h2>One developer. Multiple disciplines.<br>Tools that don't suck.</h2>
-      <p class="lede center-narrow">Honeybadger Software builds across the things you actually own and tinker with — 3D printers, the car in your garage, the machinery at your plant, the maker projects on your bench. Every product is a polished Windows installer or a real piece of open hardware. No "convert your firmware first." No "buy five other things first." Just tools that work.</p>
+    <div class="cx-shead cx-rv">
+      <div class="cx-kicker">THE STUDIO</div>
+      <h2 class="cx-h2">One developer. Multiple disciplines.<br>Tools that don't suck.</h2>
+      <p class="cx-lede">Honeybadger Software builds across the things you actually own and tinker with — 3D printers, the car in your garage, the machinery at your plant, the maker projects on your bench. Every product is a polished Windows installer or a real piece of open hardware. No "convert your firmware first." No "buy five other things first." Just tools that work.</p>
     </div>
-
-    <div class="studio-grid">
-      <div class="studio-card">
-        <div class="studio-icon">🧊</div>
+    <div class="cx-disc">
+      <div class="cx-disccard cx-rv">
+        <div class="cx-icon"><!-- 3D printer nozzle / extruder -->
+          <svg viewBox="0 0 48 48"><path d="M14 8h20v10l-6 6h-8l-6-6z"/><path d="M20 24l-2 8h12l-2-8"/><path d="M24 32v6"/><path d="M21 40h6"/></svg>
+        </div>
         <h3>3D Printing</h3>
         <p>J1 Bridge — drag-drop slicing, live monitoring, camera, all on stock Snapmaker firmware. Public beta; more printers planned.</p>
       </div>
-      <div class="studio-card">
-        <div class="studio-icon">🚗</div>
+      <div class="cx-disccard cx-rv">
+        <div class="cx-icon"><!-- automotive gauge dial -->
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><path d="M24 24l8-6"/><circle cx="24" cy="24" r="2.2" fill="currentColor" stroke="none"/><path d="M12 24h3M33 24h3M24 12v3"/></svg>
+        </div>
         <h3>Automotive</h3>
         <p>C7 Corvette dashboard kit + the Dash Builder. Swappable live clusters, multimedia, nitrous safety. Raw-CAN passive read — warranty intact.</p>
       </div>
-      <div class="studio-card">
-        <div class="studio-icon">🏭</div>
+      <div class="cx-disccard cx-rv">
+        <div class="cx-icon"><!-- industrial gear -->
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="6.5"/><path d="M24 8v5M24 35v5M8 24h5M35 24h5M13 13l3.5 3.5M31.5 31.5L35 35M35 13l-3.5 3.5M16.5 31.5L13 35"/></svg>
+        </div>
         <h3>Industrial</h3>
         <p>Operator dashboards and reporting — OPC UA, MQTT, and Modbus.</p>
       </div>
-      <div class="studio-card">
-        <div class="studio-icon">🔬</div>
+      <div class="cx-disccard cx-rv">
+        <div class="cx-icon"><!-- schematic / resistor -->
+          <svg viewBox="0 0 48 48"><path d="M6 24h8l3-7 6 14 6-14 3 7h9"/><circle cx="9" cy="24" r="1.6" fill="currentColor" stroke="none"/><circle cx="39" cy="24" r="1.6" fill="currentColor" stroke="none"/></svg>
+        </div>
         <h3>Maker &amp; Learn</h3>
         <p>PLC documentation tooling and vendor-hardware knowledge bases for people who want to <em>understand</em> their gear, not just operate it.</p>
       </div>
@@ -187,7 +455,7 @@
   </div>
 </section>
 
-<!-- ===== WHY HONEYBADGER ===== -->
+<!-- ===== WHY HONEYBADGER (light, unchanged content) ===== -->
 <section id="why" class="section section-why">
   <div class="container">
     <div class="section-head center">
@@ -208,7 +476,7 @@
   </div>
 </section>
 
-<!-- ===== COMMUNITY TEASER ===== -->
+<!-- ===== COMMUNITY TEASER (amber CTA band, unchanged) ===== -->
 <section class="section">
   <div class="container">
     <div class="split-cta">
@@ -221,7 +489,7 @@
   </div>
 </section>
 
-<!-- ===== NEWS TEASER ===== -->
+<!-- ===== NEWS TEASER (unchanged) ===== -->
 <section class="section section-alt">
   <div class="container">
     <div class="section-head">
@@ -260,7 +528,7 @@
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
+<!-- ===== FOOTER (copied exactly from current homepage) ===== -->
 <footer class="site-footer">
   <div class="container">
     <div class="footer-cols">
@@ -302,6 +570,87 @@
   </div>
 </footer>
 
+<!-- ===== LIGHTBOX ===== -->
+<div class="cx-lb" id="cxLb">
+  <button class="cx-lbx" id="cxLbx" type="button" aria-label="Close">✕</button>
+  <img id="cxLbImg" src="" alt="Inspected screenshot">
+  <div class="cx-lbcap">click anywhere or press Esc to close</div>
+</div>
+
 <script src="assets/js/nav.js?v=4"></script>
+<script>
+/* ---------- scroll-reveal for cinematic blocks (own .cx-rv class) ---------- */
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var items = [].slice.call(document.querySelectorAll('.cx-rv'));
+  if (reduce || !('IntersectionObserver' in window)) {
+    items.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
+    items.forEach(function(el){ io.observe(el); });
+    /* safety finalizer — never leave content invisible if observer misfires */
+    setTimeout(function(){ items.forEach(function(el){ el.classList.add('in'); }); }, 1400);
+  }
+})();
+
+/* ---------- count-up stats as evidence ---------- */
+(function(){
+  var done = false;
+  function run(instant){
+    if (done) return; done = true;
+    document.querySelectorAll('#cxStats b').forEach(function(b){
+      var target = parseInt(b.dataset.count, 10) || 0;
+      var finished = false;
+      function set(v){ b.innerHTML = v; }
+      function finalize(){ finished = true; set(target); }
+      if (instant || target === 0){ finalize(); return; }
+      var t0 = null;
+      function tick(ts){
+        if (finished) return;                 /* never overwrite the settled value */
+        if (!t0) t0 = ts;
+        var p = Math.min(1, (ts - t0) / 1100), eased = 1 - Math.pow(1 - p, 3);
+        set(Math.round(target * eased));
+        if (p < 1) requestAnimationFrame(tick); else finished = true;
+      }
+      requestAnimationFrame(tick);
+      /* rAF is suspended in background tabs — guarantee the real number lands
+         and lock it so a late-scheduled tick can't reopen it */
+      setTimeout(finalize, 1500);
+    });
+  }
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) { run(true); }
+  else {
+    var so = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting) run(); });
+    }, {threshold:.4});
+    var sl = document.getElementById('cxStats'); if (sl) so.observe(sl);
+    setTimeout(run, 2500);
+  }
+})();
+
+/* ---------- click-to-inspect lightbox on real screenshots ---------- */
+(function(){
+  var lb = document.getElementById('cxLb'), im = document.getElementById('cxLbImg');
+  function open(src, alt){ im.src = src; im.alt = alt || 'Inspected screenshot';
+    lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function close(){ lb.classList.remove('open'); document.body.style.overflow = '';
+    /* release the image so a huge screenshot isn't held in memory */
+    setTimeout(function(){ if(!lb.classList.contains('open')) im.src=''; }, 200); }
+  document.querySelectorAll('[data-full]').forEach(function(fig){
+    fig.addEventListener('click', function(){
+      var img = fig.querySelector('img');
+      open(fig.dataset.full, img ? img.alt : '');
+    });
+  });
+  document.getElementById('cxLbx').addEventListener('click', close);
+  lb.addEventListener('click', function(e){ if (e.target === lb || e.target === im) close(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+})();
+</script>
 </body>
 </html>
