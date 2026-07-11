@@ -1,0 +1,48 @@
+================================================================================
+ SKR PICO <-> RASPBERRY PI — UART SETUP
+ FOR:      Raspberry Pi 5  ·  Pi 500
+ NOT FOR:  Pi 3/4/Zero (own files — their steps DO NOTHING on a Pi 5) · CB1
+ P5 POWER VERDICT: NO. The Pi 5 requires a 5 A / 27 W-class supply; the Pico's
+                   P5 header tops out at a 3.5 A shared fuse (17.5 W). Power the
+                   Pi 5 from ITS OWN USB-C supply and run only TX/RX/GND to P5.
+ Source-verified 2026-07-10 against raspberrypi.com official documentation,
+ the Raspberry Pi kernel device tree, and BigTreeTech's SKR-Pico repository.
+                                                          honeybadger.software
+================================================================================
+
+THE PI 5 IS DIFFERENT — READ THIS FIRST
+  * Bluetooth does NOT sit on the GPIO UART here (it has its own dedicated
+    UART inside the SoC). The Pi-3/4 overlays (pi3-miniuart-bt, miniuart-bt,
+    disable-bt) are USELESS on a Pi 5 — copying BTT's manual recipe adds a
+    no-op and misses the one step that matters: enabling uart0.
+  * THE /dev/serial0 TRAP: on Pi 5 the serial0 shortcut points at the tiny
+    3-pin DEBUG connector (/dev/ttyAMA10), NOT the 40-pin header. Any guide
+    that says "use /dev/serial0" silently aims Klipper at the wrong port.
+    Always hardcode /dev/ttyAMA0.
+
+STEP 1 — edit /boot/firmware/config.txt — add:
+  enable_uart=1
+  dtparam=uart0=on
+
+STEP 2 — edit /boot/firmware/cmdline.txt
+DELETE the token:  console=serial0,115200
+
+(TUI alternative:  sudo raspi-config -> 3 Interface Options -> I6 Serial Port ->
+ login shell NO -> serial hardware YES)
+
+STEP 3 — printer.cfg
+  [mcu]
+  serial: /dev/ttyAMA0        # NEVER /dev/serial0 on a Pi 5 — see trap above
+  restart_method: command
+
+STEP 4 — the wiring (data only on Pi 5!)
+  Pico P5:  GND · RX0(IO1) · TX0(IO0)   ->   Pi pins 6 GND · 8 TXD · 10 RXD
+  (TX crosses to RX both ways.) DO NOT connect P5's 5 V pins to a Pi 5 —
+  it needs its own 27 W USB-C supply.
+  Firmware on the Pico: klipper-UART0.uf2 (NOT the USB build).
+
+POWER MATH (why the verdict is NO)
+  Official Pi 5 requirement: 5.0 A at 5.1 V (27 W). P5 ceiling: 3.5 A fuse
+  x 5 V = 17.5 W, shared with the Pico's own 5 V loads. 3.5 < 5.0 — and GPIO
+  back-powering bypasses the Pi 5's USB-C power negotiation entirely.
+================================================================================

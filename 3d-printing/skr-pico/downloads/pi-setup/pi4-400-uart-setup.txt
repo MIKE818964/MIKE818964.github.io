@@ -1,0 +1,61 @@
+================================================================================
+ SKR PICO <-> RASPBERRY PI — UART SETUP
+ FOR:      Raspberry Pi 4 Model B  ·  Pi 400
+ NOT FOR:  Pi 3/Zero 2 W (own file) · Pi 5/500 (DIFFERENT steps!) · CB1 (own file)
+ P5 POWER VERDICT: CAUTION — a lean HEADLESS Pi 4 runs fine from the Pico's P5
+                   header (measured stress ~1.25 A vs the 3.5 A fuse), but P5
+                   cannot honor the Pi 4's full official 3 A envelope. No USB
+                   peripherals. Pi 400: use its own USB-C supply, period.
+ Source-verified 2026-07-10 against raspberrypi.com official documentation,
+ klipper3d.org, and BigTreeTech's SKR-Pico repository. honeybadger.software
+================================================================================
+
+WHY THIS IS NEEDED
+On the Pi 4, Bluetooth owns the good UART (the PL011/UART0) and the mini UART
+sits on the header by default. One overlay swaps that. (BTT's manual line
+"dtoverlay=pi3-miniuart-bt" is a deprecated alias — current names below.)
+
+STEP 1 — edit config.txt
+File on current Raspberry Pi OS (Bookworm):   /boot/firmware/config.txt
+(on older images:                              /boot/config.txt)
+
+Add ONE of:
+
+  # Option A (recommended for a headless printer — Bluetooth off):
+  dtoverlay=disable-bt
+
+  # Option B (keep Bluetooth):
+  dtoverlay=miniuart-bt
+  core_freq=250          # REQUIRED with option B — BTT's manual omits it
+
+If Option A, also run once:  sudo systemctl disable hciuart
+
+STEP 2 — edit cmdline.txt
+File (Bookworm):  /boot/firmware/cmdline.txt    (older: /boot/cmdline.txt)
+DELETE the token:  console=serial0,115200
+
+(TUI alternative:  sudo raspi-config -> 3 Interface Options -> I6 Serial Port ->
+ login shell NO -> serial hardware YES)
+
+STEP 3 — printer.cfg
+  [mcu]
+  serial: /dev/ttyAMA0
+  restart_method: command
+
+STEP 4 — the wiring (BTT's 5-wire lead)
+  Pico P5:  5V · 5V · GND · RX0(IO1) · TX0(IO0)
+  Pi pins:   2  ·  4 ·  6  ·  8 TXD   ·  10 RXD     (TX crosses to RX both ways)
+  Firmware on the Pico: klipper-UART0.uf2 (NOT the USB build).
+
+POWER MATH (why the verdict is CAUTION)
+  Official Pi 4 recommendation: 3.0 A supply (includes a 1.2 A USB-peripheral
+  budget). P5's rail = 3.5 A fuse SHARED with the Pico's own 5 V loads
+  (endstops, probe, servo, RGB). Headless Pi 4 stress ~1.25 A = fine;
+  add a camera/touchscreen/USB drives and you are gambling with the fuse.
+  Check with `vcgencmd get_throttled` after install — 0x0 = clean.
+
+CLASSIC TRAPS
+  * Bookworm's real files live under /boot/firmware/ — the old paths edit dead
+    copies.  * Option B without core_freq=250 quietly breaks Bluetooth.
+  * Never feed the Pi from P5 and its USB-C supply at the same time.
+================================================================================

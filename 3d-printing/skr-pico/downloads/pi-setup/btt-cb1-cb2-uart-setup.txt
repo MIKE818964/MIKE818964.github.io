@@ -1,0 +1,53 @@
+================================================================================
+ SKR PICO <-> BIGTREETECH CB1 / CB2 — UART SETUP
+ FOR:      BTT CB1 (Allwinner H616) · CB2 (RK3566) on a CM4-pinout carrier
+           (e.g. BTT PI4B Adapter)
+ NOT FOR:  Any Raspberry Pi (own files) · CB1/CB2 socketed on a Manta board
+           (the Manta pairs internally — this file doesn't apply)
+ P5 POWER VERDICT: OK — CB1/CB2 max input is 5 V / 2 A vs the P5 rail's 3.5 A
+                   fuse: 1.5 A of headroom. Feed 5V/GND into the carrier's
+                   40-pin pins 2or4 / 6. Mind the tight 5 V ±5% tolerance:
+                   short, thick leads.
+ Source-verified 2026-07-10 against BigTreeTech's CB1/CB2 repos, user manuals,
+ and their shipped boot scripts. honeybadger.software
+================================================================================
+
+CB1/CB2 ARE NOT RASPBERRY PIS — DIFFERENT FILES, DIFFERENT RULES
+  * There is NO config.txt, NO cmdline.txt, NO dtoverlay lines, NO enable_uart.
+    Those are Raspberry Pi things. Don't go looking for them.
+  * No Bluetooth-steals-the-UART problem here (CB1 has no BT at all; CB2's BT
+    doesn't ride the header UART). The console is what occupies the UART.
+
+THE ONE CHANGE (editable from Windows — the FAT32 "BOOT" partition)
+  Current V3.0.0 images:  open  armbianEnv.txt   and change the line
+      console=display
+  to
+      console=serial
+  Older V2.3.x images: the file is named BoardEnv.txt — same one-line change.
+
+  ⚠ Counter-intuitive but verified against BTT's shipped boot scripts:
+    "display" = console occupies the UART (busy) · "serial" = UART freed for
+    Klipper. (Stock Armbian docs describe the OPPOSITE — BTT's images invert
+    it. Trust this file, not armbian.com, for BTT images.)
+
+PRINTER.CFG
+  CB1:  [mcu]
+        serial: /dev/ttyS0        # UART0 -> carrier pins 8 (TX) / 10 (RX)
+        restart_method: command
+  CB2:  [mcu]
+        serial: /dev/ttyS2        # UART2 -> same header positions
+        restart_method: command
+
+WIRING (BTT's 5-wire lead, via the PI4B Adapter's 40-pin header)
+  Pico P5:  5V · 5V · GND · RX0(IO1) · TX0(IO0)
+  Header:    2  ·  4 ·  6  ·  8 TX    ·  10 RX     (TX crosses to RX both ways)
+  Firmware on the Pico: klipper-UART0.uf2 (NOT the USB build).
+
+CLASSIC TRAPS
+  * File-name drift: V2.3.x = BoardEnv.txt, V3.0.0 = armbianEnv.txt — check
+    which one your BOOT partition actually has.
+  * CB2 only: do NOT add "overlays=disable_uart2" — that removes the UART
+    you're trying to use.
+  * On a Manta board none of this applies — the CB socket wires the link
+    internally; see the Manta hub (coming) instead.
+================================================================================
