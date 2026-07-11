@@ -28,13 +28,13 @@
    Everything below is scoped with a cx- prefix so it never fights the
    base cascade. Navy space bands + slow electric-blue/cyan streaks +
    cyan neon glow rims + glowing curve transitions + count-up evidence.
-   Honey-amber is the RARE warm glint (our take on their one red glint)
+   BTT-red is the RARE warm glint (their own signature accent)
    and the single warm CTA — the honey in the electric dark.
    ===================================================================== */
 :root{
   --nx1:#05091F; --nx2:#0A1134; --nx3:#16226B; --nx-deep:#0B1445;
   --elec:#2E7BFF; --cyan:#3FD8FF;
-  --honey:#ed7a06; --honey-hi:#ffb84d;
+  --honey:#E1252B; --honey-hi:#FF6B70;
   --ink-nav:#0A1134;
   --txt-hi:#DCE6FF; --txt-mid:#A9B6D6; --txt-dim:#7E8BB0;
 }
@@ -61,7 +61,7 @@
 @keyframes cxdrift{from{transform:translateX(-60%)}to{transform:translateX(260%)}}
 /* the rare honey glint — a warm flash in the cold */
 .cx-glint{position:absolute;height:2px;width:30%;pointer-events:none;z-index:1;
-  background:linear-gradient(90deg,transparent,rgba(237,122,6,.65),rgba(255,184,77,.4),transparent);
+  background:linear-gradient(90deg,transparent,rgba(225,37,43,.65),rgba(255,184,77,.4),transparent);
   animation:cxglint 15s ease-in-out infinite}
 @keyframes cxglint{0%,82%,100%{opacity:0;transform:translateX(-40%)}88%{opacity:.9}
   94%{opacity:0;transform:translateX(240%)}}
@@ -88,10 +88,10 @@
   letter-spacing:.3px;border:1.5px solid transparent;cursor:pointer;text-decoration:none;text-align:center;
   transition:transform .12s ease,box-shadow .2s ease,background .15s,border-color .15s,color .15s}
 .cx-btn:hover{transform:translateY(-2px)}
-/* the single warm CTA — brand-signature honey, the actionable glint */
-.cx-btn-honey{background:linear-gradient(120deg,#ffab3d,var(--honey));color:#1a1206;
-  box-shadow:0 10px 28px rgba(237,122,6,.34)}
-.cx-btn-honey:hover{box-shadow:0 14px 38px rgba(237,122,6,.5);color:#1a1206}
+/* the single warm CTA — BTT red, the actionable accent */
+.cx-btn-honey{background:linear-gradient(120deg,#FF3B41,var(--honey));color:#fff;
+  box-shadow:0 10px 28px rgba(225,37,43,.38)}
+.cx-btn-honey:hover{box-shadow:0 14px 38px rgba(225,37,43,.55);color:#fff}
 .cx-btn-ghost{background:rgba(63,216,255,.04);color:var(--cyan);border-color:rgba(63,216,255,.5)}
 .cx-btn-ghost:hover{background:rgba(63,216,255,.12);border-color:var(--cyan);
   box-shadow:0 8px 26px rgba(46,123,255,.35)}
@@ -167,7 +167,7 @@
   font-weight:700;padding:5px 11px;border-radius:6px;margin-bottom:14px}
 .cx-fbadge.live{background:rgba(63,216,255,.13);color:var(--cyan);border:1px solid rgba(63,216,255,.4)}
 .cx-fbadge.beta{background:rgba(46,123,255,.14);color:#6fa8ff;border:1px solid rgba(46,123,255,.45)}
-.cx-fbadge.kit{background:rgba(237,122,6,.13);color:var(--honey-hi);border:1px solid rgba(237,122,6,.42)}
+.cx-fbadge.kit{background:rgba(225,37,43,.13);color:var(--honey-hi);border:1px solid rgba(225,37,43,.42)}
 .cx-fbadge.free{background:rgba(46,190,120,.14);color:#5fe0a0;border:1px solid rgba(46,190,120,.4)}
 .cx-ftext h3{font-family:"Space Grotesk","Inter",sans-serif;font-size:27px;font-weight:700;color:#fff;margin:0 0 12px}
 .cx-ftext p{font-size:15.5px;line-height:1.65;color:var(--txt-mid);margin:0 0 18px}
@@ -225,12 +225,48 @@
 .cx-lbx:hover{background:rgba(63,216,255,.3)}
 .cx-lbcap{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);color:var(--txt-mid);
   font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.8px;z-index:901}
+
+/* ===== v2: NO GOLD ANYWHERE + full-dark end-all (Michael's law) ===== */
+.btn-gold,.btn-gold:hover{background:linear-gradient(135deg,#2E7BFF,#3FD8FF)!important;
+  color:#06102A!important;border-color:transparent!important}
+body{background:#070D2A}
+.section,.section-alt,.section-why{background:linear-gradient(150deg,#05091F,#0A1134 55%,#101B52 100%);
+  color:#DCE6FF;border-color:rgba(63,216,255,.15)}
+.section h2,.section h3,.section-why h2{color:#fff}
+.section p,.section li,.post-body p{color:#A9B6D6}
+.kicker{color:#3FD8FF}
+.post-card{background:rgba(8,14,40,.78);border:1px solid rgba(63,216,255,.18)}
+.post-card h3{color:#fff}
+.post-tag{color:#3FD8FF}
+.split-cta{background:linear-gradient(120deg,rgba(225,37,43,.16),rgba(46,123,255,.16));
+  border:1px solid rgba(63,216,255,.3);color:#fff}
+.split-cta p{color:#A9B6D6}
+.btn-primary{background:linear-gradient(120deg,#FF3B41,#E1252B)!important;color:#fff!important;border:0!important}
+.why-badger{box-shadow:0 0 0 1px rgba(63,216,255,.3),0 0 36px rgba(46,123,255,.35);border-radius:14px}
+/* movies energy: slow ken-burns drift on every product visual */
+.cx-shot img,.cx-fmedia img{animation:cxkb 17s ease-in-out infinite alternate}
+@keyframes cxkb{from{transform:scale(1)}to{transform:scale(1.05)}}
+@media (prefers-reduced-motion: reduce){.cx-shot img,.cx-fmedia img{animation:none}}
+/* the nuclear de-gold: any base-css use of --gold now renders electric */
+:root{--gold:#3FD8FF}
+.post-card .post-stripe{background:linear-gradient(90deg,#2E7BFF,#3FD8FF)!important}
+.post-tag{color:#3FD8FF!important}
+/* the Why principle rows: dark cards, readable, cyan checks */
+.principle-list li{background:rgba(8,14,40,.75);border:1px solid rgba(63,216,255,.18);
+  border-radius:10px;padding:12px 16px 12px 40px;color:#A9B6D6!important}
+.principle-list li strong{color:#fff!important}
+.principle-list li::before{left:14px;color:#3FD8FF!important}
+.why-quote{color:#BFD7FF}
+/* footer: navy instead of warm-dark, cyan column headers instead of tan-gold */
+.site-footer{background:#05081A!important;border-top:1px solid rgba(63,216,255,.15)}
+.site-footer h4,.footer-col h4{color:#3FD8FF!important}
+.footer-fineprint,.footer-fineprint small{color:#7E8BB0}
 </style>
 </head>
 <body>
 
 <!-- ===== WORK-IN-PROGRESS BANNER (unchanged) ===== -->
-<div style="background:linear-gradient(90deg,#3a1f00,#5a3210,#3a1f00);color:#f4c441;padding:6px 0;text-align:center;font-size:12px;font-weight:700;letter-spacing:3px;border-bottom:1px solid #d4a017;">
+<div style="background:linear-gradient(90deg,#05091F,#16226B,#05091F);color:#3FD8FF;padding:6px 0;text-align:center;font-size:12px;font-weight:700;letter-spacing:3px;border-bottom:1px solid rgba(46,123,255,.6);">
   🚧 &nbsp; SITE IN ACTIVE DEVELOPMENT &nbsp;·&nbsp; some pages + polish still being built &nbsp;·&nbsp; check back often &nbsp; 🦡
 </div>
 
