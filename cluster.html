@@ -92,8 +92,8 @@
 
 <footer>HONEYBADGER SOFTWARE INC · cluster builder · arrange a full instrument cluster — same engine as the single-gauge builder, so it ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=7"></script>
-<script src="assets/js/anim.js?v=3"></script>
+<script src="assets/js/gauges.js?v=14"></script>
+<script src="assets/js/anim.js?v=5"></script>
 <script>
 const {RENDER,UNITS,PALETTES,STYLES}=window.HBG;
 const $=id=>document.getElementById(id);
@@ -117,9 +117,11 @@ const DEMO={rpm:4200,mph:78,kmh:120,boost:15,map:95,maf:14,tps:22,coolant:200,oi
 let curP={};
 function gaugeVal(u){const U=UNITS[u],mn=U.min||0;return window.HBANIM?HBANIM.disp(u):(DEMO[u]!=null?DEMO[u]:Math.round(mn+(U.max-mn)*0.55));}
 function fillAll(force){
+  const nowT=performance.now();
   document.querySelectorAll('#cluster .slot').forEach(el=>{
     const u=el.dataset.u, st=el.dataset.st, v=gaugeVal(u);
-    if(force||el._lv!==v){ el._lv=v;
+    const chart=window.HBG.CHART_STYLES&&HBG.CHART_STYLES[st];
+    if(force||(chart?nowT-(el._ht||0)>=300:el._lv!==v)){ el._lv=v; el._ht=nowT;
       el.innerHTML=RENDER[st]({style:st,unit:u,needle:curP.needle,accent:curP.accent,bezel:curP.bezel,face:curP.face,value:v,gear:window.HBANIM?HBANIM.gear():3}); }
     el.classList.toggle('redline', !!(window.HBANIM&&HBANIM.isRed(u)));
   });

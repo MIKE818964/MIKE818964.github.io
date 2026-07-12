@@ -140,13 +140,17 @@
   <div class="stage">
     <div id="gauge"></div>
     <div class="hint">Change any control — the gauge rebuilds live. This is the exact SVG that renders on the physical dashboard.</div>
+    <div id="liveBar" style="display:none;margin-top:18px;width:100%;max-width:360px;text-align:center">
+      <button id="sendlive" style="width:100%;background:#3aff80;color:#04130a;border:0;border-radius:9px;padding:12px;font:700 15px/1 'Segoe UI',system-ui,sans-serif;cursor:pointer;margin-bottom:7px">➕ Add to live dash</button>
+      <a href="live.html" style="display:block;font-size:12px;color:#8b949e;text-decoration:none">▶ Open live dash →</a>
+    </div>
   </div>
 </div>
 
 <footer>HONEYBADGER SOFTWARE INC · gauge builder (growing toward ~50 styles per type) · what you configure ships pixel-identical to your dash.</footer>
 
-<script src="assets/js/gauges.js?v=7"></script>
-<script src="assets/js/anim.js?v=3"></script>
+<script src="assets/js/gauges.js?v=14"></script>
+<script src="assets/js/anim.js?v=5"></script>
 <script>
 const {RENDER,UNITS,PALETTES,STYLES}=window.HBG;
 const $=id=>document.getElementById(id);
@@ -172,6 +176,28 @@ function applyPreset(d){if(d.unit){$('units').value=d.unit;onUnit();}if(d.style)
 document.querySelectorAll('.tpl').forEach(b=>b.addEventListener('click',()=>applyPreset(b.dataset)));
 PALETTES.forEach(p=>{const b=document.createElement('button');b.className='sw';b.title=p.name;b.style.background=`linear-gradient(135deg,${p.needle} 60%,${p.accent} 60%)`;b.addEventListener('click',()=>{$('needle').value=p.needle;$('accent').value=p.accent;render();});$('swrow').appendChild(b);});
 onUnit();
+
+// "Add to live dash" — only visible when the Pi server (dash_feed.py) is running
+fetch('feed.json',{cache:'no-store'}).then(r=>{if(r.ok)document.getElementById('liveBar').style.display='block';}).catch(()=>{});
+document.getElementById('sendlive').addEventListener('click',()=>{
+  const btn=document.getElementById('sendlive');
+  const gauge={kind:'gauge',unit:$('units').value,style:$('style').value,bezel:$('bezel').value,face:$('face').value,needle:$('needle').value,accent:$('accent').value};
+  // Fetch existing layout so we append rather than replace
+  fetch('dash.json',{cache:'no-store'}).then(r=>r.ok?r.json():Promise.resolve({widgets:[]})).then(d=>{
+    const widgets=(d&&Array.isArray(d.widgets))?d.widgets:[];
+    // Cascade position so new gauge doesn't land on top of an existing one
+    const k=widgets.length%8;
+    gauge.fx=Math.min(0.9,Math.max(0.1,0.25+k*0.09));
+    gauge.fy=Math.min(0.9,Math.max(0.1,0.30+k*0.08));
+    gauge.size=0.22;
+    widgets.push(gauge);
+    const design=Object.assign({},d,{widgets});
+    return fetch('save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(design)});
+  }).then(r=>r.json()).then(j=>{
+    btn.textContent=j.ok?'✓ Added — open live dash':'⚠ save failed';
+    setTimeout(()=>btn.textContent='➕ Add to live dash',2600);
+  }).catch(()=>{btn.textContent='⚠ server not reachable';setTimeout(()=>btn.textContent='➕ Add to live dash',2600);});
+});
 </script>
 </body>
 </html>
