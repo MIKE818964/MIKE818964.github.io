@@ -117,11 +117,21 @@ function pollFeed(){
   });
 }
 
-fetch('dash.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{design=(d&&d.widgets)?d:null;build();}).catch(()=>{
-  // Pi server not reachable — fall back to whatever the designer saved in localStorage
-  try{const s=localStorage.getItem('hb_dash_design');if(s){const d=JSON.parse(s);design=(d&&d.widgets)?d:null;}}catch(e){}
-  build();
-});
+// Load design once on start, then poll every 3s so changes from the builder appear automatically
+let _lastDesignJson='';
+function loadDesign(){
+  fetch('dash.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+    const j=JSON.stringify(d);
+    if(j!==_lastDesignJson){_lastDesignJson=j;design=(d&&d.widgets)?d:null;build();}
+  }).catch(()=>{
+    if(_lastDesignJson===''){
+      try{const s=localStorage.getItem('hb_dash_design');if(s){const d=JSON.parse(s);design=(d&&d.widgets)?d:null;_lastDesignJson=JSON.stringify(d);}}catch(e){}
+      build();
+    }
+  });
+}
+loadDesign();
+setInterval(loadDesign,3000);
 setInterval(pollFeed,120);
 setInterval(tick,40);
 pollFeed();

@@ -22,22 +22,24 @@ body {
 }
 
 :root {
-  --bg-deep:    #faf6ee;   /* warm cream — main background (LIGHT theme) */
-  --bg-mid:     #f1e8d8;   /* warm tint — alternating bands */
-  --bg-card:    #ffffff;
-  --bg-card-hi: #fbf6ee;
-  --bg-light:   #ffffff;
-  --bg-dark:    #14110c;   /* warm near-black — footer + top strip */
-  --accent:     #ed7a06;   /* vivid amber-orange — CTAs, kickers */
-  --accent-hi:  #b35e09;   /* deep amber — readable accent/link text on light */
-  --gold:       #b9842b;
-  --green:      #2e9e63;
-  --red:        #d8472f;
-  --text:       #1d1813;   /* near-black warm */
-  --text-mid:   #5e5446;
-  --text-dim:   #8d8170;
-  --border:     rgba(20, 16, 10, 0.12);
-  --border-hi:  rgba(237, 122, 6, 0.45);
+  /* DARK CINEMA THEME (2026-07-12) — navy space + electric/red, NO GOLD anywhere.
+     Re-themes the whole site to match the homepage, hub, and industrial pages. */
+  --bg-deep:    #070D2A;   /* deep navy — main background */
+  --bg-mid:     #0A1435;   /* navy — alternating bands */
+  --bg-card:    #0C1638;   /* navy card */
+  --bg-card-hi: #111C44;
+  --bg-light:   #0C1638;   /* legacy "light" slots → navy card */
+  --bg-dark:    #05081A;   /* deepest navy — footer + top strip */
+  --accent:     #E1252B;   /* BTT red — CTA buttons + strong accents */
+  --accent-hi:  #3FD8FF;   /* electric cyan — links + kickers on dark */
+  --gold:       #3FD8FF;   /* was gold → now cyan (gold is dead site-wide) */
+  --green:      #2FD37E;
+  --red:        #E1252B;
+  --text:       #E6ECFA;   /* light — body text on navy */
+  --text-mid:   #A9B6D6;
+  --text-dim:   #7E8BB0;
+  --border:     rgba(63, 216, 255, 0.14);
+  --border-hi:  rgba(63, 216, 255, 0.45);
 }
 
 a { color: var(--accent-hi); text-decoration: none; transition: color 0.15s; }
@@ -1107,3 +1109,62 @@ img { max-width: 100%; height: auto; }
 .track-cols p { color: #bcae9c; font-size: 14.5px; margin: 0; line-height: 1.6; }
 .track-build .proof-fineprint { color: #8d8170; text-align: left; margin-top: 28px; }
 @media (prefers-reduced-motion: reduce){ .why-badger { animation: none; } }
+
+
+/* ============================================================
+   DARK-THEME PATCH (2026-07-12) — finish the light->dark flip.
+   Neutralizes every remaining amber/gold/light remnant so ALL
+   pages match the dark-cinema identity. Appended last = wins.
+   ============================================================ */
+.hero { background-image:
+  radial-gradient(900px 520px at 12% -10%, rgba(46,123,255,0.20), transparent 62%),
+  radial-gradient(820px 620px at 100% 6%, rgba(63,216,255,0.10), transparent 60%),
+  radial-gradient(760px 520px at 62% 116%, rgba(46,123,255,0.10), transparent 60%); }
+.hero-eyebrow { color: var(--accent-hi); border-color: rgba(63,216,255,0.4); background: rgba(63,216,255,0.07); }
+.hero-title .hl { color: var(--accent-hi);
+  background: linear-gradient(100deg, var(--accent-hi), #8FE6FF 70%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.btn-gold { background: linear-gradient(135deg,#2E7BFF,#3FD8FF); color:#06102A; border-color:transparent; }
+.btn-gold:hover { background: linear-gradient(135deg,#3FD8FF,#8FE6FF); border-color:transparent; color:#06102A; }
+.btn-primary { background: var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 8px 24px rgba(225,37,43,0.28); }
+.btn-primary:hover { background:#FF3B41; box-shadow:0 12px 32px rgba(225,37,43,0.4); color:#fff; }
+.btn-ghost { color: var(--accent-hi); border-color: rgba(63,216,255,0.5); }
+.btn-ghost:hover { background: rgba(63,216,255,0.1); border-color: var(--accent-hi); color: var(--accent-hi); }
+.nav-dropdown-menu { background:#0A1330; box-shadow:0 24px 60px rgba(0,0,0,0.55); border:1px solid rgba(63,216,255,0.16); }
+.nav-dropdown-menu a strong { color:#fff; }
+.nav-dropdown-menu a span { color: var(--text-mid); }
+.nav-dropdown-menu a:hover { background: rgba(63,216,255,0.08); }
+/* kill the intentional "light section" theme -> dark */
+.section-light { background: var(--bg-mid); color: var(--text-mid); }
+.section-light .kicker { color: var(--accent-hi); }
+.section-light h2, .section-light h3, .section-light .why-quote { color:#fff; }
+.section-light .lede, .section-light p, .section-light li { color: var(--text-mid); }
+.section-light .product-card, .section-light .studio-card, .section-light .showcase-card,
+.section-light .post-card, .section-light .tier-card, .section-light .principle-list li {
+  background: var(--bg-card); border-color: var(--border); box-shadow: 0 12px 34px rgba(3,6,20,0.4); }
+.section-light .product-card h3, .section-light .studio-card h3, .section-light .showcase-card h3 { color:#fff; }
+.section-light .product-card p, .section-light .studio-card p, .section-light .showcase-card p { color: var(--text-mid); }
+.section-light .sc-link, .section-light a { color: var(--accent-hi); }
+.section-light .principle-list strong { color:#fff; }
+/* split-cta band -> navy/red, never the old dark-brown pill */
+.split-cta { background: linear-gradient(120deg, rgba(225,37,43,0.14), rgba(46,123,255,0.16)); border:1px solid rgba(63,216,255,0.28); }
+.split-cta h2 { color:#fff; } .split-cta p { color: var(--text-mid); }
+.split-cta .btn-primary { background: var(--accent); color:#fff; border-color: var(--accent); }
+/* generic card safety on dark */
+.product-card p, .showcase-card p, .studio-card p, .feature-row p { color: var(--text-mid); }
+.product-card h3, .showcase-card h3, .studio-card h3, .feature-row h3 { color:#fff; }
+.card, .product-card, .showcase-card, .studio-card, .tier-card { background: var(--bg-card); border-color: var(--border); }
+
+/* --- header + topbar: kill the hardcoded cream/warm remnants (line 975/981/982) --- */
+.site-header { background: rgba(7,13,42,0.92) !important; border-bottom-color: rgba(63,216,255,0.14) !important; }
+.brand-name { color:#fff !important; }
+.brand-tag { color: var(--accent-hi); }
+.site-nav a { color:#C7D2EA; }
+.site-nav a:hover, .site-nav a.active { color: var(--accent-hi); }
+.nav-dropdown-trigger { color:#C7D2EA !important; }
+.topbar { background:#05081A !important; }
+.topbar .topbar-tag { color:#8FA0C4 !important; }
+.topbar-links a { color:#C7D2EA; }
+.topbar-links a:hover { color: var(--accent-hi); }
+/* warm micro-tints -> cool, so they read on navy */
+.comparison-row > div:first-child, .spec-table th, .discord-embed { background: rgba(63,216,255,0.05); color: var(--text-mid); }
