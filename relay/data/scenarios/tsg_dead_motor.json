@@ -1,0 +1,60 @@
+{
+  "id": "tsg_dead_motor",
+  "title": "Dead Start/Stop Station",
+  "type": "troubleshoot",
+  "mode": "deductive",
+  "workOrder": "WORK ORDER #101 — Conveyor won't start. Operator: \"I hit Start and nothing happens.\" That's all you get.",
+  "symptom": "The conveyor won't start. It's a DIFFERENT fault each time you open this ticket — don't assume, don't parts-cannon. Meter it out, localize it, then make the call.",
+  "faults": [
+    { "component": "FU1", "kind": "blown_fuse" },
+    { "component": "CR1", "kind": "open_coil" },
+    { "component": "STOP", "kind": "stuck_open" },
+    { "component": "START", "kind": "broken_wire" },
+    { "component": "SEAL", "kind": "stuck_open" }
+  ],
+  "diagnosisOptions": [
+    { "component": "FU1", "kind": "blown_fuse" },
+    { "component": "CR1", "kind": "open_coil" },
+    { "component": "CR1", "kind": "welded_closed" },
+    { "component": "STOP", "kind": "stuck_open" },
+    { "component": "START", "kind": "broken_wire" },
+    { "component": "SEAL", "kind": "stuck_open" },
+    { "component": "RUN", "kind": "broken_wire" }
+  ],
+  "explains": {
+    "FU1:blown_fuse": "You read 24V ACROSS FU1 — voltage in on TP-L, none out on TP-1. A good fuse reads ~0V across it; full source voltage across it means it's OPEN. The whole station was dark because nothing downstream had power to even be tested. Replace it — then find WHY it blew, or the new one pops too.",
+    "CR1:open_coil": "24V was sitting right on the coil (TP-coil to N) but it never pulled in, and the Stopped light stayed on. Voltage present with no magnetic pull = the coil winding is open (burned out). Replace the coil / relay.",
+    "STOP:stuck_open": "24V at the fuse output (TP-1) but 0V the instant you crossed the Stop button = the normally-closed Stop contact is stuck OPEN. It breaks the rung before Start ever gets a vote — nothing can latch. (The Stopped light still glows because it feeds off TP-1, ahead of the Stop button.)",
+    "START:broken_wire": "Power sat waiting at the Start button's line side, but pressing Start put nothing through to the coil — the Start contact or its wire is open. With no initial pulse, the seal-in never gets a chance to grab and hold.",
+    "SEAL:stuck_open": "Classic: it RAN while you held Start, then died the instant you let go. The CR1 seal-in contact isn't making, so nothing keeps the coil energized once the Start button opens. The latch has no latch."
+  },
+  "circuit": {
+    "id": "seal_in_latch",
+    "title": "3-wire Start/Stop seal-in latch",
+    "nodes": [
+      { "id": "L", "x": 140, "y": 120 },
+      { "id": "n1", "x": 300, "y": 120 },
+      { "id": "n2", "x": 470, "y": 120 },
+      { "id": "n3", "x": 660, "y": 120 },
+      { "id": "N", "x": 860, "y": 250 },
+      { "id": "nRun", "x": 660, "y": 230 },
+      { "id": "nStp", "x": 660, "y": 330 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 140, "y": 250, "label": "24VDC", "terminals": { "pos": "L", "neg": "N" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 220, "y": 120, "label": "FU1", "terminals": { "a": "L", "b": "n1" } },
+      { "id": "STOP", "type": "pushbutton", "mode": "momentary", "contact": "NC", "x": 385, "y": 120, "label": "Stop (NC)", "terminals": { "in": "n1", "out": "n2" } },
+      { "id": "START", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 565, "y": 120, "label": "Start", "terminals": { "in": "n2", "out": "n3" } },
+      { "id": "SEAL", "type": "contact_no", "coil": "CR1", "x": 565, "y": 185, "label": "CR1 seal-in", "terminals": { "in": "n2", "out": "n3" } },
+      { "id": "CR1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC", "x": 755, "y": 120, "label": "CR1 24VDC", "terminals": { "a": "n3", "b": "N" } },
+      { "id": "RUNC", "type": "contact_no", "coil": "CR1", "x": 520, "y": 230, "label": "CR1 NO", "terminals": { "in": "n1", "out": "nRun" } },
+      { "id": "RUN", "type": "bulb", "x": 740, "y": 230, "label": "Running", "terminals": { "a": "nRun", "b": "N" } },
+      { "id": "STPC", "type": "contact_nc", "coil": "CR1", "x": 520, "y": 330, "label": "CR1 NC", "terminals": { "in": "n1", "out": "nStp" } },
+      { "id": "STP", "type": "bulb", "x": 740, "y": 330, "label": "Stopped", "terminals": { "a": "nStp", "b": "N" } },
+      { "id": "TP_L", "type": "test_point", "x": 220, "y": 64, "label": "TP-L", "terminals": { "p": "L" } },
+      { "id": "TP_1", "type": "test_point", "x": 300, "y": 64, "label": "TP-1", "terminals": { "p": "n1" } },
+      { "id": "TP_2", "type": "test_point", "x": 470, "y": 64, "label": "TP-2", "terminals": { "p": "n2" } },
+      { "id": "TPc", "type": "test_point", "x": 660, "y": 64, "label": "TP-coil", "terminals": { "p": "n3" } }
+    ]
+  }
+}

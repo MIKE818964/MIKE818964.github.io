@@ -1,0 +1,116 @@
+{
+  "moduleId": "m01-what-is-electricity",
+  "title": "Electricity Is Just Water in Pipes",
+  "questions": [
+    {
+      "q": "In the water analogy, what does VOLTAGE represent?",
+      "options": [
+        "The pressure pushing the water",
+        "The amount of water flowing",
+        "The size of the pipe",
+        "The complete loop of pipe"
+      ],
+      "correct": 0,
+      "why": "Voltage is the pressure that pushes the water; the amount actually flowing is current (amps)."
+    },
+    {
+      "q": "In the water analogy, what does CURRENT (amps) represent?",
+      "options": [
+        "How much water is actually flowing",
+        "The pressure pushing the water",
+        "Whether the loop is open or closed",
+        "The color of the pipe"
+      ],
+      "correct": 0,
+      "why": "Current (amps) is how MUCH water is actually flowing; voltage is the pressure that pushes it."
+    },
+    {
+      "q": "You connect a 9-volt battery but leave a gap in the wire so the loop is not complete. Does any current flow?",
+      "options": [
+        "No — nothing flows until the loop is closed",
+        "Yes — the battery forces current across the gap",
+        "Yes, but only half as much",
+        "Only if you raise the voltage higher"
+      ],
+      "correct": 0,
+      "why": "Just like no water comes out until the pipe goes all the way around, nothing flows until the loop is a complete, closed circuit."
+    },
+    {
+      "q": "Which comparison is correct about pressure versus a wall outlet?",
+      "options": [
+        "A 9-volt battery is a small pump; a wall outlet is like high city water pressure",
+        "A 9-volt battery has more pressure than a wall outlet",
+        "Both supply exactly the same pressure",
+        "Neither one supplies any pressure"
+      ],
+      "correct": 0,
+      "why": "A 9V battery is a small pump (low pressure) while a wall outlet is like strong city water pressure (much higher voltage)."
+    },
+    {
+      "q": "On a 24VDC blender control panel, you measure 24.2V at the power supply terminals with the circuit open, and you sign it off as good. Later a relay coil on that circuit burns out after only two months. What's the most likely explanation, based on how this kind of failure actually happens?",
+      "options": [
+        "DC coils don't fail from voltage problems, so something else like vibration caused it",
+        "The coil must have been defective from the manufacturer, since the supply voltage was confirmed correct",
+        "The open-circuit reading at the supply didn't prove the coil was actually getting full voltage under load — a bad connection somewhere in the path was dropping voltage only when current flowed",
+        "24.2V is over the rated voltage for a 24VDC coil, so it was overvoltage from the start"
+      ],
+      "correct": 2,
+      "why": "An open-circuit (no-load) reading only proves the source is fine — it says nothing about what the coil actually sees once current flows through the real wiring. A corroded or under-torqued connection can be invisible with no load but drop many volts once the coil demands current, slow-cooking it exactly like the Line 3 war story. 24.2V is within the 85%-110% window, so it isn't overvoltage, and blaming the coil or vibration skips the step every tech should do first: measure at the coil terminals under load."
+    },
+    {
+      "q": "You're walking a dead control circuit with a meter, measuring hot-to-neutral across each wire segment from the power supply toward the load. At one segment the reading jumps from near-zero to full source voltage. What does that jump tell you?",
+      "options": [
+        "That segment has a short circuit and needs to be replaced immediately",
+        "You just crossed an open — a break, blown fuse, or failed terminal — right at that segment",
+        "You've found a properly working section of the circuit and should keep walking past it",
+        "The meter is picking up capacitive coupling and the reading should be ignored"
+      ],
+      "correct": 1,
+      "why": "Voltage appears across an open because the source is pushing on both sides of the gap with nothing completing the loop between them — that jump from near-zero to full voltage IS the signature of an open, whether it's a broken wire, blown fuse, or failed terminal. A short circuit would instead read near-zero everywhere since there's no meaningful resistance to drop voltage across. Capacitive coupling causes small floating readings on a dead run measured to ground, not a full-voltage jump measured properly across the gap."
+    },
+    {
+      "q": "A 24VDC control relay coil is spec'd at 240 ohms. During a PM, you pull the coil out of circuit and measure 178 ohms cold with an ohmmeter. What should you do?",
+      "options": [
+        "Increase the supply voltage to compensate so the coil pulls in the same current as spec",
+        "Ignore it — coil resistance always drifts with age and has no bearing on reliability",
+        "Install it anyway, since lower resistance just means it will draw less current and run cooler",
+        "Treat it as suspect and replace it — a resistance well below spec on a coil usually means partial insulation breakdown from past overvoltage or overheating"
+      ],
+      "correct": 3,
+      "why": "Coil resistance dropping well below the datasheet number is exactly what the module flags as a sign the coil has already been partially cooked by overvoltage or a bad supply — replace it rather than trust it back into service. Lower resistance means MORE current draws (I = V/R), not less, which runs it hotter, not cooler; and 'never bears on reliability' ignores a documented failure pattern. Raising supply voltage to force spec current is backwards and would push it further into overvoltage."
+    },
+    {
+      "q": "A 24VDC coil draws 0.1A sealed-in through a wire run and terminal splice with a combined 40 ohms of resistance. Using Ohm's Law, how many volts get lost in that path before reaching the coil, and does the coil still fall within its safe 85%-110% operating window?",
+      "options": [
+        "No voltage is lost in a DC circuit unless the coil is also drawing inrush current",
+        "0.4 volts are lost, leaving the coil essentially at full 24V with plenty of margin",
+        "4 volts are lost (0.1A x 40Ω), leaving 20V at the coil — right at the edge of the 85% floor (20.4V), so it's marginal and worth investigating",
+        "40 volts are lost, since resistance in ohms converts directly to volts lost regardless of current"
+      ],
+      "correct": 2,
+      "why": "V = I x R gives 0.1A x 40Ω = 4V dropped in the bad path, leaving only 20V at the coil out of a 24V supply — that's below the 85% floor (20.4V) laid out in the Field Notes, so this coil is right at the point of unreliable pull-in or chatter. Volts lost always requires multiplying by current, not reading the ohms directly; and DC circuits absolutely drop voltage across resistance any time current flows, inrush or not."
+    },
+    {
+      "q": "A tech decides it's fine to leave an oxidized terminal splice in a 24VDC control circuit in place because 'it still works, just a little warm.' What's the real danger of ignoring rising resistance at a connection like this?",
+      "options": [
+        "Oxidized connections self-clean over time as current flows through them, so it will resolve on its own",
+        "The main risk is just nuisance relay chatter, which is annoying but not a safety concern",
+        "Nothing — resistance in a splice only affects current, never heat, so it's a cosmetic issue at most",
+        "Heat from P = I² x R grows with the square of current, so as load increases even slightly, that connection can go from warm to a fire risk while also starving the coil of enough voltage to operate reliably"
+      ],
+      "correct": 3,
+      "why": "Because heat is P = I² x R, doubling the current through that bad joint doesn't double the heat, it quadruples it — a splice that ran warm for years can become a real fire risk the moment load increases, and the same resistance is simultaneously stealing voltage the coil needs to pull in reliably. This isn't cosmetic, and it isn't just chatter — it's a heat and fire hazard on top of a reliability problem. Oxidized contacts get worse under current and heat cycling, they don't self-clean."
+    },
+    {
+      "q": "You're troubleshooting a circuit that has run fine for years, but ever since a second load was added to the same branch, a terminal block downstream has started running noticeably hot. What's the most likely explanation using what you know about resistance and heat?",
+      "options": [
+        "The terminal is fine — all terminals get warm when a circuit has been running for years, regardless of current",
+        "The added load increased total current through that terminal, and since heat follows P = I² x R, even a small pre-existing resistance at that terminal now dissipates much more heat than before",
+        "The extra load lowered the circuit's voltage, and lower voltage always causes terminals to overheat",
+        "Adding a second load can never affect an unrelated terminal's temperature, so the terminal must have failed coincidentally at the same time"
+      ],
+      "correct": 1,
+      "why": "This is precisely the scenario the module calls out: a marginal connection with some resistance can run cool for years, but P = I² x R means heat scales with the SQUARE of current, so adding a second load and increasing current can suddenly turn a fine connection into a hot one. It's not coincidence, and terminals don't just get warm from age alone — rising heat at a specific point means rising current or rising resistance there. Lower voltage isn't what's driving the heat; current through resistance is."
+    }
+  ]
+}

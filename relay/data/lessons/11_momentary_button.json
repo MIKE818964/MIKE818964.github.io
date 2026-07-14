@@ -1,0 +1,28 @@
+{
+  "id": "11_momentary_button",
+  "circuit": {
+    "id": "momentary_button",
+    "title": "Momentary Start button — no seal-in (the problem)",
+    "nodes": [
+      { "id": "L", "x": 140, "y": 120 },
+      { "id": "n1", "x": 300, "y": 120 },
+      { "id": "n2", "x": 470, "y": 120 },
+      { "id": "N", "x": 860, "y": 250 },
+      { "id": "nRun", "x": 660, "y": 230 },
+      { "id": "nStp", "x": 660, "y": 330 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 140, "y": 250, "label": "24VDC", "terminals": { "pos": "L", "neg": "N" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 220, "y": 120, "label": "FU1", "terminals": { "a": "L", "b": "n1" } },
+      { "id": "S1", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 385, "y": 120, "label": "S1 Start", "terminals": { "in": "n1", "out": "n2" } },
+      { "id": "CR1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC", "x": 660, "y": 120, "label": "CR1 24VDC", "terminals": { "a": "n2", "b": "N" } },
+      { "id": "RUNC", "type": "contact_no", "coil": "CR1", "x": 470, "y": 230, "label": "CR1 NO", "terminals": { "in": "n1", "out": "nRun" } },
+      { "id": "RUN", "type": "bulb", "x": 740, "y": 230, "label": "Running", "terminals": { "a": "nRun", "b": "N" } },
+      { "id": "STPC", "type": "contact_nc", "coil": "CR1", "x": 470, "y": 330, "label": "CR1 NC", "terminals": { "in": "n1", "out": "nStp" } },
+      { "id": "STP", "type": "bulb", "x": 740, "y": 330, "label": "Stopped", "terminals": { "a": "nStp", "b": "N" } },
+      { "id": "TP_L", "type": "test_point", "x": 220, "y": 60, "label": "TP-L", "terminals": { "p": "L" } },
+      { "id": "TP_1", "type": "test_point", "x": 300, "y": 60, "label": "TP-1", "terminals": { "p": "n1" } },
+      { "id": "TPc", "type": "test_point", "x": 470, "y": 60, "label": "TP-coil", "terminals": { "p": "n2" } }
+    ]
+  }
+}

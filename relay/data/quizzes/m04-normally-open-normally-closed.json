@@ -1,0 +1,138 @@
+{
+  "moduleId": "m04-normally-open-normally-closed",
+  "title": "Normally Open vs Normally Closed: the Resting State",
+  "questions": [
+    {
+      "q": "A Normally Closed (NC) contact has nothing acting on it. Is its load energized?",
+      "options": [
+        "Yes — NC rests closed, so the load is already on",
+        "No — NC rests open, so the load is off",
+        "Only after you press it",
+        "Only if the supply is 24VDC"
+      ],
+      "correct": 0,
+      "why": "Normally Closed rests in the closed position, so current already has a path to the load until something acts on it."
+    },
+    {
+      "q": "What does the word 'normally' mean when describing a contact?",
+      "options": [
+        "The resting position with no energy applied to change it",
+        "The position it is in most of the day",
+        "The position once it is fully energized",
+        "The factory default that can never change"
+      ],
+      "correct": 0,
+      "why": "'Normally' means the at-rest state, before anything pushes on the contact to flip it."
+    },
+    {
+      "q": "A Normally Open (NO) contact is sitting at rest. What is its load doing?",
+      "options": [
+        "Off — NO rests open, so there is no path yet",
+        "On — NO rests closed",
+        "Flickering on and off",
+        "On, but only at half power"
+      ],
+      "correct": 0,
+      "why": "A Normally Open contact rests open, so there is no path to the load and it stays off until something acts on the contact."
+    },
+    {
+      "q": "A car's brake-light switch rests open with the light off and only closes when you press the pedal. What kind of contact is it?",
+      "options": [
+        "Normally Open (NO)",
+        "Normally Closed (NC)",
+        "Double Throw",
+        "A load, not a contact"
+      ],
+      "correct": 0,
+      "why": "Resting open with the light off and closing only when pressed is the definition of a Normally Open contact."
+    },
+    {
+      "q": "You press the Stop pushbutton (an NC contact in the coil path) and the motor keeps running. You backprobe across the Stop button while holding it in and read 0V. What do you conclude?",
+      "options": [
+        "The button's NC contact has welded closed, or the mechanism is jammed, so it can't open the gap",
+        "The button is working fine — 0V across a pressed NC contact is normal",
+        "The coil itself has failed shorted and is bypassing the Stop button entirely",
+        "The supply voltage has dropped too low for the button to register the press"
+      ],
+      "correct": 0,
+      "why": "Pressing an NC contact should open the gap and put full supply voltage across it — 24V, not 0V. Reading 0V while pressed means current is still flowing through, so the contact never opened: it's welded shut or physically jammed. That is exactly the failure mode described for a Stop circuit that won't stop the machine.",
+      "visual": {
+        "lesson": "m14-swap-bulb-for-motor-starter",
+        "prevCoil": [
+          "M1"
+        ],
+        "caption": "As found — machine running; the Stop press has no effect."
+      }
+    },
+    {
+      "q": "A conveyor motor drops out randomly under load with no fault code. A cold continuity check on the NC overload contact in the stop path shows perfect continuity. What's the right next diagnostic move?",
+      "options": [
+        "Replace the overload relay immediately since continuity already proves it's bad",
+        "Ignore it — a good cold continuity reading means the contact path is fine and the fault must be upstream in the PLC",
+        "Wiggle-test the wiring and terminals on the NC contacts in the stop path while the machine runs, watching for a momentary open under vibration",
+        "Increase the overload's trip setting so it stops nuisance-tripping"
+      ],
+      "correct": 2,
+      "why": "A loose terminal or connection can pass a cold, static continuity check yet open for only tens of milliseconds under vibration or thermal expansion — long enough to drop the coil with zero fault code. Wiggle-testing while running (or watching for an AC millivolt spike at the terminal) catches an intermittent that a resistance meter at rest never will."
+    },
+    {
+      "q": "You're wiring a safety interlock on a press that must stop the machine the instant a wire breaks or control power is lost. Which contact type belongs in the 'allow motion' path?",
+      "options": [
+        "NC, so a broken wire holds the machine enabled and running",
+        "NO, so a broken wire or lost control voltage opens the path and stops the machine — fail-safe",
+        "Either type works identically for a safety interlock",
+        "NC, because NC contacts are rated for higher fault current"
+      ],
+      "correct": 1,
+      "why": "For an 'allow motion' path, you want the fault to remove permission to run. An NO contact that closes to enable motion means any broken wire or lost voltage opens that path and stops the machine — fail-safe. Using NC there means a wiring fault would hold the machine enabled, which is backwards for a safety function."
+    },
+    {
+      "q": "A new DPDT relay was just installed to replace a failed one. Before wiring, you check the terminal markings. Which pair should you land the field wires on to preserve the original NC behavior in the coil path?",
+      "options": [
+        "The terminals marked 1NO or NO",
+        "The terminals marked C (or COM) and 1NC",
+        "Any terminal pair, since DPDT relays don't distinguish NO from NC",
+        "The coil terminals themselves, bypassing the contact block"
+      ],
+      "correct": 1,
+      "why": "On a DPDT relay, common is marked C or COM, and the Normally Closed contact is marked 1NC (Normally Open is marked 1NO or NO). Landing wires on the NO set instead of the NC set inverts the circuit's behavior — exactly the fault described where a machine energizes when it should be off, and vice versa. Always verify with a continuity check on the de-energized relay before buttoning it up."
+    },
+    {
+      "q": "You measure 24V DC across a closed NO contact that's supposedly carrying current to a load. What does that voltage reading actually mean, and about how much drop should a healthy closed contact show instead?",
+      "options": [
+        "It means the contact is fine; 24V across any closed contact is expected on a 24VDC circuit",
+        "It means the contact is dropping most of the supply — arced, pitted, or corroding — and a healthy closed contact should read near 0V, no more than about 1-2V",
+        "It means the load itself has failed open, and the contact resistance is irrelevant",
+        "It means the meter is set to the wrong range and should be re-measured in ohms with power on"
+      ],
+      "correct": 1,
+      "why": "By Ohm's law, a healthy closed contact has near-zero resistance, so with only milliamps flowing the volt drop across it should be near 0V (at most 1-2V on a good silver-alloy contact). Reading most of the 24V supply sitting across a 'closed' contact means it's actually carrying high resistance — arced, pitted, or corroding — and needs replacement, not more troubleshooting downstream."
+    },
+    {
+      "q": "A tech assumes an NC contact used in a stop or safety path will always fail in the safe direction, so a welded NC contact never gets treated as urgent. What's actually at risk if that assumption goes unchallenged?",
+      "options": [
+        "Nothing — NC contacts are inherently fail-safe by design, so a welded one is just a maintenance inconvenience",
+        "The only consequence is a slightly higher electric bill from the load staying energized longer than intended",
+        "The relay coil will simply burn out on its own within a few hours, which resolves the issue automatically",
+        "A welded-closed NC contact in a Stop or safety path means the machine cannot be shut down by its own control circuit — a safety emergency requiring lockout, not a routine work-order item"
+      ],
+      "correct": 3,
+      "why": "NC only fails safe if the contact can still open on demand. A welded NC contact physically cannot open, so pressing Stop does nothing — the machine keeps running through a control circuit that looks correct on paper. That is a safety emergency: the machine must be tagged out and the contact replaced before it goes back in service, not logged as a low-priority ticket."
+    },
+    {
+      "q": "In the print shown, CR1 is dropped out. Which lamp lights at the moment CR1's coil energizes?",
+      "options": [
+        "Stopped (LT2) — it is fed through CR1's NC contact",
+        "Both lamps light together",
+        "Neither lamp — contacts don't move when a coil energizes",
+        "Running (LT1) — it sits behind CR1's NO contact, which closes when the coil pulls in"
+      ],
+      "correct": 3,
+      "why": "LT1 is fed through CR1 NO — open at rest, closed the instant the coil pulls in. LT2 is fed through CR1 NC, which opens at that same instant, so Running lights while Stopped goes dark.",
+      "visual": {
+        "lesson": "m04-normally-open-normally-closed",
+        "caption": "The print at rest — S1 released, CR1 dropped out."
+      }
+    }
+  ]
+}

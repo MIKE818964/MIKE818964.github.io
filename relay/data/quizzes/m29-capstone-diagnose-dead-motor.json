@@ -1,0 +1,149 @@
+{
+  "moduleId": "m29-capstone-diagnose-dead-motor",
+  "title": "Capstone: Diagnose a Dead Motor Start/Stop Station",
+  "questions": [
+    {
+      "q": "An operator says the conveyor motor won't start. What is the FIRST thing a good troubleshooter does?",
+      "options": [
+        "Read the ladder print to know what NORMAL looks like",
+        "Start swapping parts until it runs",
+        "Replace the contactor right away",
+        "Press Start harder a few times"
+      ],
+      "correct": 0,
+      "why": "The disciplined method starts by knowing normal from the print, so you can spot exactly where the circuit deviates instead of guessing.",
+      "visual": {
+        "lesson": "m14-swap-bulb-for-motor-starter",
+        "caption": "The station's ladder print."
+      }
+    },
+    {
+      "q": "You press Start and nothing happens. You measure 24VDC present at the coil terminals, but the contactor doesn't pull in. What's your conclusion?",
+      "options": [
+        "The control circuit is good; the fault is the coil/contactor itself — replace it",
+        "A Start button wire is broken upstream",
+        "The Stop button is open",
+        "The control fuse is blown"
+      ],
+      "correct": 0,
+      "why": "Correct, matched voltage is reaching the coil, so the buttons and wiring are proven good; if it still won't energize, the coil is open/burned or jammed."
+    },
+    {
+      "q": "Before reaching into the motor starter to replace the coil, what must you do?",
+      "options": [
+        "Apply LOTO and verify zero energy, because the power side may carry 480VAC",
+        "Nothing — the 24VDC control is harmless",
+        "Just press Stop and start working",
+        "Leave it energized so you can test as you go"
+      ],
+      "correct": 0,
+      "why": "Even with 24VDC control off, the starter's power side can still hold lethal 480VAC, so you lock out and verify-dead before touching it."
+    },
+    {
+      "q": "You press Start, measure 0VDC at the coil, and find the Stop button feeds power but the Start button output is dead. Where is the fault?",
+      "options": [
+        "In the Start button or its wiring — power reaches Start but doesn't pass through",
+        "In the coil itself",
+        "In the 480V motor leads",
+        "In the overload heater"
+      ],
+      "correct": 0,
+      "why": "Dividing the circuit shows power arriving at Start but not leaving it, so the break is the Start contact or its wiring, not the coil or power side.",
+      "visual": {
+        "lesson": "m14-swap-bulb-for-motor-starter",
+        "faults": [
+          {
+            "component": "S2",
+            "kind": "stuck_open"
+          }
+        ],
+        "caption": "Station as found — idle; pressing Start does nothing."
+      }
+    },
+    {
+      "q": "You're troubleshooting a 'won't start' complaint. Rather than walking the whole rung from Stop to coil, where should your FIRST measurement land, and why?",
+      "options": [
+        "At the very last device in the rung, the coil itself, so you can rule it out completely before checking anything else",
+        "Roughly the middle of the suspect circuit, at the coil terminals — one reading there eliminates half the possibilities at once",
+        "At the disconnect switch, since that's the true beginning of the circuit",
+        "Wherever is physically easiest to get a meter on, since location doesn't affect the diagnosis"
+      ],
+      "correct": 1,
+      "why": "The half-split method means picking a midpoint test point — on a no-start call that's the coil terminals — so one reading tells you whether to hunt forward (coil/contactor) or backward (Start/Stop/fuse). Starting at one end and walking the whole rung wastes time even though it eventually gets there.",
+      "visual": {
+        "lesson": "m14-swap-bulb-for-motor-starter",
+        "caption": "The suspect rung — test points marked on the print."
+      }
+    },
+    {
+      "q": "You've got the Stop button de-energized and you measure the coil circuit reading 40VAC on what's supposed to be a dead 24VDC control wire. A green tech would call this 'still hot' and start hunting a live feed. What should you actually do next?",
+      "options": [
+        "Trust the reading and start pulling wires to find the hot conductor feeding it",
+        "Assume the meter is broken and get a new one",
+        "Switch to a low-impedance (LoZ) meter setting and re-check — a phantom reading from induced voltage on parallel conductors will collapse toward 0V",
+        "Add a jumper to ground the wire and re-measure with the same meter"
+      ],
+      "correct": 2,
+      "why": "High-impedance digital meters can display induced 'phantom' voltage from adjacent conductors sharing conduit, sometimes 20-80V on a truly dead wire. A LoZ/Z-check function loads the circuit enough that a real dead wire collapses to under 5V, proving it's safe, while a genuinely live wire holds its reading."
+    },
+    {
+      "q": "A conveyor motor runs but you notice it's hotter than usual and trips its overload sooner than it used to. With the motor running and loaded, you measure across each phase of the closed contactor's main contacts and get 6V drop on all three legs. What's happening?",
+      "options": [
+        "This is normal; any closed contact under motor load will show several volts of drop",
+        "The overload relay itself is miscalibrated and needs to be replaced",
+        "The motor's nameplate FLA rating is wrong and needs to be re-derated",
+        "The contacts are pitted from arcing — they're dissipating real wattage as heat and starving the motor of about 18V combined, which runs it hot and trips the OL"
+      ],
+      "correct": 3,
+      "why": "Healthy closed contacts drop less than 0.5V; anything in the 4-8V range per contact means pitting or contamination is adding resistance. Three legs at 6V each is 18V robbed from the motor, which is why it runs hot, slow, and trips overloads even though the contactor looks like it's working fine when you just watch it pull in."
+    },
+    {
+      "q": "The overload trips, and you find the OL is a few amps below the motor's nameplate FLA. Someone suggests just bumping the OL dial up so it stops nuisance-tripping and the motor 'runs fine.' Why is this the wrong move on the floor?",
+      "options": [
+        "It's fine as long as the breaker size is checked first",
+        "The OL dial should always be set 20% above FLA as standard practice to prevent nuisance trips",
+        "OL settings don't matter once the motor has run for more than a week without tripping",
+        "The OL must be set to nameplate FLA, not adjusted upward to stop tripping — raising it past FLA removes the protection meant to catch a real overcurrent condition like a jam or shorted winding"
+      ],
+      "correct": 3,
+      "why": "The OL's job is to trip before the motor cooks itself; setting it above nameplate FLA to silence a trip means a real fault (mechanical jam, low voltage under load, shorted winding) no longer trips the protection, and the motor burns silently, sometimes for months, before it fails outright."
+    },
+    {
+      "q": "A NEMA contactor is rated for a 24VDC coil with a normal pull-in voltage range of 85-110%. Control voltage at the coil (measured while it's actually trying to energize, not open-circuit) sags to 19.5VDC during the inrush moment and the contactor chatters instead of sealing in. What does the math tell you?",
+      "options": [
+        "19.5VDC is about 81% of 24V, below the 85% dropout/pull-in threshold, so the chatter is consistent with a sagging supply rather than a bad coil",
+        "19.5VDC is well within the 85-110% window, so the chatter must be a mechanical problem with the armature",
+        "19.5VDC is above the 110% ceiling, meaning the coil is being overdriven and will overheat",
+        "Voltage sag during inrush is irrelevant since only the open-circuit reading at rest matters"
+      ],
+      "correct": 0,
+      "why": "24V x 0.85 = 20.4V is the floor for reliable pull-in; 19.5VDC is roughly 81%, under that threshold, so the contactor chattering instead of sealing in points to a weak supply or transformer collapsing under coil inrush current, not a bad coil. Checking only open-circuit voltage misses this because inrush can be 6-10x the sealed current for the first 20-50ms."
+    },
+    {
+      "q": "You reset a tripped overload and the motor starts right up with no further investigation. Two weeks later that same motor's windings are cooked and it has to be replaced. What did the initial diagnosis miss, and what should have been done instead?",
+      "options": [
+        "The OL tripped for a reason — mechanical jam, low supply voltage, or a shorted winding drawing extra current — and that root cause should have been checked with a clamp meter against nameplate FLA before just resetting and walking away",
+        "Nothing could have been done differently; overloads trip randomly sometimes and resetting is the correct full fix",
+        "The technician should have replaced the contactor instead of resetting the OL",
+        "The fix was correct; motor winding failures two weeks later are unrelated to an earlier OL trip"
+      ],
+      "correct": 0,
+      "why": "An OL trip is a symptom, not the problem — it means the motor pulled more than its full-load amps for too long. Skipping the clamp-meter check against nameplate FLA to save five minutes is exactly how a quick reset turns a repeat callback into a burned-out motor and a much bigger repair bill."
+    },
+    {
+      "q": "In the print shown, the operator reports: the motor runs while S2 Start is held, and stops the instant it is released. Stop behaves normally. Which component in the print is the prime suspect?",
+      "options": [
+        "S1 Stop — an open Stop contact would keep the rung dead",
+        "The M1 seal-in contact or its wiring — it is the only path that keeps the coil fed after Start is released",
+        "FU1 — a blown fuse starves the whole rung",
+        "The M1 main contact — it carries the motor current"
+      ],
+      "correct": 1,
+      "why": "Runs-while-held is the signature of a dead holding path. Start still feeds the coil (so FU1, S1 and the coil are proven good) and the motor runs (so M1 main works). The one component whose only job is to keep the coil fed after Start opens is the M1 seal-in.",
+      "visual": {
+        "lesson": "m14-swap-bulb-for-motor-starter",
+        "caption": "The station's print — drawn de-energized."
+      }
+    }
+  ]
+}

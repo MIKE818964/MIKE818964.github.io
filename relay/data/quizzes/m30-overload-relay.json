@@ -1,0 +1,133 @@
+{
+  "moduleId": "m30-overload-relay",
+  "title": "The Overload Relay: the Motor's Bodyguard",
+  "questions": [
+    {
+      "q": "A motor branch circuit has fuses (or a breaker) AND an overload relay. Why both — what job does each one own?",
+      "options": [
+        "They're redundant — either one alone gives the same protection",
+        "Fuses/breaker protect the CIRCUIT (wires, short circuits, ground faults); the overload protects the MOTOR from running over its nameplate current long enough to cook the windings",
+        "The overload protects against short circuits; the fuses catch slow overloads",
+        "Fuses protect the control side; the overload protects the power side"
+      ],
+      "correct": 1,
+      "why": "They protect different things. Fuses and breakers are sized to carry the motor's starting inrush, so a motor grinding along at 115-125% of nameplate never touches them — but that slow overcurrent is exactly what degrades winding insulation. The overload relay is the slow, motor-shaped protection: it models motor heating and trips before the windings cook. The fuse is the wire's bodyguard; the overload is the motor's."
+    },
+    {
+      "q": "The RW27-2D3-D063 has an adjustable FLA dial marked 4.0 to 6.3 amps. The motor nameplate says FLA 5.2 A. Where do you set the dial?",
+      "options": [
+        "6.3 A — max the dial so it never nuisance-trips",
+        "4.0 A — minimum, for maximum protection",
+        "5.2 A — the motor's nameplate full-load amps",
+        "Halfway, then adjust until the motor stops tripping"
+      ],
+      "correct": 2,
+      "why": "The dial is set to the motor NAMEPLATE full-load amps — that's the whole point of an adjustable range (this model covers 4.0-6.3 A). Set it high and the motor can run overloaded without protection; set it low and it nuisance-trips on a healthy load. The nameplate, not trial and error, is the source of truth."
+    },
+    {
+      "q": "The RW27 cut sheet says 'Trip Class 10.' In plain words, what does trip class tell you?",
+      "options": [
+        "How long the overload tolerates a heavy overload before tripping — Class 10 trips within about 10 seconds at 6x the dial current",
+        "The maximum amps the contacts can carry — 10 amps",
+        "How many times it can trip before replacement — 10 trips",
+        "The reset cool-down time — 10 minutes"
+      ],
+      "correct": 0,
+      "why": "Trip class is a TIME rating at 6x the dial (FLA) current: Class 10 trips within ~10 s, Class 20 within ~20 s, Class 30 within ~30 s. It exists because motors pull several times FLA while starting — the class you pick has to ride through the start. Quick-starting pumps get Class 10; high-inertia loads that start slow and heavy need 20 or 30 so the start itself doesn't trip the overload."
+    },
+    {
+      "q": "The overload trips while the motor is running. What actually opens, and what stops the motor?",
+      "options": [
+        "The heater elements melt open like fuses, breaking the motor current directly",
+        "The overload's main power poles open all three motor legs",
+        "The 97-98 contact opens and disconnects the motor",
+        "The little 95-96 NC contact — wired in series with the CONTACTOR COIL — opens; the coil drops, and the contactor's main contacts are what break the motor current"
+      ],
+      "correct": 3,
+      "why": "This is the punchline of the whole device: the overload never breaks motor current. Its heaters just measure it. On a trip, the bimetal mechanism opens the 95-96 normally-closed contact sitting in the coil rung — same effect as pressing Stop. The coil de-energizes, the contactor drops out, and the contactor's power poles stop the motor. Pilot-duty contact, motor-duty result."
+    },
+    {
+      "q": "The overload is tripped and the operator is holding the Start button for you. Your meter is across the overload's 95 and 96 terminals. What should it read, and why?",
+      "options": [
+        "0 V — the contact is open so no voltage can be there",
+        "About 12 V — the coil drops half the supply",
+        "The full 24 V control voltage — supply pushes through the de-energized coil to terminal 95, and the open 95-96 contact is where the whole drop lands",
+        "It will read OL because the circuit is dead"
+      ],
+      "correct": 2,
+      "why": "Voltage appears ACROSS whatever is open in a series string. With Start held, 24 V walks through the closed Stop button, the Start button, and the de-energized coil (a coil passing no current drops no voltage) all the way to terminal 95. Terminal 96 sits at 0 V on the return. Full supply across 95-96 = that contact is your open. Reading 0 V across a contact means it's closed — the exact opposite of what new techs expect.",
+      "visual": {
+        "lesson": "30_overload",
+        "pressed": ["S2"],
+        "faults": [
+          { "component": "OL9596", "kind": "stuck_open" },
+          { "component": "OL9798", "kind": "welded_closed" }
+        ],
+        "caption": "The station as found, with the Start button held."
+      }
+    },
+    {
+      "q": "Besides the 95-96 NC contact, the RW27 carries one more aux contact: 97-98, normally open. What is it typically used for?",
+      "options": [
+        "It closes when the overload trips — feeding a trip/alarm light or a PLC input so somebody knows WHY the motor stopped",
+        "It carries one of the three motor phases",
+        "It's a spare seal-in contact for the Start button",
+        "It opens on a trip as a backup for 95-96"
+      ],
+      "correct": 0,
+      "why": "The cut sheet lists (1) N.O. and (1) N.C. auxiliary contacts. 95-96 (the NC) drops the coil; 97-98 (the NO) closes on the same trip and typically drives an amber TRIP light or an alarm input. Without it, a tripped overload just looks like a dead motor — the light is what turns a mystery call into a 10-second diagnosis."
+    },
+    {
+      "q": "Why can an overload relay set to AUTOMATIC reset be dangerous on a machine, where MANUAL reset would be safe?",
+      "options": [
+        "Auto reset wears out the bimetal faster",
+        "With auto reset on a 2-wire (maintained-switch) control, the contact re-closes by itself when the bimetal cools — and the motor restarts with nobody at the machine, possibly with someone's hands in it",
+        "Auto reset trips at a lower current than manual reset",
+        "There is no difference — reset mode only changes who pushes the button"
+      ],
+      "correct": 1,
+      "why": "A tripped overload holds the machine off only as long as 95-96 stays open. In AUTO mode the contact re-closes on its own once the bimetal cools. On a 3-wire circuit that's survivable — the seal-in already dropped, so the motor still waits for a Start press. But on 2-wire control (a maintained switch or thermostat still closed) the motor lurches back to life unattended. If a jam is being cleared by hand at that moment, people get hurt. Manual reset makes a human walk to the panel first."
+    },
+    {
+      "q": "A 3-phase motor is running when one supply fuse blows — the classic 'single-phasing' fault. What happens, and how does the overload respond?",
+      "options": [
+        "The motor stops instantly, so no protection is needed",
+        "Nothing changes — the two remaining phases carry the same current as before",
+        "The motor speeds up and the overload ignores it",
+        "The motor keeps running on two legs, those legs pull roughly 1.7x current, and a phase-loss-sensitive overload (like the RW27) trips — faster than the current rise alone would trip it"
+      ],
+      "correct": 3,
+      "why": "A running 3-phase motor doesn't quit when it loses a phase — it keeps turning on two legs, and those legs pick up the missing phase's work at roughly 1.7x current while the motor overheats fast. The RW27's cut sheet lists 'Phase Loss Sensitive: Yes': its differential mechanism reacts to one cold heater beside two hot ones and trips harder than the current numbers alone would, which is exactly the protection single-phasing needs."
+    },
+    {
+      "q": "A conveyor motor runs about 15% over nameplate current all shift. The branch fuses never blow. Why does the overload relay catch what the fuse never will?",
+      "options": [
+        "Because the fuses must be sized to ride through the motor's starting inrush (several times FLA), a 15% overload never threatens them — but the overload's heaters and bimetal integrate that excess heat over time, just like the motor windings do, and trip first",
+        "Because fuses only work on short circuits, not on current at all",
+        "Because the overload measures voltage while the fuse measures current",
+        "It doesn't — a 15% overload is harmless and nothing should trip"
+      ],
+      "correct": 0,
+      "why": "Branch protection has to let the motor start, so it's sized well above FLA and shrugs at 115%. But 15% over, hour after hour, is a slow thermal kill for winding insulation. The overload is built as a thermal MODEL of the motor: its heaters warm the bimetal the same way the excess current warms the windings, so it trips on exactly the abuse the fuse is blind to. That's why it's the motor's bodyguard, not the wire's."
+    },
+    {
+      "q": "You find the amber OL TRIP light on and the motor dead. You press the overload's reset, hit Start, and it runs. Job done?",
+      "options": [
+        "Yes — a trip just means the overload got old and needed a reset",
+        "No — the trip is a SYMPTOM. Find out why the motor overloaded (binding load, low voltage, single-phasing, wrong dial setting) and watch running amps after the restart",
+        "No — you should have replaced the overload before resetting it",
+        "Yes, but only if the reset button felt normal"
+      ],
+      "correct": 1,
+      "why": "An overload trip means the motor pulled more than its nameplate current long enough to matter — resetting clears the protection, not the cause. Check the driven load for binding, check all three legs with a clamp meter against nameplate FLA, confirm the dial matches the nameplate, and stay for the restart. Reset-and-walk-away is how the second trip becomes a burned motor.",
+      "visual": {
+        "lesson": "30_overload",
+        "faults": [
+          { "component": "OL9596", "kind": "stuck_open" },
+          { "component": "OL9798", "kind": "welded_closed" }
+        ],
+        "caption": "The station as found on arrival — nothing pressed."
+      }
+    }
+  ]
+}

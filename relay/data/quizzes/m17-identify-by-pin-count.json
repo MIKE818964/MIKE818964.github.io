@@ -1,0 +1,116 @@
+{
+  "moduleId": "m17-identify-by-pin-count",
+  "title": "Identify a Relay by Counting Its Pins",
+  "questions": [
+    {
+      "q": "Using the pin-counting rules, how many pins does the COIL always use on a relay?",
+      "options": [
+        "1 pin",
+        "2 pins",
+        "1 pin per pole",
+        "It depends on the coil voltage"
+      ],
+      "correct": 1,
+      "why": "The coil always gets exactly 2 pins, one for each end of the coil wire, no matter how many poles the relay has."
+    },
+    {
+      "q": "How many output pins does ONE double-throw pole use?",
+      "options": [
+        "1 pin",
+        "2 pins",
+        "3 pins",
+        "4 pins"
+      ],
+      "correct": 1,
+      "why": "A double-throw pole can swing to two destinations, so it needs 2 output pins (plus its 1 common)."
+    },
+    {
+      "q": "You find an unmarked relay with 5 pins. Using the pin-counting rules, what type is it?",
+      "options": [
+        "SPST",
+        "SPDT",
+        "DPST",
+        "DPDT"
+      ],
+      "correct": 1,
+      "why": "Two pins are the coil, leaving 3 for the pole: 1 common plus 2 outputs, which is one double-throw pole, an SPDT."
+    },
+    {
+      "q": "An unmarked relay has 8 pins. After subtracting the 2 coil pins, you have 6 pin spots for the poles. What relay is it?",
+      "options": [
+        "Two double-throw poles (DPDT)",
+        "Three single-throw poles (3PST)",
+        "One double-throw pole (SPDT)",
+        "Four single-throw poles (4PST)"
+      ],
+      "correct": 0,
+      "why": "The 6 pole pins are 2 commons plus 4 outputs, which is two double-throw poles, a DPDT (8 pins total)."
+    },
+    {
+      "q": "A control panel's original relay was an 11-pin 3PDT. It burned up, and the parts cabinet only has 14-pin 4PDT relays left labeled 'same series.' You plug one into the 11-pin octal socket anyway since it looks close enough. What is the most likely real-world consequence?",
+      "options": [
+        "Nothing — extra poles on a relay are simply ignored if unused",
+        "The relay will not physically fit an 11-pin socket, so this can't happen",
+        "The extra pole's NO/NC pins can float or short against the socket base, causing phantom energization or an unintended dead leg",
+        "The coil will draw less current since it has more poles to distribute the load across"
+      ],
+      "correct": 2,
+      "why": "As the war story shows, mismatched pin counts mean extra pins land on wrong or bare contacts in the base, energizing circuits that should be dead or dropping a leg on a motor. Coil current is set by coil voltage/resistance, not pole count, and a 14-pin relay does not mechanically key into an 11-pin base the same way — but don't assume the base will always stop you; screw-terminal/DIN bases won't."
+    },
+    {
+      "q": "You're troubleshooting a machine where the load stays energized even after Stop is pressed, and you confirm 0V at the coil pins with the relay still in its socket. What should you check next?",
+      "options": [
+        "Replace the coil, since 0V at the coil pins means the coil winding failed open",
+        "Measure common-to-NC resistance on each pole with the relay de-energized — near-zero ohms where it should read open points to a welded contact",
+        "Increase the coil supply voltage to force the contacts to release",
+        "Assume the wiring diagram on the relay body is wrong and rewire from the socket markings instead"
+      ],
+      "correct": 1,
+      "why": "Coil voltage reading 0V confirms the coil dropped out correctly, so the problem lives at the contact face, not the coil. A pole that still shows continuity common-to-NC after de-energizing is a mechanically welded contact from inductive-load arcing, and per the field notes that's a relay replacement, not a wiring fix — pry never fixes a welded face."
+    },
+    {
+      "q": "You're wiring a replacement relay into a screw-terminal DIN-rail base (not an octal ice-cube socket). What's the safest habit to apply from the pin-counting rules, given that this base style won't mechanically stop you from crossing coil and pole wiring?",
+      "options": [
+        "Trust the terminal numbers printed on the DIN rail base itself, since those are fixed for the socket's lifetime",
+        "Wire it the same way as the last relay that was in that slot, since the base hasn't changed",
+        "Cross-reference every pin against the wiring diagram printed or molded on the relay body before landing any wires",
+        "Wire the coil first at rated voltage, then figure out the pole pins by process of elimination once it's powered"
+      ],
+      "correct": 2,
+      "why": "Screw-terminal and DIN-rail bases don't mechanically prevent you from landing L1/neutral on the wrong pins, unlike octal/ice-cube sockets. The relay body's printed diagram is the ground truth regardless of base style; socket labels can be worn off or mislabeled by a previous tech, and the last relay in the slot may itself have been miswired."
+    },
+    {
+      "q": "A 24VDC relay's label reads 'coil: 24VDC, 500 ohms nominal.' You pull it and ohm out the coil pins A1-A2 with the relay out of the socket, and your meter reads OL. What does this tell you, and what should you do?",
+      "options": [
+        "OL means the coil is drawing exactly its rated 500 ohms — the relay is good, reinstall it",
+        "OL means the coil winding is open (burned out) — the relay is bad and should not be reinstalled",
+        "OL means the coil is shorted internally — the relay is bad and should not be reinstalled",
+        "OL is a normal meter artifact on DC coils and should be ignored"
+      ],
+      "correct": 1,
+      "why": "OL (open loop / infinite resistance) means the coil winding itself has burned open, not that it's reading its rated 500 ohms — a good coil reads close to its labeled resistance, not infinite. A shorted coil would instead read near zero ohms, the opposite fault. Either fault means the relay is bad and gets replaced, not reinstalled."
+    },
+    {
+      "q": "You're testing an 11-pin 3PDT relay's poles with it de-energized. On pole 2, common-to-NC reads roughly 400 ohms instead of near-zero, and common-to-NO reads open as expected. What's the correct read on this pole?",
+      "options": [
+        "This is normal pole-to-pole variation and can be ignored",
+        "The NC contact face is pitted/high-resistance or the pole has failed open on that leg, not the expected near-zero continuity",
+        "This confirms the contact is welded closed, matching a welded-contact failure",
+        "This means the coil is undersized for a 3PDT and should be swapped for a higher-voltage coil"
+      ],
+      "correct": 1,
+      "why": "A de-energized pole should read near-zero ohms common-to-NC; 400 ohms is neither a clean short (welded, near 0) nor a clean open (OL) — it points to a pitted or degraded contact face raising resistance on that leg, the same pattern described for a pole that fails to actuate one load while others work fine. Welded contacts read as continuity where it should be open, which isn't what's shown here, and coil voltage rating has nothing to do with contact resistance."
+    },
+    {
+      "q": "A tech skips counting pins and swaps a burned relay for 'whatever fits in the drawer,' plugging a higher-pole-count relay into a base with unused pin positions exposed at the back of the panel. Per the deep-dive and war story, what's the real danger of ignoring pin-count verification here?",
+      "options": [
+        "Only a cosmetic issue — the panel door won't close as neatly with a bigger relay installed",
+        "The extra unused pins can rest against grounded panel metal or bridge to adjacent circuits, creating a ground fault or unintended energization that mimics an unrelated fault like an overload trip",
+        "The relay will simply run a few degrees warmer with no functional risk",
+        "Modern relays auto-detect the base pinout and disable any unused poles automatically"
+      ],
+      "correct": 1,
+      "why": "In the war story, an oversized relay's extra bare pole pins grounded against the enclosure, creating a control-circuit short that masqueraded as a mechanical overload trip until an ohmmeter check from each pin to chassis exposed it. Relays have no auto-detection of base pinout; this is a wiring/mechanical hazard, not a cosmetic or thermal one."
+    }
+  ]
+}

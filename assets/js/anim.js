@@ -15,17 +15,37 @@
   const sim={}, target={}, peakv={};
   Object.keys(U).forEach(u=>{const mn=U[u].min||0;sim[u]=mn+(U[u].max-mn)*0.4;target[u]=sim[u];});
 
-  // --- simple believable drive cycle ---
+  // --- simple believable drive cycle, with periodic stop-light launches so
+  //     the perf timer (PERF arms below 1 mph) gets demoed too ---
   let gear=2, rpm=1500, mph=12, thr=0.4, hold=0, fuel=68;
+  let phase='cruise', phT=14+Math.random()*14;   // first stop ~14-28s after load
   function drive(dt){
     const RL=6600;
-    if(thr>0.05) rpm += (2400*thr - 250)*dt; else rpm -= 1600*dt;
-    if(rpm>=RL){ gear=Math.min(6,gear+1); rpm=3000+Math.random()*500; thr=0.9; }   // upshift
-    if(rpm<1050) rpm=1050;
-    hold-=dt;
-    if(hold<=0){ thr=0.3+Math.random()*0.65; hold=0.8+Math.random()*2.2;
-      if(Math.random()<0.2){ gear=Math.max(2,gear-1); rpm=2400; } }                // roll downshift
-    mph += (Math.min(150,gear*20+(rpm/RL)*22)-mph)*Math.min(1,dt*0.7);
+    phT-=dt;
+    if(phase==='cruise'&&phT<=0)phase='stopping';
+    if(phase==='stopping'){
+      thr=0; rpm=Math.max(950,rpm-2600*dt);
+      if(mph<gear*14)gear=Math.max(2,gear-1);
+      mph=Math.max(0,mph-16*dt);
+      if(mph<=0.05){phase='staged';phT=2.6;gear=1;rpm=950;}
+    } else if(phase==='staged'){
+      mph=0; thr=0; rpm=950+Math.random()*60;
+      if(phT<=0){phase='launch';gear=2;thr=1;rpm=2600;}
+    } else if(phase==='launch'&&mph>=95){
+      phase='cruise';phT=30+Math.random()*25;
+    }
+    if(phase==='cruise'||phase==='launch'){
+      if(phase==='launch')thr=1;
+      if(thr>0.05) rpm += (2400*thr - 250)*dt; else rpm -= 1600*dt;
+      if(rpm>=RL){ gear=Math.min(6,gear+1); rpm=3000+Math.random()*500; thr=phase==='launch'?1:0.9; }  // upshift
+      if(rpm<1050) rpm=1050;
+      if(phase==='cruise'){
+        hold-=dt;
+        if(hold<=0){ thr=0.3+Math.random()*0.65; hold=0.8+Math.random()*2.2;
+          if(Math.random()<0.2){ gear=Math.max(2,gear-1); rpm=2400; } }            // roll downshift
+      }
+      mph += (Math.min(150,gear*20+(rpm/RL)*22)-mph)*Math.min(1,dt*0.7);
+    }
     fuel=Math.max(6,fuel-dt*0.05);
     const boost=Math.max(0,(thr-0.42))*26*(rpm/RL);
     T('rpm',rpm);T('mph',mph);T('kmh',mph*1.609);T('tps',thr*100);
@@ -60,6 +80,7 @@
     } else {
       Object.keys(U).forEach(u=>{const mn=U[u].min||0;sim[u]=mn+(U[u].max-mn)*sf;});
     }
+    if(HBG.HIST&&sf===null)Object.keys(sim).forEach(u=>HBG.HIST.push(u,sim[u]));
     ticks.forEach(f=>{try{f();}catch(_){}});
   }
 
@@ -74,6 +95,7 @@
     gear:()=>gear,
     resetPeaks(){Object.keys(peakv).forEach(k=>delete peakv[k]);},
     start(f){ if(f)ticks.push(f); if(!on){on=true;t0=P();last=P();timer=setInterval(loop,38);} },
+    stop(){ if(on){on=false;clearInterval(timer);timer=null;} },  // live.html calls this when the real feed returns
     get running(){return on;}
   };
 })();

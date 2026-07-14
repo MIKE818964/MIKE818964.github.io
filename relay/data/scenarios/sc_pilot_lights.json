@@ -1,0 +1,130 @@
+{
+  "id": "sc_pilot_lights",
+  "title": "Which Light Is Lying?",
+  "type": "troubleshoot",
+  "mode": "deductive",
+  "workOrder": "WORK ORDER #214 — Operator at press station reports the indicator panel looks wrong. Quote: \"The Running light isn't doing what it should.\" Could be dark when the machine's running, both lights on at once, or a fault light that won't quit. Panel behavior is not matching reality.",
+  "symptom": "The pilot-light panel is reporting incorrectly. One fault is active — it's different every time you open this ticket. Don't assume which light is wrong; meter the nodes, press the simulator buttons, and let the voltage tell the story. A light that's dark is not the same as no voltage at the node — check both.",
+  "faults": [
+    { "component": "FU1",  "kind": "blown_fuse" },
+    { "component": "RUNC", "kind": "stuck_open" },
+    { "component": "STPC", "kind": "stuck_open" },
+    { "component": "STPC", "kind": "welded_closed" },
+    { "component": "RUNC", "kind": "swapped_no_nc" },
+    { "component": "FLTC", "kind": "welded_closed" }
+  ],
+  "diagnosisOptions": [
+    { "component": "FU1",  "kind": "blown_fuse" },
+    { "component": "RUNC", "kind": "stuck_open" },
+    { "component": "STPC", "kind": "stuck_open" },
+    { "component": "STPC", "kind": "welded_closed" },
+    { "component": "RUNC", "kind": "swapped_no_nc" },
+    { "component": "FLTC", "kind": "welded_closed" },
+    { "component": "RUN",  "kind": "broken_wire" },
+    { "component": "RUNC", "kind": "welded_closed" }
+  ],
+  "explains": {
+    "FU1:blown_fuse": "All three lights — Running, Stopped, and Fault — are completely dark no matter what buttons you press. Meter TP-L to N: 24V. Move to TP-1 to N: 0V. That's the blown-fuse signature: full source voltage sitting ACROSS the fuse, nothing past it. A good fuse reads ~0V across itself. Pull FU1 — if you're lucky the element is visually burned. Replace it, then find whatever overcurrent event took it out, or the next fuse meets the same fate.",
+    "RUNC:stuck_open": "The Running light stays dark even when you hold SIM-RUN and hear CR1 pull in — the Stopped light goes out (STPC opens normally), so the coil fired. But nRun reads 0V to N. A broken lamp would read 24V at that node; zero volts means the RUNC contact upstream never closed. The contact blades are mechanically stuck open. Replace the RUNC auxiliary contact block. Classic 'voltage never made it past the contact.'",
+    "STPC:stuck_open": "At rest with no buttons pressed, the Stopped light is dark — but it should be the only light on. Meter TP-Stp to N: 0V. The STPC contact (CR1 NC) is stuck open even though CR1 is de-energized, so it never passes power to the STP lamp. Press SIM-RUN: CR1 fires, RUNC closes, Running light comes on normally — proving power and the relay are healthy. The fault is isolated to STPC. Replace that auxiliary contact block.",
+    "STPC:welded_closed": "Hold SIM-RUN: CR1 pulls in, Running light comes on as expected — but the Stopped light stays on too. Both Running AND Stopped lit at the same time. That's your fingerprint: two lights that are interlocked (one NO, one NC on the same relay) can't both be on unless one contact is welded. STPC is welded shut — it never opens when CR1 fires. In production, a panel that claims 'running' AND 'stopped' simultaneously is a safety problem. Replace the STPC auxiliary contact block.",
+    "RUNC:swapped_no_nc": "At rest, with nothing pressed, the Running light is ON — and so is the Stopped light. Hold SIM-RUN: CR1 energizes and BOTH lights go out. Release: both come back on. Everything is backwards. RUNC was installed as an NC auxiliary contact when the print calls for NO. It closes at rest and opens when the coil fires. This is a wiring/parts error, not a failure. Swap RUNC for the correct NO auxiliary contact block, or rewire it to the NC terminal on the existing block.",
+    "FLTC:welded_closed": "The Fault light is on constantly — at rest, while pressing SIM-RUN, at every step. The Running and Stopped lights cycle normally when SIM-RUN is pressed, proving power and CR1 are healthy. The fault is isolated to the FLTC branch. FLTC is a CR2 NO contact; it should only light when CR2 is energized (a real fault event). With FLTC welded closed it's always making, giving a permanent false-fault indication. Replace the FLTC auxiliary contact block."
+  },
+  "circuit": {
+    "id": "pilot_light_panel",
+    "title": "Running / Stopped / Fault pilot-light panel",
+    "nodes": [
+      { "id": "L",    "x": 140, "y": 140 },
+      { "id": "n1",   "x": 310, "y": 140 },
+      { "id": "nRun", "x": 620, "y": 140 },
+      { "id": "nStp", "x": 620, "y": 260 },
+      { "id": "nFlt", "x": 620, "y": 380 },
+      { "id": "nCR1", "x": 620, "y": 500 },
+      { "id": "nCR2", "x": 620, "y": 600 },
+      { "id": "N",    "x": 140, "y": 680 }
+    ],
+    "components": [
+      {
+        "id": "SRC", "type": "source", "current": "DC", "volts": 24,
+        "x": 140, "y": 410, "label": "24VDC",
+        "terminals": { "pos": "L", "neg": "N" }
+      },
+      {
+        "id": "FU1", "type": "fuse", "ratingA": 2,
+        "x": 225, "y": 140, "label": "FU1  2A",
+        "terminals": { "a": "L", "b": "n1" }
+      },
+      {
+        "id": "RUNC", "type": "contact_no", "coil": "CR1",
+        "x": 465, "y": 140, "label": "CR1-NO  (RUN)",
+        "terminals": { "in": "n1", "out": "nRun" }
+      },
+      {
+        "id": "RUN", "type": "bulb",
+        "x": 760, "y": 140, "label": "RUNNING",
+        "terminals": { "a": "nRun", "b": "N" }
+      },
+      {
+        "id": "STPC", "type": "contact_nc", "coil": "CR1",
+        "x": 465, "y": 260, "label": "CR1-NC  (STP)",
+        "terminals": { "in": "n1", "out": "nStp" }
+      },
+      {
+        "id": "STP", "type": "bulb",
+        "x": 760, "y": 260, "label": "STOPPED",
+        "terminals": { "a": "nStp", "b": "N" }
+      },
+      {
+        "id": "FLTC", "type": "contact_no", "coil": "CR2",
+        "x": 465, "y": 380, "label": "CR2-NO  (FLT)",
+        "terminals": { "in": "n1", "out": "nFlt" }
+      },
+      {
+        "id": "FLT", "type": "bulb",
+        "x": 760, "y": 380, "label": "FAULT",
+        "terminals": { "a": "nFlt", "b": "N" }
+      },
+      {
+        "id": "PB_RUN", "type": "pushbutton", "mode": "momentary", "contact": "NO",
+        "x": 465, "y": 500, "label": "SIM-RUN",
+        "terminals": { "in": "n1", "out": "nCR1" }
+      },
+      {
+        "id": "CR1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC",
+        "x": 760, "y": 500, "label": "CR1  24VDC",
+        "terminals": { "a": "nCR1", "b": "N" }
+      },
+      {
+        "id": "PB_FLT", "type": "pushbutton", "mode": "momentary", "contact": "NO",
+        "x": 465, "y": 600, "label": "SIM-FLT",
+        "terminals": { "in": "n1", "out": "nCR2" }
+      },
+      {
+        "id": "CR2", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC",
+        "x": 760, "y": 600, "label": "CR2  24VDC",
+        "terminals": { "a": "nCR2", "b": "N" }
+      },
+      {
+        "id": "TP_L",   "type": "test_point", "x": 225, "y": 80,  "label": "TP-L",
+        "terminals": { "p": "L" }
+      },
+      {
+        "id": "TP_1",   "type": "test_point", "x": 310, "y": 80,  "label": "TP-1",
+        "terminals": { "p": "n1" }
+      },
+      {
+        "id": "TP_Run", "type": "test_point", "x": 620, "y": 80,  "label": "TP-Run",
+        "terminals": { "p": "nRun" }
+      },
+      {
+        "id": "TP_Stp", "type": "test_point", "x": 700, "y": 200, "label": "TP-Stp",
+        "terminals": { "p": "nStp" }
+      },
+      {
+        "id": "TP_Flt", "type": "test_point", "x": 700, "y": 320, "label": "TP-Flt",
+        "terminals": { "p": "nFlt" }
+      }
+    ]
+  }
+}

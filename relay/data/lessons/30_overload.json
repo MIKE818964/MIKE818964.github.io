@@ -1,0 +1,36 @@
+{
+  "id": "30_overload",
+  "circuit": {
+    "id": "overload_starter",
+    "title": "The Overload Relay: the Motor's Bodyguard",
+    "_authorNote": "3-wire start/stop starter with the RW27-style overload wired the way real prints do it: OL1's 95-96 NC contact sits IN SERIES WITH THE CONTACTOR COIL on the return side, and its 97-98 NO aux drives the amber TRIP light. The heater elements themselves live in the POWER path (the motor branch) and never open - a trip only drops the coil. The engine has no dedicated heater symbol, so the motor branch carries the heater note in its labels; the bespoke Trip Lab view draws the heater elements properly.",
+    "nodes": [
+      { "id": "L", "x": 120, "y": 150 },
+      { "id": "n1", "x": 230, "y": 150 },
+      { "id": "n2", "x": 390, "y": 150 },
+      { "id": "n3", "x": 560, "y": 150 },
+      { "id": "n95", "x": 760, "y": 150 },
+      { "id": "nMtr", "x": 560, "y": 300 },
+      { "id": "nTL", "x": 390, "y": 400 },
+      { "id": "N", "x": 120, "y": 470 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 120, "y": 310, "label": "24VDC", "terminals": { "pos": "L", "neg": "N" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 175, "y": 150, "label": "FU1", "terminals": { "a": "L", "b": "n1" } },
+      { "id": "S1", "type": "pushbutton", "mode": "momentary", "contact": "NC", "x": 310, "y": 150, "label": "S1 Stop (NC)", "terminals": { "in": "n1", "out": "n2" } },
+      { "id": "S2", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 475, "y": 150, "label": "S2 Start", "terminals": { "in": "n2", "out": "n3" } },
+      { "id": "SEAL", "type": "contact_no", "coil": "M1", "x": 475, "y": 215, "label": "M1 seal-in", "terminals": { "in": "n2", "out": "n3" } },
+      { "id": "M1", "type": "coil", "device": "contactor", "ratedVolts": 24, "ratedCurrent": "DC", "x": 655, "y": 150, "label": "M1 coil 24VDC", "terminals": { "a": "n3", "b": "n95" } },
+      { "id": "OL9596", "type": "contact_nc", "coil": null, "x": 850, "y": 150, "label": "OL1 95-96", "terminals": { "in": "n95", "out": "N" } },
+      { "id": "M1MAIN", "type": "contact_no", "coil": "M1", "x": 475, "y": 300, "label": "M1 main", "terminals": { "in": "n2", "out": "nMtr" } },
+      { "id": "MTR", "type": "motor", "x": 700, "y": 300, "label": "MTR via OL1 heaters", "terminals": { "a": "nMtr", "b": "N" } },
+      { "id": "OL9798", "type": "contact_no", "coil": null, "x": 310, "y": 400, "label": "OL1 97-98", "terminals": { "in": "n1", "out": "nTL" } },
+      { "id": "PL1", "type": "bulb", "x": 560, "y": 400, "label": "PL1 OL TRIP", "terminals": { "a": "nTL", "b": "N" } },
+      { "id": "TP_L", "type": "test_point", "x": 175, "y": 90, "label": "TP-L", "terminals": { "p": "L" } },
+      { "id": "TP_2", "type": "test_point", "x": 390, "y": 90, "label": "TP-2", "terminals": { "p": "n2" } },
+      { "id": "TP_A1", "type": "test_point", "x": 560, "y": 90, "label": "TP-A1", "terminals": { "p": "n3" } },
+      { "id": "TP_95", "type": "test_point", "x": 760, "y": 90, "label": "TP-95", "terminals": { "p": "n95" } },
+      { "id": "TP_MTR", "type": "test_point", "x": 560, "y": 240, "label": "TP-motor", "terminals": { "p": "nMtr" } }
+    ]
+  }
+}

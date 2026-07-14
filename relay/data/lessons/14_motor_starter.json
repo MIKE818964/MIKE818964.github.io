@@ -1,0 +1,29 @@
+{
+  "id": "14_motor_starter",
+  "circuit": {
+    "id": "motor_starter",
+    "title": "Swap the Bulb for a Motor Starter (Contactor)",
+    "nodes": [
+      { "id": "L", "x": 140, "y": 160 },
+      { "id": "n1", "x": 300, "y": 160 },
+      { "id": "nodeA", "x": 470, "y": 160 },
+      { "id": "nodeB", "x": 660, "y": 160 },
+      { "id": "N", "x": 140, "y": 380 },
+      { "id": "nRun", "x": 660, "y": 270 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 140, "y": 270, "label": "24VDC", "terminals": { "pos": "L", "neg": "N" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 220, "y": 160, "label": "FU1", "terminals": { "a": "L", "b": "n1" } },
+      { "id": "S1", "type": "pushbutton", "mode": "momentary", "contact": "NC", "x": 385, "y": 160, "label": "S1 Stop (NC)", "terminals": { "in": "n1", "out": "nodeA" } },
+      { "id": "S2", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 565, "y": 160, "label": "S2 Start", "terminals": { "in": "nodeA", "out": "nodeB" } },
+      { "id": "SEAL", "type": "contact_no", "coil": "M1", "x": 565, "y": 225, "label": "M1 seal-in", "terminals": { "in": "nodeA", "out": "nodeB" } },
+      { "id": "M1", "type": "coil", "device": "contactor", "ratedVolts": 24, "ratedCurrent": "DC", "x": 755, "y": 160, "label": "M1 coil 24VDC", "terminals": { "a": "nodeB", "b": "N" } },
+      { "id": "M1MAIN", "type": "contact_no", "coil": "M1", "x": 565, "y": 270, "label": "M1 main", "terminals": { "in": "nodeA", "out": "nRun" } },
+      { "id": "MTR", "type": "motor", "x": 760, "y": 270, "label": "M1 Motor", "terminals": { "a": "nRun", "b": "N" } },
+      { "id": "TP_L", "type": "test_point", "x": 220, "y": 100, "label": "TP-L", "terminals": { "p": "L" } },
+      { "id": "TP_A", "type": "test_point", "x": 470, "y": 100, "label": "TP-A", "terminals": { "p": "nodeA" } },
+      { "id": "TP_B", "type": "test_point", "x": 660, "y": 100, "label": "TP-coil", "terminals": { "p": "nodeB" } },
+      { "id": "TP_RUN", "type": "test_point", "x": 660, "y": 340, "label": "TP-motor", "terminals": { "p": "nRun" } }
+    ]
+  }
+}

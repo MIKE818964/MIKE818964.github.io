@@ -1,0 +1,326 @@
+[
+  {
+    "file": "relay_750r_2c_24d.jpg",
+    "name": "AD 750R-2C-24D DPDT 24VDC ice-cube relay with LED indicator and test button",
+    "family": "relay",
+    "fact": "AD 750R-2C-24D DPDT 24VDC ice-cube relay with LED indicator and test button"
+  },
+  {
+    "file": "relay_750r_3c_24d.jpg",
+    "name": "AD 750R-3C-24D 3PDT 24VDC ice-cube relay",
+    "family": "relay",
+    "fact": "AD 750R-3C-24D 3PDT 24VDC ice-cube relay"
+  },
+  {
+    "file": "relay_750r_2c_120a.jpg",
+    "name": "AD 750R-2C-120A DPDT 120VAC-coil ice-cube relay (AC coil contrast to 24D units)",
+    "family": "relay",
+    "fact": "AD 750R-2C-120A DPDT 120VAC-coil ice-cube relay (AC coil contrast to 24D units)"
+  },
+  {
+    "file": "relay_755_2c_120a.jpg",
+    "name": "AD 755-2C-120A DPDT 120VAC relay (755 series)",
+    "family": "relay",
+    "fact": "AD 755-2C-120A DPDT 120VAC relay (755 series)"
+  },
+  {
+    "file": "relay_781_1c_24d.jpg",
+    "name": "AD 781-1C-24D SPDT 24VDC octal-style cube relay",
+    "family": "relay",
+    "fact": "AD 781-1C-24D SPDT 24VDC octal-style cube relay"
+  },
+  {
+    "file": "relay_782_2c_24d.jpg",
+    "name": "AD 782-2C-24D DPDT 24VDC cube relay (8-blade)",
+    "family": "relay",
+    "fact": "AD 782-2C-24D DPDT 24VDC cube relay (8-blade)"
+  },
+  {
+    "file": "relay_783_3c_24d.jpg",
+    "name": "AD 783-3C-24D 3PDT 24VDC cube relay (11-blade)",
+    "family": "relay",
+    "fact": "AD 783-3C-24D 3PDT 24VDC cube relay (11-blade)"
+  },
+  {
+    "file": "relay_784_4c_24d.jpg",
+    "name": "AD 784-4C-24D 4PDT 24VDC cube relay",
+    "family": "relay",
+    "fact": "AD 784-4C-24D 4PDT 24VDC cube relay — visually spot-checked, label and pin diagram legible in photo"
+  },
+  {
+    "file": "relay_ql2x1_d24.jpg",
+    "name": "AD QL2X1-D24 DPDT 24VDC slim QL-series relay",
+    "family": "relay",
+    "fact": "AD QL2X1-D24 DPDT 24VDC slim QL-series relay"
+  },
+  {
+    "file": "relay_qm4x1_d24.jpg",
+    "name": "AD QM4X1-D24 4PDT 24VDC QM-series relay",
+    "family": "relay",
+    "fact": "AD QM4X1-D24 4PDT 24VDC QM-series relay"
+  },
+  {
+    "file": "socket_750_2c_skt.jpg",
+    "name": "AD 750-2C-SKT DIN-rail socket for 750/750R DPDT relays",
+    "family": "socket",
+    "fact": "AD 750-2C-SKT DIN-rail socket for 750/750R DPDT relays"
+  },
+  {
+    "file": "socket_750_3c_skt.jpg",
+    "name": "AD 750-3C-SKT DIN-rail socket for 750/750R 3PDT relays",
+    "family": "socket",
+    "fact": "AD 750-3C-SKT DIN-rail socket for 750/750R 3PDT relays"
+  },
+  {
+    "file": "socket_784_4c_skt.jpg",
+    "name": "AD 784-4C-SKT 14-blade DIN-rail socket for 784 4PDT relays",
+    "family": "socket",
+    "fact": "AD 784-4C-SKT 14-blade DIN-rail socket for 784 4PDT relays"
+  },
+  {
+    "file": "socket_sql08d_8pin.jpg",
+    "name": "AD SQL08D 8-blade DIN-rail socket for QL relays",
+    "family": "socket",
+    "fact": "AD SQL08D 8-blade DIN-rail socket for QL relays — visually spot-checked, screw terminals and keying visible"
+  },
+  {
+    "file": "contactor_cwb9_11_30c03_front.jpg",
+    "name": "WEG CWB9 IEC contactor, 9A, 24VDC coil (CWB9-11-30C03)",
+    "family": "contactor",
+    "fact": "WEG CWB9 IEC contactor, 9A, 24VDC coil (CWB9-11-30C03) — 3/4 front view, small frame"
+  },
+  {
+    "file": "contactor_cwb25_11_30c03_front.jpg",
+    "name": "WEG CWB25 IEC contactor, 25A, 24VDC coil (CWB25-11-30C03)",
+    "family": "contactor",
+    "fact": "WEG CWB25 IEC contactor, 25A, 24VDC coil (CWB25-11-30C03) — 3/4 view clearly showing 1L1/3L2/5L3, 13NO/21NC aux, A1+/A2- coil terminals; ideal teaching photo"
+  },
+  {
+    "file": "contactor_cwb65_11_30d15_front.jpg",
+    "name": "WEG CWB65 IEC contactor, 65A large frame, 120VAC coil (CWB65-11-30D15)",
+    "family": "contactor",
+    "fact": "WEG CWB65 IEC contactor, 65A large frame, 120VAC coil (CWB65-11-30D15) — angled view with strong side/DIN-mount profile visibility"
+  },
+  {
+    "file": "overload_rw27_2d3_u004.jpg",
+    "name": "WEG RW27-2D3-U004 thermal overload relay, 2.8-4.0A adjustable",
+    "family": "overload",
+    "fact": "WEG RW27-2D3-U004 thermal overload relay, 2.8-4.0A adjustable — side/top 3/4 view showing trip dial, AUTO/HAND reset selector, 95NC/96NC/97NO/98NO terminals, and contactor plug-in pins"
+  },
+  {
+    "file": "overload_rw27_2d3_u032.jpg",
+    "name": "WEG RW27-2D3-U032 thermal overload relay, 22.0-32.0A adjustable (fits CWB9-CWB38)",
+    "family": "overload",
+    "fact": "WEG RW27-2D3-U032 thermal overload relay, 22.0-32.0A adjustable (fits CWB9-CWB38)"
+  },
+  {
+    "file": "contactor_gh15dn_3_01b_16a.jpg",
+    "name": "AutomationDirect/Fuji GH15DN-3-01B IEC contactor, 16A, 240VAC coil",
+    "family": "contactor",
+    "fact": "AutomationDirect/Fuji GH15DN-3-01B IEC contactor, 16A, 240VAC coil — angled view showing L1/L2/L3 top, T1/T2/T3 bottom, NC aux"
+  },
+  {
+    "file": "contactor_gh15jt_3_00a_63a.jpg",
+    "name": "AutomationDirect/Fuji GH15JT-3-00A IEC contactor, 63A 60mm frame, 120VAC coil",
+    "family": "contactor",
+    "fact": "AutomationDirect/Fuji GH15JT-3-00A IEC contactor, 63A 60mm frame, 120VAC coil"
+  },
+  {
+    "file": "aux_contact_gh15s11.jpg",
+    "name": "GH15S11 side-mount auxiliary contact block for GH15 contactors",
+    "family": "contactblock",
+    "fact": "GH15S11 side-mount auxiliary contact block for GH15 contactors — shows 11/12, 41/42, 23/24, 33/34 terminal markings; good for aux-contact lessons"
+  },
+  {
+    "file": "starter_esw_b18d39a_r32_enclosed.jpg",
+    "name": "WEG ESW-B18D39A-R32 enclosed full-voltage starter (CWB contactor + RW27 overload assembled",
+    "family": "starter",
+    "fact": "WEG ESW-B18D39A-R32 enclosed full-voltage starter (CWB contactor + RW27 overload assembled), NEMA 1 steel enclosure with Start/Stop pushbuttons and blue Reset"
+  },
+  {
+    "file": "starter_pesw_b9d15ax_r57_enclosed.jpg",
+    "name": "WEG PESW-B9D15AX-R57 enclosed starter, polycarbonate enclosure with green On / red Off-Res",
+    "family": "starter",
+    "fact": "WEG PESW-B9D15AX-R57 enclosed starter, polycarbonate enclosure with green On / red Off-Reset buttons — visual contrast to the steel ESW version"
+  },
+  {
+    "file": "pushbutton_gcx1102_green_flush.jpg",
+    "name": "GCX1102",
+    "family": "pushbutton",
+    "fact": "GCX1102 — 22mm metal green flush momentary pushbutton, 1 N.O., IP65 (the classic START button)"
+  },
+  {
+    "file": "pushbutton_gcx1100_black_flush.jpg",
+    "name": "GCX1100",
+    "family": "pushbutton",
+    "fact": "GCX1100 — 22mm metal black flush momentary pushbutton, 1 N.O., IP65"
+  },
+  {
+    "file": "estop_gcx1131_red_mushroom.jpg",
+    "name": "GCX1131",
+    "family": "estop",
+    "fact": "GCX1131 — 22mm E-stop, red 40mm mushroom, twist-to-release, 1 N.C., metal base, IP65"
+  },
+  {
+    "file": "selector_gcx1310_2pos_knob.jpg",
+    "name": "GCX1310",
+    "family": "selector",
+    "fact": "GCX1310 — 22mm 2-position selector switch, knob, spring-return from right, 1 N.O., metal base"
+  },
+  {
+    "file": "selector_gcx1320_22_3pos_knob.jpg",
+    "name": "GCX1320-22",
+    "family": "selector",
+    "fact": "GCX1320-22 — 22mm 3-position maintained selector switch, black knob, 2 N.O. + 2 N.C. blocks (HAND-OFF-AUTO style)"
+  },
+  {
+    "file": "pilot_ecx2051_24l_red.jpg",
+    "name": "ECX2051-24L",
+    "family": "pilot",
+    "fact": "ECX2051-24L — 22mm red LED indicating/pilot light, 24 VAC/VDC full-voltage, IP65"
+  },
+  {
+    "file": "pilot_ecx2052_24l_green.jpg",
+    "name": "ECX2052-24L",
+    "family": "pilot",
+    "fact": "ECX2052-24L — 22mm green LED indicating/pilot light, 24 VAC/VDC full-voltage, IP65"
+  },
+  {
+    "file": "pilot_gcx1231_24l_red_metal.jpg",
+    "name": "GCX1231-24L",
+    "family": "pilot",
+    "fact": "GCX1231-24L — 22mm metal-base red LED pilot light, 24 VAC/VDC (metal-series counterpart, takes ECX1911-2 replacement LED)"
+  },
+  {
+    "file": "contact_block_ecx1040_no.jpg",
+    "name": "ECX1040-2",
+    "family": "contactblock",
+    "fact": "ECX1040-2 — snap-on replacement contact block, 1 N.O., for GCX/ECX/ECP 22mm operators (great for teaching the operator-vs-contact split)"
+  },
+  {
+    "file": "contact_block_ecx1030_nc.jpg",
+    "name": "ECX1030-2",
+    "family": "contactblock",
+    "fact": "ECX1030-2 — snap-on replacement contact block, 1 N.C., for GCX/ECX/ECP 22mm operators (pair with ECX1040 to teach NO vs NC)"
+  },
+  {
+    "file": "timer_trs_td_d_24ad.jpg",
+    "name": "ProSense TRS-TD-D-24AD off-delay relay timer, 24 VAC/VDC, DPDT, 8-pin octal",
+    "family": "timer",
+    "fact": "ProSense TRS-TD-D-24AD off-delay relay timer, 24 VAC/VDC, DPDT, 8-pin octal — angled body shot with labeling"
+  },
+  {
+    "file": "timer_trs_td_d_120ad.jpg",
+    "name": "ProSense TRS-TD-D-120AD off-delay relay timer, 120 VAC/VDC version, 8-pin octal",
+    "family": "timer",
+    "fact": "ProSense TRS-TD-D-120AD off-delay relay timer, 120 VAC/VDC version, 8-pin octal"
+  },
+  {
+    "file": "timer_trs_td_face_view.jpg",
+    "name": "TRS-TD settings-face closeup: MIN/MAX adjust dial + A-H time-range selector knob with prin",
+    "family": "timer",
+    "fact": "TRS-TD settings-face closeup: MIN/MAX adjust dial + A-H time-range selector knob with printed range chart (0.05s-30min)"
+  },
+  {
+    "file": "timer_trm_16_d_24ad.jpg",
+    "name": "ProSense TRM-16-D-24AD multi-function (16-mode) timer relay, 24 VAC/VDC, 11-pin",
+    "family": "timer",
+    "fact": "ProSense TRM-16-D-24AD multi-function (16-mode) timer relay, 24 VAC/VDC, 11-pin — face shot showing red DIP-switch function/time-base banks, status LED, and 11-pin diagram"
+  },
+  {
+    "file": "timer_trm_16_d_120ad.jpg",
+    "name": "ProSense TRM-16-D-120AD multi-function timer relay, 120 VAC/VDC version, 11-pin",
+    "family": "timer",
+    "fact": "ProSense TRM-16-D-120AD multi-function timer relay, 120 VAC/VDC version, 11-pin"
+  },
+  {
+    "file": "timer_trm_16_face_view.jpg",
+    "name": "TRM-16 product view 01 (pv_trm16d24ad_01)",
+    "family": "timer",
+    "fact": "TRM-16 product view 01 (pv_trm16d24ad_01) — alternate straight-on face angle of DIP-switch setup panel"
+  },
+  {
+    "file": "timer_trm_16_side_view.jpg",
+    "name": "TRM-16 product view 02 (pv_trm16d24ad_02)",
+    "family": "timer",
+    "fact": "TRM-16 product view 02 (pv_trm16d24ad_02) — side view with the function/time-base setup chart referenced by 'SEE CHART ON SIDE'"
+  },
+  {
+    "file": "timer_trm_8_d_240ad.jpg",
+    "name": "ProSense TRM-8-D-240AD multi-function timer, universal 24-240 VAC / 12-125 VDC, 11-pin",
+    "family": "timer",
+    "fact": "ProSense TRM-8-D-240AD multi-function timer, universal 24-240 VAC / 12-125 VDC, 11-pin — shows FUNCTION rotary dial (1-8), t RANGE selector (A-P), MIN/MAX adjust knob, and pin diagram"
+  },
+  {
+    "file": "socket_70169d_8pin.jpg",
+    "name": "Macromatic 70169-D 8-pin octal screw-terminal socket (DIN rail/panel mount) for TRS-TD ser",
+    "family": "socket",
+    "fact": "Macromatic 70169-D 8-pin octal screw-terminal socket (DIN rail/panel mount) for TRS-TD series timers"
+  },
+  {
+    "file": "socket_70170d_11pin.jpg",
+    "name": "Macromatic 70170-D 11-pin screw-terminal socket for TRM-8/TRM-16 timers",
+    "family": "socket",
+    "fact": "Macromatic 70170-D 11-pin screw-terminal socket for TRM-8/TRM-16 timers — 'Macromatic 70170-D 300V 10A' molded label visible"
+  },
+  {
+    "file": "psu_rhino_psb24-060s.jpg",
+    "name": "RHINO PSB24-060S 24VDC 2.5A (60W) DIN-rail switching power supply, metal chassis, label vi",
+    "family": "supply",
+    "fact": "RHINO PSB24-060S 24VDC 2.5A (60W) DIN-rail switching power supply, metal chassis, label visually confirmed"
+  },
+  {
+    "file": "psu_rhino_psl24-030.jpg",
+    "name": "RHINO PSL-24-030 slim 24VDC 1.25A (30W) DIN-rail power supply, label visually confirmed",
+    "family": "supply",
+    "fact": "RHINO PSL-24-030 slim 24VDC 1.25A (30W) DIN-rail power supply, label visually confirmed"
+  },
+  {
+    "file": "breaker_wmzt1c10_1pole.jpg",
+    "name": "Eaton WMZT1C10 1-pole 10A C-curve miniature DIN-rail circuit breaker (UL1077), label visua",
+    "family": "protection",
+    "fact": "Eaton WMZT1C10 1-pole 10A C-curve miniature DIN-rail circuit breaker (UL1077), label visually confirmed"
+  },
+  {
+    "file": "breaker_wmzt2c20_2pole.jpg",
+    "name": "Eaton WMZT2C20 2-pole 20A C-curve miniature DIN-rail circuit breaker",
+    "family": "protection",
+    "fact": "Eaton WMZT2C20 2-pole 20A C-curve miniature DIN-rail circuit breaker"
+  },
+  {
+    "file": "fuse_hclr5_class_cc.jpg",
+    "name": "Edison HCLR5 Class CC fast-acting current-limiting fuse 5A, 'Fast-Acting Class CC' label v",
+    "family": "protection",
+    "fact": "Edison HCLR5 Class CC fast-acting current-limiting fuse 5A, 'Fast-Acting Class CC' label visually confirmed"
+  },
+  {
+    "file": "fuse_hctr5_class_cc_timedelay.jpg",
+    "name": "Edison HCTR5 Class CC time-delay fuse 5A (same Edison series photo style as HCLR)",
+    "family": "protection",
+    "fact": "Edison HCTR5 Class CC time-delay fuse 5A (same Edison series photo style as HCLR)"
+  },
+  {
+    "file": "fuseholder_konnectit_kn-f10.jpg",
+    "name": "Konnect-It KN-F10 DIN-rail fuse holder terminal block (fuse clips visible, visually confir",
+    "family": "protection",
+    "fact": "Konnect-It KN-F10 DIN-rail fuse holder terminal block (fuse clips visible, visually confirmed)"
+  },
+  {
+    "file": "terminal_dinnector_dn-t10a.jpg",
+    "name": "DINnector DN-T10A screw-clamp feed-through DIN-rail terminal block, gray (visually confirm",
+    "family": "panel",
+    "fact": "DINnector DN-T10A screw-clamp feed-through DIN-rail terminal block, gray (visually confirmed)"
+  },
+  {
+    "file": "terminal_ground_kn-g10.jpg",
+    "name": "Konnect-It KN-G10 green/yellow grounding terminal block with rail-bonding foot (visually c",
+    "family": "panel",
+    "fact": "Konnect-It KN-G10 green/yellow grounding terminal block with rail-bonding foot (visually confirmed)"
+  },
+  {
+    "file": "dinrail_35mm_dn-r35s1.jpg",
+    "name": "DN-R35S1 35mm slotted steel DIN rail, 1m (visually confirmed)",
+    "family": "panel",
+    "fact": "DN-R35S1 35mm slotted steel DIN rail, 1m (visually confirmed)"
+  }
+]

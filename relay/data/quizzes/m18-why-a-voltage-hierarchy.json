@@ -1,0 +1,116 @@
+{
+  "moduleId": "m18-why-a-voltage-hierarchy",
+  "title": "Why a Plant Has Many Voltages (480/240/120/24)",
+  "questions": [
+    {
+      "q": "Why doesn't a plant just pick one voltage and use it for everything?",
+      "options": [
+        "Because no single voltage is good at every job at once",
+        "Because the power company forbids using one voltage",
+        "Because mixing voltages is cheaper than standardizing",
+        "Because relays only come in one voltage"
+      ],
+      "correct": 0,
+      "why": "High voltage moves big power efficiently while low voltage is safe and cheap for controls, so the plant uses a ladder of voltages matched to each job."
+    },
+    {
+      "q": "Which voltage in the plant is used for the heavy motors that do the big work?",
+      "options": [
+        "24VDC",
+        "120VAC",
+        "480VAC",
+        "24VAC"
+      ],
+      "correct": 2,
+      "why": "480VAC moves large amounts of power efficiently, which is exactly what heavy motors need."
+    },
+    {
+      "q": "What is the main job of the 24VAC and 24VDC tiers at the bottom of the ladder?",
+      "options": [
+        "Running large 3-phase motors",
+        "Powering modern sensors, switches, and control logic",
+        "Feeding heater bands and welders",
+        "Carrying incoming power from the utility"
+      ],
+      "correct": 1,
+      "why": "Low 24V is safe and cheap to wire, which makes it the home for modern sensors, switches, and control logic."
+    },
+    {
+      "q": "A coworker says 'just wire the whole plant at safe 24VDC and skip the high voltages.' Why won't that work for the big motors?",
+      "options": [
+        "24VDC isn't a real voltage for industry",
+        "24VDC is too dangerous to touch",
+        "Pushing big power at 24V needs huge, costly wire and fuses",
+        "Motors can only run on DC, never AC"
+      ],
+      "correct": 2,
+      "why": "Moving big power at a low voltage forces enormous current, which demands very large and expensive wire and fuses, so high voltage is used for heavy loads."
+    },
+    {
+      "q": "You've swapped three relays on a 120VAC control circuit in two weeks — every replacement is labeled 'bad' the same way. With the coil attempting to pull in, your meter reads 96V at the coil terminals. Open-circuit (coil de-energized) it reads 121V. What's really going on?",
+      "options": [
+        "The relays are all defective from the same bad batch",
+        "The control transformer is sagging under inrush load and starving the coil, not the relays failing",
+        "The meter is giving a false reading because AC voltage can't be measured under load",
+        "The coil voltage rating is wrong for this application"
+      ],
+      "correct": 1,
+      "why": "121V open-circuit but 96V under pull-in load is the classic transformer-impedance signature — an overloaded or thermally marginal transformer looks fine with no load but collapses when the coil's inrush current hits it. Below about 85% of rated voltage (102V for a 120VAC coil) the armature won't fully seat, so it chatters and burns out — the relay is a victim of starved voltage, not a bad part."
+    },
+    {
+      "q": "A 24VDC proximity sensor on a long wire run flickers and false-trips only when a large motor contactor nearby energizes. You measure the 24VDC supply steady at 24.1V on your DMM during normal operation. What should you check next before condemning the sensor?",
+      "options": [
+        "Replace the sensor, since the supply voltage measured fine",
+        "Increase the sensor's supply wire gauge to fix the flicker",
+        "Catch the supply voltage at the instant of motor start-up, since a DMM's average reading can hide a fast sag or ripple that a steady-state reading misses",
+        "Assume the sensor is wired backwards (sourcing vs sinking)"
+      ],
+      "correct": 2,
+      "why": "A DMM averages, so a brief sag below 20V lasting only a few milliseconds during motor inrush can hide behind a rock-steady 24.1V steady-state reading. You have to catch the rail at the moment of the disturbance (or check for AC ripple with the meter's AC millivolt function) to see the real problem — a nearby motor's inrush sagging the shared 24VDC rail, not a bad sensor."
+    },
+    {
+      "q": "Your plant is speccing a new machine and the panel builder wants to know whether to run the control circuit at 120VAC or 24VDC. The machine will need frequent live troubleshooting on the control side while running. Which factors should drive that decision?",
+      "options": [
+        "Always pick 120VAC because it's been the industry standard the longest",
+        "Pick 24VDC: it's below the NFPA 70E 50VDC extra-low-voltage threshold (safer for live tracing), a regulated supply resists inrush sag better than a transformer, and it interfaces directly to PLCs without an extra transformer",
+        "Pick whichever voltage matches the incoming utility service to avoid any transformers at all",
+        "It doesn't matter since both voltages behave identically under load"
+      ],
+      "correct": 1,
+      "why": "24VDC wins on exactly the criteria that matter for a machine needing frequent live troubleshooting: NFPA 70E's 50VDC threshold means bare-hand contact with 24VDC control wiring is generally allowed without arc-flash PPE, a regulated switching supply holds voltage flat under load instead of sagging like a transformer under inrush, and it talks directly to PLCs/sensors with one less failure point (no transformer). 120VAC's only real edge is legacy compatibility with older equipment already wired that way."
+    },
+    {
+      "q": "A control transformer feeds four 120VAC relay coils, each drawing 40mA sealed current. Using the module's VA sizing rule of thumb (sum sealed VA, then multiply by 1.5 for inrush stacking), what's the minimum transformer VA rating you should spec?",
+      "options": [
+        "19.2 VA",
+        "28.8 VA",
+        "48 VA",
+        "76.8 VA"
+      ],
+      "correct": 2,
+      "why": "Each coil is 120V x 0.040A = 4.8VA sealed; four coils = 19.2VA sealed total. Apply the 1.5x inrush-stacking multiplier: 19.2 x 1.5 = 28.8VA minimum. Since transformers come in standard steps, you'd round up to the next standard size (commonly 50VA) — a transformer sized only for the raw sealed VA (19.2VA) or without the safety margin (28.8VA rounded down) will sag hard the moment more than one coil pulls in at once, which is exactly the chatter failure mode the module describes."
+    },
+    {
+      "q": "A tech is about to replace a failed relay and grabs a 120VAC coil from the parts bin because 'that's what's always in the drawer,' without checking the base or part number against the original. The base accepts multiple coil voltages. What's the real risk if the machine's circuit is actually 24VDC?",
+      "options": [
+        "Nothing serious — the relay will just run a little warm until it's fixed properly",
+        "The coil will hum but eventually self-correct to the right voltage",
+        "Undervoltage means the coil just pulls in slower, with no lasting damage",
+        "A voltage-tier mismatch can prevent pull-in (undervoltage, chattering, contact pitting) or, if reversed, apply overvoltage that drives excess I²R heating past what the winding insulation can shed — a real fire and equipment-damage risk"
+      ],
+      "correct": 3,
+      "why": "The module's failure modes are explicit both ways: too little voltage on a coil (wrong tier) causes chatter and pitted contacts from incomplete armature seating, while too much voltage drives current up in direct proportion (V=IR) and cooks the winding insulation — the 'burning plastic smell within a week' failure mode. A voltage-tier mismatch is never a cosmetic issue; always confirm the coil voltage marking and part number against the original before installing, not just whatever fits the base."
+    },
+    {
+      "q": "A new tech figures 'it's just a control circuit, not the big motor stuff' and starts tracing wiring live on an energized 120VAC control panel with bare hands, the way he's seen done on a 24VDC panel elsewhere in the plant. Why is that a mistake, per NFPA 70E?",
+      "options": [
+        "It's not a mistake — all control voltages are equally safe to touch live",
+        "120VAC is above the NFPA 70E extra-low-voltage threshold (50VDC / 25VAC), so bare-hand live contact requires arc-flash PPE and precautions that 24VDC control work doesn't",
+        "It's only a problem if the panel also has a 480VAC motor circuit nearby",
+        "The risk is identical, but 24VDC panels are just wired with thicker insulation"
+      ],
+      "correct": 1,
+      "why": "NFPA 70E draws the extra-low-voltage safety line at 50VDC (and 25VAC) — below that, bare-hand contact with control wiring is generally permitted without arc-flash PPE, which is exactly why 24VDC became the modern control standard. 120VAC sits well above that threshold, so treating it like a 24VDC panel and tracing it live bare-handed is a real shock and arc-flash exposure, not just a bad habit — LOTO or proper PPE is required."
+    }
+  ]
+}

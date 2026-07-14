@@ -1,0 +1,107 @@
+/* ============================================================
+   tokens.css — Relay Training, LIGHT "v0" theme.
+   Airy white surfaces, navy ink, electric-blue + violet accents,
+   blueprint schematics. Single source of color + timing truth.
+   ============================================================ */
+:root {
+  /* ---- surfaces (light / airy) ---- */
+  --bg:           #F6F8FC;   /* app canvas */
+  --bg-2:         #EEF2FB;
+  --surface:      #FFFFFF;   /* cards */
+  --surface-2:    #FBFCFE;
+  --border:       #E6EAF3;   /* hairline */
+  --border-strong:#D6DDEC;
+
+  /* ---- ink / text ---- */
+  --ink:    #0E1326;   /* headings (near-black navy) */
+  --text:   #303749;   /* body */
+  --muted:  #6B7488;   /* secondary */
+  --faint:  #99A1B3;
+
+  /* ---- v0 cool accents ---- */
+  --blue:       #3B82F6;
+  --blue-deep:  #2563EB;
+  --blue-soft:  #EAF1FE;
+  --violet:     #7C5CFF;
+  --violet-deep:#6D28D9;
+  --violet-soft:#F0ECFF;
+  --grad:       linear-gradient(135deg, #3B82F6 0%, #7C5CFF 100%);
+
+  /* ---- status ---- */
+  --success: #10B981;
+  --warning: #F59E0B;
+
+  /* ---- shadows (soft, premium) ---- */
+  --shadow-sm:   0 1px 2px rgba(16,19,38,.04), 0 1px 3px rgba(16,19,38,.05);
+  --shadow:      0 6px 28px -8px rgba(16,19,38,.12), 0 2px 8px -2px rgba(16,19,38,.05);
+  --shadow-blue: 0 10px 34px -10px rgba(59,130,246,.40);
+
+  /* ---- mapped legacy names (so any stragglers resolve) ---- */
+  --base-bg:      var(--bg);
+  --panel:        var(--surface);
+  --panel-raised: var(--surface-2);
+  --readout-bg:   #0B1020;   /* the DMM "screen" stays dark (a real instrument face) */
+  --hairline:     var(--border);
+  --text-primary: var(--text);
+  --text-heading: var(--ink);
+  --text-muted:   var(--muted);
+  --accent-cyan:       var(--blue);
+  --accent-cyan-press: var(--blue-deep);
+  --brand-red-block:  #DC2626;
+  --focus-ring:        #3B82F6;
+
+  /* ============================================================
+     ELECTRICAL STATE (blueprint on light): RED = live current.
+     3 states stay distinct by brightness + motion + glow + label.
+     ============================================================ */
+  --live:           #EF4444; /* current flowing — vivid red + glow + flow */
+  --live-label:     #DC2626;
+  --live-glow:      #EF4444;
+  --deenergized:    #E59A94; /* present, no current — soft static red */
+  --wire-rest:      #94A3B8; /* unpowered conductor — slate */
+  --neutral:        #94A3B8;
+  --ground:         #10B981;
+  --fault:          #F59E0B; /* FAULT — amber + ⚠ + blink + word FAULT */
+
+  --contact-open:   #94A3B8;
+  --contact-closed: #64748B; /* calm slate-blue, settled */
+
+  --coil-energized: #7C5CFF; /* violet: energized coil glows */
+  --coil-idle:      #C3CAD9;
+
+  --v-480:  #F97316;
+  --v-240:  #F59E0B;
+  --v-120:  #7C5CFF;
+  --v-24ac: #14B8A6;
+  --v-24dc: #3B82F6;
+
+  --readout-text:  #34E5C0; /* mint DMM digits on the dark screen */
+
+  /* ============================================================
+     FONTS (v0): Inter throughout, JetBrains Mono for instruments
+     ============================================================ */
+  --font-heading: "Inter", system-ui, sans-serif;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body:    "Inter", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  /* ============================================================
+     ANIMATION / TIMING
+     ============================================================ */
+  --energize-ms:    140ms;
+  --flow-ms:        850ms;
+  --contact-snap-ms:170ms;
+  --coil-pulse-ms:  1100ms;
+  --glow-strength:  2.2;
+  --fault-blink-ms: 520ms;
+
+  /* layout */
+  --radius:    18px;
+  --radius-sm: 11px;
+  --nav-w:    300px;
+  --teach-w:  392px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --flow-ms: 0ms; --coil-pulse-ms: 0ms; --fault-blink-ms: 0ms; }
+}

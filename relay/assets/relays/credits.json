@@ -1,0 +1,74 @@
+[
+  {
+    "file": "plugin-relay.jpg",
+    "use": "Plug-in 'ice-cube' relay on a DIN-rail socket",
+    "title": "File:Releco relay for DIN rail.JPG",
+    "author": "Dmitry G",
+    "license": "Public domain",
+    "licenseurl": "",
+    "source": "https://commons.wikimedia.org/wiki/File:Releco_relay_for_DIN_rail.JPG"
+  },
+  {
+    "file": "contactor-modern.jpg",
+    "use": "Modern industrial contactor (motor starter)",
+    "title": "File:JLC1-D09-10.jpg",
+    "author": "Редактор1511",
+    "license": "CC BY-SA 4.0",
+    "licenseurl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:JLC1-D09-10.jpg"
+  },
+  {
+    "file": "contactor-din.jpg",
+    "use": "DIN-mount contactor",
+    "title": "File:Contactor DIN IEK.jpg",
+    "author": "Kae",
+    "license": "CC BY-SA 3.0",
+    "licenseurl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Contactor_DIN_IEK.jpg"
+  },
+  {
+    "file": "contactor-exploded.jpg",
+    "use": "Exploded contactor showing coil, contacts and spring",
+    "title": "File:Despiece contactor.jpg",
+    "author": "Saguzar1",
+    "license": "CC0",
+    "licenseurl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source": "https://commons.wikimedia.org/wiki/File:Despiece_contactor.jpg"
+  },
+  {
+    "file": "timer-relay-octal.jpg",
+    "use": "Octal-base thermostatic time-delay relay",
+    "title": "File:Amperite 26C20 26V 20s SPST NO Thermostatic Delay Relay IMG 7931.jpg",
+    "author": "Alex P. Kok",
+    "license": "CC BY-SA 4.0",
+    "licenseurl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Amperite_26C20_26V_20s_SPST_NO_Thermostatic_Delay_Relay_IMG_7931.jpg"
+  },
+  {
+    "file": "pcb-relay-ratings.jpg",
+    "use": "PCB power relay with contact ratings printed on it",
+    "title": "File:Caso SMG20 - controller board - Song Chuan 302WP-1AH-CM02-8474.jpg",
+    "author": "Raimond Spekking",
+    "license": "CC BY-SA 4.0",
+    "licenseurl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Caso_SMG20_-_controller_board_-_Song_Chuan_302WP-1AH-CM02-8474.jpg"
+  },
+  {
+    "file": "fault-worn-contacts.jpg",
+    "use": "Silver contacts destroyed by arc erosion (fault example)",
+    "title": "File:Silver contacts arc erosion failure.jpg",
+    "author": "Mykhailo Prytula",
+    "license": "CC BY-SA 4.0",
+    "licenseurl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Silver_contacts_arc_erosion_failure.jpg"
+  },
+  {
+    "file": "fault-burned-contactor.jpg",
+    "use": "Burned-out contactor (fault example)",
+    "title": "File:Burned Contactor-01ASD.jpg",
+    "author": "Asurnipal",
+    "license": "CC BY-SA 4.0",
+    "licenseurl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Burned_Contactor-01ASD.jpg"
+  }
+]

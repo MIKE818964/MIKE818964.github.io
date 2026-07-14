@@ -1,0 +1,120 @@
+{
+  "moduleId": "m10-the-coil-electromagnet",
+  "title": "The Coil: an Electromagnet That Pulls the Contacts",
+  "questions": [
+    {
+      "q": "What turns a plain switch into a RELAY?",
+      "options": [
+        "A coil of wire that becomes an electromagnet when energized",
+        "A bigger battery",
+        "A second light bulb",
+        "A thicker set of wires"
+      ],
+      "correct": 0,
+      "why": "The coil becomes an electromagnet when you power it, and that magnet is what mechanically throws the contacts — that is what makes it a relay."
+    },
+    {
+      "q": "You energize the coil of a relay. What happens to the contacts?",
+      "options": [
+        "Nothing moves until you press a contact by hand",
+        "All NO contacts close and all NC contacts open at once",
+        "Only the NC contacts close",
+        "The contacts melt"
+      ],
+      "correct": 1,
+      "why": "The energized coil pulls the bar and snaps every pole over together — NO contacts close and NC contacts open at the same instant.",
+      "visual": {
+        "lesson": "m04-normally-open-normally-closed",
+        "caption": "One coil, one NO contact, one NC contact — shown at rest."
+      }
+    },
+    {
+      "q": "You cut the power to the coil. What returns the contacts to their resting state?",
+      "options": [
+        "A spring snaps them back to normal",
+        "You must reset them by hand",
+        "Another coil pushes them back",
+        "They stay wherever they were"
+      ],
+      "correct": 0,
+      "why": "With the magnet gone, a spring snaps every contact back to its normal resting position."
+    },
+    {
+      "q": "Why is it useful that the coil and the contacts are separate circuits?",
+      "options": [
+        "It makes the relay cheaper to build",
+        "A small safe control signal can switch a totally separate, bigger circuit",
+        "It lets the coil carry the motor current",
+        "It removes the need for a power supply"
+      ],
+      "correct": 1,
+      "why": "That separation is the whole point: a small safe 24VDC coil signal throws contacts that switch a much larger, separate load circuit."
+    },
+    {
+      "q": "A 120VAC relay coil rated 60 mA sealed has been humming and running hot for weeks on a hydraulic press. You finally catch it mid-cycle: supply at the transformer reads 120V, but the coil terminals read 96V under load with the coil connected. What's going on?",
+      "options": [
+        "The coil is fine — 96V is close enough to 120V for any relay to work",
+        "The supply is sagging below the ~85% pull-in minimum, so the armature never fully seats and the coil sits in continuous inrush",
+        "The relay contacts are welded shut, which always drops coil voltage",
+        "96V is high enough to fully seat the armature, so the humming is unrelated to voltage"
+      ],
+      "correct": 1,
+      "why": "96V is 80% of 120V, under the 85% minimum most AC coils need to pull in fully. With the air gap still open, inductance stays low and current stays near inrush (400-600 mA range on a 60 mA coil) continuously instead of just for the first 20-50 ms, which is exactly the hum-runs-hot-eventually-opens failure the module describes."
+    },
+    {
+      "q": "You're troubleshooting a relay that won't pull in. You unhook the coil leads, meter the coil across its own terminals, and get a clean resistance reading matching the nameplate. You call the coil good and move on. What's the mistake?",
+      "options": [
+        "There is no mistake — an ohmmeter reading confirms the coil is good",
+        "You should have used a voltmeter instead of an ohmmeter on a disconnected coil",
+        "A correct resistance reading only rules out an open coil; it says nothing about voltage drop in the wiring feeding it, which needs to be measured at the coil terminals while connected and energized",
+        "Ohmmeters can't read coil resistance accurately on AC relays"
+      ],
+      "correct": 2,
+      "why": "An open coil reads OL, so resistance rules that failure out — but the module's example shows 24V at the disconnected leads dropping to 14-19V once the coil is reconnected and drawing current, because corroded terminals in the run were adding resistance. You have to measure voltage AT the coil terminals under load, not just ring out the coil disconnected."
+    },
+    {
+      "q": "An AC-coil relay in a control panel has started buzzing continuously, and you notice the main contacts look pitted and eroded faster than the other relays nearby on the same panel. What should you check first?",
+      "options": [
+        "Replace the load it's switching, since load-side arcing causes contact pitting",
+        "Pull the relay and inspect the pole face for a cracked or missing shading ring",
+        "Increase the control voltage to the coil to stop the buzz",
+        "Nothing — buzzing is normal and doesn't affect the contacts"
+      ],
+      "correct": 1,
+      "why": "On AC, the magnetic flux crosses zero 120 times a second (60 Hz), and the shading ring is what holds the armature seated through those zero crossings. A cracked/missing shading ring lets the armature bounce at 120 Hz, and each bounce arcs the main contacts — that's the mechanical buzz plus the accelerated pitting described in the module's deep dive and failure modes."
+    },
+    {
+      "q": "You need to spec a 24VDC coil relay for a PLC discrete output that's been nuisance-tripping the output card on nearby circuits. The relay coil has no built-in suppression. Using I = E/R with a 750-ohm coil, what's the coil's steady-state draw, and what should you add?",
+      "options": [
+        "32 mA steady-state draw; add a flyback diode across the coil to clamp the collapse spike",
+        "180 mA steady-state draw; add a fuse in series with the coil",
+        "32 mA steady-state draw; nothing needed since DC coils don't generate spikes",
+        "750 mA steady-state draw; add a second relay in parallel to share the load"
+      ],
+      "correct": 0,
+      "why": "I = E/R = 24V / 750 ohms = 0.032A = 32 mA, matching the module's worked example. But that same DC coil stores energy in its magnetic field and can spike 10-20x supply (240-480V) on de-energization if unsuppressed — that spike is what damages PLC output transistors, so a flyback diode (cathode to positive) across the coil is the fix."
+    },
+    {
+      "q": "A tech is under deadline pressure and skips adding a flyback diode to a 24VDC coil relay feeding directly off a PLC discrete output card, reasoning 'it's just a small relay, it'll be fine.' What is the realistic consequence?",
+      "options": [
+        "Nothing — flyback diodes are only needed on large motor contactors, not small control relays",
+        "The coil will draw excess current and burn out within minutes",
+        "The collapsing magnetic field can generate a 240-480V spike back onto the PLC output circuit, damaging the transistor output or causing erratic/failed outputs on that card",
+        "The relay will chatter continuously until the diode is added"
+      ],
+      "correct": 2,
+      "why": "Even a small 24VDC coil stores enough energy in its field to generate a spike 10-20x the supply voltage when the circuit is broken — 240-480V on a 24V coil, per the module. That spike doesn't hurt the relay; it hurts the PLC's solid-state output driving it, which is exactly the 'nuisance output-card failures trace back to a relay coil without suppression' problem described in the deep dive."
+    },
+    {
+      "q": "A 24VDC coil draws 32 mA steady-state. You find four corroded terminals in the control wiring run, each developing about 50 ohms of contact resistance where they should read under 0.1 ohm. Roughly how much voltage do those four terminals drop under load, and is that enough to cause a no-pull-in complaint?",
+      "options": [
+        "About 0.16V total — negligible, the relay will pull in fine",
+        "About 6.4V total (4 x 50 ohms x 0.032A) — enough to drop a 24V supply to around 17.6V at the coil, likely below pull-in threshold",
+        "About 200V total — the coil will be destroyed instantly",
+        "Terminal resistance doesn't affect coil voltage, only coil resistance matters"
+      ],
+      "correct": 1,
+      "why": "V = I x R per terminal: 0.032A x 50 ohms = 1.6V per terminal, x4 = 6.4V total, matching the module's 'string four loose terminals together and you lose 6-8V' warning. That leaves roughly 17-18V at the coil — likely under the 85% pull-in minimum — even though the coil itself is perfectly healthy."
+    }
+  ]
+}

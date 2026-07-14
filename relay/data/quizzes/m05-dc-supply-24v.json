@@ -1,0 +1,116 @@
+{
+  "moduleId": "m05-dc-supply-24v",
+  "title": "Reading the Supply: What 24VDC Means",
+  "questions": [
+    {
+      "q": "On a supply labeled '24VDC', what does the '24V' part tell you?",
+      "options": [
+        "The pressure is 24 volts",
+        "The current is 24 amps",
+        "There are 24 wires",
+        "It switches direction 24 times a second"
+      ],
+      "correct": 0,
+      "why": "The 24V is the pressure — 24 volts. It says nothing about amps, wires, or how often anything switches."
+    },
+    {
+      "q": "What does the 'DC' in 24VDC mean?",
+      "options": [
+        "Direct Current — steady pressure in one direction, like a battery",
+        "Double Circuit — two loops at once",
+        "Disconnected — the supply is off",
+        "Pressure that wiggles back and forth like a wave"
+      ],
+      "correct": 0,
+      "why": "DC is Direct Current: the pressure pushes steadily in one direction, like a battery, unlike AC which wiggles back and forth."
+    },
+    {
+      "q": "Why do these lessons teach control circuits on 24VDC?",
+      "options": [
+        "It's the safe, low-cost modern standard most sensors and switches expect",
+        "It's the highest voltage available in a plant",
+        "It's the only voltage that can run a motor directly",
+        "It's required because it constantly changes direction"
+      ],
+      "correct": 0,
+      "why": "24VDC is touch-safe, cheap to wire, and the modern standard that most sensors and switches made today are built for."
+    },
+    {
+      "q": "You see a flat, steady line on a scope from one supply and a wiggling wave from another. Which one is the DC supply?",
+      "options": [
+        "The flat, steady line",
+        "The wiggling wave",
+        "Both are DC",
+        "Neither is DC"
+      ],
+      "correct": 0,
+      "why": "DC pushes steadily in one direction, so it shows as a flat steady line; the wiggling wave is AC."
+    },
+    {
+      "q": "With the panel powered but idle, your meter reads 24.2V on the 24VDC rail — normal. As soon as the line starts running (all sensors and relay coils energized), the same rail drops and clamps at about 13V, and relays start chattering. What's the most likely cause?",
+      "options": [
+        "The supply is in current fold-back — total connected load current exceeds its rated output",
+        "The supply is simply defective and needs replacing on the spot",
+        "The relays themselves are worn out and drawing excess current",
+        "Normal ripple on a DC supply always looks like this under load"
+      ],
+      "correct": 0,
+      "why": "A no-load reading that's fine but collapses to 12-15V under full load is the classic signature of a switching supply's current fold-back protection clamping the voltage, not just the current. The fix is to total the actual load current against the supply's rated output, not swap the supply blind — pulling load and watching the voltage snap back confirms it before you touch anything."
+    },
+    {
+      "q": "A PLC on a machine throws random I/O faults and phantom inputs only when the line is running at full load, then clears itself every time the tech power-cycles it. No loose wire or bad input card is ever found. What should you check next?",
+      "options": [
+        "Swap the PLC's input card since intermittent faults always trace to card failure",
+        "Put a scope on the 24VDC rail (AC coupled) and check ripple magnitude under load",
+        "Increase the PLC's input filter time so it ignores the faults",
+        "Assume it's an EMI issue from a nearby VFD and reroute conduit"
+      ],
+      "correct": 1,
+      "why": "Random I/O faults that clear on restart and only show up under load match the module's ripple failure mode: a meter on DC volts can look fine (23.8V) while a scope reveals 3-4V p-p ripple riding on top. PLCs are sensitive to ripple in a way relay coils aren't, so the fix is a regulated supply with ripple under 100mV, confirmed with a scope — not a card swap or blind rewiring."
+    },
+    {
+      "q": "You're asked to replace a failed 24VDC 2.5A (60W) DIN-rail supply on a panel that's since had three extra solenoid valves added to the same terminal strip. A spare 24VDC supply is on the shelf, also labeled '24VDC.' What must you verify before wiring it in?",
+      "options": [
+        "That the spare supply is the same physical color as the old one",
+        "That the spare has a higher voltage than 24V so it can handle the extra valves",
+        "That the spare's current/wattage rating covers the actual total load, not just that the voltage matches",
+        "Nothing else — if the voltage label matches, any 24VDC supply is interchangeable"
+      ],
+      "correct": 2,
+      "why": "The module is explicit that a 24VDC 2.5A (60W) supply is not interchangeable with a 24VDC 5A (120W) supply just because both say 24VDC — voltage matching isn't enough. Since solenoids were added after the original sizing, you need to total the new load current (coils + sensors) against the candidate supply's rated output before landing wires, or you'll walk right back into fold-back."
+    },
+    {
+      "q": "During a PM, you find the negative (common/0V) terminal on the 24VDC supply rail is finger-loose while the positive terminal is torqued tight. Per the module's field notes, what's the correct action?",
+      "options": [
+        "Leave it — only the positive rail carries current, so the common terminal tightness doesn't matter",
+        "Torque it to the 0.5-0.8 Nm spec now, and re-torque the whole rail again at the next 6-month PM",
+        "Replace the terminal block entirely; a loose terminal can never be re-torqued safely",
+        "Add a second wire to the same loose terminal to carry backup current until the next shutdown"
+      ],
+      "correct": 1,
+      "why": "The module's terminal-torque field note and war story both center on the common (0V) return — a loose common still carries full return current and causes intermittent drops/noise that get blamed on sensors. Torque to spec now (0.5-0.8 Nm) and build in a re-torque at 6 months, since copper cold-flows under the screw over time; skipping it or 'reinforcing' with a second wire doesn't fix the root cause."
+    },
+    {
+      "q": "A relay coil on a 24VDC rail is rated to reliably pull in at 85% of nominal voltage. Using that spec, about what rail voltage is the minimum for dependable pull-in, and what happens to the coil if the rail sags below it under load?",
+      "options": [
+        "About 12V minimum; below it the coil simply runs slightly warmer with no other effect",
+        "About 4V minimum; voltage below nominal has no effect on relay coils",
+        "About 20.4V minimum; below it the coil instantly burns out beyond repair",
+        "About 20.4V minimum; below it the coil may chatter and pit/weld its contacts over time"
+      ],
+      "correct": 3,
+      "why": "85% of 24V nominal is 20.4V — the module's field note gives this as the minimum for reliable pull-in. Sagging below that (per the failure modes section) doesn't destroy the coil instantly, but causes chattering, which pits and welds contacts over weeks of operation — a slow, cumulative failure, not an instant one."
+    },
+    {
+      "q": "A green tech is working on a live 24VDC control panel without gloves, reasoning 'it's fine, it's just low voltage.' A senior tech stops him and explains why 24V is treated differently from the 120VAC side of the same panel. What's the correct safety reasoning?",
+      "options": [
+        "24VDC sits below the ~50V touch-safe threshold, so bare-wire contact is unpleasant but not likely to stop a heart — unlike 120VAC, which can be lethal through a single broken wire",
+        "24VDC is exactly as dangerous as 120VAC, so the same LOTO procedure is always required for both",
+        "24VDC poses zero shock risk under any circumstance, so no caution is ever needed",
+        "The danger only depends on which color wire is used, not the voltage level"
+      ],
+      "correct": 0,
+      "why": "IEC 60950/OSHA draw the touch-safe line at 50V peak, and 24VDC sits comfortably under it, which is the actual engineering reason it's the control-wiring standard — not that it's risk-free. Treating it as identical to 120VAC (full LOTO every time) or as zero-risk are both wrong; the real practice is appropriate PPE for 24V work while still respecting the 120VAC supply primary and load side as lethal."
+    }
+  ]
+}

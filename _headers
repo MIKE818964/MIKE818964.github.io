@@ -1,0 +1,8 @@
+# Honeybadger relay-training public demo (Cloudflare Pages headers)
+# App code + data always revalidate so shipped fixes appear immediately.
+/relay/*
+  Cache-Control: no-cache
+
+# Heavy static media (photos, CAD models, cut-sheet PDFs) may cache a day.
+/relay/assets/*
+  Cache-Control: public, max-age=86400

@@ -1,0 +1,66 @@
+{
+  "moduleId": "m06-single-throw-one-destination",
+  "title": "Single Throw: One Destination",
+  "questions": [
+    {
+      "q": "How many places can a SINGLE THROW contact send electricity to?",
+      "options": ["Exactly one", "Exactly two", "As many as you wire to it", "None — it never connects"],
+      "correct": 0,
+      "why": "A single-throw contact has just one destination: it either connects to that one load or it connects to nothing."
+    },
+    {
+      "q": "In relay language, what does the word 'throw' mean?",
+      "options": ["How fast the contact moves", "The destination the contact can reach", "How much voltage it carries", "The number of separate switches inside"],
+      "correct": 1,
+      "why": "'Throw' is just where the drawbridge can connect to — the destination it can send electricity to."
+    },
+    {
+      "q": "The earlier Normally Open and Normally Closed bulbs are examples of what kind of contact?",
+      "options": ["Double-throw, because they can be on or off", "No-throw, because they have no destination", "Single-throw, because each feeds one bulb or nothing", "Triple-throw, because they pick from three bulbs"],
+      "correct": 2,
+      "why": "Each of those contacts either feeds its one bulb or it doesn't, which is exactly what single-throw means."
+    },
+    {
+      "q": "You wire a single-throw contact to one lamp. When the contact is NOT connecting to the lamp, where is the electricity going instead?",
+      "options": ["To a second hidden output", "Nowhere — there is no other destination", "Back into the coil", "Straight to ground through the lamp"],
+      "correct": 1,
+      "why": "A single-throw contact has only one possible destination, so when it isn't on that lamp it connects to nothing at all."
+    },
+    {
+      "q": "A conveyor motor has been tripping its overload every afternoon for weeks. You clamp-meter the motor current (normal) and then put a DMM across the single-throw contactor pole feeding L2 while it runs. You read 7.4V across that closed contact. What do you conclude?",
+      "options": ["The contact is fine — some voltage drop across a closed contact is normal and expected", "The contact is pitted/carbonized, adding series resistance that heats the motor and trips the overload", "The overload relay itself is miscalibrated and needs replacing", "The motor winding has a developing short to ground"],
+      "correct": 1,
+      "why": "A healthy closed contact should drop under 0.5V; 7.4V means the contact is acting like a resistor in series with the load, burning watts as heat — exactly the packaging-line war story in this module. Blaming the overload or the motor ignores the direct evidence sitting right at the contact."
+    },
+    {
+      "q": "You're troubleshooting a 24VDC relay circuit and want to confirm a single-throw NO contact is actually closed and conducting, not just mechanically stuck open while 'looking powered.' What should you measure?",
+      "options": ["Current draw of the load with a clamp meter only", "Voltage across the two contact terminals directly", "Resistance of the coil with power still applied", "Voltage from each terminal to ground, separately"],
+      "correct": 1,
+      "why": "Measuring across the contact itself tells you whether it's actually conducting: near zero volts means closed and passing current, while full supply voltage across it means the gap is still open no matter what the terminal-to-ground readings suggest. Checking each terminal to ground separately is the trap that makes a stuck-open contact 'look powered.'"
+    },
+    {
+      "q": "You're wiring a single-throw contact to switch a 24VDC solenoid coil on and off. Based on this module, what should you add to protect the contact from repeated arcing?",
+      "options": ["A second single-throw contact wired in parallel to share the load", "A flyback diode across the coil, cathode toward positive", "A fuse in series with the contact rated equal to the coil's holding current", "Nothing — single-throw contacts are rated for inductive loads as-is"],
+      "correct": 1,
+      "why": "An inductive load like a solenoid coil releases a voltage spike (5-10x supply) the instant the contact opens; a flyback diode across the coil (cathode to positive) gives that energy somewhere to go besides arcing across your single contact face. A parallel contact or an inline fuse doesn't address the inductive kick at all."
+    },
+    {
+      "q": "A relay coil is spec'd for a 24VDC supply with a 50mA sealed (holding) current draw. Roughly what peak current should you expect the coil to pull for the first 10-50ms during pull-in, and why does that matter for wiring?",
+      "options": ["About 50mA, same as sealed current, so wire sizing is not affected by inrush", "About 5-8mA, since coils draw less current while moving than at rest", "Roughly 300-500mA (6-10x sealed), meaning marginal wire or terminal resistance that looks fine at sealed current can still cause chatter or no-pull-in", "Exactly 1A regardless of the coil's rated sealed current"],
+      "correct": 2,
+      "why": "Inrush on a relay coil commonly runs 6-10x the sealed current, so a 50mA-holding coil can briefly pull 300-500mA. A loose terminal or thin wire that measures fine under the small sealed load can still starve the coil during that brief inrush spike, causing chatter or failure to pull in solid."
+    },
+    {
+      "q": "A tech ignores a single-throw contact's inductive-kick problem on a 24VDC solenoid circuit and leaves it unsuppressed for months. Besides the contact wearing out faster, what is the realistic consequence called out in this module?",
+      "options": ["The solenoid will run on reduced voltage permanently", "The contact will fail permanently welded shut on the very first cycle", "Nothing else happens — arcing only affects contact lifespan", "The repeated arcing radiates electrical noise that can upset nearby sensors and PLCs"],
+      "correct": 3,
+      "why": "Beyond eroding the one contact face you have, repeated unsuppressed inductive arcing generates radiated electrical noise that can upset nearby sensors and PLC inputs — a plant-wide reliability problem, not just a worn part. It won't weld on the first cycle; that kind of damage is cumulative over thousands of cycles."
+    },
+    {
+      "q": "A load stays energized even after the control signal drops out and the relay coil measures 0V at its terminals — the single-throw contact will not open. You measure resistance across the output contact and get 0 ohms, but it jumps to open-circuit (OL) when you tap the relay body. What's going on?",
+      "options": ["The contact is welded shut permanently and the relay must be replaced immediately", "The contact is mechanically binding rather than welded — the relay likely needs replacing but the failure is a sticking mechanism, not a fused contact face", "The coil is still energized somewhere else in the circuit, giving a false OL reading", "This is normal behavior for a single-throw contact and no fault exists"],
+      "correct": 1,
+      "why": "A truly welded contact reads 0 ohms permanently no matter what you do to the relay body; a contact that jumps to open when tapped is mechanically binding (dirt, worn guide, weak return spring) rather than fused together. Both need the relay addressed, but the diagnostic distinction matters for root-causing why it happened."
+    }
+  ]
+}

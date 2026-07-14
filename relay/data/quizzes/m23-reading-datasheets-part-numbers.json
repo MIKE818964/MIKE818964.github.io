@@ -1,0 +1,116 @@
+{
+  "moduleId": "m23-reading-datasheets-part-numbers",
+  "title": "Reading Datasheets and Decoding Part Numbers",
+  "questions": [
+    {
+      "q": "A relay datasheet lists '24VDC coil.' Which part of YOUR circuit must match that number?",
+      "options": [
+        "The control voltage feeding the coil",
+        "The motor's full-load amps",
+        "The size of the load's fuse",
+        "The number of pins in the base"
+      ],
+      "correct": 0,
+      "why": "The coil voltage must match the control voltage you feed through your buttons and contacts; a 24VDC coil needs a 24VDC control circuit to pull in safely."
+    },
+    {
+      "q": "The datasheet says '10A / 250VAC contacts.' What does that rating tell you?",
+      "options": [
+        "The coil needs 10 amps to pull in",
+        "The contacts can safely switch loads up to 10 amps at 250 volts",
+        "The relay has 10 poles",
+        "The base has 250 pins"
+      ],
+      "correct": 1,
+      "why": "The contact rating is the most current and voltage the contacts can safely switch, so your load must stay comfortably below 10A and 250VAC."
+    },
+    {
+      "q": "A part is marked '24VDC coil, 10A/250VAC, DPDT, 8-pin.' What does 'DPDT, 8-pin' tell you?",
+      "options": [
+        "The coil voltage and contact rating",
+        "The configuration and base, so it physically fits",
+        "How many amps the motor draws",
+        "Which fuse to install"
+      ],
+      "correct": 1,
+      "why": "DPDT (double pole, double throw) plus 8-pin describes the relay's configuration and base layout, which is what makes the replacement physically drop into the socket."
+    },
+    {
+      "q": "Your dead relay was a 24VDC, DPDT, 8-pin switching a 6A load. A drawer relay reads '120VAC coil, 10A/250VAC, DPDT, 8-pin.' Can you use it?",
+      "options": [
+        "Yes, the pins and configuration match",
+        "No, the coil voltage is wrong for your control circuit",
+        "Yes, the contact rating is higher so it is fine",
+        "No, the contact rating is too small for 6A"
+      ],
+      "correct": 1,
+      "why": "Even though the pins, configuration, and contact rating fit, the 120VAC coil will not work on your 24VDC control circuit, so it is the wrong part."
+    },
+    {
+      "q": "You install a replacement relay and the coil measures a healthy 24VDC at the terminals, but the relay clicks in and out rapidly every time it's energized alongside five other coils on the same start-up sequence. The original relay never did this. What's the most likely cause?",
+      "options": [
+        "The relay's mechanical life has been exceeded",
+        "The relay was wired to the wrong pin for the coil",
+        "The power supply or transformer can't hold up under the combined INRUSH current of six coils pulling in at once, sagging the voltage below pickup",
+        "The new relay's contacts are rated too high for the load"
+      ],
+      "correct": 2,
+      "why": "Inrush current is much higher than sealed (holding) current, and it's additive across every coil energized at the same instant; if the supply sags under that combined peak, coils chatter as they repeatedly try and fail to stay pulled in. Contact rating and mechanical life don't cause chatter, and a wrong coil pin would prevent pickup entirely, not cause chatter."
+    },
+    {
+      "q": "A cross-reference guide says a replacement relay is a 'direct replacement' for your dead 8-pin DPDT unit. It seats fully in the old socket, but after wiring it up one terminal has no connection and the relay won't function correctly. What should you check first?",
+      "options": [
+        "Assume the new relay is defective and order another",
+        "Increase the contact current rating to compensate",
+        "Re-measure the coil voltage with a meter",
+        "Compare the pin-assignment diagrams from both datasheets side by side — the coil or contact pins may be numbered differently between brands"
+      ],
+      "correct": 3,
+      "why": "Two 8-pin DPDT relays from different manufacturers can share the same physical footprint but assign coil and contact pins to different numbers (e.g., coil on 1/8 for one brand, 2/7 for another). The cross-reference likely matched electrical specs but not the pinout, so the fix is comparing the actual pin diagrams, not blaming the coil voltage or the part itself."
+    },
+    {
+      "q": "You're selecting a relay to switch a 4A solenoid valve at 120VAC. The drawer has two candidates: Relay A rated '10A/250VAC resistive, 2A inductive' and Relay B rated '8A/250VAC resistive, 6A inductive.' Which do you pick and why?",
+      "options": [
+        "Relay A, because its resistive rating is higher overall",
+        "Relay B, because its inductive rating covers the 4A solenoid load with margin, which is the rating that actually applies",
+        "Either one, since both exceed 4A on the resistive rating",
+        "Relay A, because inductive ratings don't apply to solenoids"
+      ],
+      "correct": 1,
+      "why": "A solenoid is an inductive load, so the inductive contact rating is what governs — not the resistive number, which is always the highest and least applicable figure on the sheet. Relay A's 2A inductive rating would be violated by a 4A solenoid and would weld or pit quickly; Relay B's 6A inductive rating covers it with margin."
+    },
+    {
+      "q": "A relay switches a pump 20 times per hour, 16 hours a day, 250 days a year. The datasheet lists electrical life as 100,000 operations at rated load. About how many operations will this relay see in one year, and what does that mean for your maintenance plan?",
+      "options": [
+        "20,000 operations/year — well under the rated life, no action needed",
+        "300,000 operations/year — the relay will fail within a month",
+        "100,000 operations/year exactly — replace it every six months to be safe",
+        "80,000 operations/year — close to the 100,000 electrical life rating, so budget for annual replacement or derate the load to extend life"
+      ],
+      "correct": 3,
+      "why": "20 cycles/hr x 16 hr/day x 250 days = 80,000 operations/year, right up against the 100,000-operation electrical life rating at rated load. That means this relay is a near-annual wear item unless you reduce switched current or duty cycle — it's not a 'set and forget' part like the mechanical (no-load) life rating of 5-10 million would suggest."
+    },
+    {
+      "q": "A tech ignores the coil voltage suffix on a part number ('DC24' vs 'AC24') because the numeric voltage (24) matches, and orders based on that alone. What is the realistic consequence of skipping that check?",
+      "options": [
+        "Nothing — 24V is 24V regardless of AC or DC",
+        "The contacts will be rated for a slightly lower amperage",
+        "The relay will simply run a few degrees warmer but function normally long-term",
+        "The relay coil will draw the wrong type of current for its design, overheat, and burn out, potentially in under an hour of run time"
+      ],
+      "correct": 3,
+      "why": "AC and DC coils are wound and rated differently even at the same nominal voltage; putting the wrong current type across a coil built for the other causes it to overheat and fail, sometimes within an hour of energizing. This is exactly the failure mode described in the module's coil-burnout scenario — the numeric voltage matching is not enough, the AC/DC suffix must match too."
+    },
+    {
+      "q": "Your panel's control cabinet sits near an oven and runs at 55°C ambient in summer. You're specifying a replacement relay whose datasheet shows a 'Load Current vs. Ambient Temperature' derating curve, rated 10A at 40°C. What should you actually do before ordering?",
+      "options": [
+        "Ignore the curve — the 10A rating is the 10A rating regardless of cabinet temperature",
+        "Read the derating curve at 55°C ambient and size the relay so its derated capacity still covers your load, or add cooling to bring ambient down",
+        "Order the same 10A relay since your load is under 10A at room temperature",
+        "Double the contact rating to 20A to be safe without checking the curve"
+      ],
+      "correct": 1,
+      "why": "A relay's rated contact current is only guaranteed at the datasheet's reference temperature (often 40°C); at 55°C ambient the same 10A relay may only safely carry 7A per the derating curve. You have to read the curve for your actual cabinet temperature and either pick a relay whose derated capacity covers the load or reduce the ambient with ventilation/cooling, not just trust the headline number or guess at a bigger size."
+    }
+  ]
+}

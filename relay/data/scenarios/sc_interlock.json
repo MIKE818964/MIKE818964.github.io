@@ -1,0 +1,139 @@
+{
+  "id": "sc_interlock",
+  "title": "Interlock Won't Sequence",
+  "type": "troubleshoot",
+  "mode": "deductive",
+  "workOrder": "WORK ORDER #214 — Two-step sequencer won't sequence. Operator: \"I hit Start and Step 1 comes on fine, but Step 2 never follows.\" Sometimes Step 1 doesn't even come on. Meter it out.",
+  "symptom": "The two-relay sequencer fails to reach Step 2. CR1 must energize before CR2 can pull in — a permissive interlock contact (INTLK) gates the CR2 rung. The fault is DIFFERENT every time you open this ticket. Don't guess; trace the permissive chain with your meter.",
+  "faults": [
+    { "component": "FU1",    "kind": "blown_fuse" },
+    { "component": "ENABLE", "kind": "stuck_open" },
+    { "component": "CR1",    "kind": "open_coil"  },
+    { "component": "INTLK",  "kind": "stuck_open" },
+    { "component": "WIRE2",  "kind": "blown_fuse" },
+    { "component": "CR2",    "kind": "open_coil"  }
+  ],
+  "diagnosisOptions": [
+    { "component": "FU1",    "kind": "blown_fuse"    },
+    { "component": "ENABLE", "kind": "stuck_open"    },
+    { "component": "CR1",    "kind": "open_coil"     },
+    { "component": "CR1",    "kind": "welded_closed" },
+    { "component": "INTLK",  "kind": "stuck_open"    },
+    { "component": "WIRE2",  "kind": "blown_fuse"    },
+    { "component": "CR2",    "kind": "open_coil"     },
+    { "component": "START1", "kind": "stuck_open"    }
+  ],
+  "explains": {
+    "FU1:blown_fuse": "You read 24V ACROSS FU1 — full source voltage on TP-L, zero on TP-1. A good fuse reads ~0V across it; the whole drop across a two-terminal device means it is open. Both LAMP1 and LAMP2 stay dark regardless of button presses because there is no power past the fuse at all. Swap FU1 — then hunt for what overcurrented it. A shorted coil, a miswire, or a ground fault downstream. Do not just stuff in a new fuse and call it done.",
+
+    "ENABLE:stuck_open": "TP-L and TP-1 are both live at 24V — the fuse is intact. But TP-2 drops to 0V the moment you cross the ENABLE contact. That normally-closed permissive is stuck OPEN, breaking the entire control rung before START1 ever gets a vote. CR1 and CR2 both stay dark. Replace the ENABLE pushbutton (or its contact block if it is a multi-block unit).",
+
+    "CR1:open_coil": "Power traces clean all the way to TP-c1 — you see 24V there whenever you hold START1. The coil has voltage on it. But CR1 never pulls in: LAMP1 stays off, INTLK stays open, LAMP2 stays off. Voltage present with zero magnetic pull = the coil winding is open. Classic burned coil; the plant-floor smell gives it away before the meter does. Replace the CR1 relay. While you are in there, check for a sustained overload on whatever CR1 was driving — that is usually what cooked it.",
+
+    "INTLK:stuck_open": "CR1 energizes perfectly — LAMP1 lights, TP-c1 shows 24V, SEAL1 latches. But TP-3 stays at 0V even though INTLK should close when CR1 is up. The interlock contact itself is stuck open: the blade did not follow the coil. Happens after arcing fatigues the contact spring, or on a modular relay when the aux contact block is loose. CR2 never sees its permissive no matter how long you wait. Replace the auxiliary interlock contact block on CR1.",
+
+    "WIRE2:blown_fuse": "CR1 is up (LAMP1 on), INTLK is conducting — TP-3 shows 24V with CR1 energized. But TP-4 reads 0V: the WIRE2 link between the INTLK output rail and the CR2 rung junction is open. This is the broken inline conductor in the CR2 feed. Check the terminal strip in that section — a pulled ferrule, a cracked wire end, or a blown inline fuse-link is the usual culprit on a machine that has been running for years.",
+
+    "CR2:open_coil": "The permissive chain is fully intact: CR1 is up, INTLK closed, WIRE2 passes power — TP-3, TP-4, and TP-c2 all show 24V when you hold START2 (or SEAL2 latches). Voltage is sitting right on the CR2 coil. But LAMP2 never lights and CR2 never actuates. Voltage at the coil with no pull-in = open winding on CR2. Swap the CR2 relay. Check what load CR2 drives for an overload that may have toasted it."
+  },
+  "circuit": {
+    "id": "two_relay_interlock",
+    "title": "Two-relay permissive interlock (CR1 must precede CR2)",
+    "nodes": [
+      { "id": "L",   "x": 140,  "y": 120 },
+      { "id": "n1",  "x": 320,  "y": 120 },
+      { "id": "n2",  "x": 500,  "y": 120 },
+      { "id": "n3",  "x": 320,  "y": 320 },
+      { "id": "n4",  "x": 500,  "y": 320 },
+      { "id": "nC1", "x": 760,  "y": 120 },
+      { "id": "nC2", "x": 760,  "y": 320 },
+      { "id": "N",   "x": 140,  "y": 560 },
+      { "id": "nL1", "x": 760,  "y": 220 },
+      { "id": "nL2", "x": 760,  "y": 420 }
+    ],
+    "components": [
+      {
+        "id": "SRC", "type": "source", "current": "DC", "volts": 24,
+        "x": 140, "y": 340, "label": "24VDC",
+        "terminals": { "pos": "L", "neg": "N" }
+      },
+      {
+        "id": "FU1", "type": "fuse", "ratingA": 2,
+        "x": 230, "y": 120, "label": "FU1",
+        "terminals": { "a": "L", "b": "n1" }
+      },
+      {
+        "id": "ENABLE", "type": "pushbutton", "mode": "momentary", "contact": "NC",
+        "x": 410, "y": 120, "label": "Enable (NC)",
+        "terminals": { "in": "n1", "out": "n2" }
+      },
+      {
+        "id": "START1", "type": "pushbutton", "mode": "momentary", "contact": "NO",
+        "x": 590, "y": 120, "label": "Start 1",
+        "terminals": { "in": "n2", "out": "nC1" }
+      },
+      {
+        "id": "SEAL1", "type": "contact_no", "coil": "CR1",
+        "x": 590, "y": 220, "label": "CR1 Seal",
+        "terminals": { "in": "n2", "out": "nC1" }
+      },
+      {
+        "id": "CR1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC",
+        "x": 880, "y": 120, "label": "CR1 24VDC",
+        "terminals": { "a": "nC1", "b": "N" }
+      },
+      {
+        "id": "LAMP1C", "type": "contact_no", "coil": "CR1",
+        "x": 590, "y": 320, "label": "CR1 IND",
+        "terminals": { "in": "n1", "out": "nL1" }
+      },
+      {
+        "id": "LAMP1", "type": "bulb",
+        "x": 880, "y": 220, "label": "Step 1 ON",
+        "terminals": { "a": "nL1", "b": "N" }
+      },
+      {
+        "id": "INTLK", "type": "contact_no", "coil": "CR1",
+        "x": 230, "y": 320, "label": "INTLK (CR1 NO)",
+        "terminals": { "in": "n1", "out": "n3" }
+      },
+      {
+        "id": "WIRE2", "type": "fuse", "ratingA": 2,
+        "x": 410, "y": 320, "label": "WIRE2 link",
+        "terminals": { "a": "n3", "b": "n4" }
+      },
+      {
+        "id": "START2", "type": "pushbutton", "mode": "momentary", "contact": "NO",
+        "x": 590, "y": 420, "label": "Start 2",
+        "terminals": { "in": "n4", "out": "nC2" }
+      },
+      {
+        "id": "SEAL2", "type": "contact_no", "coil": "CR2",
+        "x": 590, "y": 520, "label": "CR2 Seal",
+        "terminals": { "in": "n4", "out": "nC2" }
+      },
+      {
+        "id": "CR2", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC",
+        "x": 880, "y": 420, "label": "CR2 24VDC",
+        "terminals": { "a": "nC2", "b": "N" }
+      },
+      {
+        "id": "LAMP2C", "type": "contact_no", "coil": "CR2",
+        "x": 760, "y": 520, "label": "CR2 IND",
+        "terminals": { "in": "n4", "out": "nL2" }
+      },
+      {
+        "id": "LAMP2", "type": "bulb",
+        "x": 880, "y": 520, "label": "Step 2 ON",
+        "terminals": { "a": "nL2", "b": "N" }
+      },
+      { "id": "TP_L",  "type": "test_point", "x": 230,  "y": 64,  "label": "TP-L",  "terminals": { "p": "L"   } },
+      { "id": "TP_1",  "type": "test_point", "x": 320,  "y": 64,  "label": "TP-1",  "terminals": { "p": "n1"  } },
+      { "id": "TP_2",  "type": "test_point", "x": 500,  "y": 64,  "label": "TP-2",  "terminals": { "p": "n2"  } },
+      { "id": "TP_c1", "type": "test_point", "x": 760,  "y": 64,  "label": "TP-c1", "terminals": { "p": "nC1" } },
+      { "id": "TP_3",  "type": "test_point", "x": 320,  "y": 264, "label": "TP-3",  "terminals": { "p": "n3"  } },
+      { "id": "TP_4",  "type": "test_point", "x": 500,  "y": 264, "label": "TP-4",  "terminals": { "p": "n4"  } },
+      { "id": "TP_c2", "type": "test_point", "x": 760,  "y": 380, "label": "TP-c2", "terminals": { "p": "nC2" } }
+    ]
+  }
+}

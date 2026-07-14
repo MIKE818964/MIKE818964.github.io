@@ -1,0 +1,146 @@
+{
+  "moduleId": "m11-momentary-button-problem",
+  "title": "Add a Start Button — and Hit the Problem",
+  "questions": [
+    {
+      "q": "You wire a momentary Start button to the relay coil and press it. What happens while your finger holds it down?",
+      "options": [
+        "The coil energizes, the contacts flip, and the Running light comes on",
+        "Nothing happens until you let go",
+        "The coil energizes but the contacts stay in their resting state",
+        "The Stopped light stays on the whole time"
+      ],
+      "correct": 0,
+      "why": "Pressing the button completes the path to the coil, so it energizes and flips the contacts — Running on, Stopped off — for as long as you hold it.",
+      "visual": {
+        "lesson": "m11-momentary-button-problem",
+        "caption": "The station as drawn — Start not yet pressed."
+      }
+    },
+    {
+      "q": "The instant you release the momentary Start button, what does the circuit do?",
+      "options": [
+        "Everything springs back to normal — Running goes off and Stopped comes back on",
+        "The Running light stays on by itself",
+        "The coil stays energized for a few seconds, then drops out",
+        "The Stopped light and Running light both stay on"
+      ],
+      "correct": 0,
+      "why": "A momentary button only feeds the coil while pressed, so on release the spring snaps the contacts back to their resting state and the machine stops.",
+      "visual": {
+        "lesson": "m11-momentary-button-problem",
+        "pressed": [
+          "S1"
+        ],
+        "caption": "As found — Start held down, the moment before release."
+      }
+    },
+    {
+      "q": "Why is a plain momentary Start button useless for running a motor that needs to run all day?",
+      "options": [
+        "It only keeps the coil powered while you physically hold it down",
+        "It feeds too much voltage to the 24VDC coil",
+        "It can only switch a light bulb, never a coil",
+        "It opens the circuit instead of closing it when pressed"
+      ],
+      "correct": 0,
+      "why": "The coil is energized only while the button is held, so the operator would have to stand there pressing it forever — that is the exact problem the seal-in latch solves next."
+    },
+    {
+      "q": "An operator complains a machine only runs while they hold the green button and stops the moment they let go. Based on this lesson, what is missing from the circuit?",
+      "options": [
+        "A way to keep the coil powered after the button is released",
+        "A bigger 24VDC power supply",
+        "A second momentary button wired in series",
+        "A higher-voltage coil"
+      ],
+      "correct": 0,
+      "why": "Holding-only behavior is exactly what a bare momentary button does — the circuit needs a seal-in path to hold the coil energized after release.",
+      "visual": {
+        "lesson": "m11-momentary-button-problem",
+        "caption": "The station's print — trace every path that can feed CR1."
+      }
+    },
+    {
+      "q": "You probe a Start button with the meter in voltage mode, button open, no load connected — it reads a clean 24V across the terminals when pressed. But on the machine, pressing it still only gets a weak chatter out of the coil. What's the right next test?",
+      "options": [
+        "Trust the open-circuit 24V reading — the button is proven good, so move on to the coil",
+        "Reconnect the coil and measure the voltage DROP across the closed button contacts while it's actually carrying inrush current",
+        "Measure the button's open-circuit voltage again with a different meter to rule out a bad meter",
+        "Replace the coil, since the button already tested fine"
+      ],
+      "correct": 1,
+      "why": "An open-circuit voltage reading proves the button passes voltage with no current flowing — it does NOT prove the contact is good under load. Corroded or pitted contacts can pass a clean no-load reading and still drop 2-5V once inrush current flows, which is exactly the 'voltage-drop-under-load trap' this lesson warns about. You have to measure drop across the closed contact with the coil connected and current flowing."
+    },
+    {
+      "q": "A tech hears a relay buzzing and chattering every time the conveyor's Start button is pressed — never latches solid. He measures the coil terminal voltage during the attempt and sees it collapse from 24V down to about 17V before slowly climbing back. What should he check first?",
+      "options": [
+        "Swap the relay for a new one immediately, since chatter always means a bad coil",
+        "Increase the button's current rating, since chatter means the button contacts are too small",
+        "Wire-run resistance and supply voltage sag under load — a marginal transformer or long thin wire run can sag coil voltage below pickup during inrush",
+        "Add a second momentary button in parallel to share the load"
+      ],
+      "correct": 2,
+      "why": "This is the exact failure mode from the war story: inrush current (6-10x holding current) sags voltage more on long/thin wire runs or a weak supply, and if that sag dips below the coil's 18-20V pickup threshold, the relay chatters. Checking wire-run drop and supply voltage under load (no-load vs full-load) isolates it, per the lesson's field notes. Swapping the relay skips straight past the actual root cause and wastes a part."
+    },
+    {
+      "q": "You're asked to spec a momentary Start button for a new 24VDC coil circuit with no flyback protection yet designed in. Sizing the button contacts for the coil's steady-state 20mA sealed current, what real-world risk are you missing?",
+      "options": [
+        "Nothing — 20mA sealed current is the only number that matters for contact sizing",
+        "The button only needs to be rated for the coil's DC resistance, not its current",
+        "Steady-state current is always higher than inrush on a DC coil, so sizing for sealed current is already conservative",
+        "The button will see 6-10x that current as inrush for the first 20-100ms every time it's pressed, and it will also take the back-EMF release spike across its open contacts without a diode to absorb it"
+      ],
+      "correct": 3,
+      "why": "Sizing only for the 20mA sealed/holding current ignores the inrush spike (120-180mA on a coil that holds at 20mA) that hits the button contacts on every press, plus the 100-200V back-EMF spike on release that arcs across the open contact gap if there's no flyback diode. Both erode the contacts over time even though the button 'passes' a quick continuity check."
+    },
+    {
+      "q": "Maintenance wants to skip the flyback diode on a new 24VDC coil circuit to save a part and some labor, since 'the button worked fine without one on the old machine.' What's the real consequence of leaving it out?",
+      "options": [
+        "Nothing changes — flyback diodes only matter for AC coils, not DC",
+        "Every release cycle sends a 100-200V back-EMF spike across the open button contacts, arc-eroding them over time until the coil won't fully pull in even though the button still 'feels' fine",
+        "The coil will run at a higher voltage than rated, burning it out within days",
+        "The button will fail to close on the very first press without the diode"
+      ],
+      "correct": 1,
+      "why": "Without a flyback diode, the collapsing magnetic field on release has nowhere to go but back through the open contact gap as a 100-200V spike, arcing the contact faces on every single cycle. It won't fail on day one — it degrades slowly over hundreds/thousands of cycles until contact resistance climbs and pickup starts failing, which is a much harder problem to diagnose later than just installing a 1N4007 up front."
+    },
+    {
+      "q": "A relay coil is rated to pull in reliably above 18V and drop out below 6V (roughly 75-85% pickup / 10-30% dropout of a 24V rating). During inrush on a long wire run, coil terminal voltage sags to 19.5V for the first 40ms before recovering to 23.8V sealed. What should you conclude?",
+      "options": [
+        "The coil will definitely chatter, since any sag below the sealed voltage means the relay drops out",
+        "The relay is undersized and needs to be replaced with a higher-voltage coil",
+        "This proves the flyback diode is shorted",
+        "The coil should still pull in reliably — 19.5V is above the ~18V pickup threshold, so this sag is not the cause of a chatter complaint"
+      ],
+      "correct": 3,
+      "why": "Pickup threshold for a 24V coil is roughly 18-20V, so a sag to 19.5V is still within the range that should pull in cleanly — this circuit is running close to the edge but not necessarily faulty. Chatter shows up when the sag dips BELOW pickup (like the 17V in the war story), not any time voltage is lower than the fully-sealed 23.8V reading; sealed voltage is always somewhat higher than pickup voltage by design."
+    },
+    {
+      "q": "You're troubleshooting a machine where the Start button has to be pressed slowly to work — a fast jab never starts it, but a deliberate slow push does. Based on this lesson, what's the most likely cause and how would you confirm it?",
+      "options": [
+        "The coil is wired backwards; swap the two coil leads and retest",
+        "The 24VDC supply is undersized; replace the power supply before doing any further testing",
+        "Mechanical contact bounce on the button — confirm with a scope on the coil terminals looking for millisecond-wide voltage notches on a fast press",
+        "The button is rated for AC only; replace it with a DC-rated button"
+      ],
+      "correct": 2,
+      "why": "This is the bounce failure mode from the lesson: a mechanical button can close and reopen 2-10 times in the first 1-5ms, and if the coil's inrush hasn't stabilized before a bounce opens the circuit again, the relay chatters or fails to latch on a fast jab but works on a slow press that rides through the bounce. A scope on the coil terminals showing millisecond-wide notches on a fast press confirms it — swapping coil leads or the supply doesn't address contact bounce at all."
+    },
+    {
+      "q": "In the print shown, TP-coil marks the wire between S1 and coil CR1. With S1 held down and the circuit healthy, what does a meter read from TP-coil to N?",
+      "options": [
+        "About 12V — the button and the coil each drop half the supply",
+        "About 24V — holding S1 ties TP-coil to the hot rail, and the coil completes the path to N",
+        "0V — the coil blocks voltage from reaching TP-coil",
+        "OL — a wire-to-rail measurement is not valid"
+      ],
+      "correct": 1,
+      "why": "With S1 closed, TP-coil is metallically connected to the +24V rail. The meter from TP-coil to N is measuring straight across the energized coil, so it reads the full supply — about 24V.",
+      "visual": {
+        "lesson": "m11-momentary-button-problem",
+        "caption": "The print — shown at rest; the question asks about the moment S1 is held."
+      }
+    }
+  ]
+}

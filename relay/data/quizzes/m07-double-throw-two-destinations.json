@@ -1,0 +1,66 @@
+{
+  "moduleId": "m07-double-throw-two-destinations",
+  "title": "Double Throw: Two Destinations (the Selector)",
+  "questions": [
+    {
+      "q": "On a double-throw contact, can BOTH outputs be connected at the same time?",
+      "options": ["Yes, both are always connected", "No — it connects to one OR the other, never both", "Only if the coil is energized", "Only when the voltage is 24VDC"],
+      "correct": 1,
+      "why": "A double-throw contact is a selector: as one output closes the other opens, so only one is ever connected at a time."
+    },
+    {
+      "q": "What does a double-throw contact have that a single-throw contact does not?",
+      "options": ["A second destination (output B)", "A second coil", "A higher voltage rating", "A built-in fuse"],
+      "correct": 0,
+      "why": "Double-throw means the shared common can swing to either of two destinations instead of just one."
+    },
+    {
+      "q": "In the example, one double-throw contact drives a 'Stopped' light and a 'Running' light. What do you see at any moment?",
+      "options": ["Both lights on together", "Both lights off together", "Exactly one light always lit, the other dark", "The lights blinking back and forth on their own"],
+      "correct": 2,
+      "why": "Because one output is closed while the other is open, exactly one light is always lit and the other is always dark."
+    },
+    {
+      "q": "A double-throw selector should show one light on and one off, but you see BOTH the Stopped and Running lights lit at once. What does that tell you?",
+      "options": ["The selector is working perfectly", "Something is wrong — a double-throw can never feed both at once", "The coil voltage is too high", "Both bulbs are burned out"],
+      "correct": 1,
+      "why": "A healthy double-throw contact connects to only one output at a time, so both lit means a fault — the contact isn't truly switching between them."
+    },
+    {
+      "q": "You're called to a machine where the Stopped and Running lights are both flickering at the same time while the machine sits idle in a stable state. You check the coil terminals with a true-RMS meter and find 19VDC on a coil rated 24VDC. What's the most likely cause?",
+      "options": ["The NC contact is welded shut from an overcurrent event", "The contact rating was exceeded by an inductive load", "Insufficient hold voltage is letting the armature chatter between the NO and NC contacts", "The lamps are wired to two separate single-throw relays instead of one DT contact"],
+      "correct": 2,
+      "why": "19V on a 24VDC coil is below the roughly 18-20V hold-voltage floor, so the armature can't stay sealed against one contact and bounces between both, flickering both lights together. A welded contact would freeze the output on one side (not flicker both), and this symptom is specifically a voltage-sag chatter signature, not an overload or wiring-topology issue."
+    },
+    {
+      "q": "A machine is confirmed dead — motor stopped, 0V measured at the relay coil — but the Running light on the panel stays lit. You pull the relay and, with it fully de-energized, measure resistance from common to NC and common to NO. What result confirms a welded/stuck double-throw contact rather than a wiring error?",
+      "options": ["Common-to-NC reads near zero ohms, common-to-NO reads open", "Common-to-NC reads open, common-to-NO reads near zero ohms", "Both common-to-NC and common-to-NO read near zero ohms", "Both common-to-NC and common-to-NO read open (infinite resistance)"],
+      "correct": 2,
+      "why": "With the coil de-energized, a healthy DT contact should show near-zero ohms on NC only (that's the at-rest side) and open on NO. If BOTH read near-zero, the armature is mechanically frozen against both contacts (welded/stuck) and can't be a simple wiring mistake, since a wiring error wouldn't change what the meter reads at the contact itself — the relay must be replaced."
+    },
+    {
+      "q": "You're laying out a new Stopped/Running indicator circuit and have a choice: use one DPDT relay's double-throw contact, or use two separate single-throw NO contacts from two different relays. Which should you pick for this application, and why?",
+      "options": ["Two separate single-throw contacts, because they're cheaper and easier to source", "The double-throw contact, because break-before-make switching eliminates the dead window where both outputs could read as off at once", "Two separate single-throw contacts, because each light gets its own dedicated coil for redundancy", "Either works identically, so it comes down to what's already in the parts bin"],
+      "correct": 1,
+      "why": "Two independent single-throw contacts can both be briefly open during a transition, creating a dead window where a fast PLC input could latch a false de-energized state. A DT contact's break-before-make (or make-before-break, per the datasheet) geometry guarantees exactly one output is live at every instant — that's the actual engineering reason to choose it, not just convenience."
+    },
+    {
+      "q": "You need to swap a Stopped/Running indicator's DT contact from driving 24VDC pilot lamps to instead switching a 24VDC solenoid valve coil. The relay's datasheet lists 10A resistive at 250VAC on its contacts. What must you account for that you didn't have to with the lamps?",
+      "options": ["Nothing changes — 10A is 10A regardless of load type", "The inductive load's back-EMF spike at contact opening requires derating the contact rating by roughly 30-50%", "You need a higher-voltage coil to switch a solenoid", "The NC and NO pin assignments will reverse for an inductive load"],
+      "correct": 1,
+      "why": "Solenoid coils are inductive loads — when the contact opens, the collapsing field generates a back-EMF spike that sustains an arc across the opening contact, so the resistive contact rating must be derated roughly 30-50% for inductive use. Pilot lamps draw only 20-50mA and never stressed the contact this way, which is why the failure mode only shows up after the load changes."
+    },
+    {
+      "q": "A tech ignores repeated flickering on the Stopped light, assuming 'the bulb is just going bad,' and keeps swapping lamps instead of checking the DT contact. What is the real risk of leaving this ignored long-term?",
+      "options": ["Nothing — pilot lamps are low-power so the contact can't be damaged further", "The pitted NC contact will keep degrading until it fails to make reliable continuity, and the same arcing/welding mechanism can just as easily freeze a contact in the Running (NO) state on a machine that's actually been shut down, creating a false 'machine is running' indication during lockout", "The relay coil will eventually overheat and start a fire", "The only consequence is a burned-out bulb needing replacement"],
+      "correct": 1,
+      "why": "The flicker is a symptom of a degrading contact (from repeated inductive arcing), not the bulb — continuing to swap lamps just delays real diagnosis while the contact keeps pitting toward failure. Left unaddressed, the same failure mechanism (contact welding) can freeze the DT contact on the Running side, so a locked-out, de-energized machine can show a false Running indication — exactly the lockout-integrity hazard described in the Greenfield laminator war story."
+    },
+    {
+      "q": "You're wiring a DPDT relay whose contacts are rated 10A resistive at 250VAC. The output side will switch a solenoid coil pulling 4A continuous. Field notes say to derate inductive loads by roughly 30-50%. What's the effective safe contact rating you should design to for this inductive load?",
+      "options": ["Still the full 10A, since the contact is only switching 4A anyway", "20A, because inductive loads need a higher rating, not a lower one", "10A minus 4A = 6A remaining capacity for a second load", "Roughly 5-7A, so the 4A solenoid load fits comfortably within the derated rating"],
+      "correct": 3,
+      "why": "Derating 10A by 30-50% for an inductive load gives an effective safe rating of roughly 5-7A — the 4A solenoid fits inside that derated number, not the full 10A resistive rating. A green tech who uses the nameplate 10A figure directly (ignoring that back-EMF arcing sustains the interrupt current at contact opening) is under-margined and will see accelerated NC/NO pitting exactly like the module's failure-mode discussion describes."
+    }
+  ]
+}

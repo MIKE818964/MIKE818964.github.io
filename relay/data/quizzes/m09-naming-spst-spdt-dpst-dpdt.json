@@ -1,0 +1,96 @@
+{
+  "moduleId": "m09-naming-spst-spdt-dpst-dpdt",
+  "title": "Putting It Together: SPST, SPDT, DPST, DPDT",
+  "questions": [
+    {
+      "q": "In a relay name like SPDT, what do the first letters and the last letters tell you?",
+      "options": ["First = throws, last = poles", "First = poles, last = throws", "First = voltage, last = amps", "First = coil, last = contacts"],
+      "correct": 1,
+      "why": "Read left to right: the first letters are the number of poles (Single/Double) and the last are the number of throws (Single/Double)."
+    },
+    {
+      "q": "Decode the relay type SPDT.",
+      "options": ["Single Pole, Double Throw", "Double Pole, Single Throw", "Single Pole, Single Throw", "Double Pole, Double Throw"],
+      "correct": 0,
+      "why": "SPDT is Single Pole (one switch) Double Throw (two destinations) — the Stopped/Running selector."
+    },
+    {
+      "q": "Which relay is two independent on/off switches that flip together, each with just one destination?",
+      "options": ["SPST", "SPDT", "DPST", "DPDT"],
+      "correct": 2,
+      "why": "DPST is Double Pole (two switches) Single Throw (one destination each) — two on/off switches that act together."
+    },
+    {
+      "q": "You need a relay with two separate poles, and each pole must select between two outputs. Which name do you order?",
+      "options": ["SPST", "SPDT", "DPST", "DPDT"],
+      "correct": 3,
+      "why": "Two poles (Double Pole) that each choose between two destinations (Double Throw) is exactly DPDT."
+    },
+    {
+      "q": "A machine runs continuously and won't stop even after you kill the control circuit. You measure the relay coil at 0VDC (confirmed dead). What's your next diagnostic step?",
+      "options": [
+        "Replace the PLC output card — a dead coil with a powered load means the card is stuck ON",
+        "With LOTO applied, try to separate the contacts by hand with an insulated tool and ohm-check the pole",
+        "Increase the coil supply voltage to force drop-out",
+        "Check the drop-out voltage spec — the coil is probably just below the 60-70% threshold"
+      ],
+      "correct": 1,
+      "why": "A dead coil with a still-powered load is the signature of welded contacts. With LOTO in place, insulated-tool separation plus a low-Z ohm check (welded reads under 1 ohm with no coil voltage) confirms it. The PLC card and coil voltage are already ruled out — the coil measured 0V, so the coil circuit did its job; the contacts just never let go."
+    },
+    {
+      "q": "A DPDT relay on a drum-indexer intermittently drops out 3-4 times a shift. Every time maintenance checks it de-energized with an ohmmeter, both poles read fine. What should you actually do to catch the fault?",
+      "options": [
+        "Replace the relay anyway since intermittent faults always mean a dying coil",
+        "Clamp an amp meter and measure each pole's voltage while it's live and loaded, cycling the circuit multiple times",
+        "Increase the ohmmeter test current to stress the contacts and re-test de-energized",
+        "Swap the relay socket, since a loose socket always mimics contact wear"
+      ],
+      "correct": 1,
+      "why": "This is the classic pitted-pole trap from the war story: a static ohm check with the relay de-energized reads clean because there's no load current flowing through the pitted contact face. Only a live-loaded measurement (like the position-signal pole dropping to 17V under 60mA draw) exposes it. Guessing at replacement or socket swaps skips the actual root-cause step of loaded testing."
+    },
+    {
+      "q": "You're speccing a relay to switch a 240VAC single-phase transformer primary, and both legs must open together every time the circuit is de-energized. Which relay type fits the job with the fewest wasted poles?",
+      "options": [
+        "SPST, wired twice through two separate relays",
+        "SPDT, using the NC and NO legs as the two switched circuits",
+        "DPST, one coil throwing both legs open/closed together",
+        "DPDT, using only the NO contacts on each pole"
+      ],
+      "correct": 2,
+      "why": "DPST is built for exactly this: one coil command throws two independent circuits together, single destination each — no selecting between two outputs needed, so you don't pay for DPDT's extra throw you'd never use. Two separate SPST relays could work but adds coordination risk (they could sequence apart) and wastes a second coil and PLC output; SPDT's NC/NO legs aren't two independent switched circuits, they're two mutually exclusive destinations."
+    },
+    {
+      "q": "You're wiring a DPDT relay as a forward/reverse interlock so the two motor contactor coils can never pull in together. Which pair of terminals on each pole must carry the interlock path, and what should an ohmmeter read from common to that terminal with the relay de-energized?",
+      "options": [
+        "The NO terminals; should read infinite ohms de-energized",
+        "The NC terminals; should read 0 ohms de-energized",
+        "Either NO or NC, as long as both poles match; resistance doesn't matter",
+        "The common terminals on both poles tied together; should read 0 ohms"
+      ],
+      "correct": 1,
+      "why": "Each pole's NC (normally closed) terminal wires into the opposite coil's control path — de-energized, common-to-NC should read 0 ohms, giving you a closed path that only opens once this relay's own coil pulls in. Wiring NO instead (reads infinite ohms de-energized) provides no interlocking at all, which is exactly the miswiring described in the failure modes: both coils can pull in simultaneously, tripping the main breaker."
+    },
+    {
+      "q": "A tech pulls a DPDT relay rated '10A/250VAC' to switch a motor starter coil's inrush current, reasoning that 10A is plenty of headroom. What's wrong with that reasoning, and what's the real-world consequence?",
+      "options": [
+        "Nothing is wrong — 10A resistive rating covers any inductive load up to that current",
+        "The rating only applies at 24VDC, so it's fine on any AC circuit",
+        "Inductive loads draw 6-10x nameplate current on closure and the true inductive rating may be only 25-40% of the resistive rating, risking contact welding",
+        "The problem is pole count, not rating — a DPST would fix it regardless of current"
+      ],
+      "correct": 2,
+      "why": "The 10A figure is a continuous resistive rating; inductive loads like motor starter coils spike 6-10x on closure and generate back-EMF on opening, so the real inductive rating is often only 25-40% of the resistive number (a '10A' DPDT may be good for roughly 2.5A inductive). Exceed it and the arc melts the contact faces together — welded closed, load stays powered even with the coil dead, and those faces don't recover; you replace the relay."
+    },
+    {
+      "q": "On an SPDT selector circuit, both the 'Stopped' and 'Running' indicator lamps show a faint glow at the same time, instead of one bright and one dark. Your standard high-impedance DMM reads 45V on the dark lamp's terminal. What should you conclude?",
+      "options": [
+        "The SPDT relay's NC and NO contacts are both welded closed — replace the relay",
+        "The 45V is likely ghost voltage from capacitive coupling; switch to a low-Z meter (LoZ mode) and confirm it collapses under 2V",
+        "The common terminal has failed open, backfeeding both outputs equally",
+        "The coil is chattering between energized and de-energized, alternately lighting each lamp"
+      ],
+      "correct": 1,
+      "why": "A high-impedance DMM can pick up 30-80V of sneak/ghost voltage from capacitive coupling in a long parallel run, but that reading collapses under 2V on a low-impedance meter because there's no real current behind it — not enough to actually light a lamp at full brightness, only enough to make it glow faintly. Concluding welded contacts or a failed common terminal without first ruling out ghost voltage would send you replacing a good relay."
+    }
+  ]
+}

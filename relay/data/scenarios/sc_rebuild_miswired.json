@@ -1,0 +1,60 @@
+{
+  "id": "sc_rebuild_miswired",
+  "title": "The Rebuild Gone Wrong",
+  "type": "troubleshoot",
+  "mode": "deductive",
+  "workOrder": "WORK ORDER #214 — Station 4 came back from a weekend panel rebuild and \"acts possessed.\" The contractor swears he landed every wire per the print. Nobody's run it since.",
+  "symptom": "Something in this station is wired BACKWARDS or left unlanded — a different mistake each time you open the ticket. Power it up, watch what it does at rest, press the buttons, meter the test points, and find the miswire.",
+  "faults": [
+    { "component": "STOP", "kind": "swapped_no_nc" },
+    { "component": "START", "kind": "swapped_no_nc" },
+    { "component": "RUNC", "kind": "swapped_no_nc" },
+    { "component": "STPC", "kind": "swapped_no_nc" },
+    { "component": "SEAL", "kind": "broken_wire" }
+  ],
+  "diagnosisOptions": [
+    { "component": "STOP", "kind": "swapped_no_nc" },
+    { "component": "START", "kind": "swapped_no_nc" },
+    { "component": "RUNC", "kind": "swapped_no_nc" },
+    { "component": "STPC", "kind": "swapped_no_nc" },
+    { "component": "SEAL", "kind": "broken_wire" },
+    { "component": "CR1", "kind": "open_coil" },
+    { "component": "FU1", "kind": "blown_fuse" }
+  ],
+  "explains": {
+    "STOP:swapped_no_nc": "The rung is DEAD at rest — 24V at TP-1 but 0V at TP-2 — yet the instant you press and hold Stop, TP-2 goes HOT. A Stop button that has to be HELD to let the machine run is wired to its NO contact block instead of NC. Classic rebuild mistake: the contractor landed the wires on the wrong side of the contact block. Move them to the NC terminals — a Stop must be closed at rest so it can BREAK the circuit.",
+    "START:swapped_no_nc": "The machine started ITSELF the moment you powered up — nobody touched Start. That's a Start button wired to its NC block: it conducts at rest, feeds the coil immediately, and the seal-in latches it. Pressing Start actually OPENS the path (does nothing once latched). Any machine that self-starts on power-up is a serious safety event — this one gets fixed before the panel is closed.",
+    "RUNC:swapped_no_nc": "Control works perfectly — but the RUNNING light is lit while the machine sits stopped, and goes DARK when it runs. The lamp contact is on the wrong side of the block: an NC instead of the NO. The machine is fine; the indication is lying. Fix it anyway — an operator who trusts a backwards light will someday reach into a 'stopped' machine that's running.",
+    "STPC:swapped_no_nc": "The STOPPED light is dark at rest and lights up while the machine runs — backwards. Its contact was landed on the NO side instead of NC. Same lesson as the Running lamp: indication faults never stop production, so they never get reported — until the day someone believes the light.",
+    "SEAL:broken_wire": "Runs while you hold Start, dies the instant you release — the latch has no latch. During the rebuild the seal-in wire never got landed (or got landed on a dead terminal). 24V control checks fine everywhere else; the fingerprint is purely behavioral: hold-to-run. Land the seal-in contact in parallel with Start and it holds."
+  },
+  "circuit": {
+    "id": "seal_in_latch_rebuild",
+    "title": "3-wire Start/Stop — post-rebuild checkout",
+    "nodes": [
+      { "id": "L", "x": 140, "y": 120 },
+      { "id": "n1", "x": 300, "y": 120 },
+      { "id": "n2", "x": 470, "y": 120 },
+      { "id": "n3", "x": 660, "y": 120 },
+      { "id": "N", "x": 860, "y": 250 },
+      { "id": "nRun", "x": 660, "y": 230 },
+      { "id": "nStp", "x": 660, "y": 330 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 140, "y": 250, "label": "24VDC", "terminals": { "pos": "L", "neg": "N" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 220, "y": 120, "label": "FU1", "terminals": { "a": "L", "b": "n1" } },
+      { "id": "STOP", "type": "pushbutton", "mode": "momentary", "contact": "NC", "x": 385, "y": 120, "label": "Stop (NC)", "terminals": { "in": "n1", "out": "n2" } },
+      { "id": "START", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 565, "y": 120, "label": "Start", "terminals": { "in": "n2", "out": "n3" } },
+      { "id": "SEAL", "type": "contact_no", "coil": "CR1", "x": 565, "y": 185, "label": "CR1 seal-in", "terminals": { "in": "n2", "out": "n3" } },
+      { "id": "CR1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC", "x": 755, "y": 120, "label": "CR1 24VDC", "terminals": { "a": "n3", "b": "N" } },
+      { "id": "RUNC", "type": "contact_no", "coil": "CR1", "x": 520, "y": 230, "label": "CR1 NO", "terminals": { "in": "n1", "out": "nRun" } },
+      { "id": "RUN", "type": "bulb", "x": 740, "y": 230, "label": "Running", "terminals": { "a": "nRun", "b": "N" } },
+      { "id": "STPC", "type": "contact_nc", "coil": "CR1", "x": 520, "y": 330, "label": "CR1 NC", "terminals": { "in": "n1", "out": "nStp" } },
+      { "id": "STP", "type": "bulb", "x": 740, "y": 330, "label": "Stopped", "terminals": { "a": "nStp", "b": "N" } },
+      { "id": "TP_L", "type": "test_point", "x": 220, "y": 64, "label": "TP-L", "terminals": { "p": "L" } },
+      { "id": "TP_1", "type": "test_point", "x": 300, "y": 64, "label": "TP-1", "terminals": { "p": "n1" } },
+      { "id": "TP_2", "type": "test_point", "x": 470, "y": 64, "label": "TP-2", "terminals": { "p": "n2" } },
+      { "id": "TPc", "type": "test_point", "x": 660, "y": 64, "label": "TP-coil", "terminals": { "p": "n3" } }
+    ]
+  }
+}
