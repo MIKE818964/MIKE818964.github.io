@@ -1,0 +1,66 @@
+{
+  "moduleId": "m08-what-is-a-pole",
+  "title": "What Is a Pole: One Independent Switch Inside",
+  "questions": [
+    {
+      "q": "In plain words, what is a 'pole'?",
+      "options": ["A single input contact point that supplies electricity to a load", "The metal case the relay sits in", "The coil that makes the magnet", "The two pins that power the coil"],
+      "correct": 0,
+      "why": "A pole is defined as one input contact point that supplies a load — one complete, independent switch inside the relay."
+    },
+    {
+      "q": "How many separate circuits can ONE pole switch?",
+      "options": ["Its own one circuit", "Two circuits at once", "Three circuits at once", "Every circuit in the relay"],
+      "correct": 0,
+      "why": "Each pole is its own independent lane carrying one circuit; to switch more circuits you add more poles."
+    },
+    {
+      "q": "A single pole can be set up as either single-throw or double-throw. What changes between the two?",
+      "options": ["The number of coils it uses", "The number of output destinations — one versus two", "The voltage it can carry", "Whether it has a common terminal"],
+      "correct": 1,
+      "why": "Single-throw gives the pole one output destination; double-throw gives that same pole two destinations to choose between."
+    },
+    {
+      "q": "A relay has three poles that all flip together when it acts. What is true about the three circuits running through them?",
+      "options": ["They are all the same circuit sharing one wire", "Each pole carries its own separate circuit", "Only the first pole carries current", "They must all be at different voltages"],
+      "correct": 1,
+      "why": "Poles flip together but each is an independent lane, so each one carries its own separate circuit."
+    },
+    {
+      "q": "A 4-pole starter runs a mixer's three power legs plus a seal-in circuit on the fourth pole. After months in service, the mixer randomly drops out on Start release, but only some shifts. You check the seal-in pole's contact and wiring and they read clean. What should you suspect next?",
+      "options": ["A blown fuse on the seal-in leg, since clean contacts rule out the pole itself", "The coil voltage is too low to pick up all four poles", "Worn armature pivot flexing under the heavier power-pole loading, making the light seal-in pole the last (and sometimes marginal) to close", "The seal-in pole must be wired to the wrong throw"],
+      "correct": 2,
+      "why": "This is the mixer war story: all poles share one armature, so if the pivot wears and the three heavily-loaded power poles flex the armature under load, a lighter-duty pole like the seal-in can be the last to fully seat — intermittently. Clean contacts and wiring don't rule this out because the fault is mechanical (shared body), not electrical at that one pole."
+    },
+    {
+      "q": "On a DPST relay you measure the resistance across Pole 2's contacts with the relay de-energized and get 0.4 ohms; Pole 1 reads OL (open) as expected. What does the 0.4 ohm reading on Pole 2 tell you?",
+      "options": ["Pole 2 is functioning normally for an open contact", "Pole 2's contact is welded shut", "Pole 2 has too much spring tension", "The meter needs to be recalibrated"],
+      "correct": 1,
+      "why": "A de-energized pole that should read open (infinite resistance/OL) but instead reads under 1 ohm has welded contacts — the metal fused together during a heavy arc. Comparing against the healthy pole's OL reading is exactly the diagnostic check described for catching a stuck pole."
+    },
+    {
+      "q": "You're wiring a control panel and need a 24VDC lamp and a separate 24VDC solenoid to both de-energize the instant one relay drops out. Following the rule of treating poles as independent circuits, what's the correct approach?",
+      "options": ["Run both loads off one pole in parallel to save wiring", "Use both poles as a shared return path for the two loads", "Wire the lamp to one pole and the solenoid to a second pole on the same relay, each with its own complete power-in/load-out path", "Wire the solenoid across two poles to double its rated current"],
+      "correct": 2,
+      "why": "Each pole should be its own complete, separate circuit: power routed in one end, load out the other, on its own dedicated pole. Giving the lamp and solenoid their own poles keeps them independent while still guaranteeing simultaneous switching, since both poles share the same armature."
+    },
+    {
+      "q": "A relay is rated '10A at 240VAC per pole.' A tech wires two poles of that relay in parallel to switch a single 18A pump motor, reasoning that 2 x 10A covers it with margin. Why is this a mistake?",
+      "options": ["18A is still over the combined 20A rating so it will never work", "Contacts don't close at the exact same instant, so one pole takes the full inrush first and can weld before the second pole ever shares the load", "Parallel poles automatically halve the relay's voltage rating", "10A per pole means 10A is the absolute total across the whole relay"],
+      "correct": 1,
+      "why": "The per-pole rating is exactly that — per pole, not shared — so on paper 20A of contact capacity looks fine. But armature tilt and uneven wear mean one contact always makes contact microseconds before the other, so it sees the full 18A inrush alone; if that arc is heavy enough it welds before the second pole ever helps carry the load. The fix is a properly rated single-pole contactor or contactor block, not paralleled poles."
+    },
+    {
+      "q": "You're troubleshooting a control panel where a 24VDC control transformer secondary has a grounded negative rail. A tech used two poles of one relay to switch the positive leg at two different points in the circuit, thinking it added redundancy. What real risk does this create?",
+      "options": ["No risk — grounding the negative rail protects both poles equally", "A ground fault anywhere between those two switched points can put unexpected voltage on a circuit you thought was fully switched off", "The two poles will short together and blow the coil", "It only reduces the current rating of each pole, nothing more"],
+      "correct": 1,
+      "why": "Using two poles as a sneak return path for the same load, combined with a grounded secondary, means a ground fault between the switching points can energize the circuit from a direction your fuse doesn't protect — even with the relay de-energized. The fix is treating each pole as its own complete circuit: power in one end, load out the other, never using a second pole as a return path."
+    },
+    {
+      "q": "You measure 3.5V dropped across a closed, energized pole's contacts while its load runs at rated current, while a healthy pole on the same relay reads 0.2V. If you ignore this and leave the relay in service, what is the realistic consequence?",
+      "options": ["Nothing — voltage drop across a closed contact is normal and expected to be several volts", "The relay's coil will automatically compensate and the drop will self-correct", "The other, healthy pole will pick up the extra current to balance the load", "The pitted contact will keep dissipating heat (P = I x V) at the fault point, accelerating pitting/oxidation until the contact fails or welds"],
+      "correct": 3,
+      "why": "A healthy closed contact should drop under 0.3V at rated current; 3.5V is 10x+ that and means real wattage is being burned right at the contact junction, which generates heat and accelerates further pitting — a runaway condition, not a stable one. Poles are independent lanes, so a healthy pole cannot 'help' an overloaded one; ignoring the reading just lets the bad pole cook itself toward a weld or an open failure."
+    }
+  ]
+}

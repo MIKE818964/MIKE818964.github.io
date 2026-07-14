@@ -1,0 +1,120 @@
+{
+  "id": "sc_starter_wont_start",
+  "title": "Motor Starter Won't Start",
+  "type": "troubleshoot",
+  "mode": "deductive",
+  "workOrder": "WORK ORDER #214 — Pump skid, Line 4. Operator: \"Hit Start and nothing happens — or it ran for a second and quit.\" No other symptoms volunteered. It's a different fault each time you open this ticket.",
+  "symptom": "The motor won't start (or won't stay running). A 3-wire start/stop feeds the M1 contactor. Control rung and power rung are both in play — don't assume it's just the control side. Meter it out rung by rung and make the call.",
+  "faults": [
+    { "component": "FU1",     "kind": "blown_fuse"   },
+    { "component": "M1",      "kind": "open_coil"    },
+    { "component": "STOP",    "kind": "stuck_open"   },
+    { "component": "START",   "kind": "broken_wire"  },
+    { "component": "SEAL",    "kind": "stuck_open"   },
+    { "component": "M1_MAIN", "kind": "stuck_open"   }
+  ],
+  "diagnosisOptions": [
+    { "component": "FU1",     "kind": "blown_fuse"   },
+    { "component": "M1",      "kind": "open_coil"    },
+    { "component": "M1",      "kind": "welded_closed"},
+    { "component": "STOP",    "kind": "stuck_open"   },
+    { "component": "START",   "kind": "broken_wire"  },
+    { "component": "SEAL",    "kind": "stuck_open"   },
+    { "component": "M1_MAIN", "kind": "stuck_open"   },
+    { "component": "M1_MAIN", "kind": "welded_closed"}
+  ],
+  "explains": {
+    "FU1:blown_fuse": "Your first meter shot: 24V ACROSS FU1 — full source voltage on TP-L, zero on TP-1. A healthy fuse is a dead short; you'd read ~0V across it. Full voltage drop = it's OPEN. The whole station went dark: no Running light, no Stopped light, motor stone-dead. Pull it, visually confirm the element's gone, replace it — then track down the overcurrent that killed it or the new one pops on the next start.",
+    "M1:open_coil": "You had 24V at TP-2 (Stop was fine), pressed Start and saw 24V jump to TP-3 — voltage right at the coil terminals — but M1 never pulled in. The Stopped light stayed on; the Running light never lit. Coil voltage present with zero magnetic action = burned-out coil winding, open circuit inside the bobbin. Replace the coil (or the whole contactor if the frame's cooked). Been there: coils burn when a mechanical jam holds them half-in for hours.",
+    "STOP:stuck_open": "Power made it through FU1 — TP-1 read 24V and the Stopped light was on — but TP-2 read 0V before you ever touched the Start button. The normally-closed Stop contact is stuck OPEN, breaking the rung permanently. No amount of pressing Start does anything; the path is severed upstream. Check for a mechanical jam in the Stop button head, a broken spring, or a corroded contact face. Swap the button, retest.",
+    "START:broken_wire": "TP-1 and TP-2 were both live — 24V through the fuse and through the Stop button — but pressing Start left TP-3 at 0V. Voltage waiting on one side of Start, nothing getting through to the other side. The Start pushbutton contact or the wire on its load-side is open. With no pulse reaching the coil, the seal-in never has a chance to grab. Check the Start contact mechanism and both screw terminals; a loose spade on the out-terminal is the classic culprit.",
+    "SEAL:stuck_open": "Classic latching failure: motor ran fine while you held Start (TP-3 live, M1 energized, Running light on), then died the instant you released it. The M1 seal-in contact (SEAL) is not making. When Start opens, there's no parallel path to keep the coil fed. The latch has no latch. Verify the auxiliary contact block is seated on the contactor frame — they vibrate loose. Replace the aux block if the contact face is pitted.",
+    "M1_MAIN:stuck_open": "This one bites newer techs every time: the control circuit looked PERFECT — M1 coil latched, Running light came on, Stopped light went off — but the motor sat dead silent. TP-3 showed 24V (coil energized), yet the motor didn't move. Shift your meter to the power rung: 480V (or whatever your line voltage is) on the line side of M1_MAIN, zero on the load side, with the contactor supposedly pulled in. The main power contact is welded open or mechanically stuck. The control side is lying to you; the work is on the power side."
+  },
+  "circuit": {
+    "id": "motor_starter_3wire",
+    "title": "3-Wire Motor Starter — Control + Power Rungs",
+    "nodes": [
+      { "id": "L",    "x": 140, "y": 120 },
+      { "id": "n1",   "x": 310, "y": 120 },
+      { "id": "n2",   "x": 490, "y": 120 },
+      { "id": "n3",   "x": 680, "y": 120 },
+      { "id": "N",    "x": 880, "y": 280 },
+      { "id": "nRun", "x": 680, "y": 240 },
+      { "id": "nStp", "x": 680, "y": 340 },
+      { "id": "n4",   "x": 490, "y": 440 }
+    ],
+    "components": [
+      {
+        "id": "SRC", "type": "source", "current": "DC", "volts": 24,
+        "x": 140, "y": 280, "label": "24VDC",
+        "terminals": { "pos": "L", "neg": "N" }
+      },
+      {
+        "id": "FU1", "type": "fuse", "ratingA": 2,
+        "x": 225, "y": 120, "label": "FU1",
+        "terminals": { "a": "L", "b": "n1" }
+      },
+      {
+        "id": "STOP", "type": "pushbutton", "mode": "momentary", "contact": "NC",
+        "x": 400, "y": 120, "label": "Stop (NC)",
+        "terminals": { "in": "n1", "out": "n2" }
+      },
+      {
+        "id": "START", "type": "pushbutton", "mode": "momentary", "contact": "NO",
+        "x": 585, "y": 120, "label": "Start",
+        "terminals": { "in": "n2", "out": "n3" }
+      },
+      {
+        "id": "SEAL", "type": "contact_no", "coil": "M1",
+        "x": 585, "y": 195, "label": "M1 seal-in",
+        "terminals": { "in": "n2", "out": "n3" }
+      },
+      {
+        "id": "M1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC",
+        "x": 780, "y": 120, "label": "M1 24VDC",
+        "terminals": { "a": "n3", "b": "N" }
+      },
+      {
+        "id": "RUNC", "type": "contact_no", "coil": "M1",
+        "x": 540, "y": 240, "label": "M1 NO",
+        "terminals": { "in": "n1", "out": "nRun" }
+      },
+      {
+        "id": "RUN", "type": "bulb",
+        "x": 780, "y": 240, "label": "Running",
+        "terminals": { "a": "nRun", "b": "N" }
+      },
+      {
+        "id": "STPC", "type": "contact_nc", "coil": "M1",
+        "x": 540, "y": 340, "label": "M1 NC",
+        "terminals": { "in": "n1", "out": "nStp" }
+      },
+      {
+        "id": "STP", "type": "bulb",
+        "x": 780, "y": 340, "label": "Stopped",
+        "terminals": { "a": "nStp", "b": "N" }
+      },
+      {
+        "id": "M1_MAIN", "type": "contact_no", "coil": "M1",
+        "x": 315, "y": 440, "label": "M1 Main",
+        "terminals": { "in": "L", "out": "n4" }
+      },
+      {
+        "id": "MTR", "type": "motor",
+        "x": 640, "y": 440, "label": "M1 Motor",
+        "terminals": { "a": "n4", "b": "N" }
+      },
+      {
+        "id": "TP_L",  "type": "test_point", "x": 225, "y": 64,  "label": "TP-L",  "terminals": { "p": "L"   } },
+      {
+        "id": "TP_1",  "type": "test_point", "x": 310, "y": 64,  "label": "TP-1",  "terminals": { "p": "n1"  } },
+      {
+        "id": "TP_2",  "type": "test_point", "x": 490, "y": 64,  "label": "TP-2",  "terminals": { "p": "n2"  } },
+      {
+        "id": "TP_3",  "type": "test_point", "x": 680, "y": 64,  "label": "TP-3",  "terminals": { "p": "n3"  } },
+      {
+        "id": "TP_4",  "type": "test_point", "x": 490, "y": 384, "label": "TP-4",  "terminals": { "p": "n4"  } }
+    ]
+  }
+}

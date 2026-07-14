@@ -1,0 +1,145 @@
+{
+  "moduleId": "m13-stop-button-3wire",
+  "title": "The Stop Button: The Classic 3-Wire Start/Stop",
+  "questions": [
+    {
+      "q": "To add an OFF function to the latch, what kind of Stop button do you use and where do you wire it?",
+      "options": [
+        "A Normally Closed button, in series ahead of the Start button",
+        "A Normally Open button, in parallel with the Start button",
+        "A Normally Closed button, in parallel with the coil",
+        "A Normally Open button, in series after the coil"
+      ],
+      "correct": 0,
+      "why": "A Normally Closed Stop wired in series ahead of Start normally passes power so the latch works, but breaks the feed the instant it is pressed."
+    },
+    {
+      "q": "Why must the Stop button be Normally CLOSED?",
+      "options": [
+        "So it normally passes power and lets the latch hold, then opens to break the feed when pressed",
+        "So it normally blocks power until you press it to start the motor",
+        "So it can carry the motor's high current",
+        "So it stays open until the relay latches"
+      ],
+      "correct": 0,
+      "why": "Being NC means it sits closed and lets the coil stay powered; pressing it opens the path for a moment, dropping out the relay and resetting the circuit.",
+      "visual": {
+        "lesson": "m13-stop-button-3wire",
+        "caption": "The 3-wire station print — at rest."
+      }
+    },
+    {
+      "q": "When you press the NC Stop button, what is the chain of events that shuts the machine down?",
+      "options": [
+        "The path to the coil opens, the coil drops out, the seal-in contact opens, and everything resets",
+        "The coil energizes harder and the Running light gets brighter",
+        "The Start button re-latches automatically",
+        "The seal-in contact closes tighter and holds the coil on"
+      ],
+      "correct": 0,
+      "why": "Opening the line de-energizes the coil, which lets its own seal-in contact fall open, so even after you release Stop the circuit stays off until Start is pressed again.",
+      "visual": {
+        "lesson": "m13-stop-button-3wire",
+        "prevCoil": [
+          "CR1"
+        ],
+        "caption": "Latched and running — the moment before Stop is pressed."
+      }
+    },
+    {
+      "q": "On a real machine, someone replaces a worn-out Stop button with a Normally OPEN button by mistake. What happens?",
+      "options": [
+        "The relay can never latch — power can't reach the coil through an open Stop contact",
+        "The machine runs but can no longer be stopped",
+        "The machine works exactly the same as before",
+        "The Stop button now also starts the machine"
+      ],
+      "correct": 0,
+      "why": "A NO Stop button sits open at rest, so it breaks the line to the coil all the time — the latch can never hold and the machine won't run."
+    },
+    {
+      "q": "A machine has been running fine for an hour when it drops out on its own. Operator presses Start again and it runs fine for another hour before it happens again. Maintenance can't reproduce it standing at the panel with the door open. What's the most likely cause and how do you confirm it?",
+      "options": [
+        "A loose/corroded NC Stop terminal that only develops enough resistance to matter once the panel heats up from an hour of run time — confirm by reading voltage across the closed contact itself while it's running warm",
+        "The Stop button is actually wired Normally Open — confirm with an ohmmeter with power off",
+        "The seal-in contact is welded shut — confirm by checking if the Start button still does anything",
+        "The coil is oversized for the contactor — confirm by reading the nameplate voltage"
+      ],
+      "correct": 0,
+      "why": "This is a classic thermally-intermittent fault: a loose or oxidized NC terminal reads near 0V when cool but climbs to several volts as it heats up over the shift, eventually starving the coil enough to drop out — then it cools with the door open and 'disappears.' A NO-button miswire or welded seal-in would fail every time, not intermittently, so those don't fit the hour-long cycle."
+    },
+    {
+      "q": "You've got two NC Stop buttons wired in series (local panel + remote pendant). After an electrician replaces the remote button, the local Stop still shuts the machine down fine, but the remote pendant does nothing at all. What do you check first, and what do you expect to find?",
+      "options": [
+        "Check the coil voltage — expect it's too low to hold the seal-in",
+        "Check the remote button's contact type — expect it was replaced with a Normally Open button, which sits open at rest and already breaks the series path, so pressing it changes nothing",
+        "Check the seal-in contact — expect it's welded and bypassing both Stop buttons",
+        "Check the Start button — expect it's wired in parallel with the remote Stop"
+      ],
+      "correct": 1,
+      "why": "A NO button dropped into an NC Stop position is already open at rest, so it's silently breaking the series path all the time — pressing it does nothing because there's nothing left for it to open. The local Stop still works because it's a separate NC contact earlier in the same series string. Coil voltage or a welded seal-in wouldn't explain the local button working perfectly while only the remote one is dead."
+    },
+    {
+      "q": "Your plant is buying replacement Start buttons and someone suggests using a cheaper 0.5A-rated logic-level pushbutton instead of the 3A-rated ones the panel currently has, since 'the coil only draws 50mA once it's running.' What's wrong with that plan?",
+      "options": [
+        "Nothing is wrong — sealed current is all that matters for contact sizing since that's what flows most of the time",
+        "The issue is voltage rating, not current rating — a 0.5A button can't handle 24VDC",
+        "The Start contacts see inrush current 6-10x the sealed current for the first 20-50ms of every start — a 24VDC coil drawing 50mA sealed can pull 300-500mA at that moment, which will pit and burn a 0.5A contact over months of cycling",
+        "The 0.5A button is fine for Start but would be dangerous if used for Stop instead"
+      ],
+      "correct": 2,
+      "why": "Contact sizing has to account for inrush, not just steady-state sealed current — the coil pulls 6-10x its sealed draw for the first 20-50ms every time Start is pressed while the armature seats. A 0.5A contact repeatedly hit with 300-500mA inrush spikes will pit and fail early, which is exactly why the field notes call for a minimum 3A-rated contact even though the running draw is only 50mA."
+    },
+    {
+      "q": "A 24VDC coil is rated to hold in reliably down to about 85% of rated voltage. If a corroded Stop button terminal develops 200 ohms of resistance and the circuit is drawing 50mA sealed current, roughly how much voltage does the coil actually see, and does it stay within its holding margin?",
+      "options": [
+        "Resistance in series with the coil doesn't affect coil voltage, only current, so the coil sees the full 24V regardless",
+        "The bad terminal drops about 10V, leaving the coil at 14V, which is still fine since most 24VDC coils hold in down to 50% of rated voltage",
+        "The bad terminal drops about 1V (200 ohms x 0.05A, then divided by 10 by mistake), leaving the coil at 23V — comfortably within the holding margin",
+        "The bad terminal drops about 10V (200 ohms x 0.05A), leaving the coil around 14V — well below the ~20.4V (85%) minimum, so it will drop out or chatter"
+      ],
+      "correct": 3,
+      "why": "V = I x R = 0.05A x 200 ohms = 10V dropped at the bad terminal, leaving only about 14V at the coil — well under the roughly 20.4V (85% of 24V) minimum holding voltage, so the coil will nuisance-trip or chatter. Series resistance always drops voltage proportional to current (Ohm's law), and 85%, not 50%, is the realistic holding margin quoted for these coils."
+    },
+    {
+      "q": "You're commissioning a new panel with a NEMA/NFPA 79 machine and specifying the Stop circuit. Your junior tech asks if it's okay to wire the Stop as a Normally Open button in parallel with the coil instead of NC in series, since 'it would still let you kill power to the coil by pressing it.' How do you answer, and why?",
+      "options": [
+        "It's fine either way — as long as pressing the button removes power from the coil, the wiring topology doesn't matter",
+        "No — NFPA 79 requires the Stop function be NC and wired in series, so that a broken wire, loose terminal, or lost supply anywhere in that string fails to the safe (stopped) state; a NO button in parallel would only stop the machine while held and wouldn't fail safe if a wire broke",
+        "No — a NO button in parallel would work fine electrically, but it's against code purely as a formality with no real safety benefit",
+        "Yes, and it's actually safer, because a NO parallel button can't accidentally get bypassed by a jumper the way an NC series button can"
+      ],
+      "correct": 1,
+      "why": "The whole point of NC-in-series is fail-safe design: a broken wire, blown fuse, or loose terminal anywhere in that series string removes coil power and stops the machine, satisfying NFPA 79's requirement that loss of control power results in a safe state. A NO button in parallel would only cut power while actively held down and wouldn't protect against a broken conductor — a wire could fail and the machine would just keep running with no way to stop it that way."
+    },
+    {
+      "q": "An electrician jumpers across a Stop button's terminals to chase a nuisance trip on second shift, planning to remove it before he leaves, but gets pulled to another emergency and forgets. What is the real-world danger of leaving that jumper in place, even if the machine seems to run normally?",
+      "options": [
+        "The jumper will overheat and start a fire within a few hours",
+        "It only affects that one shift — the jumper has no effect once day shift electricians take over",
+        "The coil will be permanently energized at full inrush current, burning it out",
+        "The Stop button is completely bypassed — pressing it does nothing, so anyone relying on it in an emergency (like a jam or a caught hand) has no way to shut the machine down through that station"
+      ],
+      "correct": 3,
+      "why": "A jumper across Stop terminals defeats the stop function entirely for that station — the coil stays sealed in no matter how many times Stop is pressed, which on a machine with moving parts (like a rotating die) turns a routine control-circuit fix into a safety hazard with no visible warning. This is exactly the near-miss described in the war story: the pendant Stop was silently dead for six shifts before anyone caught it."
+    },
+    {
+      "q": "In the print shown, the machine is latched and running with both buttons released. What does a meter placed directly across the Start button's two terminals read?",
+      "options": [
+        "24V — full supply always appears across an open contact",
+        "About 12V — half the supply drops across each parallel branch",
+        "About 0V — the closed CR1 seal-in parallels Start, holding both of its terminals at the same potential",
+        "OL — voltage cannot be read across a pushbutton"
+      ],
+      "correct": 2,
+      "why": "Start is open, but the seal-in contact wired in parallel with it is closed and carrying the coil current — both Start terminals ride at the same potential, so the meter reads about 0V. Full supply across Start would only appear if the seal-in path were open too.",
+      "visual": {
+        "lesson": "m13-stop-button-3wire",
+        "prevCoil": [
+          "CR1"
+        ],
+        "caption": "Latched and running — both buttons released."
+      }
+    }
+  ]
+}

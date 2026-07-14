@@ -1,0 +1,353 @@
+{
+  "moduleId": "m24-ladder-symbols-reading-a-rung",
+  "title": "Reading the Print: Ladder Symbols and Rungs",
+  "questions": [
+    {
+      "q": "On a ladder diagram, which symbol is a Normally Open contact?",
+      "options": [
+        "Two plain parallel lines  -| |-",
+        "Two lines with a diagonal slash  -|/|-",
+        "A circle  -( )-",
+        "A zig-zag line"
+      ],
+      "correct": 0,
+      "why": "A Normally Open contact is drawn as two plain parallel lines; the slash through it would make it Normally Closed, and the circle is a coil."
+    },
+    {
+      "q": "How do you read a single rung of a ladder diagram?",
+      "options": [
+        "Right to left, coil first",
+        "Left to right, power passing through each contact to the coil",
+        "Top to bottom down the rail",
+        "In any order you like"
+      ],
+      "correct": 1,
+      "why": "You read a rung left to right like a sentence: power must pass through every contact in the rung to reach and energize the coil at the right end."
+    },
+    {
+      "q": "On a ladder rung, where does the coil (the circle) sit, and when is it energized?",
+      "options": [
+        "On the left rail, energized always",
+        "At the far right, energized only when power passes through all contacts to its left",
+        "In the middle, energized by the neutral rail",
+        "On the right rail, energized by the fuse"
+      ],
+      "correct": 1,
+      "why": "The coil sits at the far right end of the rung and energizes only when every contact to its left is closed so power can reach it."
+    },
+    {
+      "q": "You see a rung: an NC contact, then a contact paralleled with another contact, all feeding a coil. Which familiar circuit is this?",
+      "options": [
+        "A simple on/off light switch",
+        "The 3-wire Start/Stop seal-in latch",
+        "An on-delay timer only",
+        "A 3-phase motor power circuit"
+      ],
+      "correct": 1,
+      "why": "That is the latch in ladder form: the NC Stop, then Start paralleled with the seal-in contact, all feeding the coil, exactly the 3-wire control circuit.",
+      "visual": {
+        "circuit": {
+          "id": "ev_generic_rung",
+          "nodes": [
+            {
+              "id": "L",
+              "x": 140,
+              "y": 120
+            },
+            {
+              "id": "n1",
+              "x": 300,
+              "y": 120
+            },
+            {
+              "id": "n2",
+              "x": 470,
+              "y": 120
+            },
+            {
+              "id": "n3",
+              "x": 660,
+              "y": 120
+            },
+            {
+              "id": "N",
+              "x": 860,
+              "y": 210
+            }
+          ],
+          "components": [
+            {
+              "id": "SRC",
+              "type": "source",
+              "current": "DC",
+              "volts": 24,
+              "x": 140,
+              "y": 210,
+              "label": "24VDC",
+              "terminals": {
+                "pos": "L",
+                "neg": "N"
+              }
+            },
+            {
+              "id": "FU1",
+              "type": "fuse",
+              "ratingA": 1,
+              "x": 220,
+              "y": 120,
+              "label": "FU1",
+              "terminals": {
+                "a": "L",
+                "b": "n1"
+              }
+            },
+            {
+              "id": "PB1",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NC",
+              "x": 385,
+              "y": 120,
+              "label": "PB1 (NC)",
+              "terminals": {
+                "in": "n1",
+                "out": "n2"
+              }
+            },
+            {
+              "id": "PB2",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NO",
+              "x": 565,
+              "y": 120,
+              "label": "PB2",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "CR1A",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 565,
+              "y": 185,
+              "label": "CR1 contact",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "CR1",
+              "type": "coil",
+              "ratedVolts": 24,
+              "ratedCurrent": "DC",
+              "x": 755,
+              "y": 120,
+              "label": "CR1",
+              "terminals": {
+                "a": "n3",
+                "b": "N"
+              }
+            }
+          ]
+        },
+        "caption": "The rung as it appears on the print."
+      }
+    },
+    {
+      "q": "You're handed a print with an unfamiliar rung: a normally-open contact labeled FU1-OK feeding a coil labeled M1-PERMIT, with no other symbols on the rung. Per the module's approach to reading a rung, what should you do before touching any wiring?",
+      "options": [
+        "Ignore the print and go straight to the panel with your meter since the print could be outdated",
+        "Read it left to right like a sentence: power from the left rail must pass through the FU1-OK contact to energize M1-PERMIT, so trace what drives FU1-OK first",
+        "Assume the coil is always energized since it's on the right side of the rung",
+        "Skip the rung since a single-contact rung can't be a real fault path"
+      ],
+      "correct": 1,
+      "why": "The module's core reading skill is left-to-right: identify what has to be true (FU1-OK closed) for the coil to energize, then trace backward to find what drives that contact. Going straight to the panel without reading the rung first throws away the print's biggest advantage -- turning a puzzle into a fast, directed check."
+    },
+    {
+      "q": "You're probing a rung left to right at 3 AM. You read full 24VDC at the wire between the NC Stop symbol and the Start/seal-in parallel branch, but 0V on the wire between that branch and the coil. What do you conclude?",
+      "options": [
+        "The gap is downstream of the parallel branch, so the fault is in that branch or its contacts, not the Stop button",
+        "The Stop button has failed and is blocking power",
+        "This is ghost voltage and can be ignored",
+        "The coil itself is open and needs replacing before checking anything else"
+      ],
+      "correct": 0,
+      "why": "Full voltage going INTO the Start/seal-in branch but 0V coming OUT of it means the open is in that parallel section (bad Start contact and no seal-in path, or both legs open) -- not at Stop, which already passed voltage through. Jumping straight to 'replace the coil' skips the left-to-right rung trace that would have pinpointed the actual gap first.",
+      "visual": {
+        "lesson": "m13-stop-button-3wire",
+        "caption": "The rung being probed — machine idle, buttons released."
+      }
+    },
+    {
+      "q": "A tech reads 24V at both coil terminals with a standard high-impedance multimeter, but the relay won't pull in. Per the module's ghost voltage warning, what's the correct next move?",
+      "options": [
+        "Replace the coil immediately since it's clearly getting full voltage but not pulling in",
+        "Switch the meter to LoZ mode (or clip a small load like a test light across the wire) and re-measure",
+        "Assume the print is wrong and rewire the rung from scratch",
+        "Increase the supply voltage to force the relay to pull in"
+      ],
+      "correct": 1,
+      "why": "Reading 24V (to common) at BOTH coil terminals means the return path is open: power passes through the high-impedance coil winding, so both terminals float at 24V relative to common while the coil itself has 0V ACROSS it — no current, no pull-in. A LoZ meter (or a small test load) gives the measurement a path to common, and the return-side reading collapses to ~0V, confirming the open return. Replacing the coil (option 1) would fix nothing."
+    },
+    {
+      "q": "You've been handed a rung to re-draw for a machine safety update. Where must the hardwired E-stop NC contact be placed relative to the Start/seal-in parallel branch, and why does it matter on the floor?",
+      "options": [
+        "Anywhere on the rung, since ladder logic evaluates all contacts simultaneously regardless of position",
+        "Leftmost, before the parallel branch, so a welded seal-in contact can't create a path around it",
+        "Immediately to the right of the coil, so it's the last thing power sees before the coil",
+        "In parallel with the seal-in contact so it has a backup path"
+      ],
+      "correct": 1,
+      "why": "The E-stop must sit leftmost so it's in series with every possible path to the coil, including a welded/sneaking seal-in branch; put it to the right of that branch (or in parallel with it) and power can sneak around the E-stop entirely even with the button pressed. Left-to-right position on a rung is a safety argument, not just drawing style."
+    },
+    {
+      "q": "A 24VDC relay coil has a rated pull-in of 90% of rated voltage. If three pitted contacts in series on the feed to that coil are each dropping 1.5V under load, what happens and why?",
+      "options": [
+        "Nothing -- coil voltage only matters at the coil terminals, not upstream contact drops",
+        "The coil sees roughly 19.5V, which is still above the ~21.6V pull-in threshold so it operates normally",
+        "The coil sees roughly 19.5V, below the ~21.6V (90% of 24V) pull-in threshold, so it may fail to pull in or chatter",
+        "The contacts will blow a fuse before the coil is affected"
+      ],
+      "correct": 2,
+      "why": "3 contacts x 1.5V = 4.5V lost in series before the coil, leaving about 19.5V at the coil -- below the 21.6VDC (90% of 24V) pull-in minimum the module calls out, so the relay can fail to pull in or chatter even though the supply at the left rail reads a healthy 24V. Voltage drop stacks across every series contact, it doesn't just matter at the coil terminals."
+    },
+    {
+      "q": "A technician re-drawing a machine's E-stop rung moves the hardwired E-stop contact to the right of the Start/seal-in parallel branch instead of leftmost, reasoning 'it still opens the circuit either way.' What is the real danger if this rung goes into service as drawn?",
+      "options": [
+        "None -- as long as the E-stop contact is somewhere on the rung, pressing it will always de-energize the coil",
+        "The rung will simply run slower, causing a delay before the coil drops out",
+        "If the seal-in contact welds or sneaks power around that branch, pressing E-stop no longer breaks the only path to the coil, so the machine keeps running with E-stop pressed",
+        "The coil will draw excess current and burn out, but the E-stop function itself is unaffected"
+      ],
+      "correct": 2,
+      "why": "Position on the rung matters: with E-stop to the right of the parallel branch, a welded or sneaking seal-in contact provides an alternate path to the coil that bypasses the E-stop contact entirely -- pressing E-stop won't stop the machine, which is exactly the hazard the module warns about. 'It opens the circuit either way' is only true if every other contact is healthy, and E-stop rungs must be designed for the failure case, not the healthy case."
+    },
+    {
+      "q": "In the print shown, what must be true for coil CR1 to energize?",
+      "options": [
+        "PB1 and PB2 must both be open",
+        "Only PB2 matters — PB1 is a spare contact on the rung",
+        "PB1 must stay closed AND at least one of PB2 or the CR1 contact must close — series first, then the parallel pair",
+        "The CR1 contact must open to let power through to the coil"
+      ],
+      "correct": 2,
+      "why": "Read the rung left to right: power crosses FU1, then the series contact PB1, then the parallel branch — PB2 OR the CR1 contact — before it can reach the coil. Series means AND, parallel means OR.",
+      "visual": {
+        "circuit": {
+          "id": "ev_generic_rung",
+          "nodes": [
+            {
+              "id": "L",
+              "x": 140,
+              "y": 120
+            },
+            {
+              "id": "n1",
+              "x": 300,
+              "y": 120
+            },
+            {
+              "id": "n2",
+              "x": 470,
+              "y": 120
+            },
+            {
+              "id": "n3",
+              "x": 660,
+              "y": 120
+            },
+            {
+              "id": "N",
+              "x": 860,
+              "y": 210
+            }
+          ],
+          "components": [
+            {
+              "id": "SRC",
+              "type": "source",
+              "current": "DC",
+              "volts": 24,
+              "x": 140,
+              "y": 210,
+              "label": "24VDC",
+              "terminals": {
+                "pos": "L",
+                "neg": "N"
+              }
+            },
+            {
+              "id": "FU1",
+              "type": "fuse",
+              "ratingA": 1,
+              "x": 220,
+              "y": 120,
+              "label": "FU1",
+              "terminals": {
+                "a": "L",
+                "b": "n1"
+              }
+            },
+            {
+              "id": "PB1",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NC",
+              "x": 385,
+              "y": 120,
+              "label": "PB1 (NC)",
+              "terminals": {
+                "in": "n1",
+                "out": "n2"
+              }
+            },
+            {
+              "id": "PB2",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NO",
+              "x": 565,
+              "y": 120,
+              "label": "PB2",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "CR1A",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 565,
+              "y": 185,
+              "label": "CR1 contact",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "CR1",
+              "type": "coil",
+              "ratedVolts": 24,
+              "ratedCurrent": "DC",
+              "x": 755,
+              "y": 120,
+              "label": "CR1",
+              "terminals": {
+                "a": "n3",
+                "b": "N"
+              }
+            }
+          ]
+        },
+        "caption": "The rung as it appears on the print — read it left to right."
+      }
+    }
+  ]
+}

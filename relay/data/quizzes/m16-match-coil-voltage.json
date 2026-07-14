@@ -1,0 +1,116 @@
+{
+  "moduleId": "m16-match-coil-voltage",
+  "title": "Match the Control Voltage to the Coil Voltage",
+  "questions": [
+    {
+      "q": "What is the basic rule for the voltage you feed a relay coil through your buttons and contacts?",
+      "options": [
+        "It must match the coil's rated voltage",
+        "It just needs to be DC, any DC voltage is fine",
+        "Higher is always safer than lower",
+        "It only matters for AC coils, not DC coils"
+      ],
+      "correct": 0,
+      "why": "Every coil is built for one specific voltage, so the control voltage you apply must match that rating exactly."
+    },
+    {
+      "q": "You apply 120VAC to a relay whose coil is rated 12VDC. What happens?",
+      "options": [
+        "It works fine, since 120VAC is more than enough",
+        "The coil burns up almost instantly (you let the smoke out)",
+        "Nothing happens at all, ever",
+        "It pulls in but runs a little warm"
+      ],
+      "correct": 1,
+      "why": "Feeding a small 12VDC coil with 120VAC is way too much pressure, so it overheats and fries almost instantly."
+    },
+    {
+      "q": "You apply only 12VDC to a relay whose coil is rated 120VAC. What do you see?",
+      "options": [
+        "Smoke pours out and the coil burns up",
+        "It pulls in, just slowly",
+        "Nothing happens at all, ever",
+        "It chatters on and off rapidly"
+      ],
+      "correct": 2,
+      "why": "Too little voltage can't build a strong enough magnet to pull the contacts, so the relay simply never energizes."
+    },
+    {
+      "q": "A relay won't pull in. You read 24VAC at its coil, but the part is stamped '24VDC coil.' What's wrong?",
+      "options": [
+        "The voltage is fine; the coil must be broken",
+        "Wrong type of voltage at the coil; it needs 24VDC, not 24VAC",
+        "Nothing is wrong; AC and DC are interchangeable at 24V",
+        "The control voltage is too high and will burn it out"
+      ],
+      "correct": 1,
+      "why": "The number matches but the type doesn't; a coil rated 24VDC needs steady DC, so feeding it 24VAC means it won't reliably pull in."
+    },
+    {
+      "q": "A packaging-line relay panel starts nuisance-dropping only in the afternoon, always fine again by morning. At 7 AM you meter 118VAC at the coil terminals. At 2 PM, same meter, same coil terminals, you read 101VAC. What's the most likely cause?",
+      "options": [
+        "The relay coil itself is degrading with age and needs replacement",
+        "The control transformer is undersized and its output sags as it heats up under load through the day",
+        "Ambient plant temperature is affecting the meter's accuracy",
+        "The contacts are pitted and need to be filed down"
+      ],
+      "correct": 1,
+      "why": "A marginal-VA transformer heats up over hours of load cycling, its winding resistance climbs, and secondary voltage droops below the coil's reliable pull-in threshold by afternoon, then cools and recovers overnight. The meter and contacts aren't the variable here — the coil terminal reading itself is dropping over the course of the day, which points straight at the supply, not the relay or contacts."
+    },
+    {
+      "q": "You swap in a replacement relay, same part number, same footprint as the one that failed. Before energizing it you check the transformer secondary open-circuit and read a solid 118VAC, so you sign off on the panel. Two hours later it's chattering under load. What did you skip?",
+      "options": [
+        "You should have used a higher-VA transformer instead of trusting the reading",
+        "You should have measured voltage AT the coil terminals with the relay(s) actually loaded, not the transformer open-circuit",
+        "You should have re-torqued the coil terminal screws before testing",
+        "You should have measured the coil's DC resistance with an ohmmeter first"
+      ],
+      "correct": 1,
+      "why": "An open-circuit transformer reading tells you nothing about what the coil actually sees once real load is pulling current — a transformer that reads 118VAC unloaded can collapse to under 100VAC with several coils energized at once. Always meter at the coil terminals under the panel's normal running load before calling it good."
+    },
+    {
+      "q": "You're speccing a replacement relay for a 120VAC motor starter circuit that also needs to switch a 24VDC indicator lamp through a second contact block on the same relay. What must you check on the datasheet?",
+      "options": [
+        "Only the coil voltage rating — contacts on the same relay always share one voltage rating",
+        "Only the contact voltage rating — the coil rating doesn't matter if the relay physically fits",
+        "Both the coil voltage rating (must match your 120VAC control circuit) and the contact voltage/current rating for each load you're switching, since coil and contact ratings are independent specs",
+        "Nothing — as long as the relay's terminal size matches the wire gauge, ratings are not a comissioning concern"
+      ],
+      "correct": 2,
+      "why": "Coil voltage (what energizes the relay) and contact rating (what the contacts can safely switch) are two separate specs on the datasheet, and a single relay can legally have a 120VAC coil while its contacts are rated for multiple different loads including 24VDC. Checking only one side, or assuming they must match each other, is exactly the mix-up that leads to arcing and pitted contacts on an undersized load."
+    },
+    {
+      "q": "A 24VDC coil measures 300 ohms of resistance. Someone accidentally wires it to 120VAC instead of 24VDC. Roughly how much power does the coil dissipate at that instant compared to its rated 1.9W, using P = V²/R?",
+      "options": [
+        "About the same, roughly 2W, since resistance stays constant",
+        "About double, roughly 4W",
+        "About 25x rated power, roughly 48W",
+        "About half, roughly 1W, since AC is less effective than DC at heating a coil"
+      ],
+      "correct": 2,
+      "why": "P = V²/R gives 120²/300 = 48W versus the rated 24²/300 = 1.9W — roughly 25 times the rated power dissipated in the same winding, which is why the insulation vaporizes in seconds instead of gradually overheating. This is the same math that shows why even a seemingly modest overvoltage error gets amplified hugely by the squared term."
+    },
+    {
+      "q": "A tech figures a slightly undersized control transformer is 'good enough' because the coils still pull in most of the time, and leaves it in service on a machine with four starters. What's the real risk of ignoring that chronic under-voltage condition?",
+      "options": [
+        "None — as long as the relay eventually pulls in, the circuit is safe long-term",
+        "Only nuisance downtime from occasional dropouts, with no equipment damage risk",
+        "Repeated chatter drives repeated inrush spikes every cycle, running the coil hot until the winding insulation fails, plus unpredictable dropout of safety-relevant control circuits at the worst possible moment",
+        "The transformer will simply blow a fuse and shut everything down safely before any coil is damaged"
+      ],
+      "correct": 2,
+      "why": "Every chatter cycle re-triggers an inrush spike, and a coil chattering under chronic low voltage runs hotter than its spec until the winding insulation fails — on top of that, an unpredictable dropout is a control-reliability problem, not just a nuisance, especially if that relay is doing anything safety-related. A tripped fuse is not guaranteed; marginal sag often just causes chronic chatter without ever tripping protection, so the damage accumulates silently."
+    },
+    {
+      "q": "You need to run a 120VAC load through the contacts of a relay whose datasheet lists contacts rated only for 24VDC/2A, because it was the only relay on hand with the right coil voltage. What's the danger if you use it anyway?",
+      "options": [
+        "None — contact ratings are just conservative manufacturer suggestions, not hard limits",
+        "The coil will overheat, since contact load current feeds back into the coil circuit",
+        "The contacts will arc and pit on every open cycle because the load exceeds their rating, and a DC contact rating is always lower than the equivalent AC rating for the same physical contacts, so the mismatch can be worse than the numbers first suggest",
+        "Nothing dangerous happens as long as the coil voltage itself is correct"
+      ],
+      "correct": 2,
+      "why": "Contact rating is a separate spec from coil rating, and it exists because arcing behavior differs by load type — AC arcs self-extinguish at the zero crossing while DC arcs must be physically broken, so a contact block rated for light 24VDC duty will pit and eventually weld or fail open when forced to switch a heavier 120VAC load it was never rated for. Coil voltage being correct doesn't protect the contacts; the two ratings must each be checked against their own circuit."
+    }
+  ]
+}

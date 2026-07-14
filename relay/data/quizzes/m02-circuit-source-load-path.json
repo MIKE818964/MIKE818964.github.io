@@ -1,0 +1,189 @@
+{
+  "moduleId": "m02-circuit-source-load-path",
+  "title": "A Circuit Needs Three Things: Source, Path, Load",
+  "questions": [
+    {
+      "q": "What are the three parts every working circuit must have?",
+      "options": [
+        "Source, path, and load",
+        "Voltage, copper, and a fuse",
+        "Battery, switch, and a meter",
+        "Pressure, heat, and light"
+      ],
+      "correct": 0,
+      "why": "Every working circuit needs a SOURCE for pressure, a PATH for the electricity to travel, and a LOAD that does the work."
+    },
+    {
+      "q": "In a flashlight, which part is the LOAD?",
+      "options": [
+        "The bulb",
+        "The battery",
+        "The metal strips",
+        "The slide switch"
+      ],
+      "correct": 0,
+      "why": "The bulb is the load — it turns electricity into useful work (light). The battery is the source and the metal strips are the path."
+    },
+    {
+      "q": "What does the word 'load' actually mean?",
+      "options": [
+        "The part that does the real work, like a bulb or motor",
+        "The wire that carries the electricity",
+        "The switch that opens and closes",
+        "The pressure pushing the current"
+      ],
+      "correct": 0,
+      "why": "A load converts electrical energy into light, motion, heat, or sound; wires and switches only carry or control the electricity."
+    },
+    {
+      "q": "A flashlight goes dark even though the battery is good and the bulb is fine. A break is found in one of the metal strips. Which of the three parts has failed?",
+      "options": [
+        "The path",
+        "The source",
+        "The load",
+        "Nothing — it should still work"
+      ],
+      "correct": 0,
+      "why": "The metal strips are the path; break the path and the loop is no longer complete, so the bulb cannot light even with a good source and load."
+    },
+    {
+      "q": "A machine is completely dead — control panel dark, nothing responds — but the main breaker upstream has NOT tripped. Where should you put your meter leads first?",
+      "options": [
+        "At the source (supply terminals) to confirm voltage is actually present before checking anything downstream",
+        "At the load, since that's where the symptom is showing up",
+        "Across the nearest terminal block screw, since loose connections are the most common fault",
+        "At the control relay coil, since relays fail most often"
+      ],
+      "correct": 0,
+      "why": "Work from the source outward. If you start at the load and read 0V, you still don't know if the source is dead or the path is open — you've learned nothing. Confirming source voltage first tells you immediately whether the problem is upstream (source/control transformer/fuse) or downstream (path), so you don't waste an hour chasing a contact when the transformer was dead all along."
+    },
+    {
+      "q": "A 24VDC solenoid coil hums and chatters instead of pulling in. With the coil trying to energize, you measure 18V at its terminals, and 24V at the source. What's the most likely explanation and what should you do next?",
+      "options": [
+        "18V is within normal range for a 24VDC coil, so no action is needed",
+        "There's excess resistance somewhere in the path between source and coil; calculate path resistance using the voltage drop and coil current, then trace terminals for the bad connection",
+        "The coil itself is failing internally and should be replaced immediately",
+        "The source is weak and needs a bigger transformer"
+      ],
+      "correct": 1,
+      "why": "24V at the source but only 18V at the coil means something in the path between them is eating 6V — that's a bad connection, not a bad coil or a weak source (the source is proven good at 24V). 18V is also below the ~85% (20.4V) pull-in threshold, which is why it's chattering. Divide the 6V drop by the coil current to get the path resistance, then walk the terminals to find it, like the gate solenoid war story."
+    },
+    {
+      "q": "You just finished a new wiring installation. The load never energizes at all, but the path looks correct by eye and you've confirmed full source voltage is present. What's the right next check?",
+      "options": [
+        "Assume the path has a hidden break and re-run new wire from source to load",
+        "Check the breaker size, since an oversized breaker would prevent the load from energizing",
+        "Power off the circuit and measure resistance across the load itself, checking for an open (infinite resistance/OL) winding",
+        "Increase the source voltage until the load responds"
+      ],
+      "correct": 2,
+      "why": "Source is confirmed good and the path looks intact, so by process of elimination the load itself is the remaining suspect. An open coil or solenoid winding reads infinite resistance (OL) on a meter with power off. Re-running wire or changing breaker size skips straight past the one component you haven't actually tested yet."
+    },
+    {
+      "q": "A machine's breaker trips the instant power is applied. You disconnect the load from the path and re-energize — the breaker holds. What does that tell you, and what's your next step?",
+      "options": [
+        "The short is in the path wiring, so start replacing wire runs",
+        "Nothing conclusive — reconnect everything and try a bigger breaker",
+        "The breaker itself is faulty and needs to be swapped",
+        "The short is inside the load itself (e.g., a shorted coil winding); the path and source are cleared, so replace or repair the load"
+      ],
+      "correct": 3,
+      "why": "If removing the load lets the breaker hold, the bolted short was traveling through the load when it was connected — meaning the load, not the path, is where the near-zero-resistance fault lives. If it had still tripped with the load disconnected, that would point to the path/wiring instead. A bigger breaker just masks the short longer before something overheats."
+    },
+    {
+      "q": "You measure 24V at the source and 14V at the load terminals of an energized 24VDC circuit. The load is drawing 0.5A. How many ohms of resistance are hiding in the path?",
+      "options": [
+        "5 ohms",
+        "14 ohms",
+        "20 ohms",
+        "0.5 ohms"
+      ],
+      "correct": 2,
+      "why": "Voltage drop = 24V minus 14V = 10V. Using V = I x R, solve for R: R = V / I = 10V / 0.5A = 20 ohms. That's 20 ohms of bad connections (corroded terminals, loose screws) burning up voltage before it ever reaches the load."
+    },
+    {
+      "q": "A tech measures a terminal block with the circuit at rest (no load drawing current) and gets a clean 24V reading, so he signs off the connection as good. Two hours later the machine drops out intermittently. What did the open-circuit-only check miss, and why does that matter beyond just downtime?",
+      "options": [
+        "Nothing — an open-circuit reading and a loaded reading are always the same, so the second failure must be unrelated",
+        "A loose or corroding terminal can measure fine with no current flowing but collapse once the load demands current — repeated heating at that resistive joint can eventually cause arcing or a burned terminal, a fire and equipment-damage risk, not just a nuisance fault",
+        "The meter was miscalibrated; open-circuit tests are always reliable and don't need to be repeated under load",
+        "The problem is guaranteed to be the load itself, since the path already tested good at rest"
+      ],
+      "correct": 1,
+      "why": "A meter in open-circuit state can show full voltage right through a high-resistance joint because no current is flowing to reveal the drop. Under load, that same joint can collapse to a few volts as current forces the voltage drop across the resistance — and that resistive joint dissipates heat (I-squared-R) every cycle, which over time can carbonize insulation or arc, turning an intermittent nuisance into a real fire/equipment hazard. Always re-check suspect terminals with the load energized."
+    },
+    {
+      "q": "In the print shown, which component is the LOAD — the part the circuit exists to power?",
+      "options": [
+        "The 24VDC supply on the left",
+        "LT1 — the lamp; it's the device that turns current into useful work",
+        "PB1 — the pushbutton",
+        "The wire between PB1 and LT1"
+      ],
+      "correct": 1,
+      "why": "On any print the load is the device that converts current into work — here the lamp LT1. The supply is the source, PB1 is a contact in the path, and wire is just path.",
+      "visual": {
+        "circuit": {
+          "id": "ev_one_rung_lamp",
+          "nodes": [
+            {
+              "id": "nPos",
+              "x": 160,
+              "y": 140
+            },
+            {
+              "id": "nA",
+              "x": 460,
+              "y": 140
+            },
+            {
+              "id": "nNeg",
+              "x": 160,
+              "y": 340
+            }
+          ],
+          "components": [
+            {
+              "id": "SRC",
+              "type": "source",
+              "current": "DC",
+              "volts": 24,
+              "x": 160,
+              "y": 240,
+              "label": "24VDC",
+              "terminals": {
+                "pos": "nPos",
+                "neg": "nNeg"
+              }
+            },
+            {
+              "id": "PB1",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NO",
+              "x": 310,
+              "y": 140,
+              "label": "PB1",
+              "terminals": {
+                "in": "nPos",
+                "out": "nA"
+              }
+            },
+            {
+              "id": "LT1",
+              "type": "bulb",
+              "x": 600,
+              "y": 140,
+              "label": "LT1",
+              "terminals": {
+                "a": "nA",
+                "b": "nNeg"
+              }
+            }
+          ]
+        },
+        "caption": "A one-rung print: supply on the left, one button, one lamp."
+      }
+    }
+  ]
+}

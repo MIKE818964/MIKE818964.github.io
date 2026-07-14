@@ -1,0 +1,814 @@
+{
+  "moduleId": "m22-timer-sequence-build",
+  "title": "Build the Fan + Conveyor Timed Sequence",
+  "questions": [
+    {
+      "q": "In the fan-and-conveyor sequence, which device turns on FIRST when you press Start?",
+      "options": [
+        "The conveyor",
+        "The fan",
+        "Both at the exact same instant",
+        "Neither until 5 seconds pass"
+      ],
+      "correct": 1,
+      "why": "Pressing Start runs the fan immediately while the on-delay timer holds the conveyor off, so the fan leads and the conveyor follows 5 seconds later.",
+      "visual": {
+        "circuit": {
+          "id": "ev_fan_conveyor_seq",
+          "nodes": [
+            {
+              "id": "L",
+              "x": 140,
+              "y": 120
+            },
+            {
+              "id": "n1",
+              "x": 300,
+              "y": 120
+            },
+            {
+              "id": "n2",
+              "x": 470,
+              "y": 120
+            },
+            {
+              "id": "n3",
+              "x": 660,
+              "y": 120
+            },
+            {
+              "id": "nC2",
+              "x": 660,
+              "y": 230
+            },
+            {
+              "id": "nC3",
+              "x": 660,
+              "y": 320
+            },
+            {
+              "id": "nFan",
+              "x": 660,
+              "y": 410
+            },
+            {
+              "id": "nCnv",
+              "x": 660,
+              "y": 500
+            },
+            {
+              "id": "N",
+              "x": 880,
+              "y": 310
+            }
+          ],
+          "components": [
+            {
+              "id": "SRC",
+              "type": "source",
+              "current": "AC",
+              "volts": 120,
+              "x": 140,
+              "y": 310,
+              "label": "120VAC",
+              "terminals": {
+                "pos": "L",
+                "neg": "N"
+              }
+            },
+            {
+              "id": "FU1",
+              "type": "fuse",
+              "ratingA": 2,
+              "x": 220,
+              "y": 120,
+              "label": "FU1",
+              "terminals": {
+                "a": "L",
+                "b": "n1"
+              }
+            },
+            {
+              "id": "STOP",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NC",
+              "x": 385,
+              "y": 120,
+              "label": "Stop (NC)",
+              "terminals": {
+                "in": "n1",
+                "out": "n2"
+              }
+            },
+            {
+              "id": "START",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NO",
+              "x": 565,
+              "y": 120,
+              "label": "Start",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "SEAL",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 565,
+              "y": 185,
+              "label": "CR1 seal-in",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "CR1",
+              "type": "coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 120,
+              "label": "CR1 latch",
+              "terminals": {
+                "a": "n3",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR1A",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 470,
+              "y": 230,
+              "label": "CR1",
+              "terminals": {
+                "in": "n1",
+                "out": "nC2"
+              }
+            },
+            {
+              "id": "CR2",
+              "type": "timer_coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 230,
+              "label": "CR2 off-delay",
+              "terminals": {
+                "a": "nC2",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR1B",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 470,
+              "y": 320,
+              "label": "CR1",
+              "terminals": {
+                "in": "n1",
+                "out": "nC3"
+              }
+            },
+            {
+              "id": "CR3",
+              "type": "timer_coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 320,
+              "label": "CR3 on-delay",
+              "terminals": {
+                "a": "nC3",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR2T",
+              "type": "contact_no",
+              "coil": "CR2",
+              "x": 470,
+              "y": 410,
+              "label": "CR2 timed",
+              "terminals": {
+                "in": "n1",
+                "out": "nFan"
+              }
+            },
+            {
+              "id": "FAN",
+              "type": "motor",
+              "x": 770,
+              "y": 410,
+              "label": "Fan",
+              "terminals": {
+                "a": "nFan",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR3T",
+              "type": "contact_no",
+              "coil": "CR3",
+              "x": 470,
+              "y": 500,
+              "label": "CR3 timed",
+              "terminals": {
+                "in": "n1",
+                "out": "nCnv"
+              }
+            },
+            {
+              "id": "CONV",
+              "type": "motor",
+              "x": 770,
+              "y": 500,
+              "label": "Conveyor",
+              "terminals": {
+                "a": "nCnv",
+                "b": "N"
+              }
+            }
+          ]
+        },
+        "caption": "the sequence print — drawn de-energized."
+      }
+    },
+    {
+      "q": "When you press Stop, what happens to the conveyor and the fan?",
+      "options": [
+        "Both stop instantly",
+        "The conveyor stops instantly; the fan keeps running about 5 seconds",
+        "The fan stops instantly; the conveyor keeps running about 5 seconds",
+        "Both keep running about 5 seconds"
+      ],
+      "correct": 1,
+      "why": "On Stop the conveyor (on-delay) cuts immediately, while the fan stays on via the off-delay timer for about 5 seconds to clear the air.",
+      "visual": {
+        "circuit": {
+          "id": "ev_fan_conveyor_seq",
+          "nodes": [
+            {
+              "id": "L",
+              "x": 140,
+              "y": 120
+            },
+            {
+              "id": "n1",
+              "x": 300,
+              "y": 120
+            },
+            {
+              "id": "n2",
+              "x": 470,
+              "y": 120
+            },
+            {
+              "id": "n3",
+              "x": 660,
+              "y": 120
+            },
+            {
+              "id": "nC2",
+              "x": 660,
+              "y": 230
+            },
+            {
+              "id": "nC3",
+              "x": 660,
+              "y": 320
+            },
+            {
+              "id": "nFan",
+              "x": 660,
+              "y": 410
+            },
+            {
+              "id": "nCnv",
+              "x": 660,
+              "y": 500
+            },
+            {
+              "id": "N",
+              "x": 880,
+              "y": 310
+            }
+          ],
+          "components": [
+            {
+              "id": "SRC",
+              "type": "source",
+              "current": "AC",
+              "volts": 120,
+              "x": 140,
+              "y": 310,
+              "label": "120VAC",
+              "terminals": {
+                "pos": "L",
+                "neg": "N"
+              }
+            },
+            {
+              "id": "FU1",
+              "type": "fuse",
+              "ratingA": 2,
+              "x": 220,
+              "y": 120,
+              "label": "FU1",
+              "terminals": {
+                "a": "L",
+                "b": "n1"
+              }
+            },
+            {
+              "id": "STOP",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NC",
+              "x": 385,
+              "y": 120,
+              "label": "Stop (NC)",
+              "terminals": {
+                "in": "n1",
+                "out": "n2"
+              }
+            },
+            {
+              "id": "START",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NO",
+              "x": 565,
+              "y": 120,
+              "label": "Start",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "SEAL",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 565,
+              "y": 185,
+              "label": "CR1 seal-in",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "CR1",
+              "type": "coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 120,
+              "label": "CR1 latch",
+              "terminals": {
+                "a": "n3",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR1A",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 470,
+              "y": 230,
+              "label": "CR1",
+              "terminals": {
+                "in": "n1",
+                "out": "nC2"
+              }
+            },
+            {
+              "id": "CR2",
+              "type": "timer_coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 230,
+              "label": "CR2 off-delay",
+              "terminals": {
+                "a": "nC2",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR1B",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 470,
+              "y": 320,
+              "label": "CR1",
+              "terminals": {
+                "in": "n1",
+                "out": "nC3"
+              }
+            },
+            {
+              "id": "CR3",
+              "type": "timer_coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 320,
+              "label": "CR3 on-delay",
+              "terminals": {
+                "a": "nC3",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR2T",
+              "type": "contact_no",
+              "coil": "CR2",
+              "x": 470,
+              "y": 410,
+              "label": "CR2 timed",
+              "terminals": {
+                "in": "n1",
+                "out": "nFan"
+              }
+            },
+            {
+              "id": "FAN",
+              "type": "motor",
+              "x": 770,
+              "y": 410,
+              "label": "Fan",
+              "terminals": {
+                "a": "nFan",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR3T",
+              "type": "contact_no",
+              "coil": "CR3",
+              "x": 470,
+              "y": 500,
+              "label": "CR3 timed",
+              "terminals": {
+                "in": "n1",
+                "out": "nCnv"
+              }
+            },
+            {
+              "id": "CONV",
+              "type": "motor",
+              "x": 770,
+              "y": 500,
+              "label": "Conveyor",
+              "terminals": {
+                "a": "nCnv",
+                "b": "N"
+              }
+            }
+          ]
+        },
+        "caption": "the sequence print — drawn de-energized."
+      }
+    },
+    {
+      "q": "In the sequence, what is the on-delay timer (CR3) used for?",
+      "options": [
+        "Holding the fan on after Stop",
+        "Delaying the conveyor until 5 seconds after Start",
+        "Latching the whole circuit on",
+        "Matching the coil voltage"
+      ],
+      "correct": 1,
+      "why": "CR3 is the on-delay timer that waits 5 seconds after Start before letting the conveyor run, so the fan is already moving first."
+    },
+    {
+      "q": "When you press Start, the control relay CR1 latches and also does what?",
+      "options": [
+        "Energizes both timer relays at once",
+        "Shuts off both timers",
+        "Reverses the motor direction",
+        "Steps the voltage down to 24VDC"
+      ],
+      "correct": 0,
+      "why": "Pressing Start latches CR1 and energizes the coils for both timers. That begins the on-delay timer's timing period immediately. The off-delay timer energizes too, but its timed delay period only begins later — after Stop is pressed and its coil DE-energizes. Off-delay timers time on the way OUT, not the way in."
+    },
+    {
+      "q": "Third shift calls: the fan runs fine on Start, but 15 seconds later the conveyor still hasn't started, and CR3's timed-out LED is lit. With the panel de-energized and LOTO applied, what should you check FIRST?",
+      "options": [
+        "The fan contactor's coil resistance",
+        "Whether CR1's seal-in contact is wired to the Stop pushbutton",
+        "The control transformer's secondary fuse rating",
+        "Resistance across CR3's output (timed-close) contact — should read under 0.5 ohms"
+      ],
+      "correct": 3,
+      "why": "The timer showing timed-out but the conveyor not starting is the classic pitted-output-contact symptom from the war story — a healthy contact reads under 0.5 ohms closed, while a pitted one can read 150-400 ohms and drop enough voltage to starve the conveyor contactor coil. The fan contactor and CR1's seal-in wiring aren't in this path since the fan is already running correctly; checking a fuse rating doesn't explain an LED that shows timed-out with no output.",
+      "topic": "diagnostic"
+    },
+    {
+      "q": "You press Stop and immediately probe the fan contactor's coil terminals with CR1 already dropped out. You read 0VAC instantly instead of holding voltage for 5 seconds. What does this tell you?",
+      "options": [
+        "CR2's timing capacitor has failed and needs replacement",
+        "The fan contactor is wired through CR1's direct NO contact instead of through CR2's timed-open output contact",
+        "The control transformer is undersized and sagging",
+        "CR1's coil has a shorted turn"
+      ],
+      "correct": 1,
+      "why": "Per the wiring trap in the deep dive, the fan contactor must be fed through CR2's own timed-open output contact so it stays powered during the off-delay period; if it's fed from CR1's NO contact directly, voltage collapses the instant CR1 drops out and the off-delay becomes decorative. A bad capacitor or transformer sag would show up as timing drift, not an instant 0V reading, and this symptom isn't consistent with a shorted CR1 coil.",
+      "topic": "diagnostic"
+    },
+    {
+      "q": "You're wiring up the sequence on a new panel. Where should the coils for CR2 (off-delay) and CR3 (on-delay) get their power from?",
+      "options": [
+        "Downstream of CR1's auxiliary NO contact, in series with the fan and conveyor contactors",
+        "Directly off the same terminals as CR1's coil, wire-nutted in parallel",
+        "From their own separate fused branch off the supply, not downstream of an auxiliary contact carrying the main latch",
+        "From the load side of the fan contactor so they only run once the fan is confirmed on"
+      ],
+      "correct": 2,
+      "why": "The field notes are explicit: timer coils should always get their own fused branch, separate from any auxiliary contact carrying the main latch, to prevent inrush pile-up on Start and to let you isolate the timer circuit for testing without disturbing the main latch. Feeding them downstream of CR1's aux contact stacks CR2 and CR3 inrush onto the same contact CR1 is trying to seal through, which is the load-stacking problem that causes chatter.",
+      "topic": "application"
+    },
+    {
+      "q": "The plant wants to add two more permissive interlocks (a guard door switch and a low-level sensor) in series with the Start path ahead of CR1. What's the correct way to think about this addition per the deep dive on interlock pile-up?",
+      "options": [
+        "It's free — extra NC contacts in series don't affect reliability, only the wiring diagram gets bigger",
+        "Each added NC contact in series is a legitimate safety improvement but also a new point of failure that can silently block Start, so each one needs to be verifiable with a meter",
+        "Interlocks should be wired in parallel with the Start button instead of in series to avoid nuisance trips",
+        "Since CR1 already has a seal-in contact, additional interlocks are redundant and should be skipped"
+      ],
+      "correct": 1,
+      "why": "The deep dive is direct about this: adding permissives/limits/safety relays in series with Start is correct and necessary, but every added NC contact is another potential failure point that can prevent the machine from starting with no obvious symptom. Wiring interlocks in parallel would defeat their safety purpose, and calling them redundant with the seal-in ignores that a seal-in contact holds the circuit ON, it doesn't perform the same safety-permissive function.",
+      "topic": "application"
+    },
+    {
+      "q": "You measure 108VAC at CR3's coil terminals while the machine is running mid-afternoon (heater banks loaded), versus 120VAC at the transformer secondary. The conveyor is now starting 3 seconds later than the spec 5-second mark. Roughly why is this happening?",
+      "options": [
+        "108VAC is below the 85% pick-up threshold, so CR3 is chattering and re-triggering",
+        "The wire gauge to CR3 is now open-circuit and the timer is running on stray capacitance",
+        "120VAC to 108VAC is within the ±10% timing tolerance and should have zero effect on delay time",
+        "The lower voltage at the coil slows the RC timing circuit's capacitor charge rate, stretching the delay beyond spec"
+      ],
+      "correct": 3,
+      "why": "The deep dive explains that a solid-state timer's RC timing circuit charges its capacitor slower at lower voltage, stretching a 5-second delay to 6.8 seconds or more — consistent with the 3-second-late symptom here, which is a voltage-drop/timing-drift problem, not a pick-up-threshold chatter problem (108VAC is still well above the 102VAC pick-up minimum for a 120V coil). An open circuit would read 0V, not 108V, and ±10% timing tolerance applies to the timer's own accuracy spec, not to compensating for supply sag on top of it.",
+      "topic": "numbers"
+    },
+    {
+      "q": "A tech decides to skip giving CR2 and CR3 their own fused branch and instead feeds both timer coils off CR1's auxiliary NO contact using the same 14AWG wire that was already run for the seal-in path, reasoning it 'saves a wire pull.' What's the real risk if this circuit is left this way long-term?",
+      "options": [
+        "Nothing meaningful — timers only draw a few milliamps so the extra load is negligible",
+        "The inrush of the two timer coils, pulling through CR1's auxiliary contact just as CR1 itself picks up, can sag the control voltage enough to make CR1 chatter, pitting its contacts",
+        "The timers will simply run 10% faster than spec, which is within normal tolerance",
+        "The seal-in path will fail to latch on the very first Start press every time"
+      ],
+      "correct": 1,
+      "why": "The load-stacking risk is real but sequential: CR1 pulls in first, and the instant its auxiliary contact closes it must carry both timer coils' inrush on the same control run — right while CR1 is still seating. That added sag at pickup is what makes CR1 chatter and pit its contacts; a separate fused branch for the timer coils removes the stack.",
+      "topic": "consequence"
+    },
+    {
+      "q": "In the print shown, you press START and hold it. Before any delay has elapsed, which coils are energized?",
+      "options": [
+        "Only CR1 — the timer coils wait out their delays before energizing",
+        "CR1, CR2, and CR3 all at once — the delays live in the timers' contacts, not in their coils",
+        "CR1 and CR2 only — an on-delay coil energizes after its delay",
+        "Only CR2 and CR3 — CR1 waits for its seal-in to close first"
+      ],
+      "correct": 1,
+      "why": "Rungs 2 and 3 feed CR2 and CR3 through plain CR1 contacts, so both timer coils get power the instant CR1 pulls in. An on-delay times its CONTACT transfer after the coil energizes; an off-delay times its contact release after the coil de-energizes — the coils themselves are never delayed.",
+      "visual": {
+        "circuit": {
+          "id": "ev_fan_conveyor_seq",
+          "nodes": [
+            {
+              "id": "L",
+              "x": 140,
+              "y": 120
+            },
+            {
+              "id": "n1",
+              "x": 300,
+              "y": 120
+            },
+            {
+              "id": "n2",
+              "x": 470,
+              "y": 120
+            },
+            {
+              "id": "n3",
+              "x": 660,
+              "y": 120
+            },
+            {
+              "id": "nC2",
+              "x": 660,
+              "y": 230
+            },
+            {
+              "id": "nC3",
+              "x": 660,
+              "y": 320
+            },
+            {
+              "id": "nFan",
+              "x": 660,
+              "y": 410
+            },
+            {
+              "id": "nCnv",
+              "x": 660,
+              "y": 500
+            },
+            {
+              "id": "N",
+              "x": 880,
+              "y": 310
+            }
+          ],
+          "components": [
+            {
+              "id": "SRC",
+              "type": "source",
+              "current": "AC",
+              "volts": 120,
+              "x": 140,
+              "y": 310,
+              "label": "120VAC",
+              "terminals": {
+                "pos": "L",
+                "neg": "N"
+              }
+            },
+            {
+              "id": "FU1",
+              "type": "fuse",
+              "ratingA": 2,
+              "x": 220,
+              "y": 120,
+              "label": "FU1",
+              "terminals": {
+                "a": "L",
+                "b": "n1"
+              }
+            },
+            {
+              "id": "STOP",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NC",
+              "x": 385,
+              "y": 120,
+              "label": "Stop (NC)",
+              "terminals": {
+                "in": "n1",
+                "out": "n2"
+              }
+            },
+            {
+              "id": "START",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NO",
+              "x": 565,
+              "y": 120,
+              "label": "Start",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "SEAL",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 565,
+              "y": 185,
+              "label": "CR1 seal-in",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "CR1",
+              "type": "coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 120,
+              "label": "CR1 latch",
+              "terminals": {
+                "a": "n3",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR1A",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 470,
+              "y": 230,
+              "label": "CR1",
+              "terminals": {
+                "in": "n1",
+                "out": "nC2"
+              }
+            },
+            {
+              "id": "CR2",
+              "type": "timer_coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 230,
+              "label": "CR2 off-delay",
+              "terminals": {
+                "a": "nC2",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR1B",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 470,
+              "y": 320,
+              "label": "CR1",
+              "terminals": {
+                "in": "n1",
+                "out": "nC3"
+              }
+            },
+            {
+              "id": "CR3",
+              "type": "timer_coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 320,
+              "label": "CR3 on-delay",
+              "terminals": {
+                "a": "nC3",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR2T",
+              "type": "contact_no",
+              "coil": "CR2",
+              "x": 470,
+              "y": 410,
+              "label": "CR2 timed",
+              "terminals": {
+                "in": "n1",
+                "out": "nFan"
+              }
+            },
+            {
+              "id": "FAN",
+              "type": "motor",
+              "x": 770,
+              "y": 410,
+              "label": "Fan",
+              "terminals": {
+                "a": "nFan",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR3T",
+              "type": "contact_no",
+              "coil": "CR3",
+              "x": 470,
+              "y": 500,
+              "label": "CR3 timed",
+              "terminals": {
+                "in": "n1",
+                "out": "nCnv"
+              }
+            },
+            {
+              "id": "CONV",
+              "type": "motor",
+              "x": 770,
+              "y": 500,
+              "label": "Conveyor",
+              "terminals": {
+                "a": "nCnv",
+                "b": "N"
+              }
+            }
+          ]
+        },
+        "caption": "The sequence print — trace which rungs feed CR2 and CR3."
+      }
+    }
+  ]
+}

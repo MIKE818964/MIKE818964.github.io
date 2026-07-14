@@ -1,0 +1,120 @@
+{
+  "moduleId": "m15-poles-for-3phase",
+  "title": "Using the Poles: 1 to Latch, 3 for 3-Phase",
+  "questions": [
+    {
+      "q": "What is three-phase power?",
+      "options": [
+        "Three hot legs (L1, L2, L3) whose pressures take turns, spinning motors smoothly and powerfully",
+        "Three separate batteries wired in a row",
+        "One hot leg switched on and off three times a second",
+        "Three different voltages stacked on one wire"
+      ],
+      "correct": 0,
+      "why": "Three-phase delivers power on three hot legs that peak at different moments, which turns industrial motors smoothly and with lots of torque."
+    },
+    {
+      "q": "In the example, a 4PST motor starter has four poles. What is each one doing?",
+      "options": [
+        "One pole is the seal-in to latch the control circuit; the other three carry L1, L2, and L3 to the motor",
+        "All four poles carry one leg of power each to a four-wire motor",
+        "Two poles latch the control and two carry power",
+        "One pole carries power and three are spares"
+      ],
+      "correct": 0,
+      "why": "The design uses one of the four poles as the seal-in holding contact and lets the remaining three each carry one leg of the 3-phase power to the motor."
+    },
+    {
+      "q": "How many separate coils does a 4PST motor starter need to do both jobs — latch the control AND power all three motor legs?",
+      "options": [
+        "One coil — energizing it closes all four poles together",
+        "Four coils, one per pole",
+        "Three coils, one per phase",
+        "Two coils, one for control and one for power"
+      ],
+      "correct": 0,
+      "why": "A single coil pulls in all four poles at the same instant, so one coil latches the control circuit and powers the three motor legs at once."
+    },
+    {
+      "q": "A technician wires the seal-in to one pole and L1/L2/L3 to the other three, then presses Start. What happens when the coil energizes?",
+      "options": [
+        "All four poles close together — the control latches on and the motor gets all three legs",
+        "Only the seal-in pole closes; the motor legs need a second press",
+        "The motor legs close first, then the seal-in a few seconds later",
+        "Only the three motor legs close; the control does not latch"
+      ],
+      "correct": 0,
+      "why": "Because one coil throws all four poles simultaneously, the latch seals in and all three phases reach the motor at the same moment Start is pressed.",
+      "visual": {
+        "lesson": "m15-poles-for-3phase",
+        "caption": "The 4-pole starter wiring — at rest, Start not yet pressed."
+      }
+    },
+    {
+      "q": "A 30HP blender motor is running. You clamp all three legs at the motor terminals and read L1 = 205% of nameplate, L2 = 198% of nameplate, L3 = 0A. The motor is humming and hot. What's going on?",
+      "options": [
+        "The overload relay heater elements are miscalibrated and reading falsely high",
+        "One contactor pole has lost contact (open or welded-open with no real contact area) — the motor is running on two legs and drawing massive current trying to make up torque on a weak rotating field",
+        "The motor's internal windings are shorted phase-to-phase, causing the imbalance",
+        "This is normal starting inrush and will settle out within a few seconds"
+      ],
+      "correct": 1,
+      "why": "Zero amps on one leg with the other two pulling 200%+ of nameplate is the signature of phase loss: the motor tries to develop full torque on only 58% of its normal rotating field, so the two remaining legs overdraw current while the rotor overheats 3-4x normal. This is exactly the FL3 blender war story — a cracked contact carrier on one pole was floating, not a bad overload relay or a shorted winding."
+    },
+    {
+      "q": "You're about to wire the seal-in (holding) circuit for a new 4-pole contactor. The unit has three main power poles for the motor plus a small auxiliary contact block on the side rated 10A/300V AC-15. A coworker suggests just tapping a spare screw terminal off one of the main power poles instead, since it's already right there. What should you do?",
+      "options": [
+        "Tap the spare power-pole terminal — it's rated for higher current so it's actually safer for the control circuit",
+        "Use the dedicated auxiliary contact block for the seal-in and keep all main poles dedicated to the motor legs",
+        "Either works fine since all the poles close and open at the same instant",
+        "Wire the seal-in to two power poles in parallel for redundancy"
+      ],
+      "correct": 1,
+      "why": "The auxiliary block is built and rated for control-circuit service (AC-15/DC-13, low current, high duty cycle), while main power poles are AC-3 rated for motor inrush and running current — a different contact geometry and arc environment. Tapping a spare power pole works until the contactor is replaced with a model that lacks a spare pole, or until the power-pole contact behaves differently under light control-circuit load than it was designed for. Always use the dedicated auxiliary contact for the seal-in."
+    },
+    {
+      "q": "A tech is choosing a replacement contactor for a 30HP squirrel-cage blender motor and finds two units in the parts room: one stamped 'AC-1, 32A' and one stamped 'AC-3, 32A' at the same voltage. Which one should go on the motor, and why?",
+      "options": [
+        "Either one — the 32A rating is what matters, the AC-1/AC-3 letters are just a manufacturer code",
+        "The AC-1 unit, because it's rated for continuous full current in both directions",
+        "The AC-3 unit, because it's built for motor switching duty — making against locked-rotor inrush (6-10x FLA) and breaking running current — while AC-1 is sized for resistive loads and isn't built for that inrush",
+        "The AC-1 unit, since AC-3 is only for single-phase loads"
+      ],
+      "correct": 2,
+      "why": "AC-3 utilization category is specifically rated for motor switching: closing against high inrush and opening against running current. An AC-1 contactor at the same amp stamp is sized for resistive/slightly inductive loads only — put a 30HP motor's 600+ amp inrush through it and the contacts arc-weld shut on the first start or erode away in weeks. The current number alone doesn't tell you the duty the contact was designed for."
+    },
+    {
+      "q": "You measure L-L voltage at a running motor's terminals: 478V, 476V, and 431V. Roughly how much current unbalance should you expect this to be causing on the motor windings, and what's the consequence?",
+      "options": [
+        "About 3% current unbalance — negligible, no action needed",
+        "About 50%+ current unbalance per NEMA MG1 rules — one winding group is running dramatically hotter and losing service life",
+        "About 10% current unbalance, which is within normal tolerance for any 3-phase motor",
+        "Voltage unbalance doesn't translate to current unbalance unless the motor is starting"
+      ],
+      "correct": 1,
+      "why": "That spread is roughly a 10% voltage unbalance ((478-431)/476 average-based calc lands near 10%), and NEMA MG1 rules of thumb say voltage unbalance produces current unbalance at 6-10x the percentage — so 10% voltage unbalance can drive 50%+ current unbalance in one winding group, cutting motor life sharply. A 3.5% voltage unbalance alone is enough to cut service life by half, so 10% is a serious finding, not something to write off."
+    },
+    {
+      "q": "A plant lead wants to skip the auxiliary contact block on a new install and just tie the seal-in wire to a spare power-pole terminal to save $40 on parts, arguing 'it's DC control voltage, barely any current, it'll never wear that contact out.' What's the real risk in ignoring this?",
+      "options": [
+        "None — DC control circuits draw so little current that any contact type will outlast the equipment",
+        "DC arcs don't self-extinguish at a zero-crossing the way AC does, so even a small 24VDC seal-in current will slowly erode a power-pole contact face not designed for DC duty — and it may fail without warning during a swap to a contactor model with no spare pole",
+        "The only risk is a slightly higher coil inrush current, which the control fuse will catch",
+        "The risk is limited to a nuisance trip of the overload relay, nothing else"
+      ],
+      "correct": 1,
+      "why": "DC arcs sustain themselves without a natural zero-crossing, so even milliamp-level DC switching erodes a contact face faster than AC would — a power-pole contact isn't built for that duty cycle. On top of the physical wear risk, the practice creates a hidden dependency: the next contactor swap to a model without a spare power pole leaves no seal-in path at all, and a green tech troubleshooting the resulting no-latch fault won't think to check for a missing terminal that was never in the vendor documentation."
+    },
+    {
+      "q": "A blender starts and runs fine, but every few minutes it drops out on its own — no overload trip, no fault light, coil circuit otherwise looks normal. With the unit re-energized, you probe the auxiliary/seal-in output terminal and read 0VDC even though the coil is pulled in and the main contacts are closed. What do you conclude?",
+      "options": [
+        "The 24VDC control power supply is failing intermittently under load",
+        "The auxiliary contact itself is pitted, has a broken spring, or the block is mechanically loose — it isn't actually closing even though the rest of the contactor is operating normally",
+        "The motor's overload heaters are undersized and nuisance-tripping without registering a fault light",
+        "The seal-in pole is fine; the problem must be a loose Start pushbutton"
+      ],
+      "correct": 1,
+      "why": "0V at the aux output while the coil is energized and the main poles are closed points straight at the auxiliary contact block itself — pitted face, broken spring, or a loose mount — not the supply or the main power poles, which are already confirmed working since the motor runs. This intermittent dropout with no other fault indication is the classic symptom in the module's failure-mode list, and a light tap on the contact block often reproduces or momentarily clears it."
+    }
+  ]
+}

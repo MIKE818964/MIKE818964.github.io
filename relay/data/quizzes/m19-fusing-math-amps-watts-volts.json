@@ -1,0 +1,116 @@
+{
+  "moduleId": "m19-fusing-math-amps-watts-volts",
+  "title": "The Fusing Math: Why High Voltage Is Hard to Protect",
+  "questions": [
+    {
+      "q": "What is the formula behind the whole voltage ladder?",
+      "options": [
+        "Amps = Watts x Volts",
+        "Amps = Watts / Volts",
+        "Amps = Volts / Watts",
+        "Amps = Volts x Volts"
+      ],
+      "correct": 1,
+      "why": "Amps equals Watts divided by Volts, so for a fixed wattage a higher voltage means fewer amps."
+    },
+    {
+      "q": "A 100W load runs at 480V. Roughly how many amps does it draw?",
+      "options": [
+        "About 0.21A",
+        "About 2.1A",
+        "About 21A",
+        "About 48A"
+      ],
+      "correct": 0,
+      "why": "100 watts divided by 480 volts is about 0.21A, a tiny current."
+    },
+    {
+      "q": "Why is that 0.21A at 480V a fusing problem?",
+      "options": [
+        "A fuse that small would cost too much to make",
+        "A 480V fuse that blows at only about a quarter-amp barely exists",
+        "Fuses can't be used on AC at all",
+        "The fuse would blow too slowly to protect anything"
+      ],
+      "correct": 1,
+      "why": "Protecting a small high-voltage load needs a fuse rated for 480V yet tripping at a quarter-amp, and those are almost impossible to find."
+    },
+    {
+      "q": "Take that same 100W load and run it at 24V instead of 480V. How does fusing change?",
+      "options": [
+        "The current gets even smaller and harder to fuse",
+        "The current stays the same, so nothing changes",
+        "The current gets larger and is easy to fuse with common cheap fuses",
+        "You can no longer fuse it at all"
+      ],
+      "correct": 2,
+      "why": "At 24V the same 100W draws a much larger current (about 4A), which common, inexpensive fuses handle easily."
+    },
+    {
+      "q": "You're troubleshooting a 480VAC control cabinet: a small indicator-transformer branch has never once tripped its 1A fuse in two years, but you notice the wire insulation in the wireway near it has gone brittle and discolored. What's the most likely explanation?",
+      "options": [
+        "The transformer is overheating internally and radiating heat into the wireway",
+        "The load current is so far below the fuse's trip rating that a slow-developing fault current can climb for a long time without ever reaching 1A, cooking the insulation before the fuse reacts",
+        "The fuse is a fast-blow type and should have been a time-delay type instead",
+        "Wire insulation naturally degrades over two years regardless of current"
+      ],
+      "correct": 1,
+      "why": "When a fuse is sized far above the actual load current (a 100W/480V load is only ~0.21A, nowhere near a 1A trip point), a developing fault can drift the current up slowly for a long time without ever tripping the fuse, letting the wire roast from resistive heating the whole time. Fuse type (fast vs time-delay) affects inrush handling, not this slow-drift scenario, and insulation doesn't just degrade on its own without a heat source."
+    },
+    {
+      "q": "A 24VDC relay coil chatters and buzzes when you energize its circuit, even though your meter reads a solid 24V at the power supply's output terminals. What should you check next?",
+      "options": [
+        "Replace the relay coil, since chatter always means the coil itself is failing",
+        "Increase the fuse size feeding the coil circuit",
+        "Measure voltage at the coil terminals themselves while it's trying to pull in — if it sags to 15-18V under inrush, the supply is undersized or current-limiting for the actual inrush load",
+        "Switch the coil circuit fuse from time-delay to fast-blow"
+      ],
+      "correct": 2,
+      "why": "Voltage measured at the supply terminals under no significant load can look fine while the rail sags hard under the coil's inrush (which can run 6-10x sealed current for 50-100ms) — you have to measure at the coil itself while it's pulling in to catch that sag. Swapping the relay or changing fuse type doesn't address a supply that collapses under inrush, and a bigger fuse doesn't fix a weak supply."
+    },
+    {
+      "q": "You're designing a 24VDC control circuit for a solenoid valve that draws 10W. Using Amps = Watts / Volts, about how much current will it draw, and what fuse size actually gives you meaningful protection on that circuit?",
+      "options": [
+        "0.42A, so a 30A fuse for extra headroom",
+        "0.42A, so a 1A or 2A fuse so the load current sits near a useful fraction of the fuse's rating",
+        "4.2A, so a 1A fuse",
+        "0.042A, so no fuse is really practical"
+      ],
+      "correct": 1,
+      "why": "10W / 24V = 0.417A. Practical fusing needs load current at roughly 30-40% or more of the fuse rating, so a 1A or 2A fuse gives real protection here, while a 30A fuse would be so oversized it could never catch a developing fault on this small a load."
+    },
+    {
+      "q": "A maintenance tech wants to add a new 480VAC-fed 75-watt panel-light circuit to an existing junction box instead of running it off the nearby 120V transformer secondary, to save time. Based on the fusing math, why should you push back on that plan?",
+      "options": [
+        "480VAC junction boxes aren't rated for lighting loads by code",
+        "75 watts at 480V draws only about 0.156A, which is too small to protect with any practical fuse rating, creating the same slow-fault/insulation-cooking risk described in the module's failure modes",
+        "120V transformers can't supply enough current for lighting circuits",
+        "It would violate wire color-coding standards"
+      ],
+      "correct": 1,
+      "why": "75W / 480V = 0.156A, well below what any common fuse can meaningfully protect — this is exactly the trap the module's war story describes, where unprotected small 480V loads slowly char their insulation over years. The 120V secondary is the better tap point because the resulting current lands in a range real fuses are built for."
+    },
+    {
+      "q": "A contactor coil rated 25VA sealed is wired on a 24VDC control circuit. What fuse type should protect it, and why?",
+      "options": [
+        "A fast-blow fuse sized right at the sealed current, since fast-blow reacts quickest to protect the coil",
+        "A time-delay (Slo-Blo) fuse, sized to ride through the 6-10x inrush spike for 50-100ms while still catching a sustained overcurrent",
+        "No fuse is needed on DC coil circuits since DC doesn't have inrush",
+        "A fast-blow fuse sized at 10x the sealed current so it never nuisance-trips"
+      ],
+      "correct": 1,
+      "why": "Coil inrush runs 6-10x sealed current for the first 50-100ms as the coil pulls in, so a fast-blow fuse sized near sealed current will nuisance-trip on every startup. A time-delay (Slo-Blo/Type T) fuse rides through that brief spike but still opens on a genuine sustained overcurrent. Oversizing a fast-blow fuse 10x defeats its protective purpose, and DC coils absolutely do have inrush just like AC coils."
+    },
+    {
+      "q": "A plant keeps running small 480VAC loads (indicator lights, tiny solenoids) on branch fuses sized far above the actual load current because 'a bigger fuse never hurts.' What's the real safety consequence of ignoring the Amps = Watts / Volts math here?",
+      "options": [
+        "Nothing serious — an oversized fuse just means it takes longer to blow, which is only a minor inconvenience",
+        "A developing fault can draw current well above normal but still stay below the oversized fuse's trip point for a long time, letting P = I squared R heating cook wire insulation for months until it becomes a fire risk inside the conduit or wireway",
+        "The load will simply stop working since it can't pull enough current through an oversized fuse",
+        "It only matters for DC circuits, not AC control circuits"
+      ],
+      "correct": 1,
+      "why": "This is the exact mechanism in the module's war story: an oversized fuse lets a slowly worsening fault current climb well past normal draw while staying under the trip threshold, and I squared R heating in the undersized wire quietly roasts the insulation for months before anyone notices — a real fire hazard inside a wireway. The fuse doesn't limit the load's ability to draw current (that's set by the load and wiring, not the fuse rating), and the heating math applies to both AC and DC branch circuits."
+    }
+  ]
+}

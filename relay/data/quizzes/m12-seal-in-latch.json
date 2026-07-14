@@ -1,0 +1,131 @@
+{
+  "moduleId": "m12-seal-in-latch",
+  "title": "The Seal-In: Make the Relay Hold Itself On",
+  "questions": [
+    {
+      "q": "To fix the release problem, which of the relay's own contacts do you wire in parallel with the Start button?",
+      "options": [
+        "One of its Normally Open contacts",
+        "One of its Normally Closed contacts",
+        "The coil itself",
+        "A spare common terminal"
+      ],
+      "correct": 0,
+      "why": "A Normally Open contact is open at rest but closes when the coil energizes, so it can take over feeding the coil only after Start is pressed — exactly what a seal-in needs."
+    },
+    {
+      "q": "After you release the Start button in a latched circuit, what keeps the coil energized?",
+      "options": [
+        "The relay's own NO contact, now closed, feeding the coil in parallel with Start",
+        "The Start button stays mechanically stuck down",
+        "Stored energy in the coil keeps it powered",
+        "The Stopped light feeds power back to the coil"
+      ],
+      "correct": 0,
+      "why": "When the coil pulled in, its seal-in contact closed and now supplies the coil all by itself, so the relay holds its own power — it is 'sealed in.'"
+    },
+    {
+      "q": "Why must the seal-in contact be wired in PARALLEL with the Start button, not in series with it?",
+      "options": [
+        "So the contact provides a second path to the coil once Start is let go",
+        "So the contact blocks the coil until Start is pressed twice",
+        "So pressing Start opens the seal-in path",
+        "So the coil only powers when both Start and the contact are closed"
+      ],
+      "correct": 0,
+      "why": "Parallel means either path can feed the coil — Start gets it going, then the closed seal-in contact carries it on its own after you release the button.",
+      "visual": {
+        "lesson": "m12-seal-in-latch",
+        "caption": "The seal-in circuit as drawn — at rest."
+      }
+    },
+    {
+      "q": "You build the seal-in and the machine now latches on and stays running. What problem does this lesson say you still have?",
+      "options": [
+        "There is no way to turn it back OFF",
+        "The coil voltage no longer matches",
+        "The Running light is now too dim",
+        "The Start button no longer works"
+      ],
+      "correct": 0,
+      "why": "The latch holds itself on with nothing in the circuit to break the feed, so there is still no off switch — the Stop button comes next."
+    },
+    {
+      "q": "An operator says a conveyor motor 'runs fine while I hold Start but drops out the second I let go' — every single time, no exceptions. What's the most likely cause?",
+      "options": [
+        "The coil's suppression diode is installed backwards",
+        "The main power contacts are pitted and dropping voltage under motor load",
+        "The seal-in contact is open-circuit or its wiring is broken, so nothing feeds the coil once Start releases",
+        "The Stop button has a sneak path to neutral"
+      ],
+      "correct": 2,
+      "why": "A seal-in that only runs while the button is held is the classic signature of an open or disconnected seal-in contact — there's no second path to carry the coil after Start opens. A sneak path (last option) causes the opposite symptom: the machine won't stop. A backwards diode or pitted power contacts don't produce a clean 'only while held' pattern.",
+      "visual": {
+        "lesson": "m12-seal-in-latch",
+        "caption": "The print — trace every path that can feed CR1 after Start is released."
+      }
+    },
+    {
+      "q": "You put a meter on the coil terminals while pressing Start on a 24VDC seal-in circuit. The reading dips to 17V for about 30ms before settling at 24V, and the relay pulls in fine with no chatter. What do you conclude?",
+      "options": [
+        "17V is below the 85% pull-in threshold, so the relay should be replaced",
+        "This proves a sneak path is feeding the coil from the Stop side",
+        "The seal-in contact is pitted and must be cleaned immediately",
+        "This is normal inrush sag — the coil pulled in cleanly, so no action is needed"
+      ],
+      "correct": 3,
+      "why": "A brief inrush sag that recovers and results in a clean, non-chattering pull-in is exactly what the module describes as normal — inrush current is 6-10x sealed current for 15-50ms while the armature closes. The concern threshold (below ~20V, or under 85% of rated) only matters if it prevents pull-in or causes chatter, which didn't happen here."
+    },
+    {
+      "q": "You're wiring a seal-in circuit and need to pick the coil supply's current rating. The relay's coil datasheet lists 80mA sealed current. What should you size the supply to handle, and why?",
+      "options": [
+        "Exactly 80mA, matching the sealed current rating on the datasheet",
+        "Well above the inrush current (roughly 480-800mA for this coil), because sizing for sealed current alone lets the supply sag and the relay chatter",
+        "The auxiliary contact rating of 10A, since that's the highest number on the relay",
+        "Half the sealed current, since inrush only lasts milliseconds and doesn't count"
+      ],
+      "correct": 1,
+      "why": "The module is explicit: always size the supply for inrush (6-10x sealed, here roughly 480-800mA), not sealed current, or the rail sags during pull-in and the coil chatters at inrush current, pitting the seal-in contact. Matching only the 80mA sealed rating (first option) is the mistake that causes the sag in the first place."
+    },
+    {
+      "q": "A machine has been latching fine every morning for weeks but starts randomly dropping out mid-shift on hot afternoons and after rain. Where do you put your meter, and what reading confirms a bad seal-in contact rather than a coil or supply problem?",
+      "options": [
+        "At the 24VDC power supply terminals with no load; any reading below 24V confirms the contact is bad",
+        "Across the coil during the initial Start press only; a brief dip below 24V confirms the contact is bad",
+        "At the Stop button terminals with the circuit de-energized; continuity confirms the contact is bad",
+        "Across the closed seal-in contact itself; a reading of roughly 2-8V while latched confirms a pitted/oxidized high-resistance contact"
+      ],
+      "correct": 3,
+      "why": "The module's intermittent-latch failure mode calls for measuring voltage across the closed seal-in contact itself (not the supply, not the coil at Start press) — a good contact reads under 0.5V, while 2-8V across it while 'closed' means it's pitted or oxidized and dropping voltage the coil needs. Checking the unloaded supply (first option) won't reveal a downstream contact problem, and normal Start-press inrush dip (second option) is unrelated to contact pitting.",
+      "visual": {
+        "lesson": "m12-seal-in-latch",
+        "prevCoil": [
+          "CR1"
+        ],
+        "caption": "Latched mid-shift — machine running."
+      }
+    },
+    {
+      "q": "You skip the suppression diode on a 24VDC seal-in coil to save a part and finish the panel faster. What is the real consequence over time?",
+      "options": [
+        "The coil will simply fail to pull in on the next Start press",
+        "The seal-in contact will weld permanently shut the first time it closes",
+        "Every time the coil drops out, the inductive kickback can spike to 200-400V across the seal-in contact, arc-pitting it on every single cycle",
+        "Nothing changes functionally, it only affects the Running indicator light"
+      ],
+      "correct": 2,
+      "why": "Per the module's field notes, without a suppression diode the inductive kickback at dropout can reach 200-400V on a 24VDC circuit, and that spike arcs across the seal-in contact every time it opens — accelerating pitting and shortening contact life dramatically. It doesn't prevent pull-in (first option) or weld the contact shut on first closure (second option); the damage is cumulative arc erosion at dropout, not an instant failure."
+    },
+    {
+      "q": "You're commissioning a new motor starter and have a choice of two spare auxiliary contacts on the starter to use as the seal-in: one rated 10A/120VAC, and one you find on an old spare relay pulled from a drawer rated only for signal-level duty (dry contact, low milliamp). Which do you use for the seal-in, and why?",
+      "options": [
+        "The 10A/120VAC auxiliary contact, because the seal-in must be rated for the coil's inrush current, not just its trivial sealed current",
+        "The signal-level contact, because the seal-in only ever carries the small sealed coil current so a low-rated contact is fine",
+        "Either one — seal-in contacts don't carry real current, they just signal that the coil is on",
+        "Neither — the seal-in must always be a brand-new contact, reused contacts are never acceptable"
+      ],
+      "correct": 0,
+      "why": "The seal-in contact has to survive the coil's inrush every time it makes or breaks, not just the trivial 50-100mA sealed current — that's why real auxiliary contacts on starters/relays carry ratings like 10A at 120VAC. A signal-level dry contact isn't built for that repeated inrush arc and will pit or fail quickly. It's the auxiliary contact rating that matters, not just proximity to a coil that draws little current at steady state."
+    }
+  ]
+}

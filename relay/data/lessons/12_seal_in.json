@@ -1,0 +1,33 @@
+{
+  "id": "12_seal_in",
+  "circuit": {
+    "id": "12_seal_in",
+    "nodes": [
+      { "id": "nPos", "x": 140, "y": 160 },
+      { "id": "nFused", "x": 310, "y": 160 },
+      { "id": "nCoil", "x": 650, "y": 160 },
+      { "id": "nRun", "x": 650, "y": 270 },
+      { "id": "nStop", "x": 650, "y": 380 },
+      { "id": "nNeg", "x": 140, "y": 480 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 140, "y": 320, "label": "24VDC", "terminals": { "pos": "nPos", "neg": "nNeg" } },
+
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 220, "y": 160, "label": "FU1", "terminals": { "a": "nPos", "b": "nFused" } },
+
+      { "id": "S1", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 460, "y": 160, "label": "Start", "terminals": { "in": "nFused", "out": "nCoil" } },
+
+      { "id": "CR1-SI", "type": "contact_no", "coil": "CR1", "x": 460, "y": 210, "label": "CR1 Seal-In", "terminals": { "in": "nFused", "out": "nCoil" } },
+
+      { "id": "CR1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC", "x": 810, "y": 160, "label": "CR1", "terminals": { "a": "nCoil", "b": "nNeg" } },
+
+      { "id": "CR1-R", "type": "contact_no", "coil": "CR1", "x": 460, "y": 270, "label": "CR1", "terminals": { "in": "nFused", "out": "nRun" } },
+      { "id": "RUN", "type": "bulb", "x": 810, "y": 270, "label": "Running", "terminals": { "a": "nRun", "b": "nNeg" } },
+
+      { "id": "CR1-S", "type": "contact_nc", "coil": "CR1", "x": 460, "y": 380, "label": "CR1", "terminals": { "in": "nFused", "out": "nStop" } },
+      { "id": "STOP", "type": "bulb", "x": 810, "y": 380, "label": "Stopped", "terminals": { "a": "nStop", "b": "nNeg" } },
+
+      { "id": "TP_COIL", "type": "test_point", "x": 650, "y": 100, "label": "Coil", "terminals": { "p": "nCoil" } }
+    ]
+  }
+}

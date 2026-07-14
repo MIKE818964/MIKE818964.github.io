@@ -1,0 +1,20 @@
+{
+  "id": "05_supply_24v",
+  "circuit": {
+    "id": "supply_24v",
+    "title": "Reading the Supply: What 24VDC Means",
+    "nodes": [
+      { "id": "L", "x": 140, "y": 160 },
+      { "id": "nHot", "x": 480, "y": 160 },
+      { "id": "N", "x": 140, "y": 360 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 140, "y": 260, "label": "24VDC", "terminals": { "pos": "L", "neg": "N" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 310, "y": 160, "label": "FU1", "terminals": { "a": "L", "b": "nHot" } },
+      { "id": "PL1", "type": "bulb", "x": 650, "y": 160, "label": "PL1", "terminals": { "a": "nHot", "b": "N" } },
+      { "id": "TP_SRC", "type": "test_point", "x": 230, "y": 100, "label": "TP-HOT", "terminals": { "p": "L" } },
+      { "id": "TP_24V", "type": "test_point", "x": 480, "y": 100, "label": "TP-+24V", "terminals": { "p": "nHot" } },
+      { "id": "TP_0V", "type": "test_point", "x": 650, "y": 300, "label": "TP-0V", "terminals": { "p": "N" } }
+    ]
+  }
+}

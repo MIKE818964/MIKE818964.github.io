@@ -1,0 +1,354 @@
+{
+  "moduleId": "m21-timer-on-delay-off-delay",
+  "title": "Timer Relays: On-Delay vs Off-Delay",
+  "questions": [
+    {
+      "q": "What does an ON-DELAY timer relay do after its coil gets power?",
+      "options": [
+        "It waits a set time, then its contacts act",
+        "Its contacts act instantly, then drop out after a set time",
+        "Its contacts never act at all",
+        "It acts only while you hold a button"
+      ],
+      "correct": 0,
+      "why": "On-delay means delayed ON: after the coil is powered it waits the set time before its contacts act, then drops out instantly when power is removed."
+    },
+    {
+      "q": "An OFF-DELAY timer is powered, then power is removed. What happens to its contacts?",
+      "options": [
+        "They open the instant power is removed",
+        "They stay held for the set time, then open",
+        "They never closed in the first place",
+        "They wait the set time before first closing"
+      ],
+      "correct": 1,
+      "why": "Off-delay means instant on, delayed off: it acts the moment it is powered and keeps its contacts held for the set time after power is removed."
+    },
+    {
+      "q": "A fan must keep running for 5 seconds AFTER the Stop button is pressed. Which timer do you use?",
+      "options": [
+        "On-delay timer",
+        "Off-delay timer",
+        "No timer is needed",
+        "Either one works the same"
+      ],
+      "correct": 1,
+      "why": "An off-delay timer holds its contact for the set time after power is removed, so the fan keeps running about 5 seconds past Stop before it shuts off."
+    },
+    {
+      "q": "You want a conveyor to wait 5 seconds AFTER Start so the fan is already moving first. Which timer starts the conveyor?",
+      "options": [
+        "An off-delay timer",
+        "An on-delay timer",
+        "A latching relay with no timer",
+        "A momentary Start button only"
+      ],
+      "correct": 1,
+      "why": "An on-delay timer waits the set time after its coil is powered before acting, so the conveyor holds off for 5 seconds while the fan gets up to speed."
+    },
+    {
+      "q": "A machine has an on-delay timer set for 5 seconds between the fan and the conveyor, but the conveyor fires the instant the fan does — no delay at all. You put your meter across the timer's timed NO contact right after power-up, before the 5 seconds elapse, and read 0V. What's the most likely cause?",
+      "options": [
+        "The timer coil has failed open and is drawing no current",
+        "A jumper or spare contact from the same relay is wired in parallel with the timed contact, bypassing it",
+        "The timer is a pneumatic dashpot type and has drifted short",
+        "The control transformer supplying the timer has sagged below dropout voltage"
+      ],
+      "correct": 1,
+      "why": "With the timed contact still open (before timeout) you should read full control voltage across it. Reading 0V means something else is already closed and carrying the circuit — a parallel jumper or mis-wired spare contact bypassing the timed contact. A failed-open coil would stop the timer from working at all, not cause an instant, no-delay start."
+    },
+    {
+      "q": "An off-delay timer holding a fan's contactor coil in after Stop is pressed suddenly starts letting the fan cut off instantly with the conveyor, same as if there were no delay at all. With the control relay dropped out and Stop held, you measure the off-delay timer's coil terminals and read a clean 0V. What should you conclude?",
+      "options": [
+        "The timer is backfed by an induced sneak voltage and needs a low-impedance meter to confirm",
+        "The 0V reading confirms the coil was correctly de-energized; the timer itself has likely failed internally (bad capacitor or timing circuit) and is no longer performing its off-delay hold.",
+        "The contact rating has been exceeded and the timed contact is burned open",
+        "This is normal pneumatic drift and the timer needs replacement"
+      ],
+      "correct": 1,
+      "why": "With Stop pressed the coil SHOULD read 0V — that's a healthy de-energize, and it is exactly the moment an off-delay timer must keep its contact held for the set time. If the fan drops instantly anyway, the timing function inside the timer has failed. The backfeed theory would require voltage still present on the coil, which your 0V reading rules out."
+    },
+    {
+      "q": "You're sequencing a 120VAC contactor coil off a DIN-rail electronic timer's timed contact, and the timer contact is only rated 5A at 250VAC while the control relay in the next slot is rated 10A. The contactor's inrush draws close to 0.7A peak. Why should you still double-check the timer contact rating before wiring it up?",
+      "options": [
+        "Because 0.7A is close to the timer's continuous rating and will trip it like a breaker",
+        "Because timer contacts are inherently unreliable regardless of rating",
+        "Because inrush current spikes happen in milliseconds and can pit or burn a marginal contact without blowing a fuse, showing up later as erratic or high-resistance switching",
+        "Because 120VAC coils always require a control relay, never a timer contact"
+      ],
+      "correct": 2,
+      "why": "0.7A is well under a 5A rating in steady state, but the danger is the millisecond inrush spike arcing across a small contact — repeated arcing pits the contact over time until it reads high resistance or chatters, without ever tripping a fuse. Always verify contact rating against real inrush, not just running current."
+    },
+    {
+      "q": "A panel has been running fine all morning, but by mid-afternoon a timed delay that should be 5 seconds is measuring out at 8-9 seconds on a stopwatch. The timer's adjustment knob has a bellows/bladder mechanism, not a digital display. What do you do?",
+      "options": [
+        "Replace the timer's coil, since coil resistance changes with heat",
+        "Recognize this as normal thermal drift for a pneumatic dashpot timer, and replace it with a solid-state electronic timer if precision matters",
+        "Assume the supply voltage is sagging and add a control transformer",
+        "Reset the timer's dial to zero and re-time it cold every morning"
+      ],
+      "correct": 1,
+      "why": "A bellows/bladder adjustment knob is the signature of a pneumatic dashpot timer, whose timing mechanism is known to be sensitive to ambient temperature changes. The drift is a characteristic of the technology, not an electrical fault — no coil swap or transformer will fix it. If precise, repeatable timing matters, swap in a solid-state electronic timer."
+    },
+    {
+      "q": "A solid-state 24VDC timer times out fine when the machine idles, but resets mid-count whenever a nearby contactor kicks in. Open-circuit you read 24.1V at the timer coil, but under load (contactor pulled in) you read 17.8V. What's the numbers-based conclusion?",
+      "options": [
+        "17.8V is above the timer's 15-18VDC hold-in floor, so voltage sag is not the cause — look elsewhere",
+        "The coil voltage rating is wrong for the application and a 120VAC timer should be substituted",
+        "17.8V is at or below the typical ~15-18VDC dropout threshold for a 24VDC solid-state timer, so the voltage sag caused by the contactor pulling in is resetting the timer mid-count",
+        "The open-circuit reading of 24.1V proves the supply is healthy and the timer itself must be defective"
+      ],
+      "correct": 2,
+      "why": "Solid-state 24VDC timers typically hold in only down to about 15-18VDC; a load-induced sag to 17.8V sits right at that edge and is enough to reset the timing circuit. The open-circuit reading of 24.1V is misleading because it doesn't capture the sag under load — you have to measure while the machine cycles to catch this, exactly as the war story about the granulator timer swap illustrates the cost of not verifying real conditions before calling a job done."
+    },
+    {
+      "q": "A maintenance crew replaces a failed pneumatic on-delay timer sequencing a 40-HP granulator fan ahead of the knife motor, and sets the new timer's dial to the same number the old one used. They do not check it with a stopwatch. Based on the war story, what real-world consequence follows from skipping that verification, and why?",
+      "options": [
+        "None — as long as the dial number matches, the delay is guaranteed to match because all timer dials use the same scale",
+        "The new timer (a different brand, same dial markings but a different scale) actually delayed only 1.2 seconds instead of 8, so the knife motor started against full material load repeatedly, destroying bearings every few weeks from repeated mechanical shock",
+        "The new timer would simply fail to power up at all, which would have been obvious immediately",
+        "The fan would run continuously and never stop, burning out the fan motor instead of the knife motor bearings"
+      ],
+      "correct": 1,
+      "why": "Dial markings are not a universal standard between brands — the replacement timer looked right but delivered only 1.2 seconds instead of 8, so the fan never had time to clear the chute before the knife motor spun up into a full load of material every single start. That repeated mechanical shock is what ate the bearings every few weeks. The lesson: always time a replacement timer with a stopwatch under real conditions before calling the job done, never trust the dial alone."
+    },
+    {
+      "q": "In the print shown, the machine has been running for several minutes when Stop is pressed and CR1 drops out. Which load is still running a moment later, and through which contact?",
+      "options": [
+        "The conveyor — CR3's on-delay contact holds after power is removed",
+        "Both — timed contacts always hold for their set time after a Stop",
+        "Neither — every contact in the print opens the instant CR1 drops out",
+        "The fan — CR2 is an off-delay timer, so its timed contact stays closed for the set time after CR2's coil loses power"
+      ],
+      "correct": 3,
+      "why": "The fan sits behind CR2, the off-delay: its contact closes the instant CR2 energizes and holds for the set time after the coil de-energizes. CR3 is an on-delay — its contact drops open immediately when the coil loses power, so the conveyor stops with CR1.",
+      "visual": {
+        "circuit": {
+          "id": "ev_fan_conveyor_seq",
+          "nodes": [
+            {
+              "id": "L",
+              "x": 140,
+              "y": 120
+            },
+            {
+              "id": "n1",
+              "x": 300,
+              "y": 120
+            },
+            {
+              "id": "n2",
+              "x": 470,
+              "y": 120
+            },
+            {
+              "id": "n3",
+              "x": 660,
+              "y": 120
+            },
+            {
+              "id": "nC2",
+              "x": 660,
+              "y": 230
+            },
+            {
+              "id": "nC3",
+              "x": 660,
+              "y": 320
+            },
+            {
+              "id": "nFan",
+              "x": 660,
+              "y": 410
+            },
+            {
+              "id": "nCnv",
+              "x": 660,
+              "y": 500
+            },
+            {
+              "id": "N",
+              "x": 880,
+              "y": 310
+            }
+          ],
+          "components": [
+            {
+              "id": "SRC",
+              "type": "source",
+              "current": "AC",
+              "volts": 120,
+              "x": 140,
+              "y": 310,
+              "label": "120VAC",
+              "terminals": {
+                "pos": "L",
+                "neg": "N"
+              }
+            },
+            {
+              "id": "FU1",
+              "type": "fuse",
+              "ratingA": 2,
+              "x": 220,
+              "y": 120,
+              "label": "FU1",
+              "terminals": {
+                "a": "L",
+                "b": "n1"
+              }
+            },
+            {
+              "id": "STOP",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NC",
+              "x": 385,
+              "y": 120,
+              "label": "Stop (NC)",
+              "terminals": {
+                "in": "n1",
+                "out": "n2"
+              }
+            },
+            {
+              "id": "START",
+              "type": "pushbutton",
+              "mode": "momentary",
+              "contact": "NO",
+              "x": 565,
+              "y": 120,
+              "label": "Start",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "SEAL",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 565,
+              "y": 185,
+              "label": "CR1 seal-in",
+              "terminals": {
+                "in": "n2",
+                "out": "n3"
+              }
+            },
+            {
+              "id": "CR1",
+              "type": "coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 120,
+              "label": "CR1 latch",
+              "terminals": {
+                "a": "n3",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR1A",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 470,
+              "y": 230,
+              "label": "CR1",
+              "terminals": {
+                "in": "n1",
+                "out": "nC2"
+              }
+            },
+            {
+              "id": "CR2",
+              "type": "timer_coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 230,
+              "label": "CR2 off-delay",
+              "terminals": {
+                "a": "nC2",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR1B",
+              "type": "contact_no",
+              "coil": "CR1",
+              "x": 470,
+              "y": 320,
+              "label": "CR1",
+              "terminals": {
+                "in": "n1",
+                "out": "nC3"
+              }
+            },
+            {
+              "id": "CR3",
+              "type": "timer_coil",
+              "ratedVolts": 120,
+              "ratedCurrent": "AC",
+              "x": 770,
+              "y": 320,
+              "label": "CR3 on-delay",
+              "terminals": {
+                "a": "nC3",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR2T",
+              "type": "contact_no",
+              "coil": "CR2",
+              "x": 470,
+              "y": 410,
+              "label": "CR2 timed",
+              "terminals": {
+                "in": "n1",
+                "out": "nFan"
+              }
+            },
+            {
+              "id": "FAN",
+              "type": "motor",
+              "x": 770,
+              "y": 410,
+              "label": "Fan",
+              "terminals": {
+                "a": "nFan",
+                "b": "N"
+              }
+            },
+            {
+              "id": "CR3T",
+              "type": "contact_no",
+              "coil": "CR3",
+              "x": 470,
+              "y": 500,
+              "label": "CR3 timed",
+              "terminals": {
+                "in": "n1",
+                "out": "nCnv"
+              }
+            },
+            {
+              "id": "CONV",
+              "type": "motor",
+              "x": 770,
+              "y": 500,
+              "label": "Conveyor",
+              "terminals": {
+                "a": "nCnv",
+                "b": "N"
+              }
+            }
+          ]
+        },
+        "caption": "The fan + conveyor sequence — the print, drawn de-energized."
+      }
+    }
+  ]
+}

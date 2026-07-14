@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Industrial electrical education and machine-specific troubleshooting portals. A live, solver-driven relay schematic you actually operate, a ~29-lesson track from basics to fault-hunt drills, and tribal machine knowledge turned into a technician's tool. Built for maintenance techs, not engineers.">
+<meta name="theme-color" content="#05080C">
+<link rel="canonical" href="https://honeybadger.software/training">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Industrial Education &amp; Training | HONEYBADGER SOFTWARE INC">
+<meta property="og:description" content="We turn the machine nobody fully understands anymore into interactive training and a live troubleshooting portal — symptom, ranked causes, exact checks, wired to real controller data.">
+<meta property="og:url" content="https://honeybadger.software/training">
+<title>Industrial Education &amp; Training | HONEYBADGER SOFTWARE INC</title>
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
+<style>
+/* ============================================================
+   TRAINING — dark navy cinema, NO GOLD. The palette does work
+   here: the curriculum tiers are colour-encoded by difficulty,
+   cool (basics) -> warm (expert), so colour MEANS something.
+   Shared chrome (topbar/header/nav/footer/buttons/grids) comes
+   from style.css; everything below is scoped.
+   ============================================================ */
+:root{
+  --gold:#3FD8FF;               /* nuke base-css gold -> electric */
+  --navy:#0A1134;--elec:#2E7BFF;--cyan:#3FD8FF;--hbred:#E1252B;
+  /* difficulty ramp: cool = easy, hot = expert */
+  --t1:#3FD8FF;   /* Baby Steps  */
+  --t2:#2E7BFF;   /* Beginner    */
+  --t3:#8B6FFF;   /* Intermediate*/
+  --t4:#FFB84D;   /* Advanced    */
+  --t5:#FF6B70;   /* Expert      */
+  --amber:#FFC24B;--green:#7FE2A2;
+  --txt-hi:#DCE6FF;--txt-mid:#A9B6D6;--txt-dim:#7E8BB0;
+}
+body{background:#070D2A}
+.btn-gold,.btn-gold:hover{background:linear-gradient(135deg,#2E7BFF,#3FD8FF)!important;color:#06102A!important;border-color:transparent!important}
+.btn-primary{background:linear-gradient(120deg,#FF3B41,#E1252B)!important;color:#fff!important;border:0!important}
+.btn-ghost{background:rgba(63,216,255,.05)!important;color:#3FD8FF!important;border:1.5px solid rgba(63,216,255,.5)!important}
+
+/* ---- section chrome (match industrial) ---- */
+.section,.section-alt{background:linear-gradient(150deg,#05091F,#0A1134 55%,#101B52 100%);color:var(--txt-hi);border-color:rgba(63,216,255,.14)}
+.section h2,.section-alt h2,.section h3{color:#fff}
+.section p,.section li,.section-alt p{color:var(--txt-mid)}
+.kicker{color:#3FD8FF}
+.center-block{color:var(--txt-hi)}
+.product-card{background:rgba(8,14,40,.8);border:1px solid rgba(63,216,255,.18);transition:transform .2s,box-shadow .2s,border-color .2s}
+.product-card:hover{transform:translateY(-4px);border-color:rgba(63,216,255,.5);box-shadow:0 16px 40px rgba(46,123,255,.28)}
+.product-card h3{color:#fff}
+.site-footer{background:#05081A!important;border-top:1px solid rgba(63,216,255,.15)}
+.site-footer h4,.footer-col h4{color:#3FD8FF!important}
+
+/* ---- HERO ---- */
+.page-hero{background:radial-gradient(70% 120% at 82% 6%,rgba(46,123,255,.30),transparent 55%),linear-gradient(140deg,#05091F,#0A1134 45%,#16226B 100%);position:relative;overflow:hidden}
+.page-hero .container{position:relative;z-index:2}
+.page-hero h1{color:#fff;max-width:18ch}
+.page-hero .lede{color:#AEBAD6;max-width:60ch}
+.page-hero .breadcrumb,.page-hero .breadcrumb a{color:#7E8BB0}
+.eyebrow-chip{background:rgba(63,216,255,.08);border:1px solid rgba(63,216,255,.4);color:#3FD8FF}
+.ind-streak{position:absolute;width:42%;height:2px;pointer-events:none;z-index:1;
+  background:linear-gradient(90deg,transparent,rgba(63,216,255,.5),rgba(46,123,255,.3),transparent);
+  animation:indDrift 17s linear infinite}
+@keyframes indDrift{from{transform:translateX(-60%)}to{transform:translateX(260%)}}
+
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center;margin-top:22px}
+@media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:34px}}
+
+/* the interactive ladder — a live schematic, not a picture of one */
+.tr-panel{position:relative;background:#FAF9F5;border:1px solid #D8D4C9;border-radius:16px;
+  padding:18px 18px 14px;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+.tr-panel .tr-cap{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.tr-panel .tr-cap b{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:1.6px;color:#334155;font-weight:800}
+.tr-ladder{width:100%;height:auto;display:block;cursor:pointer}
+.tr-controls{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.tr-mini{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;letter-spacing:.4px;border-radius:8px;
+  padding:8px 16px;cursor:pointer;border:1.5px solid transparent;transition:transform .12s,box-shadow .2s,background .15s}
+.tr-mini:hover{transform:translateY(-1px)}
+.tr-start{background:linear-gradient(120deg,#22C55E,#15803D);color:#FFFFFF}
+.tr-start:hover{box-shadow:0 8px 22px rgba(34,197,94,.45)}
+.tr-stop{background:linear-gradient(120deg,#EF4444,#B91C1C);color:#FFFFFF;border-color:transparent}
+.tr-stop:hover{box-shadow:0 8px 22px rgba(239,68,68,.45)}
+.tr-status{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.5px;color:#64748B;margin-left:auto}
+.tr-status.live{color:#15803D}
+
+/* ladder svg state */
+.tr-ladder .wire{stroke:#111827;stroke-width:3;fill:none;stroke-linecap:round;transition:stroke .35s,filter .35s}
+.tr-ladder .rail{stroke:#111827;stroke-width:3.4}
+.tr-ladder .glyph{stroke:#111827;stroke-width:2.2;fill:none;transition:stroke .35s}
+.tr-ladder .dot{fill:#111827}
+.tr-ladder .seal{opacity:.30;transition:opacity .35s}
+.tr-ladder .flow{stroke:#EF4444;stroke-width:2.6;fill:none;stroke-linecap:round;stroke-dasharray:6 11;opacity:0}
+.tr-ladder .coilGlow{fill:none;stroke:#EF4444;stroke-width:2;opacity:0;transition:opacity .35s}
+.tr-ladder .lamp{fill:#FFFFFF;stroke:#111827;stroke-width:2.4;transition:fill .35s,filter .35s,stroke .35s}
+.tr-ladder .ray{stroke:#9CA3AF;stroke-width:2;opacity:0;transition:opacity .35s,stroke .35s}
+.tr-ladder text{fill:#475569;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.4px}
+.tr-ladder .tl{fill:#334155}
+.tr-ladder.on .wire.hot{stroke:#EF4444;filter:drop-shadow(0 0 4px rgba(239,68,68,.55))}
+.tr-ladder.on .seal{opacity:1}
+.tr-ladder.on .seal .glyph{stroke:#EF4444}
+.tr-ladder.on .flow{opacity:.95;animation:trflow 1.1s linear infinite}
+.tr-ladder.on .coilGlow{opacity:1;animation:trpulse 1.8s ease-in-out infinite}
+.tr-ladder.on .lamp.run{fill:#FFB84D;stroke:#FFB84D;filter:drop-shadow(0 0 9px rgba(255,184,77,.85))}
+.tr-ladder.on .ray.run{stroke:#FFD98A;opacity:1}
+@keyframes trflow{to{stroke-dashoffset:-34}}
+@keyframes trpulse{0%,100%{opacity:.45}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .ind-streak,.tr-ladder .flow,.tr-ladder .coilGlow{animation:none!important}
+}
+
+/* ---- generic reusable bits ---- */
+.lead-hook{max-width:70ch;font-size:16px}
+.lead-hook b{color:var(--txt-hi)}
+.eyebrow-line{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:3px;color:#3FD8FF;margin-bottom:12px}
+
+/* THE PROCESS — numbered steps */
+.proc{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+@media(max-width:820px){.proc{grid-template-columns:1fr}}
+.proc-step{position:relative;background:rgba(8,14,40,.7);border:1px solid rgba(63,216,255,.18);border-radius:14px;padding:22px 22px 20px 62px;transition:transform .2s,border-color .2s}
+.proc-step:hover{transform:translateY(-3px);border-color:rgba(63,216,255,.45)}
+.proc-step .n{position:absolute;left:18px;top:20px;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  font-family:"Space Grotesk","Inter",sans-serif;font-weight:800;font-size:15px;color:#06102A;
+  background:linear-gradient(135deg,#3FD8FF,#2E7BFF)}
+.proc-step h3{font-size:17.5px;margin:0 0 8px;color:#fff}
+.proc-step p{font-size:14.5px;line-height:1.62;margin:0;color:var(--txt-mid)}
+
+/* the "why it's hard" callout */
+.hard{margin-top:24px;background:linear-gradient(120deg,rgba(139,111,255,.14),rgba(46,123,255,.14));
+  border:1px solid rgba(139,111,255,.4);border-radius:16px;padding:26px 30px}
+.hard h3{color:#fff;font-size:20px;margin:0 0 10px}
+.hard p{color:#CBD6F2;margin:0;max-width:78ch;font-size:15px;line-height:1.72}
+.hard .flag{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:800;letter-spacing:1.4px;
+  color:#B9A9FF;background:rgba(139,111,255,.12);border:1px solid rgba(139,111,255,.4);border-radius:6px;padding:3px 10px;margin-bottom:12px}
+
+/* symptom -> cause -> check mini-flow */
+.flow3{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:stretch;margin-top:26px}
+@media(max-width:820px){.flow3{grid-template-columns:1fr;gap:10px}.flow3 .arw{display:none}}
+.f3{background:#060B24;border:1px solid rgba(63,216,255,.24);border-radius:13px;padding:16px 16px 14px}
+.f3 .fk{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:1.4px;font-weight:800;margin-bottom:10px}
+.f3.sym .fk{color:#FF9EA2}.f3.cau .fk{color:#B9A9FF}.f3.chk .fk{color:#7FE2A2}
+.f3 .row{font-size:12.5px;color:var(--txt-mid);padding:6px 0;border-top:1px solid rgba(63,216,255,.10);line-height:1.4}
+.f3 .row:first-of-type{border-top:0}
+.f3 .row b{color:var(--txt-hi);font-weight:600}
+.f3 .rank{color:#8FA3CC;font-family:"JetBrains Mono",monospace;font-size:10px;margin-right:6px}
+.arw{display:grid;place-items:center;color:#3FD8FF;font-size:22px;font-weight:700}
+
+/* curriculum tier ramp */
+.track{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:30px}
+@media(max-width:960px){.track{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.track{grid-template-columns:1fr}}
+.tier{background:rgba(8,14,40,.72);border:1px solid rgba(63,216,255,.14);border-radius:14px;padding:18px 16px;
+  position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.tier:hover{transform:translateY(-4px)}
+.tier::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tc)}
+.tier .tno{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:1.4px;color:var(--tc);font-weight:800}
+.tier h4{margin:6px 0 4px;font-size:16px;color:#fff}
+.tier .cnt{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:#8FA3CC;margin-bottom:10px}
+.tier ul{list-style:none;padding:0;margin:0}
+.tier li{font-size:12.5px;color:var(--txt-mid);padding:4px 0 4px 15px;position:relative;line-height:1.4}
+.tier li::before{content:"";position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;background:var(--tc)}
+.tier:hover{border-color:var(--tc)}
+.tier.e1{--tc:var(--t1)}.tier.e2{--tc:var(--t2)}.tier.e3{--tc:var(--t3)}.tier.e4{--tc:var(--t4)}.tier.e5{--tc:var(--t5)}
+.rampbar{height:8px;border-radius:999px;margin-top:26px;
+  background:linear-gradient(90deg,var(--t1),var(--t2) 30%,var(--t3) 52%,var(--t4) 76%,var(--t5));
+  box-shadow:0 0 20px rgba(46,123,255,.4)}
+.ramp-lbl{display:flex;justify-content:space-between;margin-top:8px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:1px;color:#8FA3CC}
+
+/* feature chips row */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.chip{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:600;color:#BFD7FF;
+  background:rgba(10,17,52,.6);border:1px solid rgba(63,216,255,.26);border-radius:999px;padding:8px 15px}
+.chip .g{color:#7FE2A2}
+
+/* outcome value cards use the base .product-grid/.product-card look */
+.metric{font-family:"Space Grotesk","Inter",sans-serif;font-weight:800;font-size:15px;letter-spacing:.3px;
+  background:linear-gradient(100deg,#3FD8FF,#2E7BFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.cardnote{font-size:11.5px;color:#7E8BB0;margin-top:10px;border-top:1px dashed rgba(63,216,255,.14);padding-top:8px}
+
+/* honest inline flag (matches industrial) */
+.honest{display:inline-block;font-size:11px;font-weight:700;color:#FFC24B;background:rgba(255,194,75,.08);
+  border:1px solid rgba(255,194,75,.32);border-radius:6px;padding:2px 9px;margin-left:6px;vertical-align:middle}
+
+/* closing CTA */
+.inline-cta{background:rgba(8,14,40,.7);border:1px solid rgba(63,216,255,.28);border-radius:16px;padding:30px 32px;margin-top:8px;text-align:center}
+.inline-cta h3{color:#fff;font-size:23px;margin:0 0 8px}
+.inline-cta p{color:var(--txt-mid);max-width:64ch;margin:0 auto 18px;font-size:15px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
+    <span class="topbar-links">
+      <a href="community.html">Community</a>
+      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+      <a href="downloads.html">Downloads</a>
+    </span>
+  </div>
+</div>
+<header class="site-header">
+  <div class="container header-row">
+    <a href="/" class="brand">
+      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
+      <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
+    </a>
+    <nav class="site-nav" id="siteNav">
+      <a href="/">Home</a>
+      <div class="nav-dropdown">
+        <a href="/products.html" class="nav-dropdown-trigger">Products ▾</a>
+        <div class="nav-dropdown-menu">
+          <a href="/industrial.html"><strong>Industrial</strong><span>Plant-floor dashboards, troubleshooters, ERP hand-off</span></a>
+          <a href="/training.html"><strong>Training</strong><span>Interactive electrical training &amp; machine troubleshooting portals</span></a>
+          <a href="/j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
+          <a href="/3d-printing/"><strong>3D Printing Hub</strong><span>Board wiring, firmware &amp; pinouts</span></a>
+          <a href="/eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
+          <a href="/c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
+          <a href="/gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
+        </div>
+      </div>
+      <a href="/3d-printing/">3D Printing</a>
+      <a href="/industrial.html">Industrial</a>
+      <a href="/training.html" class="active">Training</a>
+      <a href="/games.html">Games</a>
+      <a href="/community.html">Community</a>
+      <a href="/downloads.html">Downloads</a>
+      <a href="/about.html">About</a>
+    </nav>
+    <div class="header-actions">
+      <a href="mailto:contact@honeybadger.software" class="btn btn-primary btn-sm">Get in touch</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="page-hero">
+  <div class="ind-streak" style="top:24%"></div>
+  <div class="ind-streak" style="top:66%;animation-delay:7s"></div>
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / Training</div>
+    <div class="eyebrow-chip">🎓 INDUSTRIAL EDUCATION &amp; TRAINING</div>
+    <div class="hero-grid">
+      <div>
+        <h1>Plants run on machines nobody fully understands anymore.</h1>
+        <p class="lede">The one tech who knows the panel is about to retire. The prints went missing three retirements
+        ago. The fault that eats a whole shift lives in one person's head. We take that machine — its wiring, its logic,
+        its failure history — and turn the tribal knowledge into <b style="color:#DCE6FF">interactive training and a live
+        troubleshooting portal</b>. Not a slideshow. Not a binder. A tool your crew actually operates.</p>
+        <p class="lead-hook" style="margin-top:14px;color:#8FA3CC">Honestly? <b>Almost nobody else is doing this.</b>
+        Simulators teach a generic textbook cabinet; manuals describe the happy path. We build training around
+        <i>your</i> hardware and the way it actually breaks.</p>
+        <div class="hero-cta" style="margin-top:24px">
+          <a href="mailto:contact@honeybadger.software?subject=Training%20%26%20troubleshooting%20portal" class="btn btn-primary">Get in touch</a>
+          <a href="#process" class="btn btn-ghost">See how it works →</a>
+        </div>
+      </div>
+
+      <!-- LIVE interactive schematic — proves the point: you operate it -->
+      <div class="tr-panel">
+        <div class="tr-cap"><b>◉ LIVE SCHEMATIC — 3-WIRE START/STOP</b></div>
+        <svg class="tr-ladder" id="trLadder" viewBox="0 0 480 300" role="img"
+             aria-label="Interactive relay ladder: press Start to energize the coil and latch the seal-in circuit">
+          <!-- rails -->
+          <line class="rail" x1="44" y1="46" x2="44" y2="252"></line>
+          <line class="rail" x1="436" y1="46" x2="436" y2="252"></line>
+          <text class="tl" x="30" y="40">L+ 24VDC</text>
+          <text x="428" y="40">N</text>
+
+          <!-- CONTROL RUNG y=92 -->
+          <line class="wire hot" x1="44" y1="92" x2="98" y2="92"></line>
+          <rect class="glyph" x="98" y="84" width="26" height="16" rx="2"></rect>
+          <text x="101" y="78">FU1</text>
+          <line class="wire hot" x1="124" y1="92" x2="168" y2="92"></line>
+          <!-- STOP (NC): two bars + slash -->
+          <line class="glyph" x1="174" y1="80" x2="174" y2="104"></line>
+          <line class="glyph" x1="186" y1="80" x2="186" y2="104"></line>
+          <line class="glyph" x1="170" y1="104" x2="190" y2="80"></line>
+          <text x="160" y="122">STOP</text>
+          <line class="wire hot" x1="186" y1="92" x2="238" y2="92"></line>
+          <circle class="dot" cx="238" cy="92" r="3"></circle>
+          <!-- START (NO): two bars -->
+          <line class="glyph" x1="263" y1="80" x2="263" y2="104"></line>
+          <line class="glyph" x1="275" y1="80" x2="275" y2="104"></line>
+          <text x="252" y="76">START</text>
+          <line class="wire hot" x1="238" y1="92" x2="263" y2="92"></line>
+          <line class="wire hot" x1="275" y1="92" x2="310" y2="92"></line>
+          <circle class="dot" cx="310" cy="92" r="3"></circle>
+          <!-- SEAL-IN parallel branch (CR NO) -->
+          <g class="seal">
+            <line class="wire hot" x1="238" y1="92" x2="238" y2="132"></line>
+            <line class="wire hot" x1="238" y1="132" x2="263" y2="132"></line>
+            <line class="glyph" x1="263" y1="120" x2="263" y2="144"></line>
+            <line class="glyph" x1="275" y1="120" x2="275" y2="144"></line>
+            <line class="wire hot" x1="275" y1="132" x2="310" y2="132"></line>
+            <line class="wire hot" x1="310" y1="132" x2="310" y2="92"></line>
+            <text x="248" y="160">CR seal-in</text>
+          </g>
+          <!-- to coil -->
+          <line class="wire hot" x1="310" y1="92" x2="364" y2="92"></line>
+          <circle class="coilGlow" cx="384" cy="92" r="20"></circle>
+          <circle class="glyph" cx="384" cy="92" r="14"></circle>
+          <text x="376" y="96" style="font-size:10px">CR</text>
+          <line class="wire hot" x1="398" y1="92" x2="436" y2="92"></line>
+
+          <!-- LAMP RUNG y=180 (Running) -->
+          <line class="wire hot" x1="44" y1="180" x2="150" y2="180"></line>
+          <!-- CR NO contact driving the lamp -->
+          <line class="glyph" x1="150" y1="168" x2="150" y2="192"></line>
+          <line class="glyph" x1="162" y1="168" x2="162" y2="192"></line>
+          <text x="140" y="210">CR</text>
+          <line class="wire hot" x1="162" y1="180" x2="316" y2="180"></line>
+          <!-- Running lamp -->
+          <g>
+            <line class="ray run" x1="331" y1="160" x2="331" y2="150"></line>
+            <line class="ray run" x1="352" y1="169" x2="360" y2="161"></line>
+            <line class="ray run" x1="310" y1="169" x2="302" y2="161"></line>
+            <circle class="lamp run" cx="331" cy="180" r="15"></circle>
+          </g>
+          <text x="316" y="212">RUN</text>
+          <line class="wire hot" x1="346" y1="180" x2="436" y2="180"></line>
+
+          <!-- current flow overlays (dashed, animate when on) -->
+          <path class="flow" d="M44,92 H98 M124,92 H364"></path>
+          <path class="flow" d="M44,180 H316"></path>
+        </svg>
+        <div class="tr-controls">
+          <button class="tr-mini tr-start" id="trStart" type="button">▶ START</button>
+          <button class="tr-mini tr-stop" id="trStop" type="button">■ STOP</button>
+          <span class="tr-status" id="trStatus">● DE-ENERGIZED — press START</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== THE PROCESS ===== -->
+<section class="section" id="process">
+  <div class="container">
+    <div class="section-head"><div class="kicker">THE PROCESS</div>
+    <h2>We turn a machine nobody documented into a tool anyone can use.</h2></div>
+    <p class="lead-hook">Every plant has them — the machine two people know how to fix, the panel whose drawings are a
+    decade of hand-scrawled red-lines, the alarm that means something different at 2 a.m. than the manual says. We
+    don't hand you a generic course. We build the training and the troubleshooter around <b>the exact hardware on your
+    floor</b>, from how it actually fails.</p>
+
+    <div class="proc">
+      <div class="proc-step"><span class="n">1</span>
+        <h3>Read the machine as-built</h3>
+        <p>Its electrical prints, its live controller program, and its real failure history — the alarms crews actually
+        see, in the order they cascade. We work from how the machine fails, not from the manual's happy path.</p></div>
+      <div class="proc-step"><span class="n">2</span>
+        <h3>Reverse-engineer the logic</h3>
+        <p>We monitor the ladder while operating the machine, decode each bit, timer, and register, and rebuild the
+        fault tree the controller is really following — the run-enable chain, the interlocks, the handshakes that go
+        quiet the moment something's wrong.</p></div>
+      <div class="proc-step"><span class="n">3</span>
+        <h3>Build the troubleshooting portal</h3>
+        <p>One screen per machine: pick a symptom, get a <b>ranked</b> list of likely causes, and for each one exactly
+        what to check and where — deep-linked to the precise wiring print, contact, and terminal number.</p></div>
+      <div class="proc-step"><span class="n">4</span>
+        <h3>Wire it to the live floor</h3>
+        <p>The portal reads the controller in real time over the bus it already speaks. So "is the coil energized?"
+        isn't a sentence a tech has to go measure — it's a live value already on the screen.</p></div>
+    </div>
+
+    <!-- symptom -> ranked cause -> check -->
+    <div class="flow3">
+      <div class="f3 sym"><div class="fk">◆&nbsp;SYMPTOM</div>
+        <div class="row">"Motor won't start when I press Start."</div>
+        <div class="row"><b>Operator picks it from a plain-English list.</b></div>
+      </div>
+      <div class="arw">→</div>
+      <div class="f3 cau"><div class="fk">▚&nbsp;RANKED CAUSES</div>
+        <div class="row"><span class="rank">1</span>Overload tripped on the starter</div>
+        <div class="row"><span class="rank">2</span>Control fuse blown</div>
+        <div class="row"><span class="rank">3</span>Seal-in contact failed open</div>
+        <div class="row"><span class="rank">4</span>E-stop / interlock not made</div>
+      </div>
+      <div class="arw">→</div>
+      <div class="f3 chk"><div class="fk">✓&nbsp;WHAT TO CHECK</div>
+        <div class="row"><b>Coil voltage:</b> <span style="color:#7FE2A2">live 0.0 V</span> — control side is dead</div>
+        <div class="row"><b>Go to:</b> print sheet 2, wire 14, FU1</div>
+        <div class="row">Live reading + the exact print, side by side</div>
+      </div>
+    </div>
+
+    <div class="hard">
+      <span class="flag">WHY THIS IS TECHNICALLY HARD</span>
+      <h3>Most of this logic was never written down.</h3>
+      <p>There's no export, no API, no tidy document — just thousands of steps of uncommented ladder, a wiring set
+      that's been red-lined by hand for fifteen years, and the memory of whoever's about to retire. Recovering it
+      means reading the machine live, matching every bit and register to a real behavior you can see happen, building
+      the fault tree from evidence, and being disciplined enough to label a value a
+      <span class="honest">timestamped snapshot</span> when it genuinely can't be trusted live. That's the work almost
+      nobody does — and it's exactly the work.</p>
+    </div>
+
+    <p class="lead-hook" style="margin-top:22px">When the wiring set is missing or wrong, we redraw it too:
+    client-ready <b>JIC ladder prints</b> — proper zone border, title block, bill of materials, and standard symbols
+    (N.O./N.C. contacts, pushbuttons, coils, beacons, horns, wire numbers) — plus matching operation and sensor-setup
+    guides. The same drawings the portal deep-links into. Deployed as one private portal for a whole floor — one home
+    screen, every machine behind it — not sold off a shelf.</p>
+  </div>
+</section>
+
+<!-- ===== THE RELAY TRAINER ===== -->
+<section class="section section-alt" id="trainer">
+  <div class="container">
+    <div class="section-head"><div class="kicker">THE INTERACTIVE TRAINER</div>
+    <h2>An electrical trainer built for techs, not engineers.</h2></div>
+    <p class="lead-hook">The schematic in the hero isn't a screenshot — it's the real thing, and it's how the whole
+    trainer works. <b>Relays energize, contacts flip, the seal-in latches, current lights up the wire.</b> Every
+    circuit is driven by a genuine solver that behaves like a real panel — signed DC readings, floating points that
+    read near zero, sneak paths in ohms mode — so what a learner sees on screen is what a meter would show in the
+    cabinet. No cartoons of electricity. Actual electricity, simulated honestly.</p>
+
+    <div class="chips">
+      <span class="chip"><span class="g">●</span> Live circuit solver</span>
+      <span class="chip"><span class="g">●</span> Operable SVG schematics</span>
+      <span class="chip"><span class="g">●</span> Virtual multimeter (live-dead-live)</span>
+      <span class="chip"><span class="g">●</span> Fault injection &amp; fault-hunt drills</span>
+      <span class="chip"><span class="g">●</span> 3D relay parts you can rotate</span>
+      <span class="chip"><span class="g">●</span> Real datasheets &amp; cut sheets</span>
+      <span class="chip"><span class="g">●</span> Component photos &amp; cutaways</span>
+      <span class="chip"><span class="g">●</span> Quizzes + a graded capstone</span>
+    </div>
+
+    <div class="section-head" style="margin-top:44px"><div class="kicker">THE ~29-LESSON TRACK</div>
+    <h2>Baby steps to fault-hunt, and the colour is the difficulty.</h2></div>
+    <p class="lead-hook">A structured path a brand-new tech can start from zero and finish able to diagnose a dead
+    motor. Each tier builds on the last — no leaps, no assumed knowledge.</p>
+
+    <div class="track">
+      <div class="tier e1"><div class="tno">TIER 1</div><h4>Baby Steps</h4><div class="cnt">the mental model</div>
+        <ul><li>Electricity as water in pipes</li><li>Source, path, load</li><li>The contact as a drawbridge</li></ul></div>
+      <div class="tier e2"><div class="tno">TIER 2</div><h4>Beginner</h4><div class="cnt">the parts</div>
+        <ul><li>Normally open vs closed</li><li>Reading 24VDC &amp; poles/throws</li><li>SPST → DPDT naming</li><li>The coil; the momentary-button problem</li></ul></div>
+      <div class="tier e3"><div class="tno">TIER 3</div><h4>Intermediate</h4><div class="cnt">the circuit</div>
+        <ul><li>The seal-in latch</li><li>Classic 3-wire Start/Stop</li><li>Swap the bulb for a contactor</li><li>Poles for 3-phase; matching coil voltage</li></ul></div>
+      <div class="tier e4"><div class="tno">TIER 4</div><h4>Advanced</h4><div class="cnt">the system</div>
+        <ul><li>The 480/240/120/24 voltage ladder</li><li>Fusing math (A = W ÷ V)</li><li>On-delay vs off-delay timers</li><li>Reading datasheets &amp; ladder symbols</li></ul></div>
+      <div class="tier e5"><div class="tno">TIER 5</div><h4>Expert</h4><div class="cnt">the diagnosis</div>
+        <ul><li>Divide-and-conquer method</li><li>Safe metering &amp; live-dead-live</li><li>Common real-world faults</li><li>Lockout/Tagout</li><li>Capstone: diagnose a dead motor</li></ul></div>
+    </div>
+    <div class="rampbar"></div>
+    <div class="ramp-lbl"><span>◀ SAFE / SIMPLE</span><span>COOL → WARM = EASY → EXPERT</span><span>LETHAL / EXPERT ▶</span></div>
+  </div>
+</section>
+
+<!-- ===== WHAT IT DOES FOR YOUR COMPANY ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-head"><div class="kicker">WHAT IT DOES FOR YOUR COMPANY</div>
+    <h2>Knowledge on a screen beats knowledge in one person's head.</h2></div>
+    <div class="product-grid">
+      <div class="product-card"><div class="product-icon">⏱️</div>
+        <h3>Troubleshooting in <span class="metric">minutes, not shifts</span></h3>
+        <p>A tech follows symptom → ranked cause → exact check instead of guessing. The fix that used to live in one
+        person's memory is now on every screen on the floor, backed by a live controller reading.</p>
+        <div class="cardnote">Less downtime per fault. Fewer callbacks to the one person who "just knows."</div></div>
+      <div class="product-card"><div class="product-icon">🎓</div>
+        <h3>Onboard techs in <span class="metric">weeks, not years</span></h3>
+        <p>New maintenance hires learn the actual cabinet — live schematics they operate, a meter they use safely,
+        faults they hunt — then carry a portal that walks them through your real machines from day one.</p>
+        <div class="cardnote">The trainer teaches the trade; the portal teaches your floor.</div></div>
+      <div class="product-card"><div class="product-icon">🧠</div>
+        <h3>Capture the expert <span class="metric">before they walk out</span></h3>
+        <p>Your most senior tech's knowledge becomes a documented controller program and a searchable troubleshooting
+        portal — retained when they retire, not lost with them. Debrief once; keep it forever.</p>
+        <div class="cardnote">The most expensive knowledge in the building, finally written down.</div></div>
+      <div class="product-card"><div class="product-icon">🔩</div>
+        <h3>Fewer <span class="metric">parts-cannon repairs</span></h3>
+        <p>When the screen names the component that's actually failing and how to prove it, crews stop swapping good
+        parts hoping one sticks. Less guesswork, less inventory burned, less repeat downtime.</p>
+        <div class="cardnote">Diagnose the fault, replace the part once.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WORK WITH US ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="inline-cta">
+      <h3>Bring us your worst machine.</h3>
+      <p>The one only one person can fix, the panel with no drawings, the fault that keeps eating shifts. Tell us what
+      you run and where the knowledge is walking out the door — we'll talk through turning it into training your crew
+      operates and a troubleshooter that pays for itself the first time it saves a shift.</p>
+      <a href="mailto:contact@honeybadger.software?subject=Training%20%26%20troubleshooting%20portal" class="btn btn-primary">Get in touch about your facility →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
+        <p class="footer-blurb">A software studio that reverse-engineers plant-floor hardware, turns the tribal knowledge into interactive training and live troubleshooting portals, and ships real, signed installers. No telemetry. No tracking. Just tools.</p>
+      </div>
+      <div class="footer-col"><h4>Products</h4><a href="industrial.html">Industrial</a><a href="training.html">Training</a><a href="j1-bridge.html">J1 Bridge</a><a href="eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="gauge-builder.html">Dash Builder</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="support.html">Support &amp; Docs</a><a href="downloads.html">Downloads</a><a href="news.html">News</a><a href="about.html">About</a></div>
+      <div class="footer-col"><h4>Community</h4><a href="community.html">Forums</a><a href="community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
+    </div>
+    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · Training screens are generic teaching examples · No client or facility data, drawings, or machine identifiers appear on this site · No telemetry. No tracking. Just tools.</small></div>
+  </div>
+</footer>
+<script src="assets/js/nav.js?v=4"></script>
+<script>
+/* Interactive hero schematic — you operate it, the coil latches. */
+(function(){
+  var lad = document.getElementById('trLadder');
+  var st  = document.getElementById('trStatus');
+  if(!lad || !st) return;
+  function set(on){
+    lad.classList.toggle('on', on);
+    st.textContent = on ? '● RUNNING — coil latched, seal-in holding' : '● DE-ENERGIZED — press START';
+    st.className = 'tr-status' + (on ? ' live' : '');
+  }
+  var s = document.getElementById('trStart'); if(s) s.addEventListener('click', function(){ set(true); });
+  var p = document.getElementById('trStop');  if(p) p.addEventListener('click', function(){ set(false); });
+  lad.addEventListener('click', function(){ set(!lad.classList.contains('on')); });
+})();
+</script>
+</body>
+</html>

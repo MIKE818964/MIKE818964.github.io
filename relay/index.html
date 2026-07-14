@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relay Training — Interactive Troubleshooting</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css?v=26" />
+  <link rel="stylesheet" href="css/app.css?v=26" />
+  <link rel="stylesheet" href="css/svg.css?v=26" />
+</head>
+<body>
+
+  <!-- layered G2 background: masked grid + warm glow + vignette -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+  <div class="bg-vignette"></div>
+
+  <!-- file:// guard -->
+  <div id="filewarn" class="filewarn hidden">
+    <h2>Please start with the launcher</h2>
+    <p>This program needs to run from a small local web server (it loads its lessons as data).
+       Opening the file directly won't work.</p>
+    <p>Double-click <code>Relay Training.bat</code> (or <code>app/run_training.bat</code>) and it will open correctly.</p>
+  </div>
+
+  <div id="app">
+    <header class="app-header">
+      <a class="brand" href="landing.html" title="Back to the front page">
+        <svg class="brand-mark" viewBox="0 0 40 44" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="bm" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#7C5CFF"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 2 36 9v13c0 9-7 16-16 19C11 38 4 31 4 22V9L20 2Z" stroke="url(#bm)" stroke-width="1.8"/>
+          <circle cx="20" cy="20" r="3.4" fill="url(#bm)"/>
+          <g stroke="url(#bm)" stroke-width="1.8" stroke-linecap="round">
+            <line x1="20" y1="10" x2="20" y2="15"/><line x1="20" y1="25" x2="20" y2="30"/>
+            <line x1="11" y1="20" x2="16" y2="20"/><line x1="24" y1="20" x2="29" y2="20"/>
+          </g>
+        </svg>
+        <span class="brand-text">
+          <span class="brand-name">RELAY <b>TRAINING</b></span>
+          <span class="brand-sub">Interactive Troubleshooting · by Honeybadger Software</span>
+        </span>
+        <span aria-hidden="true" style="margin-left:8px;color:#99A1B3;font-size:15px;line-height:1" title="Back to the front page">⌂</span>
+      </a>
+      <div class="progress-wrap">
+        <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+        <div id="progress-label" class="progress-label">0 / 0 complete</div>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <nav id="nav" class="nav"></nav>
+
+      <section class="stage-wrap">
+        <div id="view-tabs" class="view-tabs hidden"></div>
+        <div class="stage-card">
+          <svg id="stage" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div id="stage-overlay" class="hidden"></div>
+        </div>
+        <div class="toolbar">
+          <div class="meter">
+            <span id="meter-value" class="meter-value">--.--</span>
+            <span id="meter-sub" class="meter-sub">multimeter</span>
+          </div>
+          <div class="meter-modes">
+            <button class="meter-mode active" data-mode="VDC">VDC</button>
+            <button class="meter-mode" data-mode="VAC">VAC</button>
+            <button class="meter-mode" data-mode="CONT">Ω•))</button>
+          </div>
+          <div class="toolbar-spacer"></div>
+          <button id="btn-reset" class="btn btn-ghost">↻ Reset</button>
+        </div>
+      </section>
+
+      <aside id="teach" class="teach"></aside>
+    </div>
+  </div>
+
+  <!-- inlined SVG defs: red bloom glow for energized conductors -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="2.2" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Three.js (bundled locally, UMD globals) for the real 3D relay viewer -->
+  <script src="js/lib/three.min.js"></script>
+  <script src="js/lib/STLLoader.js"></script>
+  <script src="js/lib/GLTFLoader.js"></script>
+  <script src="js/lib/OrbitControls.js"></script>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

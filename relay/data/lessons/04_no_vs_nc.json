@@ -1,0 +1,27 @@
+{
+  "id": "04_no_vs_nc",
+  "circuit": {
+    "id": "04_no_vs_nc",
+    "nodes": [
+      { "id": "nPos", "x": 140, "y": 160 },
+      { "id": "nLive", "x": 310, "y": 160 },
+      { "id": "nCoil", "x": 650, "y": 160 },
+      { "id": "nRun", "x": 650, "y": 270 },
+      { "id": "nStop", "x": 650, "y": 380 },
+      { "id": "nNeg", "x": 140, "y": 480 }
+    ],
+    "components": [
+      { "id": "PS1", "type": "source", "current": "DC", "volts": 24, "x": 140, "y": 320, "label": "24VDC", "terminals": { "pos": "nPos", "neg": "nNeg" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 220, "y": 160, "label": "FU1", "terminals": { "a": "nPos", "b": "nLive" } },
+      { "id": "S1", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 480, "y": 160, "label": "S1 Start", "terminals": { "in": "nLive", "out": "nCoil" } },
+      { "id": "CR1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC", "x": 650, "y": 220, "label": "CR1", "terminals": { "a": "nCoil", "b": "nNeg" } },
+      { "id": "CR1NO", "type": "contact_no", "coil": "CR1", "x": 480, "y": 270, "label": "CR1 NO", "terminals": { "in": "nLive", "out": "nRun" } },
+      { "id": "LT1", "type": "bulb", "x": 650, "y": 320, "label": "Running", "terminals": { "a": "nRun", "b": "nNeg" } },
+      { "id": "CR1NC", "type": "contact_nc", "coil": "CR1", "x": 480, "y": 380, "label": "CR1 NC", "terminals": { "in": "nLive", "out": "nStop" } },
+      { "id": "LT2", "type": "bulb", "x": 650, "y": 430, "label": "Stopped", "terminals": { "a": "nStop", "b": "nNeg" } },
+      { "id": "TP1", "type": "test_point", "x": 650, "y": 100, "label": "TP-Coil", "terminals": { "p": "nCoil" } },
+      { "id": "TP2", "type": "test_point", "x": 590, "y": 270, "label": "TP-NO", "terminals": { "p": "nRun" } },
+      { "id": "TP3", "type": "test_point", "x": 590, "y": 380, "label": "TP-NC", "terminals": { "p": "nStop" } }
+    ]
+  }
+}

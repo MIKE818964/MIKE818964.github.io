@@ -1,0 +1,131 @@
+{
+  "moduleId": "m03-switch-is-a-drawbridge",
+  "title": "A Contact Is a Drawbridge in the Path",
+  "questions": [
+    {
+      "q": "A contact is OPEN. Is current flowing through it?",
+      "options": [
+        "No — open means a gap, so nothing flows",
+        "Yes — open means the path is connected",
+        "Yes, but only a little",
+        "Only if the load is a bulb"
+      ],
+      "correct": 0,
+      "why": "OPEN is like a raised drawbridge: there is a gap in the path, so no current crosses. Current flows only when the contact is CLOSED."
+    },
+    {
+      "q": "In drawbridge terms, what does CLOSED mean for a contact?",
+      "options": [
+        "Bridge down, road connected, current flows",
+        "Bridge up, gap in the road, current stops",
+        "The bridge is broken and must be replaced",
+        "The road is blocked off permanently"
+      ],
+      "correct": 0,
+      "why": "CLOSED = connected = flow, just like a drawbridge that is down lets cars (electricity) cross."
+    },
+    {
+      "q": "You want the bulb to light. Should the contact in the path be open or closed?",
+      "options": [
+        "Closed",
+        "Open",
+        "Half open",
+        "It doesn't matter"
+      ],
+      "correct": 0,
+      "why": "The bulb only lights when the path is connected, and a contact is connected when it is CLOSED (bridge down).",
+      "visual": {
+        "lesson": "m03-switch-is-a-drawbridge",
+        "caption": "The lamp circuit as drawn — button released."
+      }
+    },
+    {
+      "q": "A bulb is dark. You find the single contact in its circuit is OPEN. What does that tell you?",
+      "options": [
+        "The path is broken at the contact, so no current can reach the bulb",
+        "The bulb is burned out",
+        "The battery is dead",
+        "The contact is fine and something else is wrong"
+      ],
+      "correct": 0,
+      "why": "An open contact is a gap in the path — like a raised drawbridge — so current cannot reach the load until the contact is closed.",
+      "visual": {
+        "lesson": "m03-switch-is-a-drawbridge",
+        "caption": "As found — the only contact in the path sits open."
+      }
+    },
+    {
+      "q": "A solenoid valve is stroking slowly and running hot. You put a meter across its supply contact while the machine cycles and read 5V across the CLOSED contact, with 19V left over at the valve on a 24VDC circuit. What's going on?",
+      "options": [
+        "The contact is wired backwards and needs to be reversed",
+        "The contact is pitted/carbonized and is dropping voltage as heat instead of passing it through clean",
+        "This is normal — all closed contacts drop a few volts under load",
+        "The valve coil itself is failing and the contact is fine"
+      ],
+      "correct": 1,
+      "why": "A good closed contact should drop essentially 0-0.2V. A 5V drop means carbon/oxide buildup on the contact face is acting like a resistor in the middle of your 'connected' bridge, stealing voltage as heat and starving the load. That's exactly the failure mode described for pitted contacts — the circuit still reads 'closed' so nobody suspects it."
+    },
+    {
+      "q": "You press the Stop button and the motor keeps running. You measure across the NC stop-contact while holding it pressed and read 0V both at rest and while pressed. What should you conclude?",
+      "options": [
+        "The contact is working correctly and the fault is elsewhere",
+        "The button needs a firmer press to fully open",
+        "The contact is welded closed, so current has a path regardless of button position",
+        "0V while pressed is expected and normal for a Stop button"
+      ],
+      "correct": 2,
+      "why": "Pressing an NC contact should open it, and you should read full supply voltage across it once it's open. Reading 0V in BOTH states means the contact faces never actually separate — they're fused together (welded) and current flows regardless of what the button mechanism is doing. That's a safety-critical failure, not a downstream problem.",
+      "visual": {
+        "lesson": "m14-swap-bulb-for-motor-starter",
+        "prevCoil": [
+          "M1"
+        ],
+        "caption": "Station as found — running; pressing Stop changes nothing."
+      }
+    },
+    {
+      "q": "You're specifying a relay to switch a 24VDC solenoid valve coil that draws 3A resistive. The relay's datasheet lists a 10A resistive rating and a 4A inductive rating. What should guide your selection?",
+      "options": [
+        "Size to the resistive rating (10A) since that's the bigger, safer-looking number",
+        "Either rating works since the relay is rated well above 3A either way",
+        "Ignore both ratings and just match the wire gauge instead",
+        "Size to the inductive rating (4A), since the solenoid coil is an inductive load, not a straight resistive one"
+      ],
+      "correct": 3,
+      "why": "Solenoid coils, motor contactor coils, and relay coils are inductive loads, so the inductive rating is the one that applies — and it's commonly 30-50% lower than the resistive number for a reason: opening an inductive circuit generates a voltage spike 5-10x supply voltage at the contact gap, accelerating arcing and pitting. Sizing to the resistive number looks fine on paper but sets the contact up to fail early."
+    },
+    {
+      "q": "Before reaching into a panel to work on a 120VAC wire, a coworker tells you the limit switch contacts feeding it are open per the schematic. What should you do before you touch anything?",
+      "options": [
+        "Verify with a meter at the exact point you're about to touch, regardless of what the print or coworker says",
+        "Trust the schematic — if it says open, it's open",
+        "Trust your coworker's word since they already checked it",
+        "Check that the machine is powered off at the main disconnect and skip the meter check"
+      ],
+      "correct": 0,
+      "why": "A contact's position on a print is its DESIGNED state, not necessarily its actual state — contacts can weld closed, or a sneak parallel path or upstream ground fault can put voltage on a wire that 'should' be dead. The habit that keeps people alive is verifying with a meter at the exact point of contact, every time, no exceptions for prints or secondhand confirmations."
+    },
+    {
+      "q": "You measure across an OPEN contact with a standard high-impedance digital multimeter and see 40V ghosting on a 24VDC circuit, even though nothing should be energized. What's the right next step?",
+      "options": [
+        "Conclude the contact is definitely welded and replace the relay immediately",
+        "Re-check with a low-impedance (low-Z) meter or solenoid tester — a high-Z meter can read induced/capacitive ghost voltage as if it were real",
+        "Conclude there's a hidden parallel path and start tracing every wire in the panel",
+        "Ignore the reading since 40V is impossible on a 24VDC circuit"
+      ],
+      "correct": 1,
+      "why": "High-impedance meters can pick up ghost voltage induced from adjacent wiring or capacitive coupling and display it as if it were a real, current-capable voltage. A low-Z meter loads the circuit enough to kill that ghost. Only if the low-Z meter STILL shows voltage do you move on to suspecting a weld or a real sneak path."
+    },
+    {
+      "q": "A pilot-duty control relay's contacts have picked up a dull black tarnish after months in service, but the machine still runs correctly. What's the right response?",
+      "options": [
+        "File or sand the contact faces to bring back a bright, shiny finish",
+        "Replace the relay immediately since any discoloration means the contact is failing",
+        "Apply electrical contact cleaner spray and scrub with a wire brush",
+        "Leave it alone — silver-sulfide tarnish still conducts fine; sanding or filing it off would strip the silver alloy and ruin the contact"
+      ],
+      "correct": 3,
+      "why": "Black silver-sulfide tarnish is a normal, harmless byproduct on silver-alloy contacts and still conducts fine — it is not the same thing as carbon/oxide pitting from arcing. Sanding or filing removes the silver alloy coating and exposes the copper base underneath, which oxidizes fast and permanently ruins the contact; if a contact is actually bad, the fix is to replace the relay, not resurface it."
+    }
+  ]
+}

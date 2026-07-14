@@ -1,0 +1,120 @@
+{
+  "moduleId": "m27-common-real-faults",
+  "title": "Common Real-World Relay & Control Faults",
+  "questions": [
+    {
+      "q": "A machine runs only while you HOLD the Start button and drops out the instant you let go. What is the most likely fault?",
+      "options": [
+        "A failed seal-in path — the relay's own holding contact isn't closing",
+        "A welded main contact stuck closed",
+        "The coil is rated for the wrong voltage and overheating",
+        "The Stop button is wired normally open"
+      ],
+      "correct": 0,
+      "why": "Without a working seal-in, only the momentary Start button can feed the coil, so the relay drops out the moment you release the button.",
+      "visual": {
+        "lesson": "m13-stop-button-3wire",
+        "caption": "A standard 3-wire station print, for reference."
+      }
+    },
+    {
+      "q": "A relay's coil is energized and de-energized, but the load STAYS on and the relay won't release. What's the classic cause?",
+      "options": [
+        "Welded or pitted contacts stuck closed",
+        "A burned-out coil",
+        "A blown control fuse",
+        "A loose seal-in wire"
+      ],
+      "correct": 0,
+      "why": "Contacts that have welded or badly pitted together stay bridged even after the coil drops out, so the load can't shut off."
+    },
+    {
+      "q": "A relay buzzes and chatters instead of clicking in solidly. What does that usually point to?",
+      "options": [
+        "Loose or low control voltage at the coil",
+        "Two welded contacts",
+        "An over-voltage coil burning up",
+        "A perfectly healthy relay"
+      ],
+      "correct": 0,
+      "why": "Marginal or intermittent (loose/low) control voltage lets the coil barely pull in and then drop, so it rapidly chatters instead of holding."
+    },
+    {
+      "q": "A motor starter won't run, and you find its overload has tripped. What does a tripped overload tell you?",
+      "options": [
+        "The motor drew too much current and the overload protected it by opening the control path",
+        "The control fuse is fine and nothing else is wrong",
+        "The coil is welded closed",
+        "The Start button is broken"
+      ],
+      "correct": 0,
+      "why": "An overload trips on excess motor current and opens the control circuit to protect the motor; you find why it overloaded, then reset it."
+    },
+    {
+      "q": "You measure 24V on the input side of an auxiliary seal-in contact and 0V on the output side while the relay is energized and the Start button is being held. What's your conclusion?",
+      "options": [
+        "The coil is under-voltage and chattering",
+        "The seal-in contact itself isn't closing (burned open or mechanically bound)",
+        "The main contacts are welded",
+        "The control fuse is blown"
+      ],
+      "correct": 1,
+      "why": "Voltage present on one side of a contact and absent on the other, with the relay pulled in, means that contact is open when it should be closed — the classic failed seal-in signature. A welded main contact or blown fuse would show a completely different voltage pattern, and coil chatter would show the relay dropping in and out, not a clean stuck-open reading."
+    },
+    {
+      "q": "Contactor coil drops out with an audible click when you hit Stop, but the motor keeps running and won't stop until you throw the main disconnect. Where do you put your meter first?",
+      "options": [
+        "Across the coil terminals, checking for full control voltage",
+        "Across the control fuse, checking for 0V",
+        "Across the main contacts with the coil de-energized, checking for near-zero ohms",
+        "Across the overload contacts, checking for continuity"
+      ],
+      "correct": 2,
+      "why": "The coil already proved it's working (you heard it click and drop out), so the fault is downstream — across the main contacts, which should read open (megohms) with the coil de-energized. Anything near 0 ohms means the contacts welded shut from an arc, and replacing the coil won't fix that."
+    },
+    {
+      "q": "A new tech is troubleshooting a totally dead 24VDC control circuit — no hum, no click, nothing — and reads 24V across the control fuse. He says 'the fuse must be good, I'm seeing voltage.' What should you tell him?",
+      "options": [
+        "He's right, the fuse is fine, keep looking elsewhere",
+        "He needs to measure current instead of voltage across the fuse",
+        "The reading only makes sense on 120VAC circuits, not 24VDC",
+        "That reading means the fuse is BLOWN — a good fuse reads near 0V because it's a dead short in the circuit"
+      ],
+      "correct": 3,
+      "why": "A good fuse is essentially a piece of wire — near-zero resistance — so it drops almost no voltage across itself; the full supply voltage instead appears across whatever is open in the series loop. Reading full voltage ACROSS the fuse means you're measuring across an open element, i.e. the fuse itself is blown. This exact reversal is called out as the #1 new-tech trap."
+    },
+    {
+      "q": "On a 24VDC control rail, you measure 24V at the terminal strip with the coil disconnected, but the moment the coil tries to pull in, the voltage collapses to 16V and the relay chatters. Roughly what percentage drop is that, and what does it tell you?",
+      "options": [
+        "About a 33% drop — beyond the 10-15% threshold that points to wiring/source impedance, not a bad relay",
+        "About a 33% drop, which is normal inrush behavior and nothing to fix",
+        "About a 8% drop — within normal tolerance, so the relay itself must be defective",
+        "About a 66% drop, which can only be caused by a shorted coil winding"
+      ],
+      "correct": 0,
+      "why": "(24-16)/24 = 0.33, a 33% collapse under load — well past the 10-15% guideline for a healthy circuit. That size of sag under coil load points to a long/undersized run or a corroded terminal choking down the source, not a defective relay; swapping the relay in this case wouldn't fix anything."
+    },
+    {
+      "q": "You find a relay chattering badly and, since it's not urgent, you decide to let it run through the shift and look at it after lunch. What's the real risk of leaving a chattering coil energized?",
+      "options": [
+        "Nothing urgent — chatter is just a cosmetic noise issue with no electrical consequence",
+        "The coil is stuck in continuous inrush (6-10x its sealed current) and can overheat and burn out within minutes",
+        "The main contacts will immediately weld shut from the vibration",
+        "The overload relay will nuisance-trip but the coil itself is in no danger"
+      ],
+      "correct": 1,
+      "why": "A chattering coil never reaches sealed (holding) current — it's stuck cycling through inrush over and over, and inrush current runs 6-10x sealed current. A coil built to dissipate a few watts continuously is suddenly asked to shed several times that, and the winding insulation can brown and fail in minutes, not hours. That's a burned coil (and possible fire/smoke risk) waiting on a lunch break, not cosmetic noise."
+    },
+    {
+      "q": "You're replacing a relay that runs latched (seal-in) 8 hours a day on a 24VDC control circuit and only ever switches a few milliamps. The spec sheet lists a general-purpose relay rated 10A 250VAC with a 100mA minimum switching current. Why should you pass on that relay for this job?",
+      "options": [
+        "The 10A/250VAC rating means it can't be used on a 24VDC circuit at all",
+        "General-purpose relays always fail faster than seal-in-rated relays regardless of load",
+        "At a few milliamps you'll never reach the 100mA self-wipe threshold, so the contact will oxidize and eventually fail open — pick a relay rated for low-level switching (e.g. gold-plated contacts)",
+        "The minimum switching current only matters for AC loads, not DC control circuits"
+      ],
+      "correct": 2,
+      "why": "Contacts rated for higher currents rely on the switching current itself to wipe oxide off the contact faces; below the spec's minimum switching current, that self-cleaning action doesn't happen and the surface oxidizes over years until it reads 0V despite being 'closed.' A relay rated for low-level/dry-circuit switching (often gold-plated) avoids this. The 10A/250VAC rating doesn't forbid use on 24VDC — the problem is the tiny control current, not the voltage or relay class in general."
+    }
+  ]
+}

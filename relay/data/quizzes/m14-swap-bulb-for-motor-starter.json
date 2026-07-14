@@ -1,0 +1,135 @@
+{
+  "moduleId": "m14-swap-bulb-for-motor-starter",
+  "title": "Swap the Bulb for a Motor Starter (Contactor)",
+  "questions": [
+    {
+      "q": "You might ask: what is a motor starter (contactor) really?",
+      "options": [
+        "Just a heavy-duty relay with big contacts rated for high amperage and voltage",
+        "A special motor that has no coil",
+        "A fuse that switches the motor on and off",
+        "A transformer that steps voltage up for the motor"
+      ],
+      "correct": 0,
+      "why": "A contactor works like any relay — a coil pulls in contacts — but its contacts are built beefy to carry a motor's large current and high voltage."
+    },
+    {
+      "q": "Why don't we just switch the motor directly with our small 24VDC control relay?",
+      "options": [
+        "The little control relay's contacts can't carry the motor's high current",
+        "The control relay's coil would run backwards",
+        "The motor needs DC and the relay only passes AC",
+        "The control relay is too slow to close"
+      ],
+      "correct": 0,
+      "why": "A motor draws far more current than a small control relay's contacts are rated for, so we let it energize the contactor's coil and the contactor switches the big power."
+    },
+    {
+      "q": "When you swap the bulb for a contactor, what happens to the 24VDC Start/Stop control circuit you already built?",
+      "options": [
+        "It stays exactly the same — it just energizes the contactor's coil instead of the bulb",
+        "It must be rewired for the motor's full voltage",
+        "It is no longer needed once the contactor is added",
+        "It must be doubled up to handle the extra load"
+      ],
+      "correct": 0,
+      "why": "The whole point is separation: the same small 24VDC latch drives the contactor coil, and the contactor handles the heavy, dangerous power side on its own.",
+      "visual": {
+        "lesson": "m14-swap-bulb-for-motor-starter",
+        "caption": "The station after the swap — M1's coil now sits where the bulb was."
+      }
+    },
+    {
+      "q": "What is the main safety advantage of using a contactor between your control circuit and the motor?",
+      "options": [
+        "A small, safe 24VDC circuit controls a big, dangerous power circuit kept separate from it",
+        "It removes the need to ever lock out the motor",
+        "It lets you touch the motor leads while running",
+        "It lowers the motor's voltage to 24VDC"
+      ],
+      "correct": 0,
+      "why": "The contactor cleanly isolates the touch-safe control side from the high-voltage motor side, so you operate the machine without working in the dangerous circuit."
+    },
+    {
+      "q": "You press Start on a packaging line motor. The contactor pulls in with a solid click and holds, but the motor doesn't turn and you hear it humming. With the contactor closed, you clamp-meter each leg at T1/T2/T3 and find L2 reads almost zero amps while L1 and L3 read normal. What do you conclude?",
+      "options": [
+        "The control relay contacts are undersized for the load",
+        "This is a power-side fault — likely a blown fuse or burned contactor contact on the L2 leg, not a control circuit problem",
+        "The overload relay is set below the motor's nameplate FLA",
+        "The 24VDC coil is chattering due to low control voltage"
+      ],
+      "correct": 1,
+      "why": "The coil pulled in fine and holds, so the control circuit did its job — this is downstream of the contactor. A missing or low phase at T1/T2/T3 with the contactor closed points to a blown fuse on that leg's disconnect or a burned main contact, exactly like single-phasing described in the failure modes. Chatter or an undersized control relay would show up as the coil not holding in, not as a clean pull-in with one dead motor leg."
+    },
+    {
+      "q": "A motor has been tripping its overload every couple of hours on the same shift, no jams, no obvious cause. Maintenance has been resetting it and moving on. You clamp all three motor legs while it runs and find L2 at 23A while L1 and L3 sit at 14A. What should you do?",
+      "options": [
+        "Bump the overload's trip setting higher so it stops nuisance-tripping",
+        "Reset it again and tell maintenance it's just a nuisance trip like they thought",
+        "Pull the contactor and inspect the L2 main contact for pitting or burning that's causing resistance on that leg",
+        "Replace the motor since it's clearly drawing unbalanced current internally"
+      ],
+      "correct": 2,
+      "why": "Lopsided leg current with the contactor closed points to a degraded main contact making resistance instead of a clean connection on that leg — exactly the war-story failure. Raising the overload setting hides real overcurrent instead of fixing it, and replacing the motor skips the actual cause sitting in the contactor."
+    },
+    {
+      "q": "You're wiring up a new 5-HP, 480V 3-phase motor and need to pick a contactor. What's the correct way to size it?",
+      "options": [
+        "Match the contactor's continuous current rating to the motor's horsepower rating alone",
+        "Match the contactor's continuous rating to the motor's nameplate Full Load Amps, with margin for inrush",
+        "Size it to the branch circuit breaker's trip rating",
+        "Any contactor rated for 480V will work regardless of current rating since voltage is what matters"
+      ],
+      "correct": 1,
+      "why": "The field notes are explicit: always match to motor FLA with margin, not just horsepower — nameplate wins. Voltage rating alone isn't enough; the contacts also have to survive the continuous current and the 600-800% locked-rotor inrush on every start without welding or nuisance-opening."
+    },
+    {
+      "q": "A motor trips on an otherwise healthy-looking circuit. What is the correct first step before resetting the overload and restarting?",
+      "options": [
+        "Immediately reset the overload and restart to see if it happens again",
+        "Swap the contactor since it's the most common cause of nuisance trips",
+        "Find the reset button, read the trip indicator, and clamp-meter the motor amperage on restart to see if it's actually running over nameplate FLA",
+        "Increase the overload heater/trip setting so it has more margin next time"
+      ],
+      "correct": 2,
+      "why": "The deep dive is direct: check the overload first, reset it only after finding the cause, and monitor amperage on restart — don't just reset and walk away. Resetting blind or bumping the trip setting can mask a real problem like the degraded contact in the war story, letting it get worse."
+    },
+    {
+      "q": "A 120VAC contactor coil should read at least what voltage at its own terminals to seal in reliably, and what number tells you that?",
+      "options": [
+        "60V, which is 50% of rated coil voltage",
+        "104V, which is 87% of rated coil voltage",
+        "120V exactly, with zero tolerance for drop",
+        "12V, since contactor coils operate on low voltage logic"
+      ],
+      "correct": 1,
+      "why": "The failure modes section gives the number directly: a 120VAC coil needs at least 104V (87% of rating) to hold in cleanly. Reading full 120V at the panel but only 85V at the coil points to a wiring or connection resistance problem between the two measurement points, not the coil itself."
+    },
+    {
+      "q": "A tech finds a contactor's main contacts welded shut — the motor kept running even after Stop was pressed and the coil de-energized. If this gets ignored and the machine keeps getting run this way, what's the real danger?",
+      "options": [
+        "Nothing serious — welded contacts just mean the motor runs a little longer than commanded, which is a minor inconvenience",
+        "The motor will immediately overheat and trip the overload every time, self-limiting the risk",
+        "The load can no longer be stopped or de-energized from the control circuit, so a tech who trusts Stop or de-energizes the coil for 'safety' can walk into a machine that is still powered and running",
+        "The control circuit voltage will back-feed into the motor windings and damage the 24VDC relay"
+      ],
+      "correct": 2,
+      "why": "Welded contacts break the entire safety premise of the control/power separation: pressing Stop or removing coil voltage no longer stops the load, because the power-side contacts never open. A tech who lifts a guard or reaches into the machine trusting that the Stop button (or de-energized coil) means it's off can get caught in a running motor — this is why the failure-mode check calls for verifying main contacts actually separate with power locked out, not just watching the coil de-energize."
+    },
+    {
+      "q": "In the print shown, the station is latched and the motor is running when fuse FU1 suddenly blows. What happens?",
+      "options": [
+        "Everything stops — every path in the print feeds from the load side of FU1, so the coil drops out, its contacts open, and the motor dies with it",
+        "The motor keeps running — its rung is independent of the control fuse",
+        "Only the coil drops out; the motor keeps running through the already-closed M1 main contact",
+        "Nothing changes until Stop is also pressed"
+      ],
+      "correct": 0,
+      "why": "Trace the print: both the coil rung and the motor rung take their power from the wire downstream of FU1. Kill the fuse and the whole sheet goes dead — M1 drops out, the seal-in and main contacts open, and the motor stops.",
+      "visual": {
+        "lesson": "m14-swap-bulb-for-motor-starter",
+        "caption": "The print — drawn de-energized, the way prints are always drawn."
+      }
+    }
+  ]
+}

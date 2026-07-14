@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relay Training — Master Control Relays</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 44'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233B82F6'/%3E%3Cstop offset='1' stop-color='%237C5CFF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20 2 36 9v13c0 9-7 16-16 19C11 38 4 31 4 22V9L20 2Z' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='20' cy='20' r='5' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css?v=26" />
+  <link rel="stylesheet" href="css/svg.css?v=26" />
+  <style>
+    /* ================= base ================= */
+    *, *::before, *::after { box-sizing: border-box; }
+    /* overflow-x: clip — decorative pieces (the rotating hero ring's swung
+       bounding box, drifting orbs) must never widen the page at narrow sizes */
+    html { scroll-behavior: smooth; overflow-x: clip; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: var(--font-body); -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    .mono { font-family: var(--font-mono); }
+
+    /* ================= animated bright backdrop ================= */
+    .bg-grid {
+      position: fixed; inset: 0; z-index: -3; pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(14,19,38,.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(14,19,38,.045) 1px, transparent 1px);
+      background-size: 56px 56px;
+      -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 30%, transparent 78%);
+              mask-image: radial-gradient(120% 90% at 50% 0%, #000 30%, transparent 78%);
+      animation: gridpan 26s linear infinite;
+    }
+    @keyframes gridpan { from { background-position: 0 0, 0 0; } to { background-position: 56px 56px, 56px 56px; } }
+
+    .orbs { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(70px); will-change: transform; }
+    .orb-a { width: 560px; height: 560px; left: -160px; top: -140px;
+             background: radial-gradient(circle at 35% 35%, rgba(59,130,246,.34), rgba(59,130,246,0) 68%);
+             animation: drift-a 19s ease-in-out infinite alternate; }
+    .orb-b { width: 640px; height: 640px; right: -200px; top: 60px;
+             background: radial-gradient(circle at 60% 40%, rgba(124,92,255,.30), rgba(124,92,255,0) 70%);
+             animation: drift-b 23s ease-in-out infinite alternate; }
+    .orb-c { width: 420px; height: 420px; left: 34%; top: 58vh;
+             background: radial-gradient(circle at 50% 50%, rgba(59,130,246,.16), rgba(124,92,255,.10) 45%, rgba(124,92,255,0) 72%);
+             animation: drift-c 27s ease-in-out infinite alternate; }
+    @keyframes drift-a { from { transform: translate3d(0,0,0) scale(1); }   to { transform: translate3d(70px, 46px, 0) scale(1.08); } }
+    @keyframes drift-b { from { transform: translate3d(0,0,0) scale(1.05);} to { transform: translate3d(-80px, 60px, 0) scale(.96); } }
+    @keyframes drift-c { from { transform: translate3d(0,0,0); }            to { transform: translate3d(60px, -50px, 0); } }
+
+    /* ================= intro boot sequence ================= */
+    #intro {
+      position: fixed; inset: 0; z-index: 200; display: grid; place-items: center;
+      background: var(--bg); cursor: pointer;
+      transition: opacity .65s ease, visibility .65s;
+    }
+    #intro::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(14,19,38,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(14,19,38,.05) 1px, transparent 1px);
+      background-size: 56px 56px;
+      -webkit-mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent 90%);
+              mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent 90%);
+    }
+    #intro.done { opacity: 0; visibility: hidden; pointer-events: none; }
+    .intro-inner { text-align: center; position: relative; }
+    .intro-mark { width: 78px; height: 86px; margin: 0 auto 16px; animation: introMark .9s cubic-bezier(.16,.8,.26,1) both; }
+    @keyframes introMark { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
+    .intro-word { font-weight: 800; letter-spacing: .26em; font-size: 15px; color: var(--ink); animation: introMark .8s cubic-bezier(.16,.8,.26,1) .18s both; }
+    .intro-word b { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .intro-sweep { position: relative; width: 250px; height: 3px; margin: 24px auto 12px; background: #E1E7F4; border-radius: 99px; overflow: hidden; }
+    .intro-sweep::after {
+      content: ""; position: absolute; inset: 0; background: var(--grad); border-radius: 99px;
+      transform: scaleX(0); transform-origin: left;
+      animation: introSweep 1.45s cubic-bezier(.55,.06,.28,1) .3s forwards;
+    }
+    @keyframes introSweep { to { transform: scaleX(1); } }
+    .intro-status { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .1em; color: var(--muted); animation: introMark .6s ease .4s both; }
+    .intro-status i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--live); margin-right: 7px; animation: pulse-dot 1s ease-in-out infinite; vertical-align: 1px; }
+    .intro-skip { position: absolute; left: 50%; transform: translateX(-50%); bottom: -64px; font-family: var(--font-mono); font-size: 11px; color: var(--faint); letter-spacing: .12em; animation: introMark .6s ease 1s both; }
+
+    body.preboot { overflow: hidden; }
+    body.preboot .hero-copy > *, body.preboot .hero-visual { opacity: 0; }
+    body.booted .hero-copy > * { animation: riseIn .9s cubic-bezier(.16,.8,.26,1) both; }
+    body.booted .hero-copy > *:nth-child(1) { animation-delay: .05s; }
+    body.booted .hero-copy > *:nth-child(2) { animation-delay: .14s; }
+    body.booted .hero-copy > *:nth-child(3) { animation-delay: .24s; }
+    body.booted .hero-copy > *:nth-child(4) { animation-delay: .32s; }
+    body.booted .hero-copy > *:nth-child(5) { animation-delay: .40s; }
+    body.booted .hero-visual { animation: heroIn 1.05s cubic-bezier(.16,.8,.26,1) .28s both; }
+    @keyframes riseIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+    @keyframes heroIn { from { opacity: 0; transform: translateY(22px) scale(.965); } to { opacity: 1; transform: none; } }
+
+    /* ================= top bar ================= */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px clamp(20px, 4vw, 44px);
+      transition: background .35s, box-shadow .35s, padding .35s;
+    }
+    .topbar.scrolled {
+      background: rgba(246,248,252,.78);
+      -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+      box-shadow: 0 1px 0 var(--border), var(--shadow-sm);
+      padding-top: 10px; padding-bottom: 10px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .brand-mark { width: 34px; height: 38px; }
+    .brand-name { font-weight: 800; letter-spacing: .14em; font-size: 13.5px; color: var(--ink); }
+    .brand-name b { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .brand-sub { display: block; font-size: 11px; color: var(--muted); letter-spacing: .04em; margin-top: 1px; }
+    .top-cta {
+      font-weight: 700; font-size: 13.5px; color: #fff; background: var(--grad);
+      padding: 9px 18px; border-radius: 999px; box-shadow: var(--shadow-blue);
+      transition: transform .18s, box-shadow .18s;
+    }
+    .top-cta:hover { transform: translateY(-1px); box-shadow: 0 14px 38px -10px rgba(59,130,246,.5); }
+
+    /* ================= hero ================= */
+    .hero {
+      max-width: 1240px; margin: 0 auto;
+      padding: clamp(104px, 13vh, 146px) clamp(20px, 4vw, 44px) 26px;
+      display: grid; grid-template-columns: 1.02fr .98fr; gap: clamp(24px, 4vw, 56px);
+      align-items: center; min-height: 92vh;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em;
+      color: var(--blue-deep); background: var(--blue-soft);
+      border: 1px solid #D7E5FD; padding: 7px 14px; border-radius: 999px;
+    }
+    .hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--grad); animation: pulse-dot 2.2s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100% { box-shadow: 0 0 0 0 rgba(59,130,246,.45); } 55% { box-shadow: 0 0 0 7px rgba(59,130,246,0); } }
+    .hero h1 {
+      margin: 20px 0 18px; font-family: var(--font-display); color: var(--ink);
+      font-size: clamp(46px, 5.9vw, 86px); line-height: 1.01; letter-spacing: -0.035em; font-weight: 800;
+    }
+    .hero h1 .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-sub { font-size: clamp(15.5px, 1.35vw, 18px); line-height: 1.65; color: var(--text); max-width: 54ch; margin: 0 0 14px; }
+    .hero-sub b { color: var(--ink); }
+    .hero-credit { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin: 0 0 28px; }
+    .hero-credit em { font-style: normal; color: var(--violet-deep); font-weight: 600; }
+    .hero-credit .hb { color: var(--faint); }
+    .cta-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .btn-hero {
+      position: relative; display: inline-flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: 16.5px; letter-spacing: .01em; color: #fff;
+      background: var(--grad); border-radius: 14px; padding: 17px 30px;
+      box-shadow: var(--shadow-blue);
+      transition: transform .55s cubic-bezier(.2,1.7,.4,1), box-shadow .18s;
+      animation: cta-breathe 3.2s ease-in-out infinite;
+      will-change: transform;
+    }
+    .btn-hero.magnet { transition: transform .1s ease-out, box-shadow .18s; animation-play-state: paused; }
+    .btn-hero:hover { box-shadow: 0 18px 48px -12px rgba(59,130,246,.55); animation-play-state: paused; }
+    .btn-hero .arr { transition: transform .18s; }
+    .btn-hero:hover .arr { transform: translateX(4px); }
+    @keyframes cta-breathe {
+      0%,100% { box-shadow: 0 10px 34px -10px rgba(59,130,246,.40); }
+      50%     { box-shadow: 0 14px 44px -8px rgba(124,92,255,.48); }
+    }
+    .btn-ghost-lp {
+      font-weight: 600; font-size: 14.5px; color: var(--blue-deep);
+      padding: 12px 6px; border-bottom: 2px solid transparent; transition: border-color .2s;
+    }
+    .btn-ghost-lp:hover { border-color: var(--blue); }
+
+    /* hero 3D panel + signal flow strip */
+    .hero-visual { position: relative; height: clamp(420px, 48vw, 600px); }
+    .hero-3d { position: absolute; inset: 0 0 116px 0; cursor: grab; }
+    .hero-3d:active { cursor: grabbing; }
+    .hero-3d canvas { outline: none; }
+    .hero-ring {
+      position: absolute; inset: 0 4% 20% 4%; z-index: -1; pointer-events: none;
+      animation: ringspin 60s linear infinite;
+    }
+    @keyframes ringspin { to { transform: rotate(360deg); } }
+    .hero-shadow {
+      position: absolute; left: 20%; right: 20%; bottom: 124px; height: 30px; z-index: -1;
+      background: radial-gradient(50% 50% at 50% 50%, rgba(16,19,38,.16), transparent 72%);
+      filter: blur(4px); animation: shadow-breathe 6s ease-in-out infinite;
+    }
+    @keyframes shadow-breathe { 0%,100% { transform: scaleX(1); opacity: .9; } 50% { transform: scaleX(.9); opacity: .65; } }
+    .hero-chip {
+      position: absolute; display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.86); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+      border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-sm);
+      font-family: var(--font-mono); font-size: 11.5px; color: var(--text);
+      padding: 9px 13px; pointer-events: none; z-index: 3;
+    }
+    .hero-chip .sq { width: 9px; height: 9px; border-radius: 3px; background: var(--grad); }
+    .chip-model { top: 4%; left: 0; animation: float-1 7s ease-in-out infinite; }
+    .chip-spin  { bottom: 32%; right: 2%; animation: float-2 8.4s ease-in-out infinite; }
+    .chip-coil  { top: 18%; right: 0; animation: float-1 9.2s ease-in-out infinite reverse; }
+    @keyframes float-1 { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-11px); } }
+    @keyframes float-2 { 0%,100% { transform: translateY(0); } 50% { transform: translateY(9px); } }
+
+    /* ---- layer 1: hero signal-flow diagram ---- */
+    .signal-flow { position: absolute; left: -1%; right: -1%; bottom: 0; height: 118px; z-index: 2; }
+    .sf-wire { stroke: #C3CDE0; stroke-width: 2.5; stroke-linecap: round; transition: stroke .25s, filter .25s; }
+    .sf-wire.hot { stroke: var(--live); filter: drop-shadow(0 0 5px rgba(239,68,68,.55)); }
+    .sf-beam { stroke: rgba(239,68,68,.4); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 3 15; animation: sfflow 1.15s linear infinite; }
+    .sf-beam.hot { stroke: #FFFFFF; stroke-width: 1.6; }
+    @keyframes sfflow { to { stroke-dashoffset: -18; } }
+    .sf-dot { fill: var(--blue); filter: drop-shadow(0 0 4px rgba(59,130,246,.85)); }
+    .sf-dot.d1 { offset-path: path("M 34 50 L 528 50"); animation: sfdot 3.8s linear infinite; }
+    .sf-dot.d2 { offset-path: path("M 34 50 L 528 50"); animation: sfdot 3.8s linear infinite; animation-delay: -1.3s; }
+    .sf-dot.d3 { offset-path: path("M 34 50 L 528 50"); animation: sfdot 3.8s linear infinite; animation-delay: -2.6s; }
+    @keyframes sfdot {
+      from { offset-distance: 0%; opacity: 0; }
+      6%   { opacity: 1; }
+      92%  { opacity: 1; }
+      to   { offset-distance: 100%; opacity: 0; }
+    }
+    .sf-node { cursor: pointer; outline: none; }
+    .sf-box { fill: rgba(255,255,255,.93); stroke: var(--border-strong); stroke-width: 1.5; transition: stroke .2s, filter .25s; }
+    .sf-node:hover .sf-box, .sf-node:focus-visible .sf-box { stroke: var(--blue); }
+    .sf-node.hot .sf-box { stroke: var(--violet); filter: drop-shadow(0 5px 14px rgba(124,92,255,.45)); }
+    .sf-glyph { fill: var(--muted); font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; text-anchor: middle; transition: fill .2s; }
+    .sf-node.hot .sf-glyph { fill: var(--violet-deep); }
+    .sf-icon { stroke: #64748B; stroke-width: 1.9; fill: none; stroke-linecap: round; transition: stroke .2s; }
+    .sf-node.hot .sf-icon { stroke: var(--violet-deep); }
+    .sf-icon-fill { fill: #10B981; }
+    .sf-lbl { fill: var(--muted); font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-anchor: middle; transition: fill .2s; }
+    .sf-node.hot .sf-lbl { fill: var(--violet-deep); font-weight: 600; }
+    .sf-tip { opacity: 0; transform: translateY(5px); transition: opacity .22s ease, transform .22s ease; pointer-events: none; }
+    .sf-tip.show { opacity: 1; transform: none; }
+    .sf-tip rect { fill: #0E1326; }
+    .sf-tip text { fill: #FFFFFF; font-family: var(--font-mono); font-size: 11px; }
+    .sf-spark { fill: #F59E0B; opacity: 0; transform-box: fill-box; transform-origin: center; }
+    .sf-node.hot .sf-spark { animation: sparkPop .65s ease-out infinite; }
+    @keyframes sparkPop { 0% { opacity: .95; transform: scale(.35); } 100% { opacity: 0; transform: scale(1.9); } }
+    .offscreen .sf-beam, .offscreen .sf-dot { animation-play-state: paused; }
+
+    /* ================= stats strip ================= */
+    .stats-wrap { max-width: 1240px; margin: 4px auto 0; padding: 0 clamp(20px, 4vw, 44px) 20px; }
+    .stats {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    .stat { padding: 30px 14px 26px; text-align: center; position: relative; }
+    .stat + .stat::before { content: ""; position: absolute; left: 0; top: 22%; bottom: 22%; width: 1px; background: var(--border); }
+    .stat-num {
+      font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 3vw, 42px);
+      letter-spacing: -0.02em; line-height: 1;
+      background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label { margin-top: 9px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+    /* ================= shared bits ================= */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .18em; color: var(--violet-deep);
+    }
+    .eyebrow::before { content: ""; width: 22px; height: 3px; border-radius: 2px; background: var(--grad); }
+    .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+    .checks li { display: flex; gap: 11px; align-items: flex-start; font-size: 14px; line-height: 1.5; }
+    .checks .ck {
+      flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px; border-radius: 7px;
+      background: var(--blue-soft); color: var(--blue-deep);
+      display: grid; place-items: center; font-size: 11.5px; font-weight: 800;
+    }
+
+    /* scroll reveal (directed easing, per-card delays) */
+    .reveal { opacity: 0; transform: translateY(34px); transition: opacity .8s ease, transform .8s cubic-bezier(.16,.8,.26,1); transition-delay: var(--d, 0s); }
+    .reveal.rv-l { transform: translateX(-36px); }
+    .reveal.rv-r { transform: translateX(36px); }
+    .reveal.rv-s { transform: translateY(22px) scale(.965); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ================= 3 · BENTO GRID ================= */
+    .bento-wrap { max-width: 1240px; margin: 0 auto; padding: clamp(44px, 6vw, 80px) clamp(20px, 4vw, 44px) clamp(20px, 3vw, 40px); }
+    .bento-head { text-align: center; max-width: 760px; margin: 0 auto 38px; }
+    .bento-head h2 { margin: 14px 0 12px; color: var(--ink); font-size: clamp(30px, 3.4vw, 46px); letter-spacing: -0.028em; line-height: 1.08; font-weight: 800; }
+    .bento-head h2 .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .bento-head p { margin: 0; font-size: 16px; line-height: 1.65; color: var(--text); }
+    .bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+    .bento-card { position: relative; border-radius: var(--radius); }
+    .b-live    { grid-column: span 7; }
+    .b-meter   { grid-column: span 5; }
+    .b-chatter { grid-column: span 4; }
+    .b-relay3d { grid-column: span 4; }
+    .b-parts   { grid-column: span 4; }
+    .b-tickets { grid-column: span 7; }
+    .b-source  { grid-column: span 5; }
+    .b-marquee { grid-column: span 12; }
+    /* visual row order: (live+meter) → (chatter+3D+parts) → (tickets+source) → marquee */
+    .b-live { order: 1; } .b-meter { order: 2; } .b-chatter { order: 3; } .b-relay3d { order: 4; }
+    .b-parts { order: 5; } .b-tickets { order: 6; } .b-source { order: 7; } .b-marquee { order: 8; }
+    .b-relay3d .b-inner, .b-chatter .b-inner, .b-live .b-inner { display: flex; flex-direction: column; }
+    .b-live .live-stage { margin-top: auto; }
+    .b-live .live-strip { margin-top: auto; padding-top: 12px; }
+    .b3d-stage { flex: 1; }
+    .chat-stats { margin-top: auto; padding-top: 12px; }
+    .b-inner {
+      position: relative; height: 100%; overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 24px 26px;
+      transition: transform .6s cubic-bezier(.2,1.2,.3,1), box-shadow .3s ease;
+      will-change: transform;
+    }
+    .b-inner.tilting { transition: box-shadow .3s ease; }
+    .bento-card:hover .b-inner { box-shadow: 0 20px 54px -16px rgba(16,19,38,.24); }
+    /* moving specular sheen, follows the cursor */
+    .b-inner::after {
+      content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+      opacity: 0; transition: opacity .35s ease; mix-blend-mode: soft-light;
+      background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 30%), rgba(255,255,255,.85), rgba(255,255,255,0) 58%);
+    }
+    .bento-card:hover .b-inner::after { opacity: 1; }
+    .b-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .b-inner h3 { margin: 8px 0 8px; color: var(--ink); font-size: clamp(19px, 1.6vw, 24px); letter-spacing: -0.02em; line-height: 1.15; font-weight: 800; }
+    .b-sub { font-size: 13.5px; line-height: 1.6; color: var(--text); margin: 0 0 12px; }
+    .b-sub b { color: var(--ink); }
+    .live-tag { font-family: var(--font-mono); font-size: 11px; color: var(--live-label); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .live-tag i { width: 8px; height: 8px; border-radius: 50%; background: var(--live); animation: pulse-dot 1.6s ease-in-out infinite; }
+
+    /* ---- layer 2: LIVE circuit card ---- */
+    .live-stage { width: 100%; height: auto; display: block; margin: 6px 0 2px; }
+    .live-stage text { font-family: var(--font-mono); }
+    .live-stage text.comp-label { font-size: 20px; }
+    .live-stage text.tp-label { font-size: 17px; }
+    .live-stage text.photo-toggle-text { font-size: 15px; }
+    .live-stage text.probe-label { font-size: 15px; }
+    .live-stage text.sym-plus, .live-stage text.sym-minus { font-size: 18px; }
+    .live-fallback { font-size: 13.5px; color: var(--muted); padding: 30px 0; }
+    .live-strip { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 12px; }
+    .chip-state {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; color: var(--muted);
+      background: var(--surface-2); border: 1px solid var(--border); padding: 7px 12px; border-radius: 999px;
+      transition: color .25s, background .25s, border-color .25s;
+    }
+    .chip-state b { font-weight: 600; color: inherit; }
+    .chip-state i { width: 8px; height: 8px; border-radius: 50%; background: #C3CAD9; transition: background .2s, box-shadow .2s; flex: 0 0 auto; }
+    .chip-state.on { color: #065F46; background: #ECFDF5; border-color: #BBEBD8; }
+    .chip-state.on i { background: var(--success); box-shadow: 0 0 8px rgba(16,185,129,.65); }
+    .chip-state.live { color: var(--blue-deep); background: var(--blue-soft); border-color: #CBDFFC; }
+    .chip-state.live i { background: var(--blue); box-shadow: 0 0 8px rgba(59,130,246,.6); }
+    .live-hint { margin: 10px 0 0; font-family: var(--font-mono); font-size: 11.5px; color: var(--faint); }
+
+    /* ---- layer 3: hover-meter card ---- */
+    .hm-svg { width: 100%; height: auto; display: block; margin-top: 8px; }
+    .hm-svg text { font-family: var(--font-mono); }
+    .hm-rail { stroke-width: 3; }
+    .hm-seg { stroke: #94A3B8; stroke-width: 2.6; stroke-linecap: round; transition: stroke .2s, filter .2s; }
+    .hm-seg.hot-seg { stroke: #D89B95; }
+    .hm-seg.probed { stroke: var(--violet); filter: drop-shadow(0 0 4px rgba(124,92,255,.6)); }
+    .hm-zone { stroke: transparent; stroke-width: 22; fill: none; cursor: crosshair; pointer-events: stroke; }
+    .hm-zone:hover { stroke: rgba(124,92,255,.13); }
+    .hm-lbl { fill: var(--muted); font-size: 11px; }
+    .hm-dmm .dmm-val { font-size: 26px; min-width: 84px; }
+
+    .dmm {
+      margin-top: 12px; display: flex; align-items: center; gap: 14px;
+      background: var(--readout-bg); border-radius: 12px; padding: 12px 16px; position: relative;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,.5), var(--shadow-sm);
+    }
+    .dmm-val { font-family: var(--font-mono); font-size: 30px; font-weight: 600; color: var(--readout-text); text-shadow: 0 0 14px rgba(52,229,192,.5); font-variant-numeric: tabular-nums; min-width: 108px; }
+    .dmm-unit { font-family: var(--font-mono); font-size: 13px; color: var(--readout-text); opacity: .8; }
+    .dmm-note { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: #8B95AD; text-align: right; line-height: 1.5; }
+
+    /* ---- layer 3: chattering relay vignette ---- */
+    .ch-svg { width: 100%; height: auto; display: block; margin-top: 6px; }
+    .ch-svg text { font-family: var(--font-mono); }
+    .ch-frame { fill: none; stroke: #B7C0D0; stroke-width: 1.8; stroke-dasharray: 6 5; }
+    .ch-coil { fill: #EEF1F7; stroke: #64748B; stroke-width: 1.8; }
+    .ch-coil-lbl { fill: var(--violet-deep); font-size: 12px; font-weight: 700; text-anchor: middle; }
+    .ch-core { fill: #C9B6FF; stroke: var(--violet-deep); stroke-width: 1.4; }
+    .ch-arm-g { transform-box: view-box; transform-origin: 92px 92px; animation: chatterBuzz .09s linear infinite alternate; }
+    @keyframes chatterBuzz { from { transform: rotate(-6.5deg); } to { transform: rotate(1.5deg); } }
+    .ch-arm { fill: #DDE3EE; stroke: #5B6678; stroke-width: 1.6; }
+    .ch-pivot { fill: #5B6678; }
+    .ch-moving { fill: #FBB9B4; stroke: var(--live-label); stroke-width: 1.4; }
+    .ch-fixed { stroke: var(--live-label); stroke-width: 4; stroke-linecap: round; }
+    .ch-spring { fill: none; stroke: #8A93A6; stroke-width: 2; stroke-linejoin: round; }
+    .ch-spark-g { animation: chSparkFlick .16s steps(2) infinite; }
+    @keyframes chSparkFlick { 50% { opacity: 0; } }
+    .ch-spark { fill: #F59E0B; }
+    .ch-spark2 { fill: #FDE68A; }
+    .ch-lbl { fill: var(--muted); font-size: 11px; }
+    .offscreen .ch-arm-g, .offscreen .ch-spark-g { animation-play-state: paused; }
+    .chat-stats { margin-top: 12px; display: grid; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+    .chat-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .chat-row b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .chat-row b.crit { color: #DC2626; }
+    .chat-barwrap { height: 7px; border-radius: 99px; background: #EDF0F7; overflow: hidden; }
+    #chat-bar { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #EF4444, #F59E0B 40%, #10B981 90%); transform-origin: left; transform: scaleX(.87); transition: transform .25s linear; }
+
+    /* ---- layer 3: fault-ticket stack ---- */
+    .tstack { position: relative; height: 196px; margin-top: 14px; }
+    .ticket2 {
+      position: absolute; left: 0; right: 0; top: 0;
+      background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+      box-shadow: 0 16px 44px -14px rgba(16,19,38,.28); padding: 14px 17px;
+      transition: transform .62s cubic-bezier(.2,.9,.25,1), opacity .62s ease;
+    }
+    .ticket2[data-pos="0"] { z-index: 3; }
+    .ticket2[data-pos="1"] { z-index: 2; transform: translateY(17px) scale(.955); opacity: .55; }
+    .ticket2[data-pos="2"] { z-index: 1; transform: translateY(32px) scale(.912); opacity: .28; }
+    .ticket2.leaving { transform: translateY(-30px) rotate(-2.5deg) !important; opacity: 0 !important; z-index: 4; }
+    .ticket2 .th { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+    .ticket2 .tid { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--ink); letter-spacing: .06em; }
+    .fault-chip {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .08em;
+      color: #92400E; background: #FEF3C7; border: 1px solid #FDE68A;
+      padding: 4px 9px; border-radius: 999px; animation: faultblink 1.1s steps(2) infinite;
+    }
+    @keyframes faultblink { 50% { opacity: .45; } }
+    .offscreen .fault-chip { animation-play-state: paused; }
+    .ticket2 .tb { font-size: 12.5px; line-height: 1.5; color: var(--text); margin: 0; }
+    .ticket2 .tb b { color: var(--ink); }
+    .ticket2 .tfoot { margin-top: 9px; padding-top: 8px; border-top: 1px dashed var(--border-strong); font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+    .fail-strip { display: flex; gap: 10px; margin-top: 16px; }
+    .fail-strip figure { margin: 0; flex: 1; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface-2); }
+    .fail-strip img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+    .fail-strip figcaption { padding: 6px 10px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ---- 3D bento card ---- */
+    .b3d-stage { position: relative; height: 236px; margin-top: 8px; cursor: grab; }
+    .b3d-stage:active { cursor: grabbing; }
+    .r3d-loading { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--faint); }
+    .b3d-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+
+    /* ---- parts copy card mini collage ---- */
+    .mini-collage { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+    .part-card {
+      margin: 0; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 8px 8px 7px; transition: transform .3s, box-shadow .3s;
+    }
+    .part-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px -10px rgba(16,19,38,.18); }
+    .part-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: contain; }
+    .part-card figcaption { margin-top: 6px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+    .part-card figcaption b { color: var(--ink); font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ---- slide fan card ---- */
+    .slide-fan { position: relative; padding: 14px 0 26px; margin-top: 8px; }
+    .slide-fan .slide {
+      border-radius: 12px; border: 1px solid var(--border); overflow: hidden;
+      box-shadow: var(--shadow); background: #14343B;
+      transition: transform .45s cubic-bezier(.2,.9,.3,1.3);
+    }
+    .slide-fan .s-front { position: relative; z-index: 3; width: 82%; animation: float-1 10s ease-in-out infinite; }
+    .slide-fan .s-mid   { position: absolute; z-index: 2; width: 60%; right: -1%; top: -5%; transform: rotate(3.2deg); opacity: .96; animation: float-2 12s ease-in-out infinite; }
+    .slide-fan .s-back  { position: absolute; z-index: 1; width: 50%; right: 9%; bottom: -3%; transform: rotate(-2.6deg); opacity: .9; animation: float-2 11s ease-in-out infinite reverse; }
+    .slide-fan:hover .s-front { transform: rotate(-2.4deg) translateX(-2%); }
+    .slide-fan:hover .s-mid   { transform: rotate(7.5deg) translateX(3%); }
+    .slide-fan:hover .s-back  { transform: rotate(-7deg) translate(6%, 2%); }
+    .slide-chip {
+      position: absolute; z-index: 4; left: -8px; bottom: 4px;
+      background: rgba(255,255,255,.9); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+      border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-sm);
+      font-family: var(--font-mono); font-size: 11.5px; color: var(--text); padding: 9px 13px;
+    }
+    .slide-chip b { color: var(--violet-deep); font-weight: 600; }
+
+    /* ---- layer 5: parts marquee ---- */
+    .b-marquee .b-inner { padding: 24px 0 26px; }
+    .mq-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 0 26px 16px; flex-wrap: wrap; }
+    .mq-head h3 { margin: 6px 0 0; }
+    .mq-chip {
+      background: var(--grad); color: #fff; font-family: var(--font-mono); font-size: 11.5px;
+      padding: 8px 13px; border-radius: 999px; box-shadow: var(--shadow-blue); white-space: nowrap;
+    }
+    .mq-row { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+    .mq-row + .mq-row { margin-top: 12px; }
+    .mq-track { display: flex; gap: 14px; width: max-content; padding: 6px 0; animation: mq 48s linear infinite; will-change: transform; }
+    .mq-track.mq-rev { animation-direction: reverse; animation-duration: 56s; }
+    .mq-row:hover .mq-track { animation-play-state: paused; }
+    .offscreen .mq-track { animation-play-state: paused; }
+    @keyframes mq { to { transform: translateX(-50%); } }
+    .mq-item {
+      flex: 0 0 auto; width: 112px; margin: 0;
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 9px 9px 8px;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+    }
+    .mq-item:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: #CBDFFC; }
+    .mq-item img { width: 100%; aspect-ratio: 1 / 1; object-fit: contain; }
+    .mq-item figcaption { margin-top: 7px; font-family: var(--font-mono); font-size: 11px; line-height: 1.4; color: var(--muted); }
+    .mq-item figcaption b { display: block; color: var(--ink); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ================= 5 · sticky scroll-story ================= */
+    .story-wrap { height: 360vh; position: relative; }
+    .story-sticky { position: sticky; top: 0; height: 100vh; display: grid; place-items: center; padding: 24px clamp(20px, 4vw, 44px); }
+    .story-panel {
+      width: 100%; max-width: 1170px; position: relative; overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow);
+      display: grid; grid-template-columns: .92fr 1.35fr; gap: clamp(18px, 3vw, 44px);
+      padding: clamp(24px, 3.2vw, 42px) clamp(24px, 3.4vw, 46px);
+    }
+    .story-rail { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--border); }
+    #story-fill { position: absolute; inset: 0; background: var(--grad); transform: scaleY(0); transform-origin: top; }
+    .story-copy h2 { margin: 12px 0 6px; color: var(--ink); font-size: clamp(24px, 2.4vw, 34px); letter-spacing: -0.025em; line-height: 1.1; font-weight: 800; }
+    .story-copy > p { margin: 0 0 16px; font-size: 13.5px; color: var(--muted); }
+    .story-steps { display: grid; gap: 6px; }
+    .story-step {
+      display: flex; gap: 13px; align-items: flex-start; text-align: left;
+      background: none; border: 0; padding: 11px 12px; border-radius: 13px; cursor: pointer;
+      opacity: .42; transition: opacity .35s, background .35s, transform .35s; font: inherit; color: inherit;
+    }
+    .story-step.active { opacity: 1; background: var(--blue-soft); transform: translateX(5px); }
+    .story-num {
+      font-family: var(--font-mono); font-weight: 600; font-size: 13px; line-height: 1;
+      background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+      padding-top: 3px; min-width: 22px;
+    }
+    .story-step .st-t { display: block; margin: 0 0 3px; font-size: 14.5px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; }
+    .story-step .st-p { display: block; margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--text); }
+    .story-dots { display: flex; gap: 9px; margin-top: 16px; padding-left: 12px; }
+    .story-dot { width: 10px; height: 10px; border-radius: 50%; background: #D6DDEC; border: 0; padding: 0; cursor: pointer; transition: background .25s, box-shadow .25s, transform .25s; }
+    .story-dot.on { background: var(--blue); box-shadow: 0 0 8px rgba(59,130,246,.55); transform: scale(1.15); }
+    .story-stage { display: grid; align-items: center; }
+    .story-stage svg { width: 100%; height: auto; display: block; }
+    .story-stage text { font-family: var(--font-mono); }
+
+    /* story schematic: staged groups */
+    .story-svg [data-s] { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s cubic-bezier(.16,.8,.26,1); }
+    .story-panel[data-step="0"] [data-s="0"],
+    .story-panel[data-step="1"] :is([data-s="0"],[data-s="1"]),
+    .story-panel[data-step="2"] :is([data-s="0"],[data-s="1"],[data-s="2"]),
+    .story-panel[data-step="3"] [data-s] { opacity: 1; transform: none; }
+    .st-rail { stroke: #64748B; stroke-width: 3; }
+    .st-wire { stroke: #6B7689; stroke-width: 2.4; stroke-linecap: round; transition: stroke .45s ease, filter .45s ease; }
+    .st-plate { stroke: #475569; stroke-width: 2.4; stroke-linecap: round; transition: stroke .45s; }
+    .st-bridge { stroke: #475569; stroke-width: 2.4; stroke-linecap: round; opacity: 0; transition: opacity .3s, stroke .45s; }
+    .st-coil { fill: #FFFFFF; stroke: #475569; stroke-width: 2; transition: fill .45s, stroke .45s, filter .45s; }
+    .st-coil-lbl { fill: #475569; font-size: 14px; font-weight: 600; text-anchor: middle; transition: fill .45s; }
+    .st-lbl { fill: var(--muted); font-size: 13.5px; text-anchor: middle; }
+    .st-rail-lbl { fill: var(--muted); font-size: 13.5px; text-anchor: middle; font-weight: 600; }
+    .st-bypass { transition: opacity .4s ease; }
+    .story-panel[data-step="2"] .st-bypass, .story-panel[data-step="3"] .st-bypass { opacity: 0; }
+    .st-junc { fill: #6B7689; transition: fill .45s; }
+    .st-nc-slash { stroke: #475569; stroke-width: 2.2; stroke-linecap: round; transition: stroke .45s; }
+    .st-motor-body { fill: #FFFFFF; stroke: #475569; stroke-width: 2; transition: all .45s; }
+    .st-motor-lbl { fill: #475569; font-size: 15px; font-weight: 700; text-anchor: middle; transition: fill .45s; }
+    .st-blades { transform-box: fill-box; transform-origin: center; }
+    .st-blade { stroke: #94A3B8; stroke-width: 2.4; stroke-linecap: round; transition: stroke .45s; }
+    .st-flow { fill: none; stroke: transparent; stroke-width: 1.4; stroke-dasharray: 2 16; stroke-linecap: round; }
+    /* final act: the whole rung goes live */
+    .story-panel[data-step="3"] .st-wire { stroke: var(--live); filter: drop-shadow(0 0 3px rgba(239,68,68,.5)); }
+    .story-panel[data-step="3"] .st-bridge { opacity: 1; stroke: var(--live); }
+    .story-panel[data-step="3"] .st-plate { stroke: var(--live); }
+    .story-panel[data-step="3"] .st-junc { fill: var(--live); }
+    .story-panel[data-step="3"] .st-coil { stroke: var(--coil-energized); fill: #F4F1FF; filter: drop-shadow(0 0 8px rgba(124,92,255,.5)); }
+    .story-panel[data-step="3"] .st-coil-lbl { fill: var(--coil-energized); }
+    .story-panel[data-step="3"] .st-motor-body { stroke: #14A88E; fill: #E6FBF5; filter: drop-shadow(0 0 8px rgba(52,229,192,.6)); }
+    .story-panel[data-step="3"] .st-motor-lbl { fill: #0E8C76; }
+    .story-panel[data-step="3"] .st-blade { stroke: #0E8C76; }
+    .story-panel[data-step="3"] .st-blades { animation: motorSpin 1s linear infinite; }
+    @keyframes motorSpin { to { transform: rotate(360deg); } }
+    .story-panel[data-step="3"] .st-flow { stroke: #FFFFFF; animation: flow .85s linear infinite; opacity: .9; }
+    .offscreen .st-blades, .offscreen .st-flow { animation-play-state: paused; }
+
+    /* ================= closing CTA band ================= */
+    .band-wrap { padding: clamp(30px, 5vw, 70px) clamp(20px, 4vw, 44px) clamp(50px, 6vw, 90px); }
+    .band {
+      max-width: 1140px; margin: 0 auto; position: relative; overflow: hidden;
+      background: var(--grad); border-radius: 26px; text-align: center;
+      padding: clamp(48px, 6vw, 84px) 28px; box-shadow: 0 24px 70px -18px rgba(88,101,242,.45);
+    }
+    .band::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(46% 70% at 18% 10%, rgba(255,255,255,.22), transparent 70%),
+        radial-gradient(40% 60% at 85% 90%, rgba(255,255,255,.14), transparent 70%);
+      pointer-events: none;
+    }
+    .band::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.09) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.09) 1px, transparent 1px);
+      background-size: 44px 44px;
+      -webkit-mask-image: radial-gradient(80% 90% at 50% 50%, #000, transparent 85%);
+              mask-image: radial-gradient(80% 90% at 50% 50%, #000, transparent 85%);
+    }
+    .band h2 { position: relative; margin: 0 0 12px; color: #fff; font-size: clamp(28px, 3.4vw, 44px); letter-spacing: -0.025em; font-weight: 800; }
+    .band p { position: relative; margin: 0 auto 30px; color: rgba(255,255,255,.9); font-size: 16px; max-width: 52ch; line-height: 1.65; }
+    .btn-band {
+      position: relative; display: inline-flex; align-items: center; gap: 10px;
+      background: #fff; color: var(--ink); font-weight: 800; font-size: 16px;
+      padding: 16px 30px; border-radius: 14px; box-shadow: 0 12px 34px -8px rgba(14,19,38,.4);
+      transition: transform .18s, box-shadow .18s;
+    }
+    .btn-band:hover { transform: translateY(-2px); box-shadow: 0 18px 44px -10px rgba(14,19,38,.5); }
+
+    /* ================= footer ================= */
+    footer {
+      border-top: 1px solid var(--border); background: rgba(255,255,255,.6);
+      padding: 30px clamp(20px, 4vw, 44px) 36px;
+    }
+    .foot-inner { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+    .foot-brand { display: flex; align-items: center; gap: 10px; }
+    .foot-brand svg { width: 26px; height: 29px; }
+    .foot-brand span { font-weight: 800; letter-spacing: .12em; font-size: 12px; color: var(--ink); }
+    .foot-credit { font-size: 12.5px; color: var(--muted); line-height: 1.7; text-align: center; }
+    .foot-credit b { color: var(--ink); font-weight: 700; }
+    .foot-credit .hb { color: var(--violet-deep); font-weight: 600; }
+    .foot-meta { font-family: var(--font-mono); font-size: 11.5px; color: var(--faint); }
+
+    /* ================= responsive ================= */
+    @media (max-width: 1080px) {
+      .b-live, .b-meter, .b-chatter, .b-tickets, .b-relay3d, .b-source, .b-parts, .b-marquee { grid-column: span 12; grid-row: auto; }
+    }
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; min-height: 0; padding-top: 110px; }
+      .hero-visual { height: 440px; order: 2; }
+      .stats { grid-template-columns: repeat(5, minmax(0,1fr)); }
+      .story-panel { grid-template-columns: 1fr; }
+      .story-stage { order: -1; }
+      .story-wrap { height: 320vh; }
+    }
+    @media (max-width: 760px) {
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat + .stat::before { display: none; }
+      .brand-sub { display: none; }
+      .mini-collage { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+      #intro { display: none; }
+      body.preboot .hero-copy > *, body.preboot .hero-visual { opacity: 1; }
+      .sf-dot { display: none; }
+      .mq-track { animation: none; }
+      .ch-arm-g { animation: none; transform: rotate(-3deg); }
+    }
+  </style>
+</head>
+<body>
+<script>
+  // pre-render veil for the intro sequence — never applied under reduced motion,
+  // never applied without JS (this script IS the JS), removed by landing.js
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.body.classList.add("preboot");
+  // safety valve: if the module ever fails to boot, never leave the page veiled
+  setTimeout(function () {
+    if (document.body.classList.contains("preboot")) {
+      document.body.classList.remove("preboot");
+      document.body.classList.add("booted");
+      var i = document.getElementById("intro"); if (i) i.remove();
+    }
+  }, 4000);
+</script>
+  <!-- ===== intro boot veil (skippable, ≤2.1s) ===== -->
+  <div id="intro" aria-hidden="true">
+    <div class="intro-inner">
+      <svg class="intro-mark" viewBox="0 0 40 44" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="im" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#7C5CFF"/>
+          </linearGradient>
+        </defs>
+        <path d="M20 2 36 9v13c0 9-7 16-16 19C11 38 4 31 4 22V9L20 2Z" stroke="url(#im)" stroke-width="1.8"/>
+        <circle cx="20" cy="20" r="3.4" fill="url(#im)"/>
+        <g stroke="url(#im)" stroke-width="1.8" stroke-linecap="round">
+          <line x1="20" y1="10" x2="20" y2="15"/><line x1="20" y1="25" x2="20" y2="30"/>
+          <line x1="11" y1="20" x2="16" y2="20"/><line x1="24" y1="20" x2="29" y2="20"/>
+        </g>
+      </svg>
+      <div class="intro-word">RELAY <b>TRAINING</b></div>
+      <div class="intro-sweep"></div>
+      <div class="intro-status"><i></i>ENERGIZING CONTROL CIRCUIT</div>
+      <div class="intro-skip">click to skip</div>
+    </div>
+  </div>
+
+  <!-- animated bright backdrop -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="orbs" aria-hidden="true">
+    <div class="orb orb-a" data-par="0.10"></div>
+    <div class="orb orb-b" data-par="0.16"></div>
+    <div class="orb orb-c" data-par="0.24"></div>
+  </div>
+
+  <!-- ===== top bar ===== -->
+  <header class="topbar" id="topbar">
+    <a class="brand" href="landing.html" aria-label="Relay Training home">
+      <svg class="brand-mark" viewBox="0 0 40 44" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="bm" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#7C5CFF"/>
+          </linearGradient>
+        </defs>
+        <path d="M20 2 36 9v13c0 9-7 16-16 19C11 38 4 31 4 22V9L20 2Z" stroke="url(#bm)" stroke-width="1.8"/>
+        <circle cx="20" cy="20" r="3.4" fill="url(#bm)"/>
+        <g stroke="url(#bm)" stroke-width="1.8" stroke-linecap="round">
+          <line x1="20" y1="10" x2="20" y2="15"/><line x1="20" y1="25" x2="20" y2="30"/>
+          <line x1="11" y1="20" x2="16" y2="20"/><line x1="24" y1="20" x2="29" y2="20"/>
+        </g>
+      </svg>
+      <span>
+        <span class="brand-name">RELAY <b>TRAINING</b></span>
+        <span class="brand-sub">Interactive Troubleshooting Course</span>
+      </span>
+    </a>
+    <a class="top-cta" href="index.html">Enter the Course →</a>
+  </header>
+
+  <!-- ===== hero ===== -->
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="hero-badge"><span class="dot"></span>INTERACTIVE MAINTENANCE TRAINING</span>
+        <h1>Master <span class="grad">Control&nbsp;Relays.</span><br/>Own the panel.</h1>
+        <p class="hero-sub">
+          The interactive shop course for the people who keep the plant running.
+          Probe <b>live schematics</b> with a real meter, spin <b>genuine CAD hardware</b>,
+          and chase randomized faults the same way you chase them on the floor —
+          no simulator hand-waving, no cartoon circuits.
+        </p>
+        <p class="hero-credit">Built by <em>Michael Honeycutt</em> <span class="hb">· Honeybadger Software</span></p>
+        <div class="cta-row">
+          <a class="btn-hero" id="cta-enter" href="index.html">Enter the Course <span class="arr">→</span></a>
+          <a class="btn-ghost-lp" href="#features">See what&rsquo;s inside ↓</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="Rotating 3D model of a 750R-2C-24D control relay above an animated control-circuit signal chain">
+        <svg class="hero-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="47" fill="none" stroke="url(#ringgrad)" stroke-width=".55" stroke-dasharray="3.2 4.6" opacity=".55"/>
+          <defs>
+            <linearGradient id="ringgrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#7C5CFF"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="hero-3d" id="hero3d"></div>
+        <div class="hero-shadow" aria-hidden="true"></div>
+        <span class="hero-chip chip-model" data-depth="0.04"><span class="sq"></span>750R-2C-24D · real CAD</span>
+        <span class="hero-chip chip-coil" data-depth="0.07"><span class="sq"></span>coil: 24 VDC</span>
+        <span class="hero-chip chip-spin" data-depth="0.05"><span class="sq"></span>drag to spin · scroll to dolly</span>
+
+        <!-- layer 1: interactive signal-flow chain -->
+        <svg class="signal-flow" id="sigflow" viewBox="0 0 560 118" data-pause
+             role="img" aria-label="Signal chain: Start button energizes relay CR1, CR1 pulls in the contactor, the contactor starts the motor. Hover a stage to energize it.">
+          <line class="sf-wire" data-seg="1" x1="92"  y1="50" x2="186" y2="50"/>
+          <line class="sf-wire" data-seg="2" x1="242" y1="50" x2="336" y2="50"/>
+          <line class="sf-wire" data-seg="3" x1="392" y1="50" x2="478" y2="50"/>
+          <line class="sf-beam" data-seg="1" x1="92"  y1="50" x2="186" y2="50"/>
+          <line class="sf-beam" data-seg="2" x1="242" y1="50" x2="336" y2="50"/>
+          <line class="sf-beam" data-seg="3" x1="392" y1="50" x2="478" y2="50"/>
+          <circle class="sf-dot d1" r="3.1"/>
+          <circle class="sf-dot d2" r="3.1"/>
+          <circle class="sf-dot d3" r="3.1"/>
+
+          <g class="sf-node" data-idx="1" data-node="start" tabindex="0" role="button" aria-label="Start pushbutton">
+            <rect class="sf-box" x="36" y="30" width="56" height="40" rx="10"/>
+            <circle class="sf-icon-fill" cx="64" cy="46" r="6.5"/>
+            <circle class="sf-icon" cx="64" cy="46" r="9.5"/>
+            <text class="sf-lbl" x="64" y="88">START</text>
+            <circle class="sf-spark" cx="88" cy="34" r="4"/>
+            <g class="sf-tip"><rect x="6" y="0" width="242" height="22" rx="7"/><text x="16" y="15">NO pushbutton — press to energize</text></g>
+          </g>
+          <g class="sf-node" data-idx="2" data-node="cr1" tabindex="0" role="button" aria-label="Control relay CR1">
+            <rect class="sf-box" x="186" y="30" width="56" height="40" rx="10"/>
+            <rect class="sf-icon" x="200" y="39" width="28" height="15" rx="2"/>
+            <text class="sf-glyph" x="214" y="63">CR1</text>
+            <text class="sf-lbl" x="214" y="88">RELAY</text>
+            <circle class="sf-spark" cx="238" cy="34" r="4"/>
+            <g class="sf-tip"><rect x="104" y="0" width="222" height="22" rx="7"/><text x="114" y="15">coil pulls in · seal-in latches</text></g>
+          </g>
+          <g class="sf-node" data-idx="3" data-node="con" tabindex="0" role="button" aria-label="Motor contactor">
+            <rect class="sf-box" x="336" y="30" width="56" height="40" rx="10"/>
+            <g class="sf-icon">
+              <line x1="352" y1="38" x2="352" y2="50"/><line x1="364" y1="38" x2="364" y2="50"/><line x1="376" y1="38" x2="376" y2="50"/>
+              <line x1="348" y1="56" x2="380" y2="56"/>
+            </g>
+            <text class="sf-lbl" x="364" y="88">CONTACTOR</text>
+            <circle class="sf-spark" cx="388" cy="34" r="4"/>
+            <g class="sf-tip"><rect x="258" y="0" width="196" height="22" rx="7"/><text x="268" y="15">M coil closes all 3 poles</text></g>
+          </g>
+          <g class="sf-node" data-idx="4" data-node="motor" tabindex="0" role="button" aria-label="Motor">
+            <rect class="sf-box" x="478" y="30" width="56" height="40" rx="10"/>
+            <circle class="sf-icon" cx="506" cy="47" r="11"/>
+            <text class="sf-glyph" x="506" y="52">M</text>
+            <text class="sf-lbl" x="506" y="88">MOTOR</text>
+            <circle class="sf-spark" cx="530" cy="34" r="4"/>
+            <g class="sf-tip"><rect x="330" y="0" width="220" height="22" rx="7"/><text x="340" y="15">480 V across the line — it runs</text></g>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ===== stats strip ===== -->
+    <section class="stats-wrap reveal" id="stats">
+      <div class="stats">
+        <div class="stat"><div class="stat-num" data-count="29">0</div><div class="stat-label">Interactive lessons</div></div>
+        <div class="stat"><div class="stat-num" data-count="290">0</div><div class="stat-label">Quiz questions</div></div>
+        <div class="stat"><div class="stat-num" data-count="6">0</div><div class="stat-label">Troubleshooting tickets</div></div>
+        <div class="stat"><div class="stat-num" data-count="62">0</div><div class="stat-label">Real parts photographed</div></div>
+        <div class="stat"><div class="stat-num" data-count="5">0</div><div class="stat-label">CAD models</div></div>
+      </div>
+    </section>
+
+    <!-- ===== bento grid ===== -->
+    <div class="bento-wrap" id="features">
+      <div class="bento-head reveal">
+        <span class="eyebrow" style="justify-content:center">WHAT&rsquo;S INSIDE</span>
+        <h2>A course you <span class="grad">operate</span>, not watch.</h2>
+        <p>Every card below is running the real thing — the same solver, the same CAD,
+           the same failure photos you&rsquo;ll troubleshoot in the full course.</p>
+      </div>
+      <div class="bento">
+
+        <!-- layer 2: LIVE circuit card -->
+        <section class="bento-card b-live reveal rv-s" data-tilt data-tilt-max="2.5" id="b-live">
+          <div class="b-inner">
+            <div class="b-head">
+              <span class="eyebrow">THE ENGINE</span>
+              <span class="live-tag"><i></i>LIVE SOLVER</span>
+            </div>
+            <h3>This isn&rsquo;t a video. Press START.</h3>
+            <p class="b-sub">
+              A real <b>3-wire start/stop</b> running on the course&rsquo;s own circuit solver.
+              Press START and CR1&rsquo;s seal-in contact latches the rung. Press STOP and it drops out —
+              exactly like the panel on the floor.
+            </p>
+            <svg id="live-stage" class="live-stage" aria-label="Live interactive 3-wire start/stop schematic — press the Start button to latch relay CR1"></svg>
+            <div class="live-strip">
+              <span class="chip-state" id="st-coil"><i></i>CR1 coil: <b>de-energized</b></span>
+              <span class="chip-state" id="st-run"><i></i>Running lamp: <b>off</b></span>
+              <span class="chip-state" id="st-cycles"><i></i>latch cycles: <b>0</b></span>
+              <span class="chip-state" id="st-probe"><i></i>probe: <b>—</b></span>
+            </div>
+            <p class="live-hint">press-and-hold the buttons (or their photos) · click any wire to drop a meter probe — COM is pinned to L2</p>
+          </div>
+        </section>
+
+        <!-- layer 3: hover-meter card -->
+        <section class="bento-card b-meter reveal rv-r" data-tilt style="--d:.08s">
+          <div class="b-inner">
+            <div class="b-head"><span class="eyebrow">THE METER</span></div>
+            <h3>Probe it like a technician.</h3>
+            <p class="b-sub">
+              Drop your meter leads anywhere and read what a real DMM would read —
+              VDC, VAC, continuity. If the reading would lie to you on the floor,
+              it lies to you here first. <b>Mouse over the copper</b> and watch the meter track.
+            </p>
+            <div id="hovermeter">
+              <svg class="hm-svg" viewBox="0 0 340 128" aria-label="Mini control rung — hover a wire segment to measure it">
+                <line class="hm-rail" x1="18" y1="14" x2="18" y2="112" stroke="#DC2626"/>
+                <line class="hm-rail" x1="322" y1="14" x2="322" y2="112" stroke="#94A3B8"/>
+                <text class="hm-lbl" x="8" y="126" text-anchor="start" fill="#DC2626">L1 · +24V</text>
+                <text class="hm-lbl" x="334" y="126" text-anchor="end">L2 · 0V</text>
+                <!-- copper -->
+                <line class="hm-seg hot-seg" data-zone="a" x1="18"  y1="44" x2="80"  y2="44"/>
+                <line class="hm-seg hot-seg" data-zone="b" x1="110" y1="44" x2="170" y2="44"/>
+                <line class="hm-seg"         data-zone="c" x1="200" y1="44" x2="252" y2="44"/>
+                <line class="hm-seg"         data-zone="c" x1="286" y1="44" x2="322" y2="44"/>
+                <!-- STOP: NC, closed -->
+                <circle cx="86"  cy="44" r="3.6" fill="none" stroke="#475569" stroke-width="1.9"/>
+                <circle cx="104" cy="44" r="3.6" fill="none" stroke="#475569" stroke-width="1.9"/>
+                <line x1="84" y1="52" x2="106" y2="36" stroke="#475569" stroke-width="2"/>
+                <text class="hm-lbl" x="95" y="24" text-anchor="middle">STOP</text>
+                <!-- START: NO, open -->
+                <circle cx="176" cy="44" r="3.6" fill="none" stroke="#475569" stroke-width="1.9"/>
+                <circle cx="194" cy="44" r="3.6" fill="none" stroke="#475569" stroke-width="1.9"/>
+                <line x1="176" y1="36" x2="196" y2="30" stroke="#475569" stroke-width="2"/>
+                <text class="hm-lbl" x="185" y="24" text-anchor="middle">START</text>
+                <!-- coil -->
+                <circle cx="269" cy="44" r="17" fill="#FFFFFF" stroke="#475569" stroke-width="2"/>
+                <text class="hm-lbl" x="269" y="49" text-anchor="middle" font-weight="600">CR</text>
+                <!-- fat probe zones (drawn last = on top) -->
+                <line class="hm-zone" data-zone="a" data-volts="24.0" data-note="L1 → COM · hot conductor" x1="20" y1="44" x2="80" y2="44"/>
+                <line class="hm-zone" data-zone="b" data-volts="24.0" data-note="past STOP (NC, closed) · still hot" x1="110" y1="44" x2="170" y2="44"/>
+                <line class="hm-zone" data-zone="c" data-volts="0.0" data-note="past START (NO, open) · dead rung" x1="200" y1="44" x2="252" y2="44"/>
+              </svg>
+              <div class="dmm hm-dmm">
+                <span class="dmm-val" id="hm-val">0.0</span>
+                <span class="dmm-unit">VDC ⎓</span>
+                <span class="dmm-note" id="hm-note">idle — touch a wire segment</span>
+              </div>
+            </div>
+            <ul class="checks" style="margin-top:14px">
+              <li><span class="ck">✓</span><span><b>A real circuit solver</b> under every schematic — not scripted answers</span></li>
+              <li><span class="ck">✓</span><span>Three meter modes: <b>VDC · VAC · continuity</b>, just like your Fluke</span></li>
+              <li><span class="ck">✓</span><span>Guided measurements graded like a hands-on practical</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- layer 3: chattering relay vignette -->
+        <section class="bento-card b-chatter reveal rv-r" data-tilt style="--d:.14s" id="b-chatter" data-pause>
+          <div class="b-inner">
+            <div class="b-head">
+              <span class="eyebrow">FAILURE MODES</span>
+              <span class="live-tag"><i></i>FAULT ACTIVE</span>
+            </div>
+            <h3>Chatter eats contacts alive.</h3>
+            <p class="b-sub">
+              A tired AC relay buzzing at line frequency arcs on <b>every bounce</b>.
+              You&rsquo;ll learn to hear it, meter it, and swap it before it welds.
+            </p>
+            <svg class="ch-svg" viewBox="0 0 240 132" aria-label="Cutaway relay with a chattering armature arcing at the contact gap">
+              <rect class="ch-frame" x="8" y="10" width="224" height="112" rx="10"/>
+              <!-- coil + core -->
+              <rect class="ch-coil" x="30" y="72" width="54" height="40" rx="4"/>
+              <text class="ch-coil-lbl" x="57" y="96">COIL</text>
+              <rect class="ch-core" x="47" y="56" width="20" height="16" rx="2"/>
+              <!-- armature (buzzing) -->
+              <g class="ch-arm-g">
+                <rect class="ch-arm" x="88" y="86" width="102" height="10" rx="3"/>
+                <rect class="ch-moving" x="182" y="80" width="12" height="9" rx="2"/>
+              </g>
+              <circle class="ch-pivot" cx="92" cy="92" r="4.5"/>
+              <!-- fixed contact + spark at the gap -->
+              <line class="ch-fixed" x1="186" y1="66" x2="198" y2="66"/>
+              <g class="ch-spark-g">
+                <path class="ch-spark" d="M188 70 l4 6 -5 -2 2 7 -6 -6 4 -1 z"/>
+                <circle class="ch-spark2" cx="195" cy="74" r="2.2"/>
+              </g>
+              <!-- return spring -->
+              <path class="ch-spring" d="M108 96 l0 8 6 3 -12 5 12 5 -6 3 0 6"/>
+              <text class="ch-lbl" x="128" y="30">armature bouncing @ 120 Hz</text>
+              <text class="ch-lbl" x="186" y="52" text-anchor="middle">arc</text>
+            </svg>
+            <div class="chat-stats">
+              <div class="chat-row"><span>chatter cycles</span><b id="chat-cycles">12,438</b></div>
+              <div class="chat-row"><span>contact life remaining</span><b id="chat-life">87.4%</b></div>
+              <div class="chat-barwrap"><div id="chat-bar"></div></div>
+              <div class="chat-row"><span>relays replaced this year</span><b id="chat-swaps">2</b></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- layer 3: fault tickets -->
+        <section class="bento-card b-tickets reveal rv-l" data-tilt data-pause>
+          <div class="b-inner">
+            <div class="b-head">
+              <span class="eyebrow">THE TICKETS</span>
+              <span class="live-tag"><i></i>QUEUE CYCLING</span>
+            </div>
+            <h3>Break it. Then fix it.</h3>
+            <p class="b-sub">
+              The course hands you a work order, not an answer key. Randomized fault tickets drop
+              <b>welded contacts, open coils, and broken wires</b> into the circuit — hidden until your
+              meter finds them. Half-split the rung, isolate the fault, call the fix.
+            </p>
+            <div class="tstack" id="tstack">
+              <article class="ticket2" data-pos="0">
+                <div class="th"><span class="tid">TICKET&nbsp;#4127</span><span class="fault-chip">⚠ FAULT ACTIVE</span></div>
+                <p class="tb"><b>Line 3 conveyor won&rsquo;t restart after E-stop.</b> Operator reports the green pilot never comes back. Motor starter looks fine. Find it with the meter.</p>
+                <div class="tfoot">hint: the coil that won&rsquo;t pull in isn&rsquo;t always the part that failed…</div>
+              </article>
+              <article class="ticket2" data-pos="1">
+                <div class="th"><span class="tid">TICKET&nbsp;#4131</span><span class="fault-chip">⚠ FAULT ACTIVE</span></div>
+                <p class="tb"><b>Mixer only runs while the operator holds START.</b> Let go and it drops out instantly. The motor itself checks good. Something quit holding the rung in.</p>
+                <div class="tfoot">hint: trace the branch that wires <i>around</i> the Start button…</div>
+              </article>
+              <article class="ticket2" data-pos="2">
+                <div class="th"><span class="tid">TICKET&nbsp;#4118</span><span class="fault-chip">⚠ FAULT ACTIVE</span></div>
+                <p class="tb"><b>24&nbsp;V across the coil, relay never clicks.</b> The meter says power is there; the relay says nothing. One more reading separates &ldquo;no power&rdquo; from &ldquo;open winding.&rdquo;</p>
+                <div class="tfoot">hint: an open coil reads OL across its own terminals…</div>
+              </article>
+            </div>
+            <div class="fail-strip">
+              <figure><img src="assets/relays/fault-burned-contactor.jpg" alt="Contactor with burned, blackened contact carriers" loading="lazy" decoding="async"/><figcaption>real failure photo · burned contactor</figcaption></figure>
+              <figure><img src="assets/relays/fault-worn-contacts.jpg" alt="Severely pitted and worn relay contact face" loading="lazy" decoding="async"/><figcaption>pitted contact face</figcaption></figure>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3D CAD card -->
+        <section class="bento-card b-relay3d reveal rv-r" data-tilt data-tilt-max="3" style="--d:.08s">
+          <div class="b-inner">
+            <div class="b-head">
+              <span class="eyebrow">THE HARDWARE</span>
+              <span class="live-tag"><i></i>REAL CAD</span>
+            </div>
+            <h3>Grab it. Spin it.</h3>
+            <p class="b-sub">
+              The <b>784-4C-24D</b> — 4PDT, 14-pin, 24&nbsp;VDC coil — straight from the manufacturer&rsquo;s
+              STEP file. Drag to rotate; it keeps spinning when you let go.
+            </p>
+            <div class="b3d-stage" id="bento3d"><div class="r3d-loading">loading 3D model…</div></div>
+            <div class="b3d-chips">
+              <span class="chip-state on"><i></i>5 CAD models in-course</span>
+              <span class="chip-state"><i></i>4PDT · 14-pin · 15 A</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- the source (deck fan) -->
+        <section class="bento-card b-source reveal rv-l" data-tilt>
+          <div class="b-inner">
+            <div class="b-head"><span class="eyebrow">THE SOURCE</span></div>
+            <h3>Built from the original class deck.</h3>
+            <p class="b-sub">
+              This isn&rsquo;t generic training off a shelf — it&rsquo;s the deck our maintenance crews
+              actually learned from, rebuilt slide by slide into circuits you can touch.
+            </p>
+            <ul class="checks">
+              <li><span class="ck">✓</span><span>Every original drawing rebuilt as a <b>live, solvable circuit</b></span></li>
+              <li><span class="ck">✓</span><span>Expanded to <b>29 interactive lessons</b> + 290 quiz questions</span></li>
+              <li><span class="ck">✓</span><span>Poles &amp; throws, NO/NC, seal-in, timers, contactors, overloads — the full ladder</span></li>
+            </ul>
+            <div class="slide-fan"><span class="slide-chip" style="position:static;display:inline-block;"><b>29 interactive lessons</b> &middot; rebuilt from a classic industrial relay course</span></div>
+          </div>
+        </section>
+
+        <!-- the parts bin (copy card) -->
+        <section class="bento-card b-parts reveal rv-r" data-tilt style="--d:.08s">
+          <div class="b-inner">
+            <div class="b-head"><span class="eyebrow">THE PARTS BIN</span></div>
+            <h3>Learn on real hardware, not clip&nbsp;art.</h3>
+            <p class="b-sub">
+              Every component in the course is the genuine article — photographed from the same
+              AutomationDirect catalog hardware that&rsquo;s bolted into panels on the floor.
+              Ice-cube relays, contactors, timers, E-stops: if you&rsquo;ll wire it, you&rsquo;ll study it.
+            </p>
+            <ul class="checks">
+              <li><span class="ck">✓</span><span><b>62 catalog photographs</b> — sockets, overloads, pilots, fuses, the works</span></li>
+              <li><span class="ck">✓</span><span><b>5 grab-and-spin CAD models</b> straight from the manufacturer&rsquo;s STEP files</span></li>
+              <li><span class="ck">✓</span><span>Cut-sheet specs on tap for every part number</span></li>
+            </ul>
+            <div class="mini-collage">
+              <figure class="part-card"><img src="assets/parts/relay_784_4c_24d.jpg" alt="784-4C-24D ice cube relay" loading="lazy" decoding="async"/><figcaption><b>784-4C-24D</b>4PDT relay</figcaption></figure>
+              <figure class="part-card"><img src="assets/parts/contactor_cwb25_11_30c03_front.jpg" alt="CWB25 contactor" loading="lazy" decoding="async"/><figcaption><b>CWB25-11</b>contactor</figcaption></figure>
+              <figure class="part-card"><img src="assets/parts/timer_trm_16_face_view.jpg" alt="TRM-16 timer relay face" loading="lazy" decoding="async"/><figcaption><b>TRM-16</b>timer relay</figcaption></figure>
+              <figure class="part-card"><img src="assets/parts/estop_gcx1131_red_mushroom.jpg" alt="GCX1131 E-stop mushroom button" loading="lazy" decoding="async"/><figcaption><b>GCX1131</b>E-stop</figcaption></figure>
+            </div>
+          </div>
+        </section>
+
+        <!-- layer 5: parts marquee -->
+        <section class="bento-card b-marquee reveal rv-s" data-pause>
+          <div class="b-inner">
+            <div class="mq-head">
+              <div>
+                <span class="eyebrow">THE CATALOG</span>
+                <h3>62 parts · zero stock photos.</h3>
+              </div>
+              <span class="mq-chip">hover to pause · every part is in the course</span>
+            </div>
+            <div class="mq-row"><div class="mq-track" id="mq-a"></div></div>
+            <div class="mq-row"><div class="mq-track mq-rev" id="mq-b"></div></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ===== layer 5: sticky scroll-story — the rung builds itself ===== -->
+    <div class="story-wrap" id="story" data-pause>
+      <div class="story-sticky">
+        <section class="story-panel" id="story-panel" data-step="0">
+          <div class="story-rail" aria-hidden="true"><div id="story-fill"></div></div>
+          <div class="story-copy">
+            <span class="eyebrow">THE CURRICULUM ARC</span>
+            <h2>Watch the rung build itself.</h2>
+            <p>Keep scrolling — every lesson adds one piece, in exactly this order.</p>
+            <div class="story-steps">
+              <button class="story-step active" type="button">
+                <span class="story-num">01</span>
+                <span><span class="st-t">Start with a contact</span>
+                <span class="st-p">One NO pushbutton, one relay coil. Hold START and CR1 pulls in — let go and it drops. Momentary.</span></span>
+              </button>
+              <button class="story-step" type="button">
+                <span class="story-num">02</span>
+                <span><span class="st-t">Seal it in</span>
+                <span class="st-p">CR1&rsquo;s own contact wires around START. The relay now feeds itself — press, release, it stays latched.</span></span>
+              </button>
+              <button class="story-step" type="button">
+                <span class="story-num">03</span>
+                <span><span class="st-t">Give it a Stop</span>
+                <span class="st-p">An NC STOP splices in ahead of everything. Break the rung anywhere and the latch releases. That&rsquo;s 3-wire control.</span></span>
+              </button>
+              <button class="story-step" type="button">
+                <span class="story-num">04</span>
+                <span><span class="st-t">Put it to work</span>
+                <span class="st-p">CR1&rsquo;s contacts pull in the contactor, the contactor starts the motor. The whole panel is this rung, repeated.</span></span>
+              </button>
+            </div>
+            <div class="story-dots" role="tablist" aria-label="Story progress">
+              <button class="story-dot on" type="button" aria-label="Step 1"></button>
+              <button class="story-dot" type="button" aria-label="Step 2"></button>
+              <button class="story-dot" type="button" aria-label="Step 3"></button>
+              <button class="story-dot" type="button" aria-label="Step 4"></button>
+            </div>
+          </div>
+          <div class="story-stage">
+            <svg class="story-svg" viewBox="0 0 720 400" aria-label="Ladder diagram building up step by step into a 3-wire start/stop motor circuit">
+              <!-- rails (always) -->
+              <line class="st-rail" x1="70" y1="36" x2="70" y2="364" stroke="#DC2626"/>
+              <line class="st-rail" x1="650" y1="36" x2="650" y2="364"/>
+              <text class="st-rail-lbl" x="70" y="390" fill="#DC2626">L1</text>
+              <text class="st-rail-lbl" x="650" y="390">L2</text>
+
+              <!-- step 0: START + CR1 coil on rung 1 -->
+              <g data-s="0">
+                <line class="st-wire" x1="70" y1="110" x2="150" y2="110"/>
+                <line class="st-bypass st-wire" x1="150" y1="110" x2="210" y2="110"/>
+                <line class="st-wire" x1="210" y1="110" x2="270" y2="110"/>
+                <line class="st-wire" x1="330" y1="110" x2="512" y2="110"/>
+                <line class="st-wire" x1="568" y1="110" x2="650" y2="110"/>
+                <!-- START: NO pushbutton -->
+                <line class="st-plate" x1="292" y1="98" x2="292" y2="122"/>
+                <line class="st-plate" x1="308" y1="98" x2="308" y2="122"/>
+                <line class="st-bridge" x1="288" y1="110" x2="312" y2="110"/>
+                <line class="st-plate" x1="300" y1="98" x2="300" y2="84"/>
+                <rect class="st-plate" x="289" y="76" width="22" height="7" rx="2" fill="#EAEFF7"/>
+                <line class="st-wire" x1="270" y1="110" x2="288" y2="110"/>
+                <line class="st-wire" x1="312" y1="110" x2="330" y2="110"/>
+                <text class="st-lbl" x="300" y="146">START</text>
+                <!-- CR1 coil -->
+                <rect class="st-coil" x="512" y="94" width="56" height="32" rx="3"/>
+                <text class="st-coil-lbl" x="540" y="114">CR1</text>
+                <line class="st-flow" x1="70" y1="110" x2="288" y2="110"/>
+                <line class="st-flow" x1="312" y1="110" x2="512" y2="110"/>
+              </g>
+
+              <!-- step 1: seal-in branch around START -->
+              <g data-s="1">
+                <line class="st-wire" x1="270" y1="110" x2="270" y2="176"/>
+                <line class="st-wire" x1="270" y1="176" x2="288" y2="176"/>
+                <line class="st-plate" x1="292" y1="164" x2="292" y2="188"/>
+                <line class="st-plate" x1="308" y1="164" x2="308" y2="188"/>
+                <line class="st-bridge" x1="288" y1="176" x2="312" y2="176"/>
+                <line class="st-wire" x1="312" y1="176" x2="330" y2="176"/>
+                <line class="st-wire" x1="330" y1="176" x2="330" y2="110"/>
+                <circle class="st-junc" cx="270" cy="110" r="4"/>
+                <circle class="st-junc" cx="330" cy="110" r="4"/>
+                <text class="st-lbl" x="300" y="212">CR1-1 · seal-in</text>
+                <line class="st-flow" x1="270" y1="110" x2="270" y2="176"/>
+                <line class="st-flow" x1="270" y1="176" x2="330" y2="176"/>
+                <line class="st-flow" x1="330" y1="176" x2="330" y2="110"/>
+              </g>
+
+              <!-- step 2: STOP (NC) splices in -->
+              <g data-s="2">
+                <line class="st-plate" x1="172" y1="98" x2="172" y2="122"/>
+                <line class="st-plate" x1="188" y1="98" x2="188" y2="122"/>
+                <line class="st-bridge" style="opacity:1" x1="168" y1="110" x2="192" y2="110"/>
+                <line class="st-nc-slash" x1="166" y1="124" x2="194" y2="96"/>
+                <line class="st-plate" x1="180" y1="98" x2="180" y2="84"/>
+                <rect class="st-plate" x="169" y="76" width="22" height="7" rx="2" fill="#FBD5D5"/>
+                <line class="st-wire" x1="150" y1="110" x2="168" y2="110"/>
+                <line class="st-wire" x1="192" y1="110" x2="210" y2="110"/>
+                <text class="st-lbl" x="180" y="146">STOP</text>
+              </g>
+
+              <!-- step 3: rung 2 — CR1-2 pulls in contactor M, motor runs -->
+              <g data-s="3">
+                <line class="st-wire" x1="70" y1="290" x2="288" y2="290"/>
+                <line class="st-plate" x1="292" y1="278" x2="292" y2="302"/>
+                <line class="st-plate" x1="308" y1="278" x2="308" y2="302"/>
+                <line class="st-bridge" x1="288" y1="290" x2="312" y2="290"/>
+                <text class="st-lbl" x="300" y="326">CR1-2</text>
+                <line class="st-wire" x1="312" y1="290" x2="422" y2="290"/>
+                <rect class="st-coil" x="422" y="274" width="52" height="32" rx="3"/>
+                <text class="st-coil-lbl" x="448" y="294">M</text>
+                <line class="st-wire" x1="474" y1="290" x2="650" y2="290"/>
+                <text class="st-lbl" x="448" y="326">contactor</text>
+                <!-- motor, mechanically linked -->
+                <line x1="448" y1="274" x2="448" y2="238" stroke="#B7C0D0" stroke-width="1.6" stroke-dasharray="4 4"/>
+                <circle class="st-motor-body" cx="560" cy="222" r="26"/>
+                <g class="st-blades">
+                  <line class="st-blade" x1="560" y1="204" x2="560" y2="240"/>
+                  <line class="st-blade" x1="542" y1="222" x2="578" y2="222"/>
+                </g>
+                <circle class="st-motor-body" cx="560" cy="222" r="8" fill="#FFFFFF"/>
+                <text class="st-motor-lbl" x="560" y="266">MOTOR</text>
+                <line x1="448" y1="238" x2="560" y2="238" stroke="#B7C0D0" stroke-width="1.6" stroke-dasharray="4 4" opacity=".6"/>
+                <line class="st-flow" x1="70" y1="290" x2="288" y2="290"/>
+                <line class="st-flow" x1="312" y1="290" x2="422" y2="290"/>
+              </g>
+            </svg>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ===== closing CTA ===== -->
+    <div class="band-wrap">
+      <section class="band reveal">
+        <h2>Ready to get your hands on it?</h2>
+        <p>Twenty-nine lessons, one meter, and every fault the plant can throw at you.
+           Runs entirely on your machine — no login, no cloud, no excuses.</p>
+        <a class="btn-band" href="index.html">Enter the Course <span>→</span></a>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===== footer ===== -->
+  <footer>
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <svg viewBox="0 0 40 44" fill="none" aria-hidden="true">
+          <path d="M20 2 36 9v13c0 9-7 16-16 19C11 38 4 31 4 22V9L20 2Z" stroke="url(#bm)" stroke-width="1.8"/>
+          <circle cx="20" cy="20" r="3.4" fill="url(#bm)"/>
+        </svg>
+        <span>RELAY TRAINING</span>
+      </div>
+      <div class="foot-credit">
+        <b>Built by Michael Honeycutt</b> <span class="hb">· Honeybadger Software</span><br/>
+        Interactive relay troubleshooting · photographs of genuine plant-floor hardware.
+      </div>
+      <div class="foot-meta">local · offline · :8099</div>
+    </div>
+  </footer>
+
+  <!-- bundled Three.js (same files the course uses) -->
+  <script src="js/lib/three.min.js"></script>
+  <script src="js/lib/STLLoader.js"></script>
+  <script src="js/lib/OrbitControls.js"></script>
+  <script type="module" src="js/landing.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+{
+  "moduleId": "m26-meter-basics-safe-measurement",
+  "title": "Using a Multimeter Safely on Live Control Circuits",
+  "questions": [
+    {
+      "q": "To check the voltage at a relay coil, how do you place your two meter probes?",
+      "options": [
+        "Across the two points, one probe on each side (in parallel)",
+        "In series, breaking the wire and running current through the meter",
+        "Both probes on the same point",
+        "One probe on the coil and the other on the cabinet floor"
+      ],
+      "correct": 0,
+      "why": "Voltage is always measured ACROSS two points with the probes in parallel; you never break the circuit to run current through your probes for this work.",
+      "visual": {
+        "lesson": "m26-meter-basics-safe-measurement",
+        "caption": "The control circuit — the coil's terminals are marked TP-CR1a and TP-CR1b."
+      }
+    },
+    {
+      "q": "You are troubleshooting a 24VDC control circuit. What function should your meter be set to?",
+      "options": [
+        "DC volts, on a range that covers about 24V",
+        "AC volts, since all meters read AC",
+        "Resistance (ohms) on the live circuit",
+        "DC amps in series with the coil"
+      ],
+      "correct": 0,
+      "why": "A 24VDC supply is direct current, so you set the meter to DC volts on a range that comfortably covers the expected 24V reading."
+    },
+    {
+      "q": "Before you trust a 0-volt reading at a contact you think is dead, what must you do with your meter?",
+      "options": [
+        "Prove the meter on a known LIVE source first, then test the dead spot, then re-check on the live source (live-dead-live)",
+        "Just read it once; a 0 is always a 0",
+        "Switch to ohms and assume the reading is correct",
+        "Tap the probes together and call it good"
+      ],
+      "correct": 0,
+      "why": "Live-dead-live proves the meter actually works on a known live source before and after, so a '0V' is a real dead spot and not a broken meter or wrong setting."
+    },
+    {
+      "q": "A relay won't pull in. You set the meter to DC volts, prove it on a known-live point, then read 0V across the coil terminals. What does that tell you?",
+      "options": [
+        "Power isn't reaching the coil — the fault is upstream in the control wiring",
+        "The coil is good and is energized right now",
+        "The motor on the power side has failed",
+        "Your meter is set to the wrong function"
+      ],
+      "correct": 0,
+      "why": "An energized 24VDC coil should read about 24V; a verified 0V means control voltage never reaches the coil, so the break is somewhere upstream in the control circuit."
+    },
+    {
+      "q": "A contactor is chattering and won't seal in. You put one probe on each coil terminal WHILE it's chattering and read 19V on what's labeled a 24VDC coil. What's your next move?",
+      "options": [
+        "Replace the coil, since 19V proves the coil itself is failing",
+        "Call it normal — 19V is close enough to 24V for a coil to seal in",
+        "Trace upstream from the coil with your probes, checking each junction, until the reading jumps back up to full supply voltage — that junction is the bad connection",
+        "Switch the meter to ohms and measure the coil resistance while it's still energized"
+      ],
+      "correct": 2,
+      "why": "19V is below the roughly 85% (about 20V) threshold that lets a 24VDC coil seal in, so this is a voltage-drop fault, not a bad coil. Walking upstream terminal by terminal until the reading recovers to nominal is exactly how you localize the resistive joint causing the drop."
+    },
+    {
+      "q": "You read 0V at a control terminal with a test light AND get a real number on your meter, and the machine is dead — but when you grab and wiggle the wire bundle near that terminal, the machine suddenly starts running. What does this behavior tell you?",
+      "options": [
+        "Your meter has an internal probe break and can't be trusted at all",
+        "This is ghost/induced voltage from nearby 480V conductors in the same conduit",
+        "The relay coil itself is defective and needs replacement",
+        "There's an intermittent open at a loose terminal that makes and breaks contact under mechanical disturbance — the wire needs to be re-torqued and retested for a flicker-free reading"
+      ],
+      "correct": 3,
+      "why": "A connection that only makes contact when you physically disturb the wire is the signature of a loose or corroded terminal, not a meter problem or ghost voltage. Torque-spec the terminal and confirm the reading holds rock-solid at nominal with zero flicker under a repeat wiggle test."
+    },
+    {
+      "q": "You test a 24VDC circuit you believe is de-energized with a standard DMM (10 MΩ input impedance) and read 42VAC. You switch the same meter to its Lo-Z function (~3 kΩ) and the reading collapses to 0.6V. What's the correct conclusion?",
+      "options": [
+        "The 42V was ghost/induced voltage picked up from nearby 480V conductors in shared conduit — the high-impedance DMM held it, and the low-impedance Lo-Z function loaded the circuit enough to collapse it, confirming the circuit is actually dead",
+        "The circuit is live at 42V, and the Lo-Z reading of 0.6V is the one that's wrong because Lo-Z always under-reads real voltage",
+        "The meter itself is defective since a working meter should give the same reading on both functions",
+        "42V proves a partial short from the 480V supply is feeding into the 24VDC circuit and the breaker needs to be pulled immediately"
+      ],
+      "correct": 0,
+      "why": "A standard 10 MΩ DMM is high-impedance enough to display induced ghost voltage (commonly 30-60VAC) from adjacent power conductors without any real current flowing. The Lo-Z function's ~3 kΩ load is enough to draw real current, so a ghost voltage collapses toward 0V while a genuinely live circuit would still hold most of its voltage under that load."
+    },
+    {
+      "q": "You're about to check a 480VAC MCC bus feeding a motor starter. Which meter is safe to grab off the tool cart for this job?",
+      "options": [
+        "Any meter, since CAT rating only matters for the technician's certification paperwork",
+        "A meter rated CAT III 600V (or higher)",
+        "A CAT II meter, since CAT II covers panel and MCC work",
+        "Whichever meter is auto-ranging, regardless of CAT rating"
+      ],
+      "correct": 1,
+      "why": "CAT III 600V is the field minimum for industrial panel and MCC work because it's built to survive the transient overvoltages that occur there. A CAT II meter is only rated for plug/receptacle-level loads and can fail violently if used on an MCC bus during a transient."
+    },
+    {
+      "q": "You need to check current draw on a running 480VAC motor feeder to see if it's overloaded. What's the correct way to measure it with your meter?",
+      "options": [
+        "Set the meter to DC amps and put one probe on each side of the conductor, in parallel",
+        "Open the circuit, land one meter lead on each side of the break, and set the meter to AC volts",
+        "Use a clamp-on ammeter around one conductor — never break the circuit to insert the meter in series",
+        "Set the meter to ohms and touch both probes to the energized conductor"
+      ],
+      "correct": 2,
+      "why": "Amps at 480VAC are measured with a clamp-on ammeter that reads the magnetic field around the wire, so the circuit stays intact and safe. Breaking a live 480V circuit to insert a meter in series is how techs create a dead short and an arc flash."
+    },
+    {
+      "q": "A tech checks a 120VAC control circuit with the meter still set to DC volts from the last job and reads 0.4V, so he tells the crew the transformer secondary is dead. What actually went wrong, and what's the real risk here?",
+      "options": [
+        "Nothing went wrong — 0.4V on DC volts is a valid, accurate reading of a 120VAC circuit",
+        "AC on a DC-volts setting reads as a misleading near-zero, which can send a tech chasing a phantom 'dead transformer' fault for hours while the real live circuit gets treated as safe to touch",
+        "The meter battery is dead, which always shows up as exactly 0.4V regardless of function setting",
+        "The circuit really is dead, and the tech should proceed to work on it as a de-energized circuit"
+      ],
+      "correct": 1,
+      "why": "Measuring AC with the meter on a DC scale integrates the waveform and gives a misleadingly low reading that looks like a dead circuit when it isn't — exactly the two-hours-chasing-a-ghost-fault scenario from the transformer war story. The real danger is a tech assuming 'dead' and treating a live 120V circuit as safe to touch."
+    },
+    {
+      "q": "In the print shown, the panel is live and healthy (PL1 lit). You put the red lead on TP-FUin and the black lead on TP-FUout. What should the meter read — and what would full supply voltage there mean instead?",
+      "options": [
+        "24V — a healthy fuse drops the full supply across itself",
+        "OL — a fuse cannot be measured in-circuit",
+        "About 12V — the fuse and the coil split the supply",
+        "About 0V — a healthy fuse is a straight-through conductor; reading the full 24V across it would mean the element is open (blown)"
+      ],
+      "correct": 3,
+      "why": "A good fuse has near-zero resistance, so essentially no voltage drops across it — the meter reads about 0V. If the element is open, the full 24V appears across the gap: full supply voltage ACROSS a fuse is the signature of a blown one.",
+      "visual": {
+        "lesson": "m26-meter-basics-safe-measurement",
+        "caption": "The live panel — healthy, PL1 lit. TP-FUin and TP-FUout straddle FU1."
+      }
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "moduleId": "m20-walking-down-the-ladder",
+  "title": "Walking Down the Ladder: What Each Voltage Is For",
+  "questions": [
+    {
+      "q": "Which voltage is the modern standard for new control circuits and sensors?",
+      "options": [
+        "480VAC",
+        "240VAC",
+        "120VAC",
+        "24VDC"
+      ],
+      "correct": 3,
+      "why": "24VDC is below 50V so it's touch-safe, it's the cheapest to wire, and nearly all sensors made today are built for it."
+    },
+    {
+      "q": "What is the typical job of the 240VAC tier?",
+      "options": [
+        "Modern sensors and control logic",
+        "Heater bands, welders, and fans",
+        "The biggest 3-phase motors",
+        "HVAC thermostats"
+      ],
+      "correct": 1,
+      "why": "240VAC is still big power used for loads like heater bands, welders, and fans, but it's still dangerous and has few sensors made for it."
+    },
+    {
+      "q": "The old saying goes: 120VAC is 'now you're talking' but industry is leaving it behind. Why move away from 120VAC?",
+      "options": [
+        "Its fuses are impossible to find",
+        "No equipment was ever built for it",
+        "It's still a shock hazard, while 24VDC stays under the safe 50V line",
+        "It can't power solenoids or small motors"
+      ],
+      "correct": 2,
+      "why": "120VAC still bites you, while 24VDC stays below 50V where it's touch-safe, so modern designs favor the lower, safer voltage."
+    },
+    {
+      "q": "You're picking the supply voltage for a brand-new sensor and switch package on a machine. Which rung should you reach for, and why?",
+      "options": [
+        "480VAC, because it's the most powerful",
+        "240VAC, because it fuses easily for big loads",
+        "120VAC, because it's the long-time industry default",
+        "24VDC, because it's safe, cheap to wire, and what modern sensors expect"
+      ],
+      "correct": 3,
+      "why": "24VDC is under 50V (touch-safe), cheapest to wire, and almost all sensors and switches made today are built for it."
+    },
+    {
+      "q": "You measure the 24VDC panel supply open-circuit at 24.3V, but with the machine running full production it sags to 19V at the relay coil terminals, and CR3 is chattering audibly. What's the most likely root cause?",
+      "options": [
+        "CR3's contacts are welded shut",
+        "The supply is sagging into the coil's chatter band between drop-out (~18V) and pull-in (~20.4V), likely a failing filter capacitor",
+        "The relay coil is oversized for the panel",
+        "Ghost voltage from a nearby 120VAC circuit is confusing the coil"
+      ],
+      "correct": 1,
+      "why": "A coil chatters when supply voltage sits between drop-out (75% of rated, ~18V) and pull-in (85%, ~20.4V) — it can't fully seat but hasn't dropped out either. A supply that reads fine unloaded but sags under load points to a failing filter cap, not the relay or ghost voltage (ghost voltage only shows up on de-energized wires, not a live loaded coil circuit)."
+    },
+    {
+      "q": "A 480VAC-to-120VAC control transformer keeps blowing its secondary fuse within hours of every replacement, but the 480VAC primary fuse never trips. What should you check next?",
+      "options": [
+        "Megohm the 120VAC control wiring for a ground fault on the load side",
+        "Clamp the primary current with the secondary fuse pulled — elevated primary draw with no secondary path points to a shorted turn in the transformer itself",
+        "Replace the secondary fuse with a slower time-delay type",
+        "Check for ghost voltage on the de-energized secondary before re-fusing"
+      ],
+      "correct": 1,
+      "why": "A shorted turn inside the transformer lets it source excess current on the secondary while the primary current change is too small to trip its fuse — clamping primary current with the secondary fuse OUT isolates the transformer itself as the fault. Upsizing the secondary fuse just masks a real transformer short and risks worse failure; ghost voltage is a de-energized-wire phenomenon, not a live blown-fuse symptom."
+    },
+    {
+      "q": "You're troubleshooting an old machine and find a heater bank still wired for 480VAC control instead of running a 120VAC control transformer like the rest of the plant's equipment. What's the right response?",
+      "options": [
+        "Immediately rewire it to 24VDC control since that's the modern standard",
+        "Flag it as miswired and correct it on the spot without documentation",
+        "Recognize this as a legacy exception from before 120VAC control transformers were standard, and treat the control wiring with full 480VAC respect (PPE, arc-flash awareness) rather than assuming it's low-voltage",
+        "Ignore it — control wiring voltage doesn't affect safety procedures"
+      ],
+      "correct": 2,
+      "why": "The module notes 480VAC control only shows up on very old equipment predating 120VAC control transformers becoming standard — it's a known legacy exception, not necessarily a wiring error. The danger is assuming 'it's just control wiring' and skipping arc-flash PPE; at 480V even a control rung carries lethal arc-flash energy and deserves full respect, not an on-the-spot rewire without engineering review."
+    },
+    {
+      "q": "You're called to a machine where maintenance found 48VAC on a de-energized 24VAC wire with a standard high-impedance multimeter, and they've locked out the panel assuming a live crossed circuit. Before you spend an hour tracing wire, what's the fastest way to confirm or rule out ghost voltage?",
+      "options": [
+        "Trust the high-impedance meter reading as-is and start tracing every conductor in that conduit for a crossed wire",
+        "Clip a load (like a 1 kΩ resistor, or switch to a low-Z tester) across the wire to ground — genuine voltage holds up under load, ghost voltage collapses toward zero",
+        "Assume it's safe since 48VAC is below the 50V touch-safe threshold and skip further testing",
+        "Megohm the wire to ground, since insulation resistance is the only way to catch ghost voltage"
+      ],
+      "correct": 1,
+      "why": "Ghost/induced voltage is capacitively coupled from a nearby live conductor and a high-impedance meter holds it up artificially; loading the circuit (a resistor, or a low-Z tester like a Fluke SureTest) collapses a ghost reading toward zero while a real source stays up. Tracing every wire in the conduit wastes an hour on a phantom, and 48VAC is right at the touch-safe line so it should never be waved off without confirming what it actually is."
+    },
+    {
+      "q": "A 24VDC relay coil is rated for 24V with 10% overvoltage tolerance. After a 'same size' replacement power supply gets installed and its trim pot sits high at 28V, roughly how much more power is the coil dissipating compared to running at 24V?",
+      "options": [
+        "About 4% more, negligible",
+        "About 17% more",
+        "About 36% more, since coil power scales with V-squared over resistance",
+        "Exactly the same, since coils are constant-power devices"
+      ],
+      "correct": 2,
+      "why": "Coil power is P = V²/R, so going from 24V to 28V is (28/24)² ≈ 1.36 — about a 36% jump in heat dissipated in the coil winding, which is exactly why the module flags a high-trimmed replacement supply as a silent coil-killer. Coils aren't constant-power or linear devices, so 'same size' voltage-wise doesn't mean same heat load once the trim drifts above rating."
+    },
+    {
+      "q": "A tech ignores a chattering 24VDC relay because 'it's still pulling in, so it's fine,' and leaves it running under sagging supply voltage for a week straight. What's the real consequence of ignoring that chatter?",
+      "options": [
+        "Nothing — chatter is just noise and has no electrical effect on the coil",
+        "The coil sees repeated 150-200 mA inrush every chatter cycle instead of settling to 30-50 mA sealed current, overheating and carbonizing the winding insulation until a coil rated for 10 years fails in days",
+        "The relay's contacts will weld shut immediately, stopping the machine that same shift",
+        "The only risk is nuisance tripping of the branch circuit breaker"
+      ],
+      "correct": 1,
+      "why": "Every chatter cycle re-triggers the coil's inrush current (150-200 mA) instead of letting it settle to sealed current (30-50 mA); that repeated inrush heats and carbonizes the winding insulation, turning a 10-year coil into a days-long failure. It's not harmless noise, and the failure mode is slow insulation damage, not an instant contact weld or breaker trip."
+    }
+  ]
+}

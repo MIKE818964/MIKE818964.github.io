@@ -1,0 +1,28 @@
+{
+  "id": "26_meter_safety",
+  "circuit": {
+    "id": "meter_safety",
+    "title": "Using a Multimeter Safely on Live Control Circuits",
+    "nodes": [
+      { "id": "L", "x": 140, "y": 160 },
+      { "id": "n1", "x": 310, "y": 160 },
+      { "id": "nCoil", "x": 480, "y": 160 },
+      { "id": "nLamp", "x": 480, "y": 270 },
+      { "id": "nPL2", "x": 650, "y": 270 },
+      { "id": "N", "x": 140, "y": 420 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 140, "y": 300, "label": "24VDC", "terminals": { "pos": "L", "neg": "N" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 225, "y": 160, "label": "FU1", "terminals": { "a": "L", "b": "n1" } },
+      { "id": "CR1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC", "x": 480, "y": 160, "label": "CR1 24VDC", "terminals": { "a": "n1", "b": "N" } },
+      { "id": "PL1", "type": "bulb", "x": 480, "y": 270, "label": "PL1 Power-On", "terminals": { "a": "n1", "b": "N" } },
+      { "id": "CR1C", "type": "contact_no", "coil": "CR1", "x": 565, "y": 270, "label": "CR1 NO", "terminals": { "in": "n1", "out": "nPL2" } },
+      { "id": "PL2", "type": "bulb", "x": 650, "y": 270, "label": "PL2 Run", "terminals": { "a": "nPL2", "b": "N" } },
+      { "id": "TP_L", "type": "test_point", "x": 140, "y": 100, "label": "TP+ (+24V)", "terminals": { "p": "L" } },
+      { "id": "TP_FUa", "type": "test_point", "x": 225, "y": 100, "label": "TP-FUin", "terminals": { "p": "L" } },
+      { "id": "TP_FUb", "type": "test_point", "x": 310, "y": 100, "label": "TP-FUout", "terminals": { "p": "n1" } },
+      { "id": "TP_CRa", "type": "test_point", "x": 420, "y": 100, "label": "TP-CR1a", "terminals": { "p": "n1" } },
+      { "id": "TP_CRb", "type": "test_point", "x": 140, "y": 360, "label": "TP-CR1b (0V)", "terminals": { "p": "N" } }
+    ]
+  }
+}

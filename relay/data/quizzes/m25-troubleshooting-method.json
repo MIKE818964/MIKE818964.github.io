@@ -1,0 +1,120 @@
+{
+  "moduleId": "m25-troubleshooting-method",
+  "title": "A Systematic Troubleshooting Method",
+  "questions": [
+    {
+      "q": "What is the FIRST step of a systematic troubleshooting method?",
+      "options": [
+        "Start replacing parts until it works",
+        "Know what NORMAL looks like from the print",
+        "Lock out only the 24VDC control circuit",
+        "Call the operator back later"
+      ],
+      "correct": 1,
+      "why": "You have to know what normal looks like from the print first, because you cannot spot what is wrong until you know what right looks like."
+    },
+    {
+      "q": "What does it mean to 'divide the circuit' when troubleshooting?",
+      "options": [
+        "Cut the wires in half with cutters",
+        "Test a midpoint to split the problem space in two",
+        "Use only half of the relay's poles",
+        "Split the voltage between two meters"
+      ],
+      "correct": 1,
+      "why": "Dividing means testing a midpoint (like the coil) so one reading tells you which half the fault is in, cutting the search area in half each time."
+    },
+    {
+      "q": "A motor won't start. Which single measurement best splits the problem into 'control side' vs 'power side'?",
+      "options": [
+        "Measure the motor's temperature",
+        "Measure whether the contactor coil is being energized",
+        "Measure the incoming 480VAC",
+        "Measure the resistance of the wires"
+      ],
+      "correct": 1,
+      "why": "Checking if control voltage is present at the contactor coil divides the problem: if the coil has voltage the fault is on the power side, if not it is in the control circuit.",
+      "visual": {
+        "lesson": "m14-swap-bulb-for-motor-starter",
+        "caption": "A typical station — control rung above, motor rung below."
+      }
+    },
+    {
+      "q": "A relay won't pull in and you read 0V at the coil terminals. What does that tell you?",
+      "options": [
+        "The coil itself is burned out",
+        "Power is not reaching the coil, so the fault is upstream in the control circuit",
+        "The load on the power side is faulty",
+        "The contacts are welded shut"
+      ],
+      "correct": 1,
+      "why": "0V at the coil means the control circuit is not delivering voltage, so the fault is upstream (a button, contact, wire, or fuse), not the coil or the load."
+    },
+    {
+      "q": "A conveyor's contactor coil reads a rock-solid 24VDC at the terminals with the meter open-circuit (Start not pressed, just probing the wire). You call the coil-feed wire good and move on. What's the risk in stopping there?",
+      "options": [
+        "None — an open-circuit reading is the most reliable test there is",
+        "A high-resistance connection (corroded terminal, cracked strand) can still collapse the voltage once the coil actually draws current under load",
+        "The meter's battery could be low, giving a false-high reading",
+        "24VDC coils should be tested with the meter in continuity mode instead"
+      ],
+      "correct": 1,
+      "why": "Open-circuit voltage proves a path exists, not that it can carry current. A corroded terminal or cracked strand can look fine with no current flowing, then drop 10V or more the instant the coil pulls 50-200 mA (or up to 600 mA inrush) — you have to measure under load, with the coil energized, to catch that fault."
+    },
+    {
+      "q": "A relay chatters audibly on a 120VAC control circuit and the coil is getting hot fast. You put a true-RMS meter on the coil terminals under load and read 92VAC. What should you check next?",
+      "options": [
+        "Replace the relay immediately — the coil is shorted",
+        "Check the control-transformer output under load and confirm the control fuse is the correct size",
+        "Increase the fuse size so more current can reach the coil",
+        "Ignore it — 92VAC is close enough to 120VAC to be normal"
+      ],
+      "correct": 1,
+      "why": "Coils typically drop out below about 85% of rated voltage (about 102V for a 120V coil), so 92VAC under load explains the chatter. The likely cause is a sagging control-transformer secondary or a high-resistance fault masked by an oversized fuse — check the transformer under load and verify fuse size, don't just swap the relay."
+    },
+    {
+      "q": "You're troubleshooting a 16-point control circuit using proper half-split method. In the worst case, what is the maximum number of probes needed to isolate the fault, and why does that number matter on the floor?",
+      "options": [
+        "16 probes — you must check every point once",
+        "8 probes — half of the total points",
+        "4 probes (log2(16)) — because each smart probe cuts the remaining search space in half",
+        "1 probe — a single coil-voltage reading always finds the fault"
+      ],
+      "correct": 2,
+      "why": "Half-split is log2(N): a 16-point circuit needs at most 4 probes because each measurement should eliminate half of what's left, not just cross off one point. Random one-by-one checking on the same circuit averages around N/2 (8) probes — that's the time and risk half-split is built to avoid."
+    },
+    {
+      "q": "An operator tells you 'the machine won't start.' Following the module's method, what should you do before touching a meter?",
+      "options": [
+        "Immediately swap the contactor since that's the most common failure",
+        "Turn off power to the whole panel and start disassembling the starter",
+        "Convert the complaint into a precise symptom: what exactly happens when Start is pressed (click, light, no response) so you know which half of the circuit to probe first",
+        "Ask the operator to keep pressing Start until it works"
+      ],
+      "correct": 2,
+      "why": "'Won't start' is a complaint, not a symptom — it could mean a blown fuse, open seal-in wire, burned coil, welded-open overload, or a tripped breaker, which are all different repairs. Pinning down exactly what you observe (does it click, does a light change) is what tells you which two causes to test first, before you ever pick up a meter."
+    },
+    {
+      "q": "You measure 40VAC on a disconnected wire in a multi-conductor cable using a standard high-impedance meter, and conclude the wire is energized from an adjacent live circuit. What's the safer way to confirm that before you trust the reading?",
+      "options": [
+        "Trust the 40VAC reading as-is — any nonzero voltage means the wire is live and dangerous",
+        "Switch the meter to a low-impedance (low-Z) setting, or load the test point with a resistive load (like 10k ohms) and re-measure; if it collapses toward 0V it was ghost voltage",
+        "Measure the wire's resistance to ground instead — voltage readings can't be trusted on disconnected wires",
+        "Assume it's safe to handle since 40VAC is below the 50V shock threshold"
+      ],
+      "correct": 1,
+      "why": "Induced/capacitive coupling in a bundled cable can put 30-80VAC of ghost voltage on a disconnected conductor on a high-impedance meter, with essentially no current behind it. A low-Z setting or a resistive load test collapses that ghost voltage toward zero, while real source voltage holds up under the load — that distinction matters both for correct diagnosis and for safety."
+    },
+    {
+      "q": "You just replaced a burned coil on CR1 and it pulls in fine on the first Start press. What does this module say you must still do before closing the panel and calling the job done?",
+      "options": [
+        "Nothing else — a successful pull-in on the first try proves the repair is complete",
+        "Confirm coil voltage is steady under load, the seal-in latches, Stop drops it cleanly, the overload stays reset through a run cycle, and the output side actually drives the load — then document those checks on the work order",
+        "Just verify the coil resistance one more time with power off",
+        "Wait for the operator to report back if it fails again"
+      ],
+      "correct": 1,
+      "why": "The confirm step is the one most often skipped and the one that causes the second failure call — a single successful start doesn't rule out a marginal connection that fails under sustained load or heat. Running and documenting all five checks (voltage under load, seal-in, Stop, overload reset, output driving the load) protects both the machine and the next tech who has to troubleshoot if something changes after you leave."
+    }
+  ]
+}

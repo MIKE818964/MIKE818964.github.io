@@ -1,0 +1,19 @@
+{
+  "id": "08_what_is_a_pole",
+  "circuit": {
+    "id": "08_what_is_a_pole",
+    "nodes": [
+      { "id": "nPos", "x": 140, "y": 160 },
+      { "id": "nFused", "x": 310, "y": 160 },
+      { "id": "nPole", "x": 650, "y": 160 },
+      { "id": "nNeg", "x": 140, "y": 360 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 140, "y": 260, "label": "24VDC", "terminals": { "pos": "nPos", "neg": "nNeg" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 310, "y": 160, "label": "FU1", "terminals": { "a": "nPos", "b": "nFused" } },
+      { "id": "S1", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 480, "y": 160, "label": "Pole 1", "terminals": { "in": "nFused", "out": "nPole" } },
+      { "id": "TP1", "type": "test_point", "x": 650, "y": 100, "label": "TP1", "terminals": { "p": "nPole" } },
+      { "id": "LT1", "type": "bulb", "x": 820, "y": 160, "label": "Running", "terminals": { "a": "nPole", "b": "nNeg" } }
+    ]
+  }
+}

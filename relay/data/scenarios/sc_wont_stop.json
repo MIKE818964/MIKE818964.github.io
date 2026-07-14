@@ -1,0 +1,135 @@
+{
+  "id": "sc_wont_stop",
+  "title": "Motor Won't STOP — The Runaway",
+  "type": "troubleshoot",
+  "mode": "deductive",
+  "workOrder": "WORK ORDER #214 — Operator reports: \"I hit Stop and the motor keeps running.\" Line has been E-stopped at the panel breaker. There are TWO Stop pushbuttons in series (local + remote). Do NOT assume — find which component is lying to you.",
+  "symptom": "The motor keeps running after the Stop button is pressed. It's a DIFFERENT fault each time you open this ticket. Some faults keep the coil alive; one kills the coil but the motor shaft still turns. Meter the circuit — test points separate the control rung from the motor power branch.",
+  "faults": [
+    { "component": "STOP", "kind": "welded_closed" },
+    { "component": "STOP2", "kind": "welded_closed" },
+    { "component": "MC1", "kind": "welded_closed" },
+    { "component": "START", "kind": "welded_closed" }
+  ],
+  "diagnosisOptions": [
+    { "component": "STOP",  "kind": "welded_closed" },
+    { "component": "STOP2", "kind": "welded_closed" },
+    { "component": "MC1",   "kind": "welded_closed" },
+    { "component": "START", "kind": "welded_closed" },
+    { "component": "SEAL",  "kind": "welded_closed" },
+    { "component": "FU1",   "kind": "blown_fuse" },
+    { "component": "CR1",   "kind": "open_coil" }
+  ],
+  "explains": {
+    "STOP:welded_closed": "You pressed the LOCAL Stop and nothing happened — RUN light stayed on, motor kept spinning. Then you pressed the REMOTE Stop (STOP2) and the motor died instantly. TP-2 never lost voltage during your local Stop press; a good NC contact would drop TP-2 to 0V when pressed. The local Stop button contact is physically welded shut — it CAN'T open. Classic: the operator hammers a worn button a thousand times and the silver contacts fuse. Replace the pushbutton. Before you do, verify TP-3 also held voltage during the local press so you know the fault is between TP-1 and TP-2, not further upstream.",
+    "STOP2:welded_closed": "Local Stop (STOP) killed the motor fine; REMOTE Stop (STOP2) did nothing. TP-3 stayed at 24V during the STOP2 press — it should have gone to 0V. The remote Stop button contact is welded. Happens all the time on remote E-stops at the end of a 50-ft cable: vibration loosens the enclosure, water gets in, contacts corrode then weld on the next overcurrent event. TP-2 to TP-3 is your locating bracket — 24V across STOP2 while 'pressed' is the fingerprint. Replace the remote pushbutton.",
+    "MC1:welded_closed": "Here's the tricky one. You pressed Stop — the RUN light went OFF, TP-4 (coil input) dropped to 0V, the coil is DEAD. But the motor shaft is still turning. TP-M reads 24V with the coil de-energized. The CR1 main power contact (MC1) is physically welded closed — the contactor armature may have dropped but the silver contact tip fused to the stationary tip. The CONTROL rung is telling you the truth; the POWER contact is lying. Kill the breaker, pull the contactor, and inspect the tips — you'll see the weld. Never assume a dead coil means a dead load; always check TP-M.",
+    "START:welded_closed": "The first thing you noticed should have been odd: the motor was ALREADY running before you touched anything — RUN light on, STP light off, right from the jump. The START button contact is welded made, so it permanently feeds the coil through n3→n4 without needing the seal-in. When you press Stop the motor dies — BUT the instant Stop releases, the START contact brings it right back. TP-3 reads 24V even with no buttons pressed; on a healthy circuit TP-3 is 0V at rest (only live when START is held or the latch is in). That 24V-at-rest on TP-3 is your tell. Replace the Start pushbutton."
+  },
+  "circuit": {
+    "id": "wont_stop_starter",
+    "title": "Start/Stop Motor Starter — Two-Button Stop",
+    "nodes": [
+      { "id": "L",    "x": 140,  "y": 120 },
+      { "id": "n1",   "x": 300,  "y": 120 },
+      { "id": "n2",   "x": 460,  "y": 120 },
+      { "id": "n3",   "x": 620,  "y": 120 },
+      { "id": "n4",   "x": 800,  "y": 120 },
+      { "id": "N",    "x": 940,  "y": 380 },
+      { "id": "nRun", "x": 740,  "y": 250 },
+      { "id": "nStp", "x": 740,  "y": 360 },
+      { "id": "nM",   "x": 740,  "y": 470 }
+    ],
+    "components": [
+      {
+        "id": "SRC", "type": "source", "current": "DC", "volts": 24,
+        "x": 140, "y": 280, "label": "24VDC",
+        "terminals": { "pos": "L", "neg": "N" }
+      },
+      {
+        "id": "FU1", "type": "fuse", "ratingA": 2,
+        "x": 220, "y": 120, "label": "FU1",
+        "terminals": { "a": "L", "b": "n1" }
+      },
+      {
+        "id": "STOP", "type": "pushbutton", "mode": "momentary", "contact": "NC",
+        "x": 380, "y": 120, "label": "Stop (Local)",
+        "terminals": { "in": "n1", "out": "n2" }
+      },
+      {
+        "id": "STOP2", "type": "pushbutton", "mode": "momentary", "contact": "NC",
+        "x": 540, "y": 120, "label": "Stop (Remote)",
+        "terminals": { "in": "n2", "out": "n3" }
+      },
+      {
+        "id": "START", "type": "pushbutton", "mode": "momentary", "contact": "NO",
+        "x": 700, "y": 120, "label": "Start",
+        "terminals": { "in": "n3", "out": "n4" }
+      },
+      {
+        "id": "SEAL", "type": "contact_no", "coil": "CR1",
+        "x": 700, "y": 205, "label": "CR1 Seal-In",
+        "terminals": { "in": "n3", "out": "n4" }
+      },
+      {
+        "id": "CR1", "type": "coil", "ratedVolts": 24, "ratedCurrent": "DC",
+        "x": 870, "y": 120, "label": "CR1 24VDC",
+        "terminals": { "a": "n4", "b": "N" }
+      },
+      {
+        "id": "RUNC", "type": "contact_no", "coil": "CR1",
+        "x": 540, "y": 250, "label": "CR1 NO",
+        "terminals": { "in": "n1", "out": "nRun" }
+      },
+      {
+        "id": "RUN", "type": "bulb",
+        "x": 840, "y": 250, "label": "Running",
+        "terminals": { "a": "nRun", "b": "N" }
+      },
+      {
+        "id": "STPC", "type": "contact_nc", "coil": "CR1",
+        "x": 540, "y": 360, "label": "CR1 NC",
+        "terminals": { "in": "n1", "out": "nStp" }
+      },
+      {
+        "id": "STP", "type": "bulb",
+        "x": 840, "y": 360, "label": "Stopped",
+        "terminals": { "a": "nStp", "b": "N" }
+      },
+      {
+        "id": "MC1", "type": "contact_no", "coil": "CR1",
+        "x": 540, "y": 470, "label": "MC1 (Power)",
+        "terminals": { "in": "n1", "out": "nM" }
+      },
+      {
+        "id": "M1", "type": "motor",
+        "x": 840, "y": 470, "label": "M1",
+        "terminals": { "a": "nM", "b": "N" }
+      },
+      {
+        "id": "TP_L",  "type": "test_point", "x": 220, "y": 60, "label": "TP-L",
+        "terminals": { "p": "L" }
+      },
+      {
+        "id": "TP_1",  "type": "test_point", "x": 300, "y": 60, "label": "TP-1",
+        "terminals": { "p": "n1" }
+      },
+      {
+        "id": "TP_2",  "type": "test_point", "x": 460, "y": 60, "label": "TP-2",
+        "terminals": { "p": "n2" }
+      },
+      {
+        "id": "TP_3",  "type": "test_point", "x": 620, "y": 60, "label": "TP-3",
+        "terminals": { "p": "n3" }
+      },
+      {
+        "id": "TP_4",  "type": "test_point", "x": 800, "y": 60, "label": "TP-4",
+        "terminals": { "p": "n4" }
+      },
+      {
+        "id": "TP_M",  "type": "test_point", "x": 740, "y": 415, "label": "TP-M",
+        "terminals": { "p": "nM" }
+      }
+    ]
+  }
+}

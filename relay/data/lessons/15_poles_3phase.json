@@ -1,0 +1,34 @@
+{
+  "id": "15_poles_3phase",
+  "circuit": {
+    "id": "poles_3phase",
+    "title": "Using the Poles: 1 to Latch, 3 for 3-Phase",
+    "nodes": [
+      { "id": "L", "x": 140, "y": 160 },
+      { "id": "n1", "x": 310, "y": 160 },
+      { "id": "n2", "x": 480, "y": 160 },
+      { "id": "n3", "x": 650, "y": 160 },
+      { "id": "N", "x": 140, "y": 520 },
+      { "id": "nL1", "x": 650, "y": 270 },
+      { "id": "nL2", "x": 650, "y": 360 },
+      { "id": "nL3", "x": 650, "y": 450 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "AC", "volts": 24, "x": 140, "y": 340, "label": "24VAC", "terminals": { "pos": "L", "neg": "N" } },
+      { "id": "FU1", "type": "fuse", "ratingA": 1, "x": 220, "y": 160, "label": "FU1", "terminals": { "a": "L", "b": "n1" } },
+      { "id": "S1", "type": "pushbutton", "mode": "momentary", "contact": "NC", "x": 395, "y": 160, "label": "S1 Stop (NC)", "terminals": { "in": "n1", "out": "n2" } },
+      { "id": "S2", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 565, "y": 160, "label": "S2 Start", "terminals": { "in": "n2", "out": "n3" } },
+      { "id": "M1_SEAL", "type": "contact_no", "coil": "M1", "x": 565, "y": 225, "label": "M1 pole-1 seal-in", "terminals": { "in": "n2", "out": "n3" } },
+      { "id": "M1", "type": "coil", "device": "contactor", "ratedVolts": 24, "ratedCurrent": "AC", "x": 760, "y": 160, "label": "M1 coil 24VAC", "terminals": { "a": "n3", "b": "N" } },
+      { "id": "M1_P2", "type": "contact_no", "coil": "M1", "x": 460, "y": 270, "label": "M1 pole-2", "terminals": { "in": "n1", "out": "nL1" } },
+      { "id": "L1", "type": "motor", "x": 760, "y": 270, "label": "L1", "terminals": { "a": "nL1", "b": "N" } },
+      { "id": "M1_P3", "type": "contact_no", "coil": "M1", "x": 460, "y": 360, "label": "M1 pole-3", "terminals": { "in": "n1", "out": "nL2" } },
+      { "id": "L2", "type": "motor", "x": 760, "y": 360, "label": "L2", "terminals": { "a": "nL2", "b": "N" } },
+      { "id": "M1_P4", "type": "contact_no", "coil": "M1", "x": 460, "y": 450, "label": "M1 pole-4", "terminals": { "in": "n1", "out": "nL3" } },
+      { "id": "L3", "type": "motor", "x": 760, "y": 450, "label": "L3", "terminals": { "a": "nL3", "b": "N" } },
+      { "id": "TP_L", "type": "test_point", "x": 220, "y": 100, "label": "TP-L", "terminals": { "p": "L" } },
+      { "id": "TP_1", "type": "test_point", "x": 310, "y": 100, "label": "TP-1", "terminals": { "p": "n1" } },
+      { "id": "TP_coil", "type": "test_point", "x": 650, "y": 100, "label": "TP-coil", "terminals": { "p": "n3" } }
+    ]
+  }
+}

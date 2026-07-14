@@ -1,0 +1,337 @@
+/* ============================================================
+   svg.css — professional schematic on LIGHT. Thin technical lines,
+   standard symbols. RED = live current with fine traveling pulses.
+   ============================================================ */
+#stage text { font-family: var(--font-mono); }
+
+/* ---------- wires: thin conductor, 3 states ---------- */
+.wire {
+  fill: none;
+  stroke: #111827;                          /* black ink, like a real print */
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke var(--energize-ms) ease, filter var(--energize-ms) ease;
+}
+.wire.hot { stroke: #D89B95; }              /* present, no current — soft red */
+.wire.energized {
+  stroke: var(--live);
+  stroke-width: 2.7;
+  filter: drop-shadow(0 0 2.5px rgba(239,68,68,.5));
+}
+.wire.return { stroke: #1F2937; stroke-width: 2.6; }   /* negative / return conductor — NOT red */
+
+/* fine current pulses along live wires */
+.wire-flow { fill: none; stroke: transparent; stroke-width: 2.4; stroke-linecap: round; pointer-events: none; }
+.wire-flow.on { stroke: #FFFFFF; stroke-width: 1.2; stroke-dasharray: 2 18; animation: flow var(--flow-ms) linear infinite; opacity: .9; }
+@keyframes flow { to { stroke-dashoffset: -20; } }
+
+.junction { fill: #111827; transition: fill var(--energize-ms) ease; }
+.junction.hot { fill: #D89B95; }
+.junction.energized { fill: var(--live); }
+.junction.return { fill: #1F2937; }
+
+/* ---------- shared device strokes (thin, crisp) ---------- */
+.dev-body, .coil-body, .bulb-glass {
+  fill: #FFFFFF;
+  stroke: #111827;
+  stroke-width: 1.9;
+}
+.sym-stroke, .plate-long, .contact-fixed, .fuse-link, .filament, .coil-diag, .nc-slash {
+  stroke: #111827;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+}
+.plate-long { stroke-width: 1.9; }
+.plate-short { stroke: #475569; stroke-width: 3.4; stroke-linecap: butt; }
+.sym-plus { fill: #111827; font-size: 13px; font-weight: 700; }
+.coil-glyph { fill: #111827; font-size: 12px; font-weight: 600; }
+.term-dot { fill: #111827; }
+.comp-label { fill: var(--muted); font-size: 12.5px; font-weight: 500; font-family: var(--font-mono); }
+
+/* ---------- fuse ---------- */
+.fuse-break { stroke: #FFFFFF; stroke-width: 4; opacity: 0; }
+.comp-fuse.blown .fuse-link { stroke: var(--fault); }
+.comp-fuse.blown .fuse-break { opacity: 1; }
+.comp-fuse.blown .dev-body { stroke: var(--fault); animation: faultBlink var(--fault-blink-ms) step-end infinite; }
+@keyframes faultBlink { 50% { stroke: #111827; } }
+
+/* ---------- contacts / pushbutton: standard ladder symbol —| |— / —|/|— ---------- */
+.ladder-plate { stroke: #475569; stroke-width: 2.4; stroke-linecap: round; transition: stroke var(--energize-ms) ease; }
+.ladder-bridge {
+  stroke: #475569; stroke-width: 2.4; stroke-linecap: round;
+  opacity: 0; transition: opacity var(--contact-snap-ms) ease, stroke var(--energize-ms) ease;
+}
+.comp[data-state="closed"] .ladder-bridge { opacity: 1; }                     /* bridge appears when closed */
+.comp.conducting .ladder-bridge, .comp.conducting .ladder-plate { stroke: var(--live); }  /* red when current flows */
+.comp.conducting.neg-side .ladder-bridge, .comp.conducting.neg-side .ladder-plate { stroke: #1F2937; }  /* return side: dark, not red */
+
+/* pushbutton actuator */
+.btn-cap { fill: #FFFFFF; stroke: #111827; stroke-width: 1.8; }
+.plunger { stroke: #475569; stroke-width: 1.8; }
+.btn-cap-g { transition: transform var(--contact-snap-ms) ease; }
+.pushbtn.pressed .btn-cap-g { transform: translateY(7px); }
+.clickable { cursor: pointer; }
+.pushbtn:hover .btn-cap { fill: #F1F5F9; stroke: #0B1020; }
+.pushbtn:hover .ladder-plate { stroke: #0B1020; }
+
+/* ---------- coil (violet energize) ---------- */
+.comp.energized .coil-body { stroke: var(--coil-energized); fill: #F4F1FF; filter: drop-shadow(0 0 7px rgba(124,92,255,.45)); animation: coilPulse var(--coil-pulse-ms) ease-in-out infinite; }
+.comp.energized .coil-diag, .comp.energized .coil-glyph { stroke: var(--coil-energized); fill: var(--coil-energized); }
+@keyframes coilPulse { 50% { filter: drop-shadow(0 0 11px rgba(124,92,255,.65)); } }
+.comp.damaged .coil-body { stroke: var(--fault); stroke-dasharray: 3 2.5; }
+
+/* ---------- realistic lamp ---------- */
+.bulb-glass { fill: #F4F7FC; }
+.bulb-halo { fill: #FFC234; opacity: 0; transition: opacity var(--energize-ms) ease; }
+.bulb-base { fill: #C9CED8; stroke: #9AA3B2; stroke-width: 1; }
+.bulb-thread { stroke: #9AA3B2; stroke-width: 1; }
+.comp-bulb.lit .filament { stroke: #FFF6D0; stroke-width: 1.8; filter: drop-shadow(0 0 4px #FFB300); }
+.comp-bulb.lit .bulb-glass { stroke: #E0992A; fill: #FFE7A0; filter: drop-shadow(0 0 8px rgba(255,179,0,.7)); }
+.comp-bulb.lit .bulb-halo { opacity: .38; }
+
+/* motor (M) — a load; glows when energized */
+.motor-body { fill: #FFFFFF; stroke: #475569; stroke-width: 1.9; }
+.motor-glyph { fill: #475569; font-family: var(--font-mono, monospace); font-size: 15px; font-weight: 600; }
+.motor-halo { fill: #34E5C0; opacity: 0; transition: opacity var(--energize-ms) ease; }
+.comp-motor.running .motor-body { stroke: #14A88E; fill: #E6FBF5; filter: drop-shadow(0 0 7px rgba(52,229,192,.65)); }
+.comp-motor.running .motor-glyph { fill: #0E8C76; }
+.comp-motor.running .motor-halo { opacity: .42; }
+
+/* polarity marks */
+.sym-minus { fill: #475569; font-size: 15px; font-weight: 700; }
+
+/* ---------- test points / probes (blue) ---------- */
+.tp-ring { fill: #FFFFFF; stroke: var(--blue); stroke-width: 1.8; }
+.tp-dot { fill: var(--blue); }
+.tp-label { fill: var(--blue-deep); font-size: 11.5px; font-weight: 600; }
+.comp-test_point:hover .tp-ring { stroke: var(--violet); stroke-width: 2.6; }
+.probe-a .tp-ring { stroke: var(--success); stroke-width: 2.8; }
+.probe-a .tp-dot { fill: var(--success); }
+.probe-b .tp-ring { stroke: var(--warning); stroke-width: 2.8; }
+.probe-b .tp-dot { fill: var(--warning); }
+.ping .tp-ring { animation: ping .5s ease-out; }
+@keyframes ping { from { stroke-width: 2.8; opacity: 1; } to { stroke-width: 1.2; opacity: .5; } }
+
+/* ============================================================
+   RELAY ANATOMY (cutaway + top-down octal) — the centerpiece
+   ============================================================ */
+#ra-root text { font-family: var(--font-mono); }
+/* NOTE: the anatomy viewBox is 940 units wide but renders as small as ~546px
+   (stage at 1280x800) — a 0.58x scale. Sizes below are pre-compensated so the
+   EFFECTIVE rendered size stays ≥ ~11px at that worst case. */
+.ra-title { fill: var(--ink); font: 700 20px var(--font-display); letter-spacing: -0.01em; }
+.ra-part-label { fill: var(--muted); font-size: 19px; font-weight: 600; letter-spacing: .04em; }
+.ra-part-label.small { font-size: 19px; }
+.ra-note { fill: var(--muted); font-size: 15px; font-style: italic; }
+.ra-tag { fill: var(--muted); font-size: 19px; font-weight: 700; }
+.ra-term { fill: var(--ink); font-size: 19px; font-weight: 700; }
+.ra-term.plus, .ra-pin-lbl.plus, .sym-plus { fill: #DC2626; }
+.ra-term.minus, .ra-pin-lbl.minus { fill: #2563EB; font-size: 21px; font-weight: 700; }
+
+/* toggle */
+.ra-toggle { cursor: pointer; }
+.ra-tg-bg { fill: #FFFFFF; stroke: var(--border-strong); stroke-width: 1.6; transition: all .25s ease; }
+.ra-toggle:hover .ra-tg-bg { stroke: var(--violet); }
+#ra-root.energized .ra-tg-bg { fill: var(--violet); stroke: var(--violet); filter: drop-shadow(0 6px 16px rgba(124,92,255,.4)); }
+.ra-tg-text { fill: var(--ink); font-size: 19px; font-weight: 600; letter-spacing: .09em; transition: fill .25s ease; }
+#ra-root.energized .ra-tg-text { fill: #FFFFFF; }
+.ra-tg-led { fill: #C3CAD9; transition: all .25s ease; }
+#ra-root.energized .ra-tg-led { fill: #FFFFFF; filter: drop-shadow(0 0 7px #FFFFFF); }
+
+/* ---- cutaway ---- */
+.ra-case { fill: #FBFCFE; stroke: #B7C0D0; stroke-width: 2; stroke-dasharray: 7 5; }
+.ra-coil-body { fill: #EEF1F7; stroke: #64748B; stroke-width: 1.8; transition: all .3s ease; }
+.ra-coil-turn { stroke: #94A3B8; stroke-width: 2; transition: stroke .3s ease; }
+.ra-core { fill: #C4CBD8; stroke: #64748B; stroke-width: 1.4; transition: all .3s ease; }
+#ra-root.energized .ra-coil-body { stroke: var(--violet); fill: #F3EFFF; filter: drop-shadow(0 0 12px rgba(124,92,255,.55)); }
+#ra-root.energized .ra-coil-turn { stroke: var(--violet); }
+#ra-root.energized .ra-core { fill: #C9B6FF; stroke: var(--violet-deep); }
+.ra-field { opacity: 0; transition: opacity .3s ease; }
+#ra-root.energized .ra-field { opacity: 1; animation: raField 1.4s ease-in-out infinite; }
+.ra-field-arc { fill: none; stroke: var(--violet); stroke-width: 1.6; stroke-linecap: round; opacity: .5; }
+@keyframes raField { 50% { opacity: .35; } }
+
+.ra-armature { transform-box: view-box; transform-origin: 130px 250px; transform: rotate(-7deg); transition: transform .42s cubic-bezier(.3,1.5,.4,1); }
+#ra-root.energized .ra-armature { transform: rotate(3.5deg); }
+.ra-arm-bar { fill: #DDE3EE; stroke: #5B6678; stroke-width: 1.6; }
+.ra-pivot { fill: #5B6678; }
+.ra-moving { fill: #B7C0D0; stroke: #5B6678; stroke-width: 1.4; }
+#ra-root.energized .ra-moving { fill: #FBB9B4; stroke: var(--live-label); }
+.ra-spring { fill: none; stroke: #8A93A6; stroke-width: 2.2; stroke-linejoin: round; }
+.ra-fixed { stroke-width: 4; stroke-linecap: round; transition: stroke .3s ease; }
+.ra-fixed.nc { stroke: var(--live-label); }      /* NC made at rest */
+.ra-fixed.no { stroke: #94A3B8; }
+#ra-root.energized .ra-fixed.nc { stroke: #94A3B8; }
+#ra-root.energized .ra-fixed.no { stroke: var(--live-label); }
+.ra-lead { stroke: #64748B; stroke-width: 2.2; stroke-linecap: round; }
+#ra-root.energized .ra-lead { stroke: var(--live); }
+
+/* ---- octal ---- */
+.ra-octal-body { fill: #FBFCFE; stroke: #64748B; stroke-width: 2; stroke-dasharray: 7 5; }
+.ra-octal-inner { fill: none; stroke: #E3E8F1; stroke-width: 1.2; }
+.ra-pin { fill: #FFFFFF; stroke: #64748B; stroke-width: 1.8; }
+.ra-pin-num { fill: var(--ink); font-size: 19px; font-weight: 700; }
+.ra-pin-lbl { fill: #5A6478; font-size: 19px; font-weight: 700; }
+.ra-octal-wire { stroke: #6B7689; stroke-width: 2; stroke-linecap: round; }
+.ra-octal-common { fill: #475569; }
+.ra-octal-coilbody { fill: #EEF1F7; stroke: #64748B; stroke-width: 1.8; transition: all .3s ease; }
+.ra-octal-coiltext { fill: var(--muted); font-size: 19.5px; font-weight: 700; letter-spacing: .06em; transition: fill .3s ease; }
+#ra-root.energized .ra-octal-coilbody { stroke: var(--violet); fill: #F3EFFF; filter: drop-shadow(0 0 11px rgba(124,92,255,.55)); }
+#ra-root.energized .ra-octal-coiltext { fill: var(--violet-deep); }
+.ra-octal-blade { stroke: var(--live-label); stroke-width: 3; stroke-linecap: round; transition: x2 .4s cubic-bezier(.3,1.4,.4,1), y2 .4s cubic-bezier(.3,1.4,.4,1); }
+.ra-octal-wire.no-lead { stroke: #B7C0D0; }
+#ra-root.energized .ra-octal-wire.no-lead { stroke: var(--live); }
+#ra-root.energized .ra-octal-wire.nc-lead { stroke: #B7C0D0; }
+
+/* ============================================================
+   REAL-PART PHOTO CHIPS — small photos of the actual parts sit
+   next to their symbols and double as BIG click targets.
+   ============================================================ */
+.photo-layer { transition: opacity .18s ease; }
+.photo-layer.photos-off { display: none; }
+
+.photo-chip { filter: drop-shadow(0 2px 4px rgba(14, 19, 38, 0.18)); }
+.photo-chip .chip-card { fill: #FFFFFF; stroke: #C7CEDB; stroke-width: 1.2; }
+.photo-chip .chip-frame {
+  fill: none; stroke: rgba(71, 85, 105, 0.28); stroke-width: 1.2;
+  transition: stroke .15s ease, stroke-width .15s ease;
+}
+.photo-chip .chip-leader { stroke: #B7C0D0; stroke-width: 1; stroke-dasharray: 2 2; }
+.photo-chip:hover .chip-frame { stroke: var(--blue); stroke-width: 1.8; }
+
+/* pushbutton proxy chips: unmistakably pressable */
+.photo-chip.chip-pushbtn { cursor: pointer; }
+.photo-chip.chip-pushbtn:hover .chip-frame { stroke: var(--blue); stroke-width: 2.2; }
+.photo-chip.chip-pushbtn:hover { filter: drop-shadow(0 3px 7px rgba(37, 99, 235, 0.35)); }
+.photo-chip.chip-pushbtn.pressed { filter: drop-shadow(0 1px 1px rgba(14, 19, 38, 0.3)); transform: translateY(1.5px); }
+.photo-chip.chip-pushbtn.pressed .chip-frame { stroke: var(--violet); stroke-width: 2.4; }
+
+/* fat invisible hit rects over tiny pushbutton / contact symbols */
+.comp-hit { fill: transparent; stroke: none; pointer-events: all; }
+
+/* 📷 PARTS ON/OFF toggle, top-right of the sheet */
+.photo-toggle { cursor: pointer; }
+.photo-toggle-bg { fill: #FFFFFF; stroke: var(--border-strong, #C7CEDB); stroke-width: 1.4; transition: all .2s ease; }
+.photo-toggle:hover .photo-toggle-bg { stroke: var(--violet); }
+.photo-toggle-text { fill: var(--muted, #6B7488); font-size: 11px; font-weight: 700; letter-spacing: .05em; }
+.photo-toggle.off .photo-toggle-bg { fill: #EEF1F7; }
+.photo-toggle.off .photo-toggle-text { fill: var(--faint, #9AA3B2); }
+
+/* ===================================================== probe-on-the-wire metering */
+.wire-hit {
+  fill: none; stroke: transparent; stroke-width: 16;
+  pointer-events: stroke; cursor: crosshair;
+}
+.wire-hit:hover { stroke: rgba(124, 92, 255, 0.14); }
+.junction-hit { fill: transparent; cursor: crosshair; }
+.junction-hit:hover { fill: rgba(124, 92, 255, 0.16); }
+/* component TERMINALS are probe targets too — probe exactly where the print says */
+.term-hit { fill: transparent; cursor: crosshair; }
+.term-hit:hover { fill: rgba(124, 92, 255, 0.20); stroke: var(--violet, #7C5CFF); stroke-width: 1.4; }
+
+.tp-leader { stroke: #B7C0D0; stroke-width: 1; stroke-dasharray: 3 3; }
+
+.probe-glyph .probe-tip { stroke: #FFFFFF; stroke-width: 1.4; }
+.probe-glyph .probe-needle { stroke-width: 3; stroke-linecap: round; }
+.probe-glyph .probe-grip { stroke-width: 6.5; stroke-linecap: round; }
+.probe-glyph .probe-label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; }
+.probe-a .probe-tip { fill: #EF4444; }
+.probe-a .probe-needle { stroke: #B9BFCC; }
+.probe-a .probe-grip { stroke: #EF4444; }
+.probe-a .probe-label { fill: #B91C1C; }
+.probe-b .probe-tip { fill: #1F2937; }
+.probe-b .probe-needle { stroke: #B9BFCC; }
+.probe-b .probe-grip { stroke: #1F2937; }
+.probe-b .probe-label { fill: #1F2937; }
+.probe-glyph { filter: drop-shadow(0 2px 3px rgba(14, 19, 38, 0.25)); pointer-events: none; }
+/* the placed lead itself is a click target: click it to LIFT that lead */
+.probe-glyph .probe-hit { pointer-events: all; cursor: pointer; fill: transparent; }
+.probe-glyph .probe-hit:hover { fill: rgba(239, 68, 68, 0.12); stroke: rgba(239, 68, 68, 0.5); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.probe-b .probe-hit:hover { fill: rgba(31, 41, 55, 0.12); stroke: rgba(31, 41, 55, 0.55); }
+
+/* ---- meter-lead status chip (top-left of the sheet) ---- */
+.lead-chip-bg { fill: #FFFFFF; stroke: var(--border-strong, #C7CEDB); stroke-width: 1.4; }
+.lead-chip-text { fill: var(--muted, #6B7488); font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; letter-spacing: .01em; }
+.lead-chip-dot { fill: #FFFFFF; stroke-width: 1.8; }
+.lead-chip-dot.dot-red { stroke: #EF4444; }
+.lead-chip-dot.dot-blk { stroke: #1F2937; }
+.lead-chip-dot.dot-red.placed { fill: #EF4444; }
+.lead-chip-dot.dot-blk.placed { fill: #1F2937; }
+
+/* ===================================================== realistic contactor illustration */
+.rc-svg text { font-family: var(--font-mono); }
+.rc-dinrail { fill: #8B94A3; stroke: #6B7280; stroke-width: 1; }
+.rc-dinclip { fill: #AEB6C2; stroke: #6B7280; stroke-width: 1; }
+.rc-body { fill: url(#rc-body-grad); stroke: #1F2733; stroke-width: 1.5; }
+.rc-top-face { fill: url(#rc-top-grad); stroke: #1F2733; stroke-width: 1.2; }
+.rc-ear { fill: #384049; stroke: #1F2733; stroke-width: 1.2; }
+.rc-ear-hole { fill: #171B21; }
+.rc-plate rect { fill: #EDF0F5; stroke: #9AA3B2; stroke-width: 1; }
+.rc-plate-brand { fill: var(--ink, #0E1326); font-size: 11.5px; font-weight: 700; letter-spacing: .03em; }
+.rc-plate-model { fill: var(--muted, #6B7488); font-size: 11px; font-weight: 600; }
+.rc-plate-spec { fill: var(--muted, #6B7488); font-size: 11px; font-weight: 600; }
+.rc-flag { fill: #3B82F6; stroke: #1D4ED8; stroke-width: 1; opacity: .85; }
+.rc-coilterm rect { fill: #C9CED8; stroke: #1F2733; stroke-width: 1.2; }
+.rc-coilterm .rc-term-num { fill: var(--ink, #0E1326); font-size: 11px; font-weight: 700; }
+.rc-termblock { fill: #DDE2EA; stroke: #1F2733; stroke-width: 1.2; }
+.rc-term-hole { fill: #171B21; stroke: #454E5C; stroke-width: 1.5; }
+.rc-term-screw { fill: #7C8695; }
+.rc-term-num { fill: var(--ink, #0E1326); font-size: 12.5px; font-weight: 700; }
+.rc-term-label { fill: var(--ink, #0E1326); font-size: 12px; font-weight: 700; }
+.rc-caption { fill: var(--muted, #6B7488); font-size: 14px; font-weight: 600; }
+
+.rc-hotspot { cursor: pointer; }
+.rc-hit { fill: transparent; }
+.rc-ring { fill: none; stroke: transparent; stroke-width: 3; transition: stroke .2s ease, filter .2s ease; pointer-events: none; }
+.rc-hotspot:hover .rc-ring { stroke: rgba(59,130,246,.45); }
+.rc-ring.hot { stroke: var(--violet, #7C5CFF); filter: drop-shadow(0 0 9px rgba(124,92,255,.65)); }
+
+/* ===================================================== realistic octal relay illustration */
+.rc-octal-body { fill: #FBFCFE; stroke: #64748B; stroke-width: 2; stroke-dasharray: 7 5; }
+.rc-octal-inner { fill: none; stroke: #E3E8F1; stroke-width: 1.2; }
+.rc-pin { fill: #FFFFFF; stroke: #64748B; stroke-width: 1.8; }
+.rc-pin-num { fill: var(--ink, #0E1326); font-size: 13px; font-weight: 700; }
+.rc-pin-lbl { fill: #5A6478; font-size: 14px; font-weight: 700; }
+.rc-octal-wire { stroke: #6B7689; stroke-width: 2; stroke-linecap: round; }
+.rc-octal-common { fill: #475569; }
+.rc-octal-coilbody { fill: #EEF1F7; stroke: #64748B; stroke-width: 1.8; }
+.rc-octal-coiltext { fill: var(--muted, #6B7488); font-size: 13.5px; font-weight: 700; letter-spacing: .06em; }
+.rc-octal-blade { stroke: #94A3B8; stroke-width: 3; stroke-linecap: round;
+  transition: x2 .4s cubic-bezier(.3,1.4,.4,1), y2 .4s cubic-bezier(.3,1.4,.4,1); }
+
+/* ---- multi-layout pinout library: energize toggle, blade swing, coil glow ---- */
+.rc-pin-blade { fill: #FFFFFF; stroke: #64748B; stroke-width: 1.8; }
+.rc-root.energized .rc-octal-blade { stroke: var(--live-label, #E11D48); }
+.rc-root.energized .rc-octal-coilbody { stroke: var(--violet, #7C5CFF); fill: #F3EFFF; filter: drop-shadow(0 0 11px rgba(124,92,255,.55)); }
+.rc-root.energized .rc-octal-coiltext { fill: var(--violet-deep, #6D3FF0); }
+.rc-root.energized .rc-octal-wire.no-lead { stroke: var(--live, #16A34A); }
+.rc-root.energized .rc-octal-wire.nc-lead { stroke: #B7C0D0; }
+.rc-energize { cursor: pointer; }
+.rc-energize > * { pointer-events: none; }
+.rc-energize .rc-eng-hit { pointer-events: all; fill: transparent; }
+.rc-eng-bg { fill: #FFFFFF; stroke: var(--border-strong, #C7CEDB); stroke-width: 1.6; transition: all .25s ease; }
+.rc-energize:hover .rc-eng-bg { stroke: var(--violet, #7C5CFF); }
+.rc-root.energized .rc-eng-bg { fill: var(--violet, #7C5CFF); stroke: var(--violet, #7C5CFF); filter: drop-shadow(0 6px 16px rgba(124,92,255,.4)); }
+.rc-eng-text { fill: var(--ink, #0E1326); font-size: 14px; font-weight: 600; letter-spacing: .07em; transition: fill .25s ease; }
+.rc-root.energized .rc-eng-text { fill: #FFFFFF; }
+.rc-eng-led { fill: #C3CAD9; transition: all .25s ease; }
+.rc-root.energized .rc-eng-led { fill: #FFFFFF; filter: drop-shadow(0 0 7px #FFFFFF); }
+
+/* circular hotspot rings (octal illustration uses circles, not rects) */
+circle.rc-hit { fill: transparent; }
+circle.rc-ring { fill: none; stroke: transparent; stroke-width: 3; transition: stroke .2s ease, filter .2s ease; pointer-events: none; }
+.rc-hotspot:hover circle.rc-ring { stroke: rgba(59,130,246,.45); }
+circle.rc-ring.hot { stroke: var(--violet, #7C5CFF); filter: drop-shadow(0 0 9px rgba(124,92,255,.65)); }
+
+/* dual-view schematic side: clickable components link to the illustration */
+.dv-schem-svg .comp.dv-clickable { cursor: pointer; }
+.dv-schem-svg .comp.dv-linked .ladder-plate,
+.dv-schem-svg .comp.dv-linked .ladder-bridge,
+.dv-schem-svg .comp.dv-linked .coil-body { stroke: var(--violet, #7C5CFF); filter: drop-shadow(0 0 7px rgba(124,92,255,.6)); }
+.dv-schem-svg .comp.dv-linked .comp-label { fill: var(--violet-deep, #6D3FF0); font-weight: 700; }
+/* decorative children inside a dv-clickable group shouldn't be independently
+   hit-tested — cursor:pointer cascades to them from the parent, but the click
+   should always land on (and be handled by) the parent .comp group itself */
+.dv-schem-svg .comp.dv-clickable > * { pointer-events: none; }
+.dv-schem-svg .comp.dv-clickable { pointer-events: all; }

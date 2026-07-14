@@ -1,0 +1,18 @@
+{
+  "id": "03_drawbridge",
+  "circuit": {
+    "id": "drawbridge",
+    "title": "A contact is a drawbridge",
+    "nodes": [
+      { "id": "nPos", "x": 160, "y": 140 },
+      { "id": "nA", "x": 460, "y": 140 },
+      { "id": "nNeg", "x": 160, "y": 340 }
+    ],
+    "components": [
+      { "id": "SRC", "type": "source", "current": "DC", "volts": 24, "x": 160, "y": 240, "label": "24VDC", "terminals": { "pos": "nPos", "neg": "nNeg" } },
+      { "id": "PB", "type": "pushbutton", "mode": "momentary", "contact": "NO", "x": 310, "y": 140, "label": "Contact (press = CLOSED)", "terminals": { "in": "nPos", "out": "nA" } },
+      { "id": "LMP", "type": "bulb", "x": 600, "y": 140, "label": "Lamp", "terminals": { "a": "nA", "b": "nNeg" } },
+      { "id": "TP", "type": "test_point", "x": 460, "y": 92, "label": "TP", "terminals": { "p": "nA" } }
+    ]
+  }
+}

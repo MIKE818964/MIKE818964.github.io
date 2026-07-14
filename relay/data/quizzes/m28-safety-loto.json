@@ -1,0 +1,116 @@
+{
+  "moduleId": "m28-safety-loto",
+  "title": "Safety and Lockout/Tagout Before You Touch Anything",
+  "questions": [
+    {
+      "q": "What does Lockout/Tagout (LOTO) require you to do before hands-on work?",
+      "options": [
+        "Shut off every energy source, apply YOUR own lock and tag, then verify zero energy with your meter",
+        "Just flip the main switch off and start working",
+        "Hang a tag but leave the power on for testing",
+        "Have a coworker hold the switch off for you"
+      ],
+      "correct": 0,
+      "why": "LOTO means de-energizing all sources, applying your own lock and tag so no one can re-energize it, and proving zero energy before you touch anything."
+    },
+    {
+      "q": "Your control circuit is only 24VDC, which feels safe. Why must you STILL lock out the motor starter before working on it?",
+      "options": [
+        "The starter's power side can still carry lethal voltage like 480VAC even when the 24VDC control is off",
+        "The 24VDC could climb to 480V on its own",
+        "LOTO is only paperwork and doesn't really matter here",
+        "The control voltage is the only dangerous part"
+      ],
+      "correct": 0,
+      "why": "Turning off the 24VDC control does nothing to the separate power side, which may still carry lethal 480VAC 3-phase to the motor."
+    },
+    {
+      "q": "After you lock and tag a disconnect, what is the final step before you trust the equipment is dead?",
+      "options": [
+        "Verify zero energy by testing with your meter (live-dead-live)",
+        "Assume it's dead because the lock is on",
+        "Wait five minutes and start working",
+        "Ask the operator if it feels off"
+      ],
+      "correct": 0,
+      "why": "A lock alone doesn't prove the circuit is dead; you confirm zero energy by metering it, using live-dead-live so you can trust your meter."
+    },
+    {
+      "q": "You finish LOTO and verify-dead on the control side, but the print shows a separate 480V feed you haven't checked. What should you do?",
+      "options": [
+        "Identify and lock out that source too — LOTO must cover ALL energy sources",
+        "Ignore it because you already locked one source",
+        "Work on it anyway since the control side is dead",
+        "Re-energize everything to test it first"
+      ],
+      "correct": 0,
+      "why": "LOTO means de-energizing every source feeding the equipment, including stored energy; one unchecked 480V feed can still kill you."
+    },
+    {
+      "q": "You trip the main breaker on a VFD-fed pump, wait 45 seconds, open the drive enclosure, and set your meter to DC volts across the bus terminals (P and N). It reads 480VDC. What do you conclude?",
+      "options": [
+        "The meter is malfunctioning since the breaker is already open",
+        "480VDC is normal residual noise and safe to work around",
+        "The DC bus capacitors haven't bled down yet — close the cover and wait for the label's full bleed-down time before touching anything",
+        "The line terminals must also be live, so re-check the main breaker"
+      ],
+      "correct": 2,
+      "why": "VFD DC bus capacitors hold a lethal charge for 3-5 minutes after shutoff regardless of what the line terminals or pilot light show; the manufacturer's bleed-down label tells you the real wait time. Assuming 45 seconds is enough, or that a live reading means the meter is wrong, is exactly how techs get shocked reaching into a drive."
+    },
+    {
+      "q": "After opening a 120V circuit's disconnected wire, your standard 10-megohm meter reads 45VAC on it. You're about to tell the crew it's live and needs another lockout point. What should you check first?",
+      "options": [
+        "Assume 45VAC confirms a second hot feed and lock out another source immediately",
+        "Switch to LoZ mode (or load the wire with a plug-in resistance) — a standard high-impedance meter commonly shows 40-80VAC ghost voltage on an open wire near a live neighbor conductor",
+        "Replace the meter's battery since it's giving a false-low reading",
+        "Ignore the reading since anything under 120VAC full-scale is always safe"
+      ],
+      "correct": 1,
+      "why": "A 45VAC reading on an open conductor in a busy conduit is the classic signature of induced ghost voltage from capacitive coupling to an adjacent live wire, not a real hazard. LoZ mode or loading the circuit with a resistance collapses ghost voltage but leaves true voltage intact — that's how you tell the difference instead of chasing a phantom lockout point."
+    },
+    {
+      "q": "You're the millwright on a blender that's also being worked by an electrician. Per OSHA 1910.147 group lockout, what is the correct way to lock it out?",
+      "options": [
+        "Whoever arrives first locks it out, and the other person just signs the tag",
+        "One shared plant lock goes on the hasp and both of you keep a copy of the key",
+        "Only the electrician needs to lock it out since the electrical hazard is worse",
+        "Each of you applies your own personal lock and tag to the hasp, and the machine can't start until every lock is removed"
+      ],
+      "correct": 3,
+      "why": "Group LOTO requires every person working on the equipment to hold their own lock on the hasp, with the key in their own pocket, so no one can be re-energized on while still inside. A shared lock or a single locker's lock covering multiple trades breaks the rule that you never work under someone else's lock."
+    },
+    {
+      "q": "A control panel schematic shows one motor feeding this frame, dated 1991. Before you write the LOTO procedure for a repair, what should you do based on the war story where an unrecorded retrofit added a second 480V feed?",
+      "options": [
+        "Trust the schematic since it's the official plant document",
+        "Ask the operator if any other power feeds were added recently",
+        "Lock out only the motor shown on the print and proceed with the repair",
+        "Physically trace every conductor entering the machine frame yourself before trusting the print, since retrofits often go unrecorded"
+      ],
+      "correct": 3,
+      "why": "The war story's lesson was explicit: the print is history, the machine is truth. An unrecorded retrofit added a second 480V hydraulic pump feed that wasn't on the 1991 schematic, and a millwright who trusted the print lost two fingers. Verbal confirmation from an operator isn't a substitute for physically tracing conductors."
+    },
+    {
+      "q": "During live-dead-live testing on a 480V 3-phase feeder after lockout, how many individual meter readings should you take to fully confirm zero energy?",
+      "options": [
+        "One: just L1 to ground is enough since all three phases are tied together",
+        "Three: one reading per phase to ground only, skipping phase-to-phase",
+        "Two: L1-L2 and L1-ground cover every possible path",
+        "Six: L1-ground, L2-ground, L3-ground, L1-L2, L2-L3, and L1-L3"
+      ],
+      "correct": 3,
+      "why": "Three conductors require checking every conductor-to-ground pair AND every conductor-to-conductor pair — six readings total — because a fault or backfeed could show up on any single path while the others read zero. Skipping phase-to-phase checks (like testing only to ground) can miss an energized path between two hot legs."
+    },
+    {
+      "q": "A technician skips live-dead-live and just trusts a single 'zero' reading from their meter on a de-energized 480V conductor, not knowing the meter has a blown internal fuse. What is the real danger this creates?",
+      "options": [
+        "The meter will simply refuse to turn on, so the tech would notice immediately",
+        "The meter can display zero on a fully live 480V circuit, giving false confidence that leads the technician to grab a lethal conductor believing it's dead",
+        "A blown fuse only affects current measurements, so voltage readings are unaffected in any meter",
+        "The worst outcome is an inaccurate reading that's off by a few volts, not a false zero"
+      ],
+      "correct": 1,
+      "why": "A meter with a blown fuse, dead battery, or damaged probe can read zero on a live 480V circuit exactly as if it were dead — that false confidence is what live-dead-live is designed to catch, by proving the meter reads correctly on a known live source immediately before and after testing the de-energized point. Without that bracketing test, a bad meter and a live conductor look identical to a dead one."
+    }
+  ]
+}
