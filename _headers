@@ -6,3 +6,7 @@
 # Heavy static media (photos, CAD models, cut-sheet PDFs) may cache a day.
 /relay/assets/*
   Cache-Control: public, max-age=86400
+
+# Bounty Board (EVE Frontier mod): always revalidate, so a new build reaches players at once.
+/frontier/bounty/*
+  Cache-Control: no-cache
