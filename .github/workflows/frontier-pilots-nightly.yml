@@ -1,0 +1,49 @@
+# Nightly refresh of the Bounty Board's pilot-name directory (frontier/bounty/pilots.json), so the name search knows
+# new pilots without Michael's PC. Free: GitHub Actions is free on public repos; one commit per night = ~30 Cloudflare
+# Pages builds a month (free plan allows 500). Read-only chain scan - no keys, no wallet, nothing signed.
+# Run by hand any time: GitHub -> Actions -> "Frontier pilot directory (nightly)" -> Run workflow.
+name: Frontier pilot directory (nightly)
+
+on:
+  schedule:
+    - cron: "17 9 * * *"   # 09:17 UTC = 5:17 AM Eastern. Not on :00 - GitHub delays or drops top-of-the-hour runs.
+  workflow_dispatch: {}
+
+permissions:
+  contents: write          # to commit the refreshed pilots.json
+
+concurrency:
+  group: frontier-pilots
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+
+      - name: Scan the chain for every pilot (~25 s)
+        run: |
+          mkdir -p "$RUNNER_TEMP/pd/scripts"
+          cp .github/frontier/build-pilots.mjs "$RUNNER_TEMP/pd/scripts/"
+          node "$RUNNER_TEMP/pd/scripts/build-pilots.mjs"
+
+      - name: Check the new list before it replaces the current one
+        id: check
+        run: node .github/frontier/check-pilots.mjs "$RUNNER_TEMP/pd/public/pilots.json" frontier/bounty/pilots.json
+
+      - name: Commit the new list (only when pilots changed)
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          cp "$RUNNER_TEMP/pd/public/pilots.json" frontier/bounty/pilots.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontier/bounty/pilots.json
+          git commit -m "frontier: nightly pilot directory refresh"
+          git pull --rebase origin main   # someone may have pushed the site while the scan ran (Gemini review)
+          git push

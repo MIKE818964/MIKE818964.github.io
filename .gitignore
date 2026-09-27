@@ -1,1 +1,7 @@
 current_dash.json
+
+# Local tooling notes - never publish (Deploy-Site.bat runs git add -A)
+reviews/
+.claude_context.json
+__pycache__/
+.pytest_cache/
