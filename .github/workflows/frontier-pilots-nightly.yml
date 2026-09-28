@@ -27,7 +27,15 @@ jobs:
         with:
           node-version: 20
 
+      # Which Stillness world to scan is a committed decision in .github/frontier/world.json (Cycle 7 moved Stillness
+      # to a fresh world on 2026-09-29). Changing that file is how a world switch is made; see check-pilots.mjs.
+      - name: Read which world to scan
+        id: world
+        run: echo "id=$(node -p "require('./.github/frontier/world.json').world")" >> "$GITHUB_OUTPUT"
+
       - name: Scan the chain for every pilot (~25 s)
+        env:
+          VITE_WORLD_ORIGINAL_ID: ${{ steps.world.outputs.id }}
         run: |
           mkdir -p "$RUNNER_TEMP/pd/scripts"
           cp .github/frontier/build-pilots.mjs "$RUNNER_TEMP/pd/scripts/"
@@ -35,7 +43,7 @@ jobs:
 
       - name: Check the new list before it replaces the current one
         id: check
-        run: node .github/frontier/check-pilots.mjs "$RUNNER_TEMP/pd/public/pilots.json" frontier/bounty/pilots.json
+        run: node .github/frontier/check-pilots.mjs "$RUNNER_TEMP/pd/public/pilots.json" frontier/bounty/pilots.json .github/frontier/world.json
 
       - name: Commit the new list (only when pilots changed)
         if: steps.check.outputs.changed == 'true'
