@@ -1,0 +1,14 @@
+Fonts used by the Glass overlay page (#/overlay). All SIL Open Font License 1.1 - may be bundled and sold with
+software as long as each copy carries the copyright notice and the license (OFL-<Name>.txt next to each file).
+Licenses checked on the official upstream pages on 2026-09-29; none declares a Reserved Font Name.
+
+Inter-var.woff2           Inter 4.001 (variable, wght 100-900), Google Fonts latin subset.
+                          Official: https://github.com/rsms/inter (LICENSE.txt) - https://fonts.google.com/specimen/Inter
+                          Copied unchanged from this PC's existing copy (C:\PythonProjects\solo_training\fonts\inter-400.woff2);
+                          its name table reads "Copyright 2016 The Inter Project Authors", license URL openfontlicense.org.
+JetBrainsMono-var.woff2   JetBrains Mono 2.211 (variable, wght 400-800), Google Fonts latin subset.
+                          Official: https://github.com/JetBrains/JetBrainsMono (OFL.txt) - https://fonts.google.com/specimen/JetBrains+Mono
+                          Copied unchanged from C:\PythonProjects\solo_training\fonts\jetbrains-mono-400.woff2 (name table verified).
+SpaceGrotesk-700.woff2    Space Grotesk 2.000 Bold. Official: https://github.com/floriankarsten/space-grotesk (OFL.txt)
+                          Made from this PC's SpaceGrotesk-Bold.ttf (relay_training) with fontTools: latin subset, WOFF2.
+                          That is a "Modified Version" under the OFL - allowed; the font declares no Reserved Font Name.

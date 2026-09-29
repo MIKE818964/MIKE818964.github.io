@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Honey Badger War Room - live PvP intel from EVE Frontier's public chain. Made for EVE Frontier." />
+    <meta name="theme-color" content="#0A0E14" />
+    <title>Honey Badger War Room</title>
+    <link rel="icon" type="image/png" href="./art/brand/badger_mark.png" />
+    <!-- self-hosted fonts (OFL, public/fonts): preload the two weights the first screen uses most -->
+    <link rel="preload" href="./fonts/BarlowCondensed-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/BarlowCondensed-600.woff2" as="font" type="font/woff2" crossorigin />
+    <script>
+      // preload the Live Map's picture only when the visit opens on the Map (other pages have their own - QA L10)
+      (function () {
+        var h = location.hash;
+        if (h === "" || h === "#" || h === "#/" || h.indexOf("#/map") === 0) {
+          var l = document.createElement("link");
+          l.rel = "preload"; l.as = "image"; l.href = "./art/live_map/plate.webp";
+          document.head.appendChild(l);
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/frontier/warroom/assets/index-DvsveGtC.js"></script>
+    <link rel="modulepreload" crossorigin href="/frontier/warroom/assets/react-rtuF3O1N.js">
+    <link rel="modulepreload" crossorigin href="/frontier/warroom/assets/sui-B0PUPmz5.js">
+    <link rel="modulepreload" crossorigin href="/frontier/warroom/assets/three-CINqWSAE.js">
+    <link rel="stylesheet" crossorigin href="/frontier/warroom/assets/index-5tOXeaU7.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
