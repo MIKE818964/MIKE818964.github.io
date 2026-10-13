@@ -1,723 +1,409 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="HONEYBADGER SOFTWARE INC — a one-person studio shipping polished tools across 3D printing, automotive electronics, and industrial monitoring. Products: J1 Bridge (Snapmaker), C7 Corvette CAN dashboard, the Dash Builder, and secure industrial monitoring.">
-<meta name="keywords" content="Honeybadger Software, indie software studio, J1 Bridge, C7 Corvette dashboard, gauge builder, custom gauge cluster, Raspberry Pi automotive, industrial dashboards, Windows desktop tools">
-<meta property="og:title" content="HONEYBADGER SOFTWARE INC — Polished Tools for the Stubborn Few">
-<meta property="og:description" content="A small studio building polished tools for the gear you actually own — 3D printers, the car in your garage, the machines at your plant. J1 Bridge, C7 dashboard, Dash Builder + more.">
-<meta property="og:image" content="https://mike818964.github.io/assets/images/og_card.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="https://honeybadger.software/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="HONEYBADGER SOFTWARE INC">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="HONEYBADGER SOFTWARE INC — Polished Tools for the Stubborn Few">
-<meta name="twitter:description" content="Polished tools for 3D printing, automotive electronics, and industrial monitoring. By a one-person studio that ships.">
-<meta name="twitter:image" content="https://mike818964.github.io/assets/images/og_card.png">
-<meta name="theme-color" content="#05080C">
-<title>HONEYBADGER SOFTWARE INC — Polished Tools for the Stubborn Few</title>
-<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
-<link rel="stylesheet" href="assets/css/style.css?v=9">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Honey Badger — Mods, Software &amp; Live Combat Tools</title>
+<meta name="description" content="Honey Badger builds game mods, custom servers and tactical software for Rust, WoW Forever, EVE Frontier and Roblox.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* =====================================================================
-   CINEMA PREVIEW — homepage elevated to the /3d-printing/ standard.
-   Shared chrome (topbar/header/nav/footer/buttons) comes from style.css.
-   Everything below is scoped with a cx- prefix so it never fights the
-   base cascade. Navy space bands + slow electric-blue/cyan streaks +
-   cyan neon glow rims + glowing curve transitions + count-up evidence.
-   BTT-red is the RARE warm glint (their own signature accent)
-   and the single warm CTA — the honey in the electric dark.
-   ===================================================================== */
-:root{
-  --nx1:#05091F; --nx2:#0A1134; --nx3:#16226B; --nx-deep:#0B1445;
-  --elec:#2E7BFF; --cyan:#3FD8FF;
-  --honey:#E1252B; --honey-hi:#FF6B70;
-  --ink-nav:#0A1134;
-  --txt-hi:#DCE6FF; --txt-mid:#A9B6D6; --txt-dim:#7E8BB0;
-}
+  /* ---- palette + type (art direction: Gemini 2026-10-12, brand_emblem/gemini_art_direction_2026-10-12.md) ---- */
+  :root{
+    --bg:#0A0A0B; --ink:#EAE6DF; --mute:#8E8A84; --amber:#F5B82E;
+    --line:rgba(234,230,223,.08); --line2:#262629;
+    --disp:"Teko",Impact,"Arial Narrow",sans-serif;          /* tall industrial display */
+    --ui:"Chakra Petch","Arial Narrow",sans-serif;            /* wordmark */
+    --mono:"JetBrains Mono",Consolas,monospace;               /* every label, tag, description */
+    --snap:120ms cubic-bezier(.16,1,.3,1);                    /* hard-cut mechanical motion, no floaty eases */
+  }
+  *{box-sizing:border-box; border-radius:0 !important}        /* 0px law: nothing on this page is rounded */
+  html,body{margin:0; background:var(--bg)}
+  body{color:var(--ink); font-family:var(--mono); font-size:14px; line-height:1.55;
+       -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative}
+  a{color:inherit; text-decoration:none}
+  img{display:block}
 
-/* ---- reveal (own class so it doesn't collide with nav.js .reveal) ---- */
-.cx-rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
-.cx-rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){
-  .cx-rv{opacity:1!important;transform:none!important;transition:none}
-  .cx-streak,.cx-glint,.cx-shot,.cx-badger-anim,.cx-curveglow{animation:none!important}
-}
+  /* concrete under everything (8%) + film grain over everything (5.5%) */
+  body::before{content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.08;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
+    background-size:420px 420px}
+  body::after{content:""; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.055;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='11'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+    background-size:200px 200px}
+  .page{position:relative; z-index:1}
 
-/* ===================== DARK CINEMATIC BAND ===================== */
-.cx-band{position:relative;overflow:hidden;color:#fff;
-  background:linear-gradient(150deg,var(--nx1) 0%,var(--nx2) 46%,var(--nx3) 100%)}
-.cx-band .container{position:relative;z-index:3}
-/* slow drifting light streaks */
-.cx-streak{position:absolute;height:2px;width:42%;pointer-events:none;z-index:1;opacity:.72;
-  background:linear-gradient(90deg,transparent,rgba(63,216,255,.55),rgba(46,123,255,.32),transparent);
-  animation:cxdrift 18s linear infinite}
-.cx-streak.s2{animation-duration:22s;animation-delay:6s;
-  background:linear-gradient(90deg,transparent,rgba(46,123,255,.5),rgba(63,216,255,.25),transparent)}
-.cx-streak.s3{animation-duration:26s;animation-delay:11s;opacity:.5}
-@keyframes cxdrift{from{transform:translateX(-60%)}to{transform:translateX(260%)}}
-/* the rare honey glint — a warm flash in the cold */
-.cx-glint{position:absolute;height:2px;width:30%;pointer-events:none;z-index:1;
-  background:linear-gradient(90deg,transparent,rgba(225,37,43,.65),rgba(255,184,77,.4),transparent);
-  animation:cxglint 15s ease-in-out infinite}
-@keyframes cxglint{0%,82%,100%{opacity:0;transform:translateX(-40%)}88%{opacity:.9}
-  94%{opacity:0;transform:translateX(240%)}}
+  /* ---------- nav: raster emblem mark + chipped wordmark + 8 mono tabs ---------- */
+  header{position:sticky; top:0; z-index:60; background:rgba(10,10,11,.94); border-bottom:1px solid var(--line);
+         backdrop-filter:blur(8px); overflow:visible}
+  .nav{display:flex; align-items:center; gap:26px; height:66px; padding:0 28px; max-width:1640px; margin:0 auto}
+  .mark{display:flex; align-items:center; gap:14px; height:66px; position:relative}
+  .mark img{height:60px; width:auto; mix-blend-mode:screen; transform:translateY(7px);   /* drips hang below the bar */
+            filter:drop-shadow(0 0 16px rgba(245,184,46,.18));
+            -webkit-mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%);   /* no square edge: only the paint survives */
+            mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%)}
+  .ticker .lbl img{-webkit-mask-image:radial-gradient(circle, #000 52%, transparent 74%); mask-image:radial-gradient(circle, #000 52%, transparent 74%)}
+  .word{position:relative; font-family:var(--ui); font-weight:700; font-size:15px; letter-spacing:.14em;
+        text-transform:uppercase; color:var(--ink); filter:url(#chip); padding-top:8px}
+  .word small{position:absolute; right:0; top:-4px; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
+  nav.tabs{display:flex; flex:1; gap:2px; flex-wrap:wrap; justify-content:flex-end}
+  nav.tabs a{font:500 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--mute);
+             padding:13px 12px; border-bottom:2px solid transparent; transition:color var(--snap), border-color var(--snap)}
+  nav.tabs a:hover, nav.tabs a:focus-visible, nav.tabs a.on{color:var(--ink); border-color:var(--amber)}
+  nav.tabs a[data-soon]{opacity:.5}
+  nav.tabs a[data-soon]::after{content:" ·SOON"; color:var(--amber); font-size:9px; letter-spacing:.12em}
 
-/* ===================== HERO ===================== */
-.cx-hero{padding:66px 0 118px}
-.cx-hero:before{content:"";position:absolute;inset:-15%;z-index:0;pointer-events:none;
-  background:radial-gradient(760px 460px at 82% 8%,rgba(46,123,255,.30),transparent 58%),
-            radial-gradient(620px 520px at 4% 92%,rgba(63,216,255,.13),transparent 60%);
-  animation:cxbreathe 16s ease-in-out infinite alternate}
-@keyframes cxbreathe{from{transform:translateY(0) scale(1)}to{transform:translateY(-16px) scale(1.04)}}
-.cx-herogrid{display:grid;grid-template-columns:1.08fr .92fr;gap:52px;align-items:center;position:relative;z-index:3}
-.cx-eyebrow{display:inline-block;font-family:"JetBrains Mono","Consolas",monospace;font-size:11px;
-  letter-spacing:3px;color:var(--cyan);border:1px solid rgba(63,216,255,.4);border-radius:999px;
-  padding:6px 14px;margin-bottom:22px;background:rgba(63,216,255,.06)}
-.cx-h1{font-family:"Space Grotesk","Inter",sans-serif;font-weight:700;color:#fff;
-  font-size:clamp(40px,6.4vw,76px);line-height:1.02;letter-spacing:-1.8px;margin:0 0 22px;text-transform:uppercase}
-.cx-h1 .hl{background:linear-gradient(100deg,var(--cyan),var(--elec) 78%);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.cx-sub{font-size:18px;line-height:1.62;color:var(--txt-mid);max-width:560px;margin:0 0 30px}
-.cx-sub strong{color:var(--txt-hi)}
-.cx-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px}
-.cx-btn{display:inline-block;padding:14px 28px;border-radius:9px;font-weight:700;font-size:15px;
-  letter-spacing:.3px;border:1.5px solid transparent;cursor:pointer;text-decoration:none;text-align:center;
-  transition:transform .12s ease,box-shadow .2s ease,background .15s,border-color .15s,color .15s}
-.cx-btn:hover{transform:translateY(-2px)}
-/* the single warm CTA — BTT red, the actionable accent */
-.cx-btn-honey{background:linear-gradient(120deg,#FF3B41,var(--honey));color:#fff;
-  box-shadow:0 10px 28px rgba(225,37,43,.38)}
-.cx-btn-honey:hover{box-shadow:0 14px 38px rgba(225,37,43,.55);color:#fff}
-.cx-btn-ghost{background:rgba(63,216,255,.04);color:var(--cyan);border-color:rgba(63,216,255,.5)}
-.cx-btn-ghost:hover{background:rgba(63,216,255,.12);border-color:var(--cyan);
-  box-shadow:0 8px 26px rgba(46,123,255,.35)}
-.cx-pills{display:flex;flex-wrap:wrap;gap:10px}
-.cx-pill{font-family:"JetBrains Mono","Consolas",monospace;font-size:11px;letter-spacing:.5px;
-  color:var(--txt-mid);background:rgba(10,17,52,.55);border:1px solid rgba(63,216,255,.24);
-  border-radius:999px;padding:6px 14px}
+  /* ---------- hero: full-bleed render, emblem painted on the wall inside the world, type in the dark left ---------- */
+  .hero{position:relative; min-height:76vh; display:grid; align-items:center; overflow:hidden; border-bottom:1px solid var(--line)}
+  .hero .art{position:absolute; inset:0; background:#000 right center/cover no-repeat}   /* crop eats the dark left, keeps the operator */
+  .hero .art::after{content:""; position:absolute; inset:0; background:
+    linear-gradient(to right, #0A0A0B 0%, rgba(10,10,11,.88) 24%, rgba(10,10,11,.25) 52%, rgba(10,10,11,0) 72%, #0A0A0B 100%),
+    linear-gradient(to bottom, rgba(10,10,11,.45) 0%, rgba(10,10,11,0) 28%, rgba(10,10,11,0) 70%, #0A0A0B 100%)}
+  .hero .in{position:relative; z-index:2; width:100%; max-width:1640px; margin:0 auto; padding:84px 40px 72px}
+  .eyebrow{font:500 11px/1 var(--mono); letter-spacing:.26em; text-transform:uppercase; color:var(--amber)}
+  .hero h1{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.88; letter-spacing:.005em;
+           font-size:clamp(56px,7.4vw,120px); margin:14px 0 12px; max-width:12.5ch;      /* 3 lines at desktop */
+           text-shadow:0 6px 40px rgba(0,0,0,.85)}
+  .hero h1 em{font-style:normal; color:var(--amber)}
+  .hero p{max-width:54ch; color:var(--mute); margin:0 0 32px}
+  .cta{display:flex; gap:14px; flex-wrap:wrap}
+  .btn{--n:12px; display:inline-block; font:700 12px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase;
+       padding:17px 28px; color:var(--amber); background:rgba(245,184,46,.07); border:1px solid var(--amber);
+       clip-path:polygon(0 0, calc(100% - var(--n)) 0, 100% var(--n), 100% 100%, var(--n) 100%, 0 calc(100% - var(--n)));
+       transition:background var(--snap), color var(--snap)}
+  .btn.solid{background:var(--amber); color:#0A0A0B}
+  .btn:hover, .btn:focus-visible{background:var(--amber); color:#0A0A0B}
+  .btn.solid:hover, .btn.solid:focus-visible{background:var(--ink); color:#0A0A0B}   /* solid must visibly change too */
+  .btn:focus-visible{outline:2px solid var(--ink); outline-offset:-5px}             /* inset: the notch clip-path would eat an outer ring */
 
-/* hero product photo — the glow IS the frame */
-.cx-heroart{position:relative;z-index:3}
-.cx-shot{position:relative;border-radius:14px;overflow:hidden;background:#0d0f16;
-  box-shadow:0 0 0 1px rgba(63,216,255,.25),0 0 34px rgba(46,123,255,.34),0 26px 64px rgba(3,6,20,.6);
-  transform:rotate(-1.3deg);transition:transform .4s ease,box-shadow .4s ease;cursor:zoom-in;
-  animation:cxrim 6.5s ease-in-out infinite}
-@keyframes cxrim{0%,100%{box-shadow:0 0 0 1px rgba(63,216,255,.25),0 0 34px rgba(46,123,255,.30),0 26px 64px rgba(3,6,20,.6)}
-  50%{box-shadow:0 0 0 1px rgba(63,216,255,.4),0 0 52px rgba(46,123,255,.5),0 26px 64px rgba(3,6,20,.6)}}
-.cx-shot:hover{transform:rotate(0deg) translateY(-6px) rotate3d(1,-1,0,5deg)}
-.cx-shot img{display:block;width:100%;height:auto}
-.cx-shot:after{content:"RUNNING LIVE ON A 2014 STINGRAY";position:absolute;left:14px;bottom:13px;
-  font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:1.4px;color:#fff;
-  background:rgba(5,9,31,.78);border:1px solid rgba(63,216,255,.35);padding:5px 10px;border-radius:6px}
+  /* ---------- section frame: edge-to-edge hairlines, "// 01" numbers, crosshair ticks ---------- */
+  section.blk{position:relative; border-top:1px solid var(--line)}
+  section.blk > .in{max-width:1640px; margin:0 auto; padding:76px 40px 84px; position:relative}
+  .num{position:absolute; left:40px; top:16px; font:500 11px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
+  .tick{position:absolute; width:11px; height:11px; pointer-events:none}
+  .tick::before,.tick::after{content:""; position:absolute; background:rgba(234,230,223,.38)}
+  .tick::before{left:5px; top:0; width:1px; height:11px}
+  .tick::after{top:5px; left:0; width:11px; height:1px}
+  .tick.tl{left:-6px; top:-6px} .tick.tr{right:-6px; top:-6px}
+  .h2{display:flex; align-items:flex-end; gap:22px; margin:0 0 30px}
+  .h2 h2{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; letter-spacing:.01em;
+         font-size:clamp(46px,5.6vw,84px); margin:0}
+  .h2 .rule{flex:1; height:1px; background:linear-gradient(90deg,var(--amber),transparent 70%); margin-bottom:12px}
+  .h2 .lede{color:var(--mute); max-width:44ch; margin:0 0 6px}
 
-/* count-up evidence row */
-.cx-stats{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;
-  column-gap:34px;row-gap:18px;margin:30px 0 4px}
-.cx-stat b{display:block;font-family:"Space Grotesk","Inter",sans-serif;font-size:34px;font-weight:700;
-  color:#fff;line-height:1;font-variant-numeric:tabular-nums}
-.cx-stat b .u{color:var(--cyan)}
-.cx-stat span{display:block;margin-top:7px;font-size:10.5px;letter-spacing:1.6px;font-weight:700;
-  color:var(--txt-dim);text-transform:uppercase}
+  /* ---------- 01 the arsenal: roster + crossfade stage (switching feels like flipping a monitor feed) ---------- */
+  .arsenal{display:grid; grid-template-columns:380px 1fr; border:1px solid var(--line)}
+  .roster{display:flex; flex-direction:column; border-right:1px solid var(--line)}
+  .roster button{display:grid; grid-template-columns:58px 1fr auto; gap:16px; align-items:center; text-align:left; cursor:pointer;
+    background:transparent; border:0; border-bottom:1px solid var(--line); color:var(--mute); padding:19px 18px;
+    font:500 12px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; transition:color var(--snap), background var(--snap)}
+  .roster button:last-child{border-bottom:0}
+  .roster button .thumb{width:58px; height:36px; background:#000 center/cover no-repeat; filter:grayscale(.55) brightness(.7); transition:filter var(--snap)}
+  .roster button .st{font-size:9px; letter-spacing:.22em; color:var(--mute)}
+  .roster button .st.live{color:var(--amber)}
+  .roster button:hover, .roster button:focus-visible{color:var(--ink); background:rgba(234,230,223,.03)}
+  .roster button[aria-pressed="true"]{color:var(--ink); background:linear-gradient(90deg,rgba(245,184,46,.11),transparent 70%); box-shadow:inset 3px 0 0 var(--amber)}
+  .roster button[aria-pressed="true"] .thumb{filter:none}
+  .stage{position:relative; min-height:560px; background:#000; overflow:hidden}
+  .pane{position:absolute; inset:0; opacity:0; z-index:1; transition:opacity var(--snap)}
+  .pane.on{opacity:1; z-index:2}
+  .pane .art{position:absolute; inset:0; background:#000 center/cover no-repeat; transition:filter 90ms linear}
+  .pane.spike .art{filter:brightness(1.6) contrast(1.3)}
+  .pane .art::after{content:""; position:absolute; inset:0; background:
+    linear-gradient(to right, rgba(10,10,11,.55) 0%, rgba(10,10,11,0) 30%),
+    linear-gradient(to top, #0A0A0B 0%, rgba(10,10,11,.55) 22%, rgba(10,10,11,0) 55%)}
+  .pane .cap{position:absolute; left:0; right:0; bottom:0; z-index:3; display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding:30px 34px}
+  .cap h3{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.84; font-size:clamp(48px,5.4vw,92px); margin:0}
+  .cap p{margin:8px 0 0; color:var(--mute); max-width:48ch; font-size:13px}
+  .mods{display:flex; flex-direction:column; gap:8px; align-items:flex-end; text-align:right; flex:none}
+  .mods > *{display:inline-block; font:500 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--ink);
+            border-left:2px solid var(--amber); padding:7px 11px; background:rgba(10,10,11,.74)}
+  .mods .t{color:var(--amber); margin-left:8px}
+  .mods .dev{border-left-color:var(--line2)} .mods .dev .t{color:var(--mute)}
+  .mods a:hover .t, .mods a:focus-visible .t{text-decoration:underline}
 
-/* glowing asymmetric curve transition */
-.cx-curve{position:absolute;left:0;right:0;bottom:-1px;height:74px;z-index:2;pointer-events:none}
-.cx-curve svg{width:100%;height:100%;display:block}
-.cx-curveglow{filter:drop-shadow(0 0 7px rgba(63,216,255,.85));animation:cxcglow 7s ease-in-out infinite}
-@keyframes cxcglow{0%,100%{opacity:.65}50%{opacity:1}}
-/* glowing divider line at the top of a dark band */
-.cx-topline{position:absolute;top:0;left:0;right:0;height:2px;z-index:2;
-  background:linear-gradient(90deg,transparent,rgba(63,216,255,.6),rgba(46,123,255,.3),transparent);
-  filter:drop-shadow(0 0 6px rgba(63,216,255,.6))}
+  /* ---------- 02 featured deployment ---------- */
+  .spot{position:relative; min-height:480px; display:flex; align-items:center; overflow:hidden; border:1px solid var(--line)}
+  .spot .art{position:absolute; inset:0; background:#000 center/cover no-repeat}
+  .spot .art::after{content:""; position:absolute; inset:0; background:
+    linear-gradient(to right, #0A0A0B 0%, rgba(10,10,11,.9) 28%, rgba(10,10,11,.25) 62%, rgba(10,10,11,0) 100%),
+    linear-gradient(to top, #0A0A0B 0%, rgba(10,10,11,0) 35%)}
+  .spot .sin{position:relative; z-index:2; padding:84px 40px; max-width:700px}
+  .spot h3{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; font-size:clamp(56px,6.4vw,104px); margin:14px 0 14px}
+  .spot p{color:var(--mute); margin:0 0 26px; max-width:50ch}
+  .spec{display:grid; grid-template-columns:repeat(3,auto); gap:28px; margin:0 0 30px; justify-content:start}
+  .spec div{border-top:1px solid var(--line); padding-top:10px}
+  .spec b{display:block; font-family:var(--disp); font-weight:600; font-size:34px; line-height:.9; color:var(--ink)}
+  .spec span{font:500 10px/1 var(--mono); letter-spacing:.2em; color:var(--mute); text-transform:uppercase}
 
-/* ===================== TRUST STRIP (light) ===================== */
-/* uses base .trust-strip from style.css — no override needed */
+  /* ---------- 03 command center: hairline rows, never cards ---------- */
+  .soft{border-top:1px solid var(--line)}
+  .soft .it{display:grid; grid-template-columns:34px 300px 1fr auto; gap:22px; align-items:baseline; padding:24px 0; border-bottom:1px solid var(--line)}
+  .it .n{font:500 11px/1 var(--mono); color:var(--amber); letter-spacing:.2em}
+  .it h4{font-family:var(--disp); font-weight:700; font-size:34px; line-height:.9; text-transform:uppercase; margin:0; letter-spacing:.02em}
+  .it h4 small{display:block; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--mute); margin-top:8px}
+  .it h4 small.live{color:var(--amber)}
+  .it p{margin:0; color:var(--mute)}
+  .it a{font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); white-space:nowrap}
+  .it a:hover, .it a:focus-visible{text-decoration:underline}
+  .it span.hold{font:500 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); white-space:nowrap}
 
-/* ===================== PRODUCT SHOWCASE (dark band) ===================== */
-.cx-products{padding:70px 0 90px}
-.cx-shead{text-align:center;max-width:760px;margin:0 auto 20px}
-.cx-kicker{font-family:"JetBrains Mono","Consolas",monospace;font-size:12px;letter-spacing:4px;
-  color:var(--cyan);margin-bottom:14px}
-.cx-h2{font-family:"Space Grotesk","Inter",sans-serif;font-size:clamp(28px,4vw,44px);font-weight:700;
-  color:#fff;letter-spacing:-.5px;line-height:1.14;margin:0 0 14px}
-.cx-lede{font-size:17px;color:var(--txt-mid);margin:0 auto;max-width:640px;line-height:1.6}
+  /* ---------- comm-link ticker (sticky bottom) ---------- */
+  .ticker{position:sticky; bottom:0; z-index:55; display:flex; align-items:stretch; height:44px; overflow:hidden;
+          border-top:1px solid var(--amber); background:rgba(10,10,11,.96)}
+  .ticker .lbl{display:flex; align-items:center; gap:10px; padding:0 18px; height:100%; cursor:pointer; flex:none;
+               font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber);
+               background:transparent; border:0; border-right:1px solid var(--line)}
+  .ticker .lbl img{height:26px; width:auto; mix-blend-mode:screen}
+  .ticker .viewport{display:flex; align-items:center; overflow:hidden; flex:1}
+  .ticker .track{display:flex; white-space:nowrap; animation:scroll 38s linear infinite; will-change:transform}
+  .ticker.paused .track, .ticker:hover .track, .ticker:focus-within .track{animation-play-state:paused}
+  .ticker .grp{display:flex; gap:48px; padding-right:48px}
+  .ticker .grp span{font:500 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--mute)}
+  .ticker .grp span b{color:var(--amber); font-weight:500}
+  @keyframes scroll{from{transform:translateX(0)} to{transform:translateX(-50%)}}
 
-.cx-feat{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center;
-  padding:46px 0;border-top:1px solid rgba(63,216,255,.14)}
-.cx-feat:first-of-type{border-top:0}
-.cx-feat.flip .cx-fmedia{order:2}
-.cx-fmedia{position:relative;border-radius:14px;overflow:hidden;background:#0d0f16;cursor:zoom-in;
-  box-shadow:0 0 0 1px rgba(63,216,255,.22),0 0 26px rgba(46,123,255,.28),0 22px 52px rgba(3,6,20,.55);
-  transition:transform .4s ease,box-shadow .4s ease}
-.cx-fmedia:hover{transform:translateY(-6px) rotate3d(1,-1,0,4deg);
-  box-shadow:0 0 0 1px rgba(63,216,255,.4),0 0 44px rgba(46,123,255,.5),0 22px 52px rgba(3,6,20,.55)}
-.cx-fmedia img{display:block;width:100%;height:auto}
-.cx-fmedia.contain{background:radial-gradient(130% 120% at 30% 18%,#141b32,#080b16);
-  display:flex;align-items:center;justify-content:center;min-height:230px}
-.cx-fmedia.contain img{width:auto;height:180px;object-fit:contain;padding:24px}
-.cx-zoomhint{position:absolute;bottom:10px;right:10px;background:rgba(5,9,31,.8);color:var(--cyan);
-  font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;letter-spacing:.8px;
-  border:1px solid rgba(63,216,255,.35);border-radius:7px;padding:4px 9px;opacity:0;transition:opacity .2s}
-.cx-fmedia:hover .cx-zoomhint{opacity:1}
+  footer{border-top:1px solid var(--line); padding:30px 40px 84px; max-width:1640px; margin:0 auto;
+         display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+         font:500 10px/1.8 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--mute)}
+  footer a{color:var(--amber)}
 
-.cx-fbadge{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:1.5px;
-  font-weight:700;padding:5px 11px;border-radius:6px;margin-bottom:14px}
-.cx-fbadge.live{background:rgba(63,216,255,.13);color:var(--cyan);border:1px solid rgba(63,216,255,.4)}
-.cx-fbadge.beta{background:rgba(46,123,255,.14);color:#6fa8ff;border:1px solid rgba(46,123,255,.45)}
-.cx-fbadge.kit{background:rgba(225,37,43,.13);color:var(--honey-hi);border:1px solid rgba(225,37,43,.42)}
-.cx-fbadge.free{background:rgba(46,190,120,.14);color:#5fe0a0;border:1px solid rgba(46,190,120,.4)}
-.cx-ftext h3{font-family:"Space Grotesk","Inter",sans-serif;font-size:27px;font-weight:700;color:#fff;margin:0 0 12px}
-.cx-ftext p{font-size:15.5px;line-height:1.65;color:var(--txt-mid);margin:0 0 18px}
-.cx-ftext p strong{color:var(--txt-hi)}
-.cx-flink{display:inline-block;font-weight:700;font-size:14.5px;color:var(--cyan);text-decoration:none;
-  transition:color .15s,transform .15s}
-.cx-flink:hover{color:#fff;transform:translateX(3px)}
-
-/* ===================== STUDIO DISCIPLINES (light, SVG icons) ===================== */
-.cx-disc-sec{background:var(--bg-light);padding:80px 0}
-.cx-disc-sec .cx-kicker{color:#c2790a}
-.cx-disc-sec .cx-h2{color:#16120c}
-.cx-disc-sec .cx-lede{color:#5c544a}
-.cx-disc{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:44px}
-.cx-disccard{background:#fffdf9;border:1px solid rgba(20,16,10,.10);border-radius:16px;padding:28px 24px;
-  box-shadow:0 12px 34px rgba(40,30,10,.06);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
-.cx-disccard:hover{transform:translateY(-5px);border-color:rgba(46,123,255,.35);
-  box-shadow:0 20px 46px rgba(20,40,90,.14)}
-.cx-icon{width:46px;height:46px;margin-bottom:16px}
-.cx-icon svg{width:46px;height:46px;stroke:var(--ink-nav);stroke-width:1.5;fill:none;
-  stroke-linecap:round;stroke-linejoin:round;transition:stroke .25s ease}
-.cx-disccard:hover .cx-icon svg{stroke:var(--elec)}
-.cx-disccard h3{font-family:"Space Grotesk","Inter",sans-serif;font-size:18px;font-weight:700;
-  color:#16120c;margin:0 0 8px}
-.cx-disccard p{font-size:14px;line-height:1.55;color:#6a6155;margin:0}
-
-/* ===================== responsive ===================== */
-/* collapse at 880 to match the base site (keeps the two-column hero at
-   Michael's ~980 app width, image top-right and above the fold) */
-@media (max-width:880px){
-  .cx-herogrid{grid-template-columns:1fr;gap:38px}
-  .cx-shot{transform:none;max-width:520px}
-  .cx-feat{grid-template-columns:1fr;gap:26px;padding:36px 0}
-  .cx-feat.flip .cx-fmedia{order:0}
-  .cx-disc{grid-template-columns:1fr 1fr}
-}
-@media (max-width:560px){
-  .cx-h1{font-size:36px}
-  .cx-stats{grid-template-columns:repeat(2,auto);column-gap:30px}
-  .cx-disc{grid-template-columns:1fr}
-  .cx-btn{width:100%}
-  .cx-cta{flex-direction:column}
-}
-
-/* ===================== LIGHTBOX ===================== */
-.cx-lb{position:fixed;inset:0;background:rgba(5,9,31,.9);backdrop-filter:blur(8px);z-index:900;
-  display:none;align-items:center;justify-content:center;padding:40px}
-.cx-lb.open{display:flex}
-.cx-lb img{max-width:92vw;max-height:88vh;border-radius:10px;
-  box-shadow:0 40px 120px rgba(0,0,0,.7),0 0 60px rgba(46,123,255,.4);animation:cxpop .28s ease}
-@keyframes cxpop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
-.cx-lbx{position:fixed;top:18px;right:22px;width:42px;height:42px;border-radius:50%;
-  background:rgba(63,216,255,.15);border:1.5px solid rgba(63,216,255,.5);color:#fff;font-size:18px;
-  font-weight:800;cursor:pointer;z-index:901}
-.cx-lbx:hover{background:rgba(63,216,255,.3)}
-.cx-lbcap{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);color:var(--txt-mid);
-  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.8px;z-index:901}
-
-/* ===== v2: NO GOLD ANYWHERE + full-dark end-all (Michael's law) ===== */
-.btn-gold,.btn-gold:hover{background:linear-gradient(135deg,#2E7BFF,#3FD8FF)!important;
-  color:#06102A!important;border-color:transparent!important}
-body{background:#070D2A}
-.section,.section-alt,.section-why{background:linear-gradient(150deg,#05091F,#0A1134 55%,#101B52 100%);
-  color:#DCE6FF;border-color:rgba(63,216,255,.15)}
-.section h2,.section h3,.section-why h2{color:#fff}
-.section p,.section li,.post-body p{color:#A9B6D6}
-.kicker{color:#3FD8FF}
-.post-card{background:rgba(8,14,40,.78);border:1px solid rgba(63,216,255,.18)}
-.post-card h3{color:#fff}
-.post-tag{color:#3FD8FF}
-.split-cta{background:linear-gradient(120deg,rgba(225,37,43,.16),rgba(46,123,255,.16));
-  border:1px solid rgba(63,216,255,.3);color:#fff}
-.split-cta p{color:#A9B6D6}
-.btn-primary{background:linear-gradient(120deg,#FF3B41,#E1252B)!important;color:#fff!important;border:0!important}
-.why-badger{box-shadow:0 0 0 1px rgba(63,216,255,.3),0 0 36px rgba(46,123,255,.35);border-radius:14px}
-/* movies energy: slow ken-burns drift on every product visual */
-.cx-shot img,.cx-fmedia img{animation:cxkb 17s ease-in-out infinite alternate}
-@keyframes cxkb{from{transform:scale(1)}to{transform:scale(1.05)}}
-@media (prefers-reduced-motion: reduce){.cx-shot img,.cx-fmedia img{animation:none}}
-/* the nuclear de-gold: any base-css use of --gold now renders electric */
-:root{--gold:#3FD8FF}
-.post-card .post-stripe{background:linear-gradient(90deg,#2E7BFF,#3FD8FF)!important}
-.post-tag{color:#3FD8FF!important}
-/* the Why principle rows: dark cards, readable, cyan checks */
-.principle-list li{background:rgba(8,14,40,.75);border:1px solid rgba(63,216,255,.18);
-  border-radius:10px;padding:12px 16px 12px 40px;color:#A9B6D6!important}
-.principle-list li strong{color:#fff!important}
-.principle-list li::before{left:14px;color:#3FD8FF!important}
-.why-quote{color:#BFD7FF}
-/* footer: navy instead of warm-dark, cyan column headers instead of tan-gold */
-.site-footer{background:#05081A!important;border-top:1px solid rgba(63,216,255,.15)}
-.site-footer h4,.footer-col h4{color:#3FD8FF!important}
-.footer-fineprint,.footer-fineprint small{color:#7E8BB0}
+  @media (prefers-reduced-motion:reduce){
+    .ticker .track{animation:none} .pane{transition:none} .pane.spike .art{filter:none} *{transition:none !important}
+  }
+  @media (max-width:980px){
+    .nav{height:auto; padding:10px 18px; gap:10px; flex-wrap:wrap} nav.tabs{justify-content:flex-start; flex-basis:100%}
+    .hero .in{padding:70px 22px 60px} .hero h1{max-width:none}
+    section.blk > .in{padding:60px 22px 64px} .num{left:22px}
+    .arsenal{grid-template-columns:1fr} .roster{border-right:0; border-bottom:1px solid var(--line)} .stage{min-height:380px}
+    .pane .cap{flex-direction:column; align-items:flex-start} .mods{align-items:flex-start; text-align:left}
+    .soft .it{grid-template-columns:28px 1fr; row-gap:8px} .it p{grid-column:2} .it a, .it span.hold{grid-column:2}
+    .spot .sin{padding:60px 22px} .spec{grid-template-columns:repeat(3,1fr); gap:14px}
+    footer{padding:26px 22px 84px}
+  }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="chip" x="-6%" y="-6%" width="112%" height="112%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+<div class="page">
 
-<!-- ===== TOP UTILITY STRIP (copied exactly from current homepage) ===== -->
-<div class="topbar">
-  <div class="container">
-    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
-    <span class="topbar-links">
-      <a href="/3d-printing/" style="color:#3FD8FF">3D Printing</a>
-      <a href="community.html">Community</a>
-      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
-      <a href="downloads.html">Downloads</a>
-    </span>
-  </div>
-</div>
-
-<!-- ===== HEADER / NAV (copied exactly from current homepage, relay line included) ===== -->
-<header class="site-header">
-  <div class="container header-row">
-    <a href="/" class="brand">
-      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
-      <div class="brand-text">
-        <div class="brand-name">HONEYBADGER</div>
-        <div class="brand-tag">SOFTWARE INC</div>
-      </div>
+<header>
+  <div class="nav">
+    <a class="mark" href="/" aria-label="Honey Badger home">
+      <img src="assets/arsenal/emblem_mark.jpg?v=20261012c" srcset="assets/arsenal/emblem_mark.jpg?v=20261012c 1x, assets/arsenal/emblem_mark@2x.jpg?v=20261012c 2x" alt="" width="320" height="320">
+      <span class="word">Honey Badger<small>.software</small></span>
     </a>
-    <nav class="site-nav" id="siteNav">
-      <a href="/">Home</a>
-      <div class="nav-dropdown">
-        <a href="/products.html" class="nav-dropdown-trigger">Products ▾</a>
-        <div class="nav-dropdown-menu">
-          <a href="/industrial.html"><strong>Industrial</strong><span>Plant-floor dashboards, troubleshooters, ERP hand-off</span></a>
-          <a href="/j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
-          <a href="/3d-printing/"><strong>3D Printing Hub</strong><span>Board wiring, firmware &amp; pinouts</span></a>
-          <a href="/eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
-          <a href="/c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
-          <a href="/gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
-        </div>
-      </div>
-      <a href="/3d-printing/">3D Printing</a>
+    <nav class="tabs" aria-label="Primary">
+      <a href="/" class="on" aria-current="page">Home</a>
+      <a href="#arsenal">Supported Games</a>
+      <a href="#deployment">Our Mods</a>
+      <a href="#software">Software</a>
+      <a href="#" data-soon>Intel</a>
+      <a href="#commlink">Comm-Link</a>
+      <a href="#" data-soon data-discord>The Den</a>
+      <a href="/support.html">Support</a>
       <a href="/industrial.html">Industrial</a>
-      <a href="/training.html">Training</a>
-      <a href="/games.html">Games</a>
-      <a href="/community.html">Community</a>
-      <a href="/downloads.html">Downloads</a>
-      <a href="/about.html">About</a>
     </nav>
-    <div class="header-actions">
-      <a href="builder.html" class="btn btn-gold btn-sm">Try the Dash Builder</a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
-    </div>
   </div>
 </header>
 
-<!-- ===== HERO — dark cinematic band ===== -->
-<section class="cx-band cx-hero">
-  <div class="cx-streak" style="top:20%"></div>
-  <div class="cx-streak s2" style="top:52%"></div>
-  <div class="cx-streak s3" style="top:78%"></div>
-  <div class="cx-glint" style="top:36%"></div>
-  <div class="container">
-    <div class="cx-herogrid">
-      <div class="cx-rv">
-        <div class="cx-eyebrow">HONEYBADGER SOFTWARE INC · 3D PRINTING · AUTOMOTIVE · INDUSTRIAL</div>
-        <h1 class="cx-h1">We build the tools.<br><span class="hl">You own the gear.</span></h1>
-        <p class="cx-sub">HONEYBADGER SOFTWARE INC builds software and open hardware across the things you tinker with — your <strong>3D printer</strong>, the <strong>car in your garage</strong>, the <strong>machines at your plant</strong>. Real installers. No "convert your firmware first." No "pip install" for end users. Just tools that work.</p>
-        <div class="cx-stats" id="cxStats">
-          <div class="cx-stat"><b data-count="4">0</b><span>Products built</span></div>
-          <div class="cx-stat"><b data-count="3">0</b><span>Disciplines</span></div>
-          <div class="cx-stat"><b data-count="0">0</b><span>Telemetry channels</span></div>
-          <div class="cx-stat"><b data-count="1">0</b><span>Stubborn studio</span></div>
-        </div>
-        <div class="cx-cta">
-          <a href="products.html" class="cx-btn cx-btn-honey">Explore the products</a>
-          <a href="builder.html" class="cx-btn cx-btn-ghost">Build a gauge cluster →</a>
-        </div>
-        <div class="cx-pills">
-          <span class="cx-pill">No telemetry</span>
-          <span class="cx-pill">No tracking</span>
-          <span class="cx-pill">Honest Known-Issues pages</span>
-          <span class="cx-pill">Free where it makes sense</span>
-        </div>
-      </div>
-      <div class="cx-heroart cx-rv">
-        <figure class="cx-shot" style="margin:0" data-full="assets/images/c7-tuning-dash.png?v=2">
-          <img src="assets/images/c7-tuning-dash.png?v=2" alt="The Honeybadger C7 dashboard running live — six tuning gauges and 24 live data cells">
-        </figure>
-      </div>
-    </div>
-  </div>
-  <!-- glowing asymmetric curve into the light trust strip (#f1e8d8) -->
-  <div class="cx-curve">
-    <svg viewBox="0 0 1440 74" preserveAspectRatio="none">
-      <path d="M0,74 L0,34 C360,70 940,-6 1440,44 L1440,74 Z" fill="#f1e8d8"/>
-      <path class="cx-curveglow" d="M0,34 C360,70 940,-6 1440,44" fill="none" stroke="#3FD8FF" stroke-width="1.6"/>
-    </svg>
-  </div>
-</section>
-
-<!-- ===== TRUST STRIP (light, unchanged content) ===== -->
-<div class="trust-strip">
-  <span><b>Raw CAN</b> — no reflash</span><span class="dot">•</span>
-  <span><b>Stock firmware</b> — warranty intact</span><span class="dot">•</span>
-  <span><b>No telemetry</b></span><span class="dot">•</span>
-  <span><b>Built &amp; tested</b> on real hardware</span>
-</div>
-
-<!-- ===== INDUSTRIAL SUPERPOWER BAND (the identity: studio-first + industrial power) ===== -->
-<style>
-.cx-ind-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
-.cx-ind-card{background:rgba(8,14,40,.62);border:1px solid rgba(63,216,255,.2);border-radius:14px;padding:20px 18px;transition:transform .2s,border-color .2s,box-shadow .2s}
-.cx-ind-card:hover{transform:translateY(-3px);border-color:rgba(63,216,255,.5);box-shadow:0 14px 34px rgba(46,123,255,.26)}
-.cx-ind-card b{display:block;color:#fff;font-size:14.5px;margin-bottom:8px}
-.cx-ind-card span{color:#A9B6D6;font-size:12.5px;line-height:1.6}
-.cx-ind-h em{color:#3FD8FF;font-style:normal}
-@media(max-width:900px){.cx-ind-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.cx-ind-grid{grid-template-columns:1fr}}
-</style>
-<section class="cx-band cx-products" id="industrial-band" style="padding:66px 0 76px">
-  <div class="cx-streak" style="top:18%"></div>
-  <div class="cx-glint" style="top:70%"></div>
-  <div class="container">
-    <div class="cx-shead cx-rv">
-      <div class="cx-kicker">THE INDUSTRIAL SIDE</div>
-      <h2 class="cx-h2 cx-ind-h">We get <em>inside</em> the machines that run a plant floor.</h2>
-      <p class="cx-lede">A software studio first — and quietly, an industrial superpower. The hardware that keeps a
-      plant running rarely gives up its data easily. We reverse-engineer the protocol, pull the real numbers off the
-      controller, and put them on a screen an operator actually wants to look at. Live dashboards, shift-cost
-      reporting, machine troubleshooters, and ERP hand-off — polished like everything else we ship.</p>
-    </div>
-    <div class="cx-ind-grid cx-rv">
-      <div class="cx-ind-card"><b>Speaks the floor's protocols</b><span>Modbus, OPC UA, MQTT, serial/RS-485, plus Allen-Bradley &amp; Siemens tooling — even proprietary buses like Maguire's MLAN.</span></div>
-      <div class="cx-ind-card"><b>Maguire blender fleets, instrumented</b><span>Live dashboards, per-shift cost analytics, batch-drop logging, and clean hand-off into eIQ / DELMIAWorks.</span></div>
-      <div class="cx-ind-card"><b>Troubleshooters for real machines</b><span>Fault libraries, live PLC monitors, I/O maps and searchable ladder knowledge — built private, per plant.</span></div>
-      <div class="cx-ind-card"><b>Engineering deliverables, not just apps</b><span>JIC electrical prints, PLC code recovery, and an AI search engine across ~1,000 plant manuals.</span></div>
-    </div>
-    <div class="cx-rv" style="text-align:center;margin-top:34px">
-      <a href="industrial.html" class="cx-btn cx-btn-honey">Explore the industrial stack →</a>
+<section class="hero">
+  <div class="art" id="heroArt"></div>
+  <div class="in">
+    <div class="eyebrow">Honey Badger — independent studio</div>
+    <h1>Mods, software, and <em>live combat tools.</em></h1>
+    <p>Built in-house by Honey Badger. Custom servers, live telemetry overlays, and addons for the games we actually play.</p>
+    <div class="cta">
+      <a class="btn solid" href="#arsenal">Browse the arsenal</a>
+      <a class="btn" href="#software">Software</a>
     </div>
   </div>
 </section>
 
-<!-- ===== PRODUCT SHOWCASE — dark cinematic band, alternating feature rows ===== -->
-<section class="cx-band cx-products" id="products">
-  <div class="cx-topline"></div>
-  <div class="cx-streak" style="top:14%"></div>
-  <div class="cx-streak s2" style="top:60%"></div>
-  <div class="cx-glint" style="top:84%"></div>
-  <div class="container">
-    <div class="cx-shead cx-rv">
-      <div class="cx-kicker">THE PRODUCTS</div>
-      <h2 class="cx-h2">The products. One stubborn studio.</h2>
-      <p class="cx-lede">Each one solves a problem the big vendors left on the table — and each ships polished, or it doesn't ship.</p>
-    </div>
-
-    <!-- EVE Fleet Foreman -->
-    <div class="cx-feat cx-rv">
-      <figure class="cx-fmedia" style="margin:0" data-full="assets/images/screenshots/eve-what-to-mine.png">
-        <img src="assets/images/screenshots/eve-what-to-mine.png" alt="EVE Fleet Foreman ranking ore by ISK per cubic meter">
-        <span class="cx-zoomhint">🔍 CLICK TO INSPECT</span>
-      </figure>
-      <div class="cx-ftext">
-        <span class="cx-fbadge free">FREE · LIVE NOW</span>
-        <h3>EVE Fleet Foreman</h3>
-        <p>A free, open-source fleet-mining tool for EVE Online. See what to mine by <strong>ISK per m³</strong> from live Jita prices, get a refine-or-sell verdict, and auto-split your fleet's Mining Ledger — fairly. Read-only and 100% EULA-safe.</p>
-        <a href="eve-fleet-foreman.html" class="cx-flink">About EVE Fleet Foreman →</a>
+<!-- 01 THE ARSENAL -->
+<section class="blk" id="arsenal">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 01 &nbsp;THE ARSENAL</div>
+    <div class="h2"><h2>Supported games</h2><span class="rule"></span><p class="lede">Pick a game. The feed shows what we run on it and where each build stands.</p></div>
+    <div class="arsenal">
+      <div class="roster" id="roster" role="group" aria-label="Supported games">
+        <button data-game="rust" aria-pressed="true"><span class="thumb" data-art="rust"></span><span>Rust</span><span class="st live">Live server</span></button>
+        <button data-game="wow" aria-pressed="false"><span class="thumb" data-art="wow"></span><span>WoW Forever</span><span class="st live">Released</span></button>
+        <button data-game="eve" aria-pressed="false"><span class="thumb" data-art="eve"></span><span>EVE Frontier</span><span class="st live">Live</span></button>
+        <button data-game="roblox" aria-pressed="false"><span class="thumb" data-art="roblox"></span><span>Roblox</span><span class="st">In dev</span></button>
+        <button data-game="ore" aria-pressed="false"><span class="thumb" data-art="ore"></span><span>Out of Ore</span><span class="st">Planned</span></button>
       </div>
-    </div>
-
-    <!-- J1 Bridge -->
-    <div class="cx-feat flip cx-rv">
-      <figure class="cx-fmedia" style="margin:0" data-full="assets/images/screenshots/monitor.webp">
-        <img src="assets/images/screenshots/monitor.webp" alt="J1 Bridge live print monitor">
-        <span class="cx-zoomhint">🔍 CLICK TO INSPECT</span>
-      </figure>
-      <div class="cx-ftext">
-        <span class="cx-fbadge beta">ACTIVE BETA</span>
-        <h3>J1 Bridge</h3>
-        <p>OrcaSlicer + Snapmaker J1, finally talking to each other. Drag-drop slicing, live print monitoring, built-in camera — all on <strong>stock firmware</strong>. No Klipper, no Pi, warranty intact.</p>
-        <a href="j1-bridge.html" class="cx-flink">Learn about J1 Bridge →</a>
-      </div>
-    </div>
-
-    <!-- C7 Dashboard -->
-    <div class="cx-feat cx-rv">
-      <figure class="cx-fmedia" style="margin:0" data-full="assets/images/c7-tuning-dash.png?v=2">
-        <img src="assets/images/c7-tuning-dash.png?v=2" alt="C7 tuning dashboard with six live gauges">
-        <span class="cx-zoomhint">🔍 CLICK TO INSPECT</span>
-      </figure>
-      <div class="cx-ftext">
-        <span class="cx-fbadge kit">COMMERCIAL KIT · PRE-LAUNCH</span>
-        <h3>C7 Dashboard</h3>
-        <p>The aftermarket touchscreen head unit GM never gave the C7 Corvette. Live tuning gauges, a 250-app multimedia center, and a safety-interlocked nitrous controller — reading the OEM CAN bus <strong>passively, no reflash</strong>.</p>
-        <a href="c7-dashboard.html" class="cx-flink">See the C7 Dashboard →</a>
-      </div>
-    </div>
-
-    <!-- Dash Builder -->
-    <div class="cx-feat flip cx-rv">
-      <figure class="cx-fmedia contain" style="margin:0" data-full="assets/images/gauge-hero.svg">
-        <img src="assets/images/gauge-hero.svg" alt="A premium digital gauge designed in the Dash Builder">
-        <span class="cx-zoomhint">🔍 CLICK TO INSPECT</span>
-      </figure>
-      <div class="cx-ftext">
-        <span class="cx-fbadge live">LIVE · TRY IT NOW</span>
-        <h3>Dash Builder</h3>
-        <p>Design a <strong>whole dash</strong>, not just one gauge. A drag-and-drop screen designer, <strong>19+ gauge styles</strong> (dials, numeric readouts, trend charts, race strips), 27 live signals, 12 color themes, plus an animated symbol library — nitrous bottle, controller, telltales. What you build ships pixel-identical to your dash.</p>
-        <a href="designer.html" class="cx-flink">Open the screen designer →</a>
-      </div>
-    </div>
-  </div>
-  <!-- curve into the light studio section (#ffffff) -->
-  <div class="cx-curve">
-    <svg viewBox="0 0 1440 74" preserveAspectRatio="none">
-      <path d="M0,74 L0,44 C520,-8 1020,72 1440,30 L1440,74 Z" fill="#ffffff"/>
-      <path class="cx-curveglow" d="M0,44 C520,-8 1020,72 1440,30" fill="none" stroke="#3FD8FF" stroke-width="1.6"/>
-    </svg>
-  </div>
-</section>
-
-<!-- ===== STUDIO DISCIPLINES — light, minimal SVG icons (emoji removed) ===== -->
-<section class="cx-disc-sec" id="studio">
-  <div class="container">
-    <div class="cx-shead cx-rv">
-      <div class="cx-kicker">THE STUDIO</div>
-      <h2 class="cx-h2">One developer. Multiple disciplines.<br>Tools that don't suck.</h2>
-      <p class="cx-lede">Honeybadger Software builds across the things you actually own and tinker with — 3D printers, the car in your garage, the machinery at your plant, the maker projects on your bench. Every product is a polished Windows installer or a real piece of open hardware. No "convert your firmware first." No "buy five other things first." Just tools that work.</p>
-    </div>
-    <div class="cx-disc">
-      <div class="cx-disccard cx-rv">
-        <div class="cx-icon"><!-- 3D printer nozzle / extruder -->
-          <svg viewBox="0 0 48 48"><path d="M14 8h20v10l-6 6h-8l-6-6z"/><path d="M20 24l-2 8h12l-2-8"/><path d="M24 32v6"/><path d="M21 40h6"/></svg>
-        </div>
-        <h3>3D Printing</h3>
-        <p>J1 Bridge — drag-drop slicing, live monitoring, camera, all on stock Snapmaker firmware. Public beta; more printers planned.</p>
-      </div>
-      <div class="cx-disccard cx-rv">
-        <div class="cx-icon"><!-- automotive gauge dial -->
-          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><path d="M24 24l8-6"/><circle cx="24" cy="24" r="2.2" fill="currentColor" stroke="none"/><path d="M12 24h3M33 24h3M24 12v3"/></svg>
-        </div>
-        <h3>Automotive</h3>
-        <p>C7 Corvette dashboard kit + the Dash Builder. Swappable live clusters, multimedia, nitrous safety. Raw-CAN passive read — warranty intact.</p>
-      </div>
-      <div class="cx-disccard cx-rv">
-        <div class="cx-icon"><!-- industrial gear -->
-          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="6.5"/><path d="M24 8v5M24 35v5M8 24h5M35 24h5M13 13l3.5 3.5M31.5 31.5L35 35M35 13l-3.5 3.5M16.5 31.5L13 35"/></svg>
-        </div>
-        <h3>Industrial</h3>
-        <p>Operator dashboards and reporting — OPC UA, MQTT, and Modbus.</p>
-      </div>
-      <div class="cx-disccard cx-rv">
-        <div class="cx-icon"><!-- schematic / resistor -->
-          <svg viewBox="0 0 48 48"><path d="M6 24h8l3-7 6 14 6-14 3 7h9"/><circle cx="9" cy="24" r="1.6" fill="currentColor" stroke="none"/><circle cx="39" cy="24" r="1.6" fill="currentColor" stroke="none"/></svg>
-        </div>
-        <h3>Maker &amp; Learn</h3>
-        <p>PLC documentation tooling and vendor-hardware knowledge bases for people who want to <em>understand</em> their gear, not just operate it.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== WHY HONEYBADGER (light, unchanged content) ===== -->
-<section id="why" class="section section-why">
-  <div class="container">
-    <div class="section-head center">
-      <div class="kicker">PHILOSOPHY</div>
-      <h2>Why HONEYBADGER</h2>
-    </div>
-    <img src="assets/images/badger-moto.jpg" class="why-badger" alt="The Honeybadger — full send, doesn't care, ships anyway">
-    <div class="why-quote">
-      The honey badger doesn't care. It chews through firmware bugs vendors won't fix, walks past "this can't be done" forum threads, and ships the polished thing anyway.
-    </div>
-    <ul class="principle-list">
-      <li><strong>One-click installers, no terminals.</strong> A user shouldn't need to know what Python is to use the software.</li>
-      <li><strong>Honest about limits.</strong> Every product ships with a Known Issues page on day one.</li>
-      <li><strong>No telemetry, no analytics, no "phone home."</strong> Your machines are your business.</li>
-      <li><strong>Free + open where it makes sense.</strong> Support the studio if you want to feed the badger; nothing essential locked behind a paywall.</li>
-      <li><strong>Polished or it doesn't ship.</strong> No DOS-window installers. No "pip install" instructions for end users.</li>
-    </ul>
-  </div>
-</section>
-
-<!-- ===== COMMUNITY TEASER (amber CTA band, unchanged) ===== -->
-<section class="section">
-  <div class="container">
-    <div class="split-cta">
-      <div>
-        <h2>Join the build.</h2>
-        <p>A community for owners, tinkerers, and tuners — share builds, get support, and shape what ships next. Discord chat + forums.</p>
-      </div>
-      <a href="community.html" class="btn btn-primary">Enter the Community →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ===== NEWS TEASER (unchanged) ===== -->
-<section class="section section-alt">
-  <div class="container">
-    <div class="section-head">
-      <div class="kicker">FROM THE BENCH</div>
-      <h2>Latest news</h2>
-    </div>
-    <div class="post-grid">
-      <article class="post-card">
-        <div class="post-stripe"></div>
-        <div class="post-body">
-          <span class="post-tag">GAUGE BUILDER</span>
-          <h3>From one gauge to a whole-dash studio</h3>
-          <p>It grew up fast — a drag-and-drop screen designer, 19+ gauge styles, numeric readouts, trend charts, and an animated symbol library (nitrous bottle, controller, telltales). Build a whole cluster; it ships pixel-identical.</p>
-          <span class="post-date">Read more on the News page →</span>
-        </div>
-      </article>
-      <article class="post-card">
-        <div class="post-stripe"></div>
-        <div class="post-body">
-          <span class="post-tag">C7 DASHBOARD</span>
-          <h3>C7 head unit hits hardware prototype</h3>
-          <p>Three integrated dashboards — tuning gauges, 250-app multimedia, and a safety-interlocked nitrous controller — running on a real C7.</p>
-          <span class="post-date">Read more on the News page →</span>
-        </div>
-      </article>
-      <article class="post-card">
-        <div class="post-stripe"></div>
-        <div class="post-body">
-          <span class="post-tag">J1 BRIDGE</span>
-          <h3>J1 Bridge endurance-tested for days</h3>
-          <p>Live monitoring held continuously over multi-day prints on stock V2.8.0 firmware. Installer + launch imminent.</p>
-          <span class="post-date">Read more on the News page →</span>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ===== FOOTER (copied exactly from current homepage) ===== -->
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-cols">
-      <div class="footer-col">
-        <div class="footer-brand-row">
-          <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo">
-          <div>
-            <div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div>
-            <div class="brand-tag-sm">Built honest. Shipped polished.</div>
+      <div class="stage" id="stage">
+        <div class="pane on" data-game="rust">
+          <div class="art" data-art="rust"></div>
+          <div class="cap">
+            <div><h3>Rust</h3><p>Our own Honey Badger server. The Combat HUD reads every hit live; WarDogs three-team zone warfare is being built on top of it.</p></div>
+            <div class="mods">
+              <span>Combat HUD<b class="t">Live</b></span>
+              <span class="dev">WarDogs<b class="t">In dev</b></span>
+            </div>
           </div>
         </div>
-        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
+        <div class="pane" data-game="wow" aria-hidden="true" inert>
+          <div class="art" data-art="wow"></div>
+          <div class="cap">
+            <div><h3>WoW Forever</h3><p>Battle Aura 3.1.1 — a personal damage meter on a cinematic battle scene: floating hit numbers, crits, combos and records.</p></div>
+            <div class="mods">
+              <a href="/downloads.html">Battle Aura 3.1.1<b class="t">Download</b></a>
+            </div>
+          </div>
+        </div>
+        <div class="pane" data-game="eve" aria-hidden="true" inert>
+          <div class="art" data-art="eve"></div>
+          <div class="cap">
+            <div><h3>EVE Frontier</h3><p>Bounty Board puts a price on any pilot and lets hunters collect straight from the chain. War Room turns the public chain into live PvP intel.</p></div>
+            <div class="mods">
+              <a href="/frontier/bounty/">Bounty Board<b class="t">Live</b></a>
+              <span class="dev">War Room<b class="t">Preview</b></span>
+            </div>
+          </div>
+        </div>
+        <div class="pane" data-game="roblox" aria-hidden="true" inert>
+          <div class="art" data-art="roblox"></div>
+          <div class="cap">
+            <div><h3>Roblox</h3><p>Beam Rush — jump the rotating laser arms as they multiply and speed up. Coins and best times persist. In development.</p></div>
+            <div class="mods">
+              <span class="dev">Beam Rush<b class="t">In dev</b></span>
+            </div>
+          </div>
+        </div>
+        <div class="pane" data-game="ore" aria-hidden="true" inert>
+          <div class="art" data-art="ore"></div>
+          <div class="cap">
+            <div><h3>Out of Ore</h3><p>Companion tooling for the mining sandbox is on the workbench. Nothing shipped yet — it goes on this board the day it runs.</p></div>
+            <div class="mods">
+              <span class="dev">Companion<b class="t">Planned</b></span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="footer-col">
-        <h4>Products</h4>
-        <a href="eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="j1-bridge.html">J1 Bridge</a>
-        <a href="c7-dashboard.html">C7 Dashboard</a><a href="nitrous.html">Nitrous Control</a>
-        <a href="builder.html">Dash Builder</a>
-        <a href="industrial.html">Industrial</a>
-      </div>
-      <div class="footer-col">
-        <h4>Resources</h4>
-        <a href="support.html">Support &amp; Docs</a>
-        <a href="downloads.html">Downloads</a>
-        <a href="news.html">News</a>
-        <a href="about.html">About</a>
-      </div>
-      <div class="footer-col">
-        <h4>Community</h4>
-        <a href="community.html">Forums</a>
-        <a href="community.html">Discord</a>
-        <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
-        <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a>
-      </div>
-    </div>
-    <div class="footer-fineprint">
-      <small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small>
     </div>
   </div>
-</footer>
+</section>
 
-<!-- ===== LIGHTBOX ===== -->
-<div class="cx-lb" id="cxLb">
-  <button class="cx-lbx" id="cxLbx" type="button" aria-label="Close">✕</button>
-  <img id="cxLbImg" src="" alt="Inspected screenshot">
-  <div class="cx-lbcap">click anywhere or press Esc to close</div>
+<!-- 02 FEATURED DEPLOYMENT -->
+<section class="blk" id="deployment">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 02 &nbsp;FEATURED DEPLOYMENT</div>
+    <div class="spot">
+      <div class="art" id="spotArt"></div>
+      <div class="sin">
+        <div class="eyebrow">Rust — Honey Badger server — in development</div>
+        <h3>WarDogs</h3>
+        <p>Three teams. One control zone. Every thirty seconds the team holding the zone scores; first to the cap wins. Buy your loadout each life, earn cash for kills, revives and holding ground. The Combat HUD that already runs on the server reads it all live.</p>
+        <div class="spec">
+          <div><b>3</b><span>Teams</span></div>
+          <div><b>1</b><span>Control zone</span></div>
+          <div><b>30s</b><span>Score tick</span></div>
+        </div>
+        <a class="btn solid" href="#arsenal">Back to the arsenal</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 COMMAND CENTER -->
+<section class="blk" id="software">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 03 &nbsp;COMMAND CENTER</div>
+    <div class="h2"><h2>Software &amp; programs</h2><span class="rule"></span><p class="lede">Standalone tools. Read-only, client-side, never touching the game process.</p></div>
+    <div class="soft">
+      <div class="it"><span class="n">01</span><h4>EVE Bounty Board<small class="live">Live — Cycle 7</small></h4><p>Put a price on any pilot in EVE Frontier. Hunters collect straight from the chain. No fee.</p><a href="/frontier/bounty/">Open board</a></div>
+      <div class="it"><span class="n">02</span><h4>War Room<small>Preview build</small></h4><p>Live PvP intel from EVE Frontier's public chain: kills, gate jumps, pilot dossiers, watch alerts to Discord.</p><span class="hold">Opening soon</span></div>
+      <div class="it"><span class="n">03</span><h4>Combat HUD<small class="live">Live — Rust</small></h4><p>Server-side overlay for our Rust server: live DPS meter and loadout menu, reading every hit as it lands.</p><span class="hold">On the server</span></div>
+      <div class="it"><span class="n">04</span><h4>EVE Fleet Foreman<small class="live">Shipped — free</small></h4><p>Fleet-mining assistant for EVE Online: ranks ore by ISK/m³ off live Jita prices, computes fleet yield, splits loot fairly.</p><a href="/eve-fleet-foreman.html">Get it</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" id="commlink">
+  <button class="lbl" id="tickerToggle" aria-pressed="false" aria-label="Comm-Link: pause the activity ticker">
+    <img src="assets/arsenal/emblem_mark.jpg?v=20261012c" alt="" width="320" height="320">Comm-Link</button>
+  <div class="viewport"><div class="track" id="track"></div></div>
 </div>
 
-<script src="assets/js/nav.js?v=4"></script>
+<footer>
+  <span>honeybadger.software — independent mods, servers &amp; tactical software. All rights reserved.</span>
+  <span><a href="/downloads.html">Downloads</a> &nbsp;·&nbsp; <a href="#" data-discord>Join The Den</a> &nbsp;·&nbsp; <a href="/support.html">Support</a> &nbsp;·&nbsp; <a href="/industrial.html">Industrial</a></span>
+</footer>
+
+</div><!-- /page -->
+
 <script>
-/* ---------- scroll-reveal for cinematic blocks (own .cx-rv class) ---------- */
 (function(){
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var items = [].slice.call(document.querySelectorAll('.cx-rv'));
-  if (reduce || !('IntersectionObserver' in window)) {
-    items.forEach(function(el){ el.classList.add('in'); });
-  } else {
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-      });
-    }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
-    items.forEach(function(el){ io.observe(el); });
-    /* safety finalizer — never leave content invisible if observer misfires */
-    setTimeout(function(){ items.forEach(function(el){ el.classList.add('in'); }); }, 1400);
-  }
-})();
-
-/* ---------- count-up stats as evidence ---------- */
-(function(){
-  var done = false;
-  function run(instant){
-    if (done) return; done = true;
-    document.querySelectorAll('#cxStats b').forEach(function(b){
-      var target = parseInt(b.dataset.count, 10) || 0;
-      var finished = false;
-      function set(v){ b.innerHTML = v; }
-      function finalize(){ finished = true; set(target); }
-      if (instant || target === 0){ finalize(); return; }
-      var t0 = null;
-      function tick(ts){
-        if (finished) return;                 /* never overwrite the settled value */
-        if (!t0) t0 = ts;
-        var p = Math.min(1, (ts - t0) / 1100), eased = 1 - Math.pow(1 - p, 3);
-        set(Math.round(target * eased));
-        if (p < 1) requestAnimationFrame(tick); else finished = true;
-      }
-      requestAnimationFrame(tick);
-      /* rAF is suspended in background tabs — guarantee the real number lands
-         and lock it so a late-scheduled tick can't reopen it */
-      setTimeout(finalize, 1500);
-    });
-  }
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || !('IntersectionObserver' in window)) { run(true); }
-  else {
-    var so = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if (e.isIntersecting) run(); });
-    }, {threshold:.4});
-    var sl = document.getElementById('cxStats'); if (sl) so.observe(sl);
-    setTimeout(run, 2500);
-  }
-})();
-
-/* ---------- click-to-inspect lightbox on real screenshots ---------- */
-(function(){
-  var lb = document.getElementById('cxLb'), im = document.getElementById('cxLbImg');
-  function open(src, alt){ im.src = src; im.alt = alt || 'Inspected screenshot';
-    lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
-  function close(){ lb.classList.remove('open'); document.body.style.overflow = '';
-    /* release the image so a huge screenshot isn't held in memory */
-    setTimeout(function(){ if(!lb.classList.contains('open')) im.src=''; }, 200); }
-  document.querySelectorAll('[data-full]').forEach(function(fig){
-    fig.addEventListener('click', function(){
-      var img = fig.querySelector('img');
-      open(fig.dataset.full, img ? img.alt : '');
-    });
+  // ---- art sources (real Tripo renders; swap files here as new renders land) ----
+  var V = "?v=20261012c";                        // bump when an art file is swapped so browsers/CDN refetch it
+  var ART = { rust:"assets/arsenal/rust.jpg"+V, wow:"assets/arsenal/wow.jpg"+V, eve:"assets/arsenal/eve.jpg"+V,
+              roblox:"assets/arsenal/roblox.jpg"+V, ore:"assets/arsenal/ore.jpg"+V };
+  var HERO = "assets/arsenal/hero.jpg"+V;        // 21:9 hero: operator + stencil emblem painted on the blast wall
+  var SPOT = "assets/arsenal/wardogs.jpg"+V;     // WARDOGS scene (the render Michael picked), headline band cropped off
+  document.querySelectorAll('[data-art]').forEach(function(el){
+    var k = el.getAttribute('data-art'); if(ART[k]) el.style.backgroundImage = "url('"+ART[k]+"')";
   });
-  document.getElementById('cxLbx').addEventListener('click', close);
-  lb.addEventListener('click', function(e){ if (e.target === lb || e.target === im) close(); });
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+  var ha = document.getElementById('heroArt'); if(ha) ha.style.backgroundImage = "url('"+HERO+"')";
+  var sa = document.getElementById('spotArt'); if(sa) sa.style.backgroundImage = "url('"+SPOT+"')";
+
+  // ---- arsenal: stacked panes crossfade; the incoming pane gets a 90 ms brightness spike (monitor-feed switch);
+  //      aria-pressed / aria-hidden / inert stay in sync; only the active pane's video (if any) plays ----
+  var roster  = document.getElementById('roster');
+  var buttons = [].slice.call(roster.querySelectorAll('button[data-game]'));
+  var panes   = [].slice.call(document.querySelectorAll('#stage .pane'));
+  var reduce  = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var current = 'rust';
+  function select(game){
+    if(game === current) return;
+    current = game;
+    buttons.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.game === game)); });
+    panes.forEach(function(p){
+      var on = p.dataset.game === game;
+      p.classList.toggle('on', on);
+      if(on){
+        p.removeAttribute('aria-hidden'); p.removeAttribute('inert');
+        if(!reduce){ p.classList.add('spike'); setTimeout(function(){ p.classList.remove('spike'); }, 90); }
+      } else { p.setAttribute('aria-hidden','true'); p.setAttribute('inert',''); }
+      var v = p.querySelector('video');
+      if(v){ if(on){ v.play && v.play().catch(function(){}); } else { v.pause && v.pause(); } }
+    });
+  }
+  roster.addEventListener('click',     function(e){ var b = e.target.closest('button[data-game]'); if(b) select(b.dataset.game); });
+  roster.addEventListener('mouseover', function(e){ var b = e.target.closest('button[data-game]'); if(b) select(b.dataset.game); });
+
+  // ---- "soon" tabs: no destination yet (Discord URL + Intel page pending) — never jump to top, never 404 ----
+  document.querySelectorAll('a[data-soon], a[data-discord]').forEach(function(a){
+    a.addEventListener('click', function(e){ if(a.getAttribute('href') === '#') e.preventDefault(); });
+  });
+
+  // ---- comm-link: two identical groups so the -50% loop is seamless. Every line is a verified fact. ----
+  var lines = [
+    ["RUST // COMBAT HUD",  "live DPS meter running on Honey Badger main"],
+    ["RUST // WARDOGS",     "3-team sector control — in development"],
+    ["WOW FOREVER",         "Battle Aura 3.1.1 released on CurseForge + WoWInterface"],
+    ["EVE FRONTIER",        "Bounty Board live on Cycle 7 — no fee"],
+    ["EVE FRONTIER",        "War Room preview — public-chain PvP intel"],
+    ["ROBLOX",              "Beam Rush — in development"]
+  ];
+  var one = lines.map(function(l){ return "<span><b>["+l[0]+"]</b> "+l[1]+"</span>"; }).join("");
+  document.getElementById('track').innerHTML = '<div class="grp">'+one+'</div><div class="grp" aria-hidden="true">'+one+'</div>';
+  var ticker = document.getElementById('commlink'), toggle = document.getElementById('tickerToggle');
+  toggle.addEventListener('click', function(){
+    var paused = ticker.classList.toggle('paused');
+    toggle.setAttribute('aria-pressed', String(paused));
+    toggle.setAttribute('aria-label', paused ? 'Comm-Link: resume the activity ticker' : 'Comm-Link: pause the activity ticker');
+  });
 })();
 </script>
 </body>
