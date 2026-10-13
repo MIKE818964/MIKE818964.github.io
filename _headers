@@ -10,3 +10,9 @@
 # Bounty Board (EVE Frontier mod): always revalidate, so a new build reaches players at once.
 /frontier/bounty/*
   Cache-Control: no-cache
+
+# Homepage: always revalidate so a shipped change reaches visitors at once (art is version-stamped).
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
