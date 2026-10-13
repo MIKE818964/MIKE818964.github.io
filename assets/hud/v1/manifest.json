@@ -1,0 +1,833 @@
+{
+  "source": "design/tripo/hud_2026-10-10/202610101923_dd7927cb_0.png",
+  "source_size": [
+    1792,
+    1024
+  ],
+  "reference_size": [
+    1920,
+    1080
+  ],
+  "status": "ESTIMATE - measured by eye from the full-res render 2026-10-13; adjust after viewing PREVIEW.png",
+  "notes": [
+    "Box map for 202610101923_dd7927cb_0.png = the APPROVED top-band master (gunmetal band under the compass, killfeed rows top-right, skull hit pop at the crosshair).",
+    "Pixel boxes are [x0, y0, x1, y1] in the 1792x1024 render. text_boxes are the baked sample values the live plugin redraws (DPS, headshots, last hit, target, acc, names, distances).",
+    "The badge (badger + HONEY BADGER plate) is brand art and keeps its text."
+  ],
+  "slice_border_ltrb": [
+    26,
+    22,
+    26,
+    22
+  ],
+  "assets": {
+    "band_frame.png": {
+      "source_box": [
+        245,
+        22,
+        1550,
+        172
+      ],
+      "size": [
+        1305,
+        150
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-697.500 -181.406",
+        "OffsetMax": "700.714 -23.203"
+      },
+      "text_boxes": [
+        [
+          445,
+          55,
+          505,
+          76
+        ],
+        [
+          438,
+          84,
+          602,
+          142
+        ],
+        [
+          625,
+          55,
+          740,
+          76
+        ],
+        [
+          655,
+          88,
+          708,
+          142
+        ],
+        [
+          852,
+          44,
+          990,
+          166
+        ],
+        [
+          1022,
+          50,
+          1105,
+          70
+        ],
+        [
+          1028,
+          80,
+          1098,
+          116
+        ],
+        [
+          1022,
+          118,
+          1108,
+          150
+        ],
+        [
+          1152,
+          50,
+          1225,
+          70
+        ],
+        [
+          1152,
+          80,
+          1280,
+          110
+        ],
+        [
+          1152,
+          114,
+          1210,
+          136
+        ],
+        [
+          1152,
+          138,
+          1295,
+          153
+        ],
+        [
+          1336,
+          55,
+          1385,
+          76
+        ],
+        [
+          1332,
+          95,
+          1405,
+          138
+        ],
+        [
+          1446,
+          58,
+          1508,
+          82
+        ]
+      ]
+    },
+    "band_frame_cleaned.png": {
+      "source_box": [
+        245,
+        22,
+        1550,
+        172
+      ],
+      "size": [
+        1305,
+        150
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-697.500 -181.406",
+        "OffsetMax": "700.714 -23.203"
+      },
+      "text_boxes": [
+        [
+          445,
+          55,
+          505,
+          76
+        ],
+        [
+          438,
+          84,
+          602,
+          142
+        ],
+        [
+          625,
+          55,
+          740,
+          76
+        ],
+        [
+          655,
+          88,
+          708,
+          142
+        ],
+        [
+          852,
+          44,
+          990,
+          166
+        ],
+        [
+          1022,
+          50,
+          1105,
+          70
+        ],
+        [
+          1028,
+          80,
+          1098,
+          116
+        ],
+        [
+          1022,
+          118,
+          1108,
+          150
+        ],
+        [
+          1152,
+          50,
+          1225,
+          70
+        ],
+        [
+          1152,
+          80,
+          1280,
+          110
+        ],
+        [
+          1152,
+          114,
+          1210,
+          136
+        ],
+        [
+          1152,
+          138,
+          1295,
+          153
+        ],
+        [
+          1336,
+          55,
+          1385,
+          76
+        ],
+        [
+          1332,
+          95,
+          1405,
+          138
+        ],
+        [
+          1446,
+          58,
+          1508,
+          82
+        ]
+      ]
+    },
+    "band_frame_tl.png": {
+      "source_box": [
+        245,
+        22,
+        271,
+        44
+      ],
+      "size": [
+        26,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-697.500 -46.406",
+        "OffsetMax": "-669.643 -23.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame.png"
+    },
+    "band_frame_tl_cleaned.png": {
+      "source_box": [
+        245,
+        22,
+        271,
+        44
+      ],
+      "size": [
+        26,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-697.500 -46.406",
+        "OffsetMax": "-669.643 -23.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame_cleaned.png"
+    },
+    "band_frame_t.png": {
+      "source_box": [
+        271,
+        22,
+        1524,
+        44
+      ],
+      "size": [
+        1253,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-669.643 -46.406",
+        "OffsetMax": "672.857 -23.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame.png"
+    },
+    "band_frame_t_cleaned.png": {
+      "source_box": [
+        271,
+        22,
+        1524,
+        44
+      ],
+      "size": [
+        1253,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-669.643 -46.406",
+        "OffsetMax": "672.857 -23.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame_cleaned.png"
+    },
+    "band_frame_tr.png": {
+      "source_box": [
+        1524,
+        22,
+        1550,
+        44
+      ],
+      "size": [
+        26,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "672.857 -46.406",
+        "OffsetMax": "700.714 -23.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame.png"
+    },
+    "band_frame_tr_cleaned.png": {
+      "source_box": [
+        1524,
+        22,
+        1550,
+        44
+      ],
+      "size": [
+        26,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "672.857 -46.406",
+        "OffsetMax": "700.714 -23.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame_cleaned.png"
+    },
+    "band_frame_l.png": {
+      "source_box": [
+        245,
+        44,
+        271,
+        150
+      ],
+      "size": [
+        26,
+        106
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-697.500 -158.203",
+        "OffsetMax": "-669.643 -46.406"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame.png"
+    },
+    "band_frame_l_cleaned.png": {
+      "source_box": [
+        245,
+        44,
+        271,
+        150
+      ],
+      "size": [
+        26,
+        106
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-697.500 -158.203",
+        "OffsetMax": "-669.643 -46.406"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame_cleaned.png"
+    },
+    "band_frame_c.png": {
+      "source_box": [
+        271,
+        44,
+        1524,
+        150
+      ],
+      "size": [
+        1253,
+        106
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-669.643 -158.203",
+        "OffsetMax": "672.857 -46.406"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame.png"
+    },
+    "band_frame_c_cleaned.png": {
+      "source_box": [
+        271,
+        44,
+        1524,
+        150
+      ],
+      "size": [
+        1253,
+        106
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-669.643 -158.203",
+        "OffsetMax": "672.857 -46.406"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame_cleaned.png"
+    },
+    "band_frame_r.png": {
+      "source_box": [
+        1524,
+        44,
+        1550,
+        150
+      ],
+      "size": [
+        26,
+        106
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "672.857 -158.203",
+        "OffsetMax": "700.714 -46.406"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame.png"
+    },
+    "band_frame_r_cleaned.png": {
+      "source_box": [
+        1524,
+        44,
+        1550,
+        150
+      ],
+      "size": [
+        26,
+        106
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "672.857 -158.203",
+        "OffsetMax": "700.714 -46.406"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame_cleaned.png"
+    },
+    "band_frame_bl.png": {
+      "source_box": [
+        245,
+        150,
+        271,
+        172
+      ],
+      "size": [
+        26,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-697.500 -181.406",
+        "OffsetMax": "-669.643 -158.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame.png"
+    },
+    "band_frame_bl_cleaned.png": {
+      "source_box": [
+        245,
+        150,
+        271,
+        172
+      ],
+      "size": [
+        26,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-697.500 -181.406",
+        "OffsetMax": "-669.643 -158.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame_cleaned.png"
+    },
+    "band_frame_b.png": {
+      "source_box": [
+        271,
+        150,
+        1524,
+        172
+      ],
+      "size": [
+        1253,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-669.643 -181.406",
+        "OffsetMax": "672.857 -158.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame.png"
+    },
+    "band_frame_b_cleaned.png": {
+      "source_box": [
+        271,
+        150,
+        1524,
+        172
+      ],
+      "size": [
+        1253,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-669.643 -181.406",
+        "OffsetMax": "672.857 -158.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame_cleaned.png"
+    },
+    "band_frame_br.png": {
+      "source_box": [
+        1524,
+        150,
+        1550,
+        172
+      ],
+      "size": [
+        26,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "672.857 -181.406",
+        "OffsetMax": "700.714 -158.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame.png"
+    },
+    "band_frame_br_cleaned.png": {
+      "source_box": [
+        1524,
+        150,
+        1550,
+        172
+      ],
+      "size": [
+        26,
+        22
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "672.857 -181.406",
+        "OffsetMax": "700.714 -158.203"
+      },
+      "text_boxes": [],
+      "slice_of": "band_frame_cleaned.png"
+    },
+    "badge.png": {
+      "source_box": [
+        262,
+        32,
+        418,
+        162
+      ],
+      "size": [
+        156,
+        130
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-679.286 -170.859",
+        "OffsetMax": "-512.143 -33.750"
+      },
+      "text_boxes": []
+    },
+    "badge_cleaned.png": {
+      "source_box": [
+        262,
+        32,
+        418,
+        162
+      ],
+      "size": [
+        156,
+        130
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-679.286 -170.859",
+        "OffsetMax": "-512.143 -33.750"
+      },
+      "text_boxes": []
+    },
+    "body_silhouette.png": {
+      "source_box": [
+        765,
+        35,
+        836,
+        164
+      ],
+      "size": [
+        71,
+        129
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-140.357 -172.969",
+        "OffsetMax": "-64.286 -36.914"
+      },
+      "text_boxes": []
+    },
+    "body_silhouette_cleaned.png": {
+      "source_box": [
+        765,
+        35,
+        836,
+        164
+      ],
+      "size": [
+        71,
+        129
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-140.357 -172.969",
+        "OffsetMax": "-64.286 -36.914"
+      },
+      "text_boxes": []
+    },
+    "weapon_icon.png": {
+      "source_box": [
+        1415,
+        88,
+        1536,
+        142
+      ],
+      "size": [
+        121,
+        54
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "556.071 -149.766",
+        "OffsetMax": "685.714 -92.812"
+      },
+      "text_boxes": []
+    },
+    "weapon_icon_cleaned.png": {
+      "source_box": [
+        1415,
+        88,
+        1536,
+        142
+      ],
+      "size": [
+        121,
+        54
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "556.071 -149.766",
+        "OffsetMax": "685.714 -92.812"
+      },
+      "text_boxes": []
+    },
+    "killfeed_row.png": {
+      "source_box": [
+        1172,
+        183,
+        1550,
+        221
+      ],
+      "size": [
+        378,
+        38
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "295.714 -233.086",
+        "OffsetMax": "700.714 -193.008"
+      },
+      "text_boxes": [
+        [
+          1224,
+          191,
+          1326,
+          213
+        ],
+        [
+          1398,
+          191,
+          1446,
+          213
+        ],
+        [
+          1452,
+          191,
+          1541,
+          213
+        ]
+      ]
+    },
+    "killfeed_row_cleaned.png": {
+      "source_box": [
+        1172,
+        183,
+        1550,
+        221
+      ],
+      "size": [
+        378,
+        38
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "295.714 -233.086",
+        "OffsetMax": "700.714 -193.008"
+      },
+      "text_boxes": [
+        [
+          1224,
+          191,
+          1326,
+          213
+        ],
+        [
+          1398,
+          191,
+          1446,
+          213
+        ],
+        [
+          1452,
+          191,
+          1541,
+          213
+        ]
+      ]
+    },
+    "hitpop_skull.png": {
+      "source_box": [
+        866,
+        434,
+        926,
+        494
+      ],
+      "size": [
+        60,
+        60
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-32.143 -521.016",
+        "OffsetMax": "32.143 -457.734"
+      },
+      "text_boxes": []
+    },
+    "hitpop_skull_cleaned.png": {
+      "source_box": [
+        866,
+        434,
+        926,
+        494
+      ],
+      "size": [
+        60,
+        60
+      ],
+      "cui": {
+        "AnchorMin": "0.5 1",
+        "AnchorMax": "0.5 1",
+        "OffsetMin": "-32.143 -521.016",
+        "OffsetMax": "32.143 -457.734"
+      },
+      "text_boxes": []
+    }
+  }
+}
