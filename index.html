@@ -122,6 +122,7 @@
   .mods .t{color:var(--amber); margin-left:8px}
   .mods .dev{border-left-color:var(--line2)} .mods .dev .t{color:var(--mute)}
   .mods a:hover .t, .mods a:focus-visible .t{text-decoration:underline}
+  .cap h3 a{transition:color var(--snap)} .cap h3 a:hover, .cap h3 a:focus-visible{color:var(--amber)}
 
   /* ---------- 02 featured deployment ---------- */
   .spot{position:relative; min-height:480px; display:flex; align-items:center; overflow:hidden; border:1px solid var(--line)}
@@ -263,10 +264,11 @@
         <div class="pane" data-game="eve" aria-hidden="true" inert>
           <div class="art" data-art="eve"></div>
           <div class="cap">
-            <div><h3>EVE Frontier</h3><p>Bounty Board puts a price on any pilot and lets hunters collect straight from the chain. War Room turns the public chain into live PvP intel.</p></div>
+            <div><h3><a href="/frontier/">EVE Frontier</a></h3><p>Bounty Board puts a price on any pilot and lets hunters collect straight from the chain. War Room turns the public chain into live PvP intel.</p></div>
             <div class="mods">
               <a href="/frontier/bounty/">Bounty Board<b class="t">Live</b></a>
-              <span class="dev">War Room<b class="t">Preview</b></span>
+              <a href="/frontier/warroom/">War Room<b class="t">Live</b></a>
+              <a href="/frontier/">Both mods<b class="t">Overview</b></a>
             </div>
           </div>
         </div>
@@ -323,7 +325,7 @@
     <div class="h2"><h2>Software &amp; programs</h2><span class="rule"></span><p class="lede">Standalone tools. Read-only, client-side, never touching the game process.</p></div>
     <div class="soft">
       <div class="it"><span class="n">01</span><h4>EVE Bounty Board<small class="live">Live — Cycle 7</small></h4><p>Put a price on any pilot in EVE Frontier. Hunters collect straight from the chain. No fee.</p><a href="/frontier/bounty/">Open board</a></div>
-      <div class="it"><span class="n">02</span><h4>War Room<small>Preview build</small></h4><p>Live PvP intel from EVE Frontier's public chain: kills, gate jumps, pilot dossiers, watch alerts to Discord.</p><span class="hold">Opening soon</span></div>
+      <div class="it"><span class="n">02</span><h4>War Room<small class="live">Live — Cycle 7</small></h4><p>Live PvP intel from EVE Frontier's public chain: kills, gate jumps, pilot dossiers, watch alerts. Discord relay coming.</p><a href="/frontier/warroom/">Open War Room</a></div>
       <div class="it"><span class="n">03</span><h4>Combat HUD<small class="live">Live — Rust</small></h4><p>Server-side overlay for our Rust server: live DPS meter and loadout menu, reading every hit as it lands.</p><span class="hold">On the server</span></div>
       <div class="it"><span class="n">04</span><h4>EVE Fleet Foreman<small class="live">Shipped — free</small></h4><p>Fleet-mining assistant for EVE Online: ranks ore by ISK/m³ off live Jita prices, computes fleet yield, splits loot fairly.</p><a href="/eve-fleet-foreman.html">Get it</a></div>
     </div>
@@ -393,7 +395,7 @@
     ["RUST // WARDOGS",     "3-team sector control — in development"],
     ["WOW FOREVER",         "Battle Aura 3.1.1 released on CurseForge + WoWInterface"],
     ["EVE FRONTIER",        "Bounty Board live on Cycle 7 — no fee"],
-    ["EVE FRONTIER",        "War Room preview — public-chain PvP intel"],
+    ["EVE FRONTIER",        "War Room live on Cycle 7 — public-chain PvP intel"],
     ["ROBLOX",              "Beam Rush — in development"]
   ];
   var one = lines.map(function(l){ return "<span><b>["+l[0]+"]</b> "+l[1]+"</span>"; }).join("");

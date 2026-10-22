@@ -11,6 +11,12 @@
 /frontier/bounty/*
   Cache-Control: no-cache
 
+# EVE Frontier hub page: always revalidate (screenshots are plain files under /frontier/assets/shots/).
+/frontier/
+  Cache-Control: no-cache
+/frontier/index.html
+  Cache-Control: no-cache
+
 # Homepage: always revalidate so a shipped change reaches visitors at once (art is version-stamped).
 /
   Cache-Control: no-cache

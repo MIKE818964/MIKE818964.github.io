@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EVE Frontier — War Room &amp; Bounty Board | Honey Badger</title>
+<meta name="description" content="Two free EVE Frontier mods by Honey Badger, live on Cycle 7 Stillness: War Room turns the public chain into PvP intel, Bounty Board puts a price on any pilot and pays the hunter from the chain.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Honey Badger">
+<meta property="og:title" content="EVE Frontier — War Room &amp; Bounty Board">
+<meta property="og:description" content="Live PvP intel from the public chain, and bounties that pay the hunter straight from the chain. Free, read-only, made for EVE Frontier.">
+<meta property="og:url" content="https://honeybadger.software/frontier/">
+<meta property="og:image" content="https://honeybadger.software/frontier/assets/shots/warroom-map.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ---- palette + type: identical to the landing page (/index.html) so this reads as the same site ---- */
+  :root{
+    --bg:#0A0A0B; --ink:#EAE6DF; --mute:#8E8A84; --amber:#F5B82E;
+    --line:rgba(234,230,223,.08); --line2:#262629;
+    --disp:"Teko",Impact,"Arial Narrow",sans-serif;          /* tall industrial display */
+    --ui:"Chakra Petch","Arial Narrow",sans-serif;            /* wordmark */
+    --mono:"JetBrains Mono",Consolas,monospace;               /* every label, tag, description */
+    --snap:120ms cubic-bezier(.16,1,.3,1);                    /* hard-cut mechanical motion */
+  }
+  *{box-sizing:border-box; border-radius:0 !important}        /* 0px law: nothing on this site is rounded */
+  html,body{margin:0; background:var(--bg)}
+  body{color:var(--ink); font-family:var(--mono); font-size:14px; line-height:1.55;
+       -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative}
+  a{color:inherit; text-decoration:none}
+  img{display:block; max-width:100%}
+
+  /* concrete under everything + film grain over everything (same as landing) */
+  body::before{content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.08;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
+    background-size:420px 420px}
+  body::after{content:""; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.055;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='11'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+    background-size:200px 200px}
+  .page{position:relative; z-index:1}
+
+  /* ---------- nav (copied from landing) ---------- */
+  header{position:sticky; top:0; z-index:60; background:rgba(10,10,11,.94); border-bottom:1px solid var(--line);
+         backdrop-filter:blur(8px); overflow:visible}
+  .nav{display:flex; align-items:center; gap:26px; height:66px; padding:0 28px; max-width:1640px; margin:0 auto}
+  .mark{display:flex; align-items:center; gap:14px; height:66px; position:relative}
+  .mark img{height:60px; width:auto; mix-blend-mode:screen; transform:translateY(7px);
+            filter:drop-shadow(0 0 16px rgba(245,184,46,.18));
+            -webkit-mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%);
+            mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%)}
+  .word{position:relative; font-family:var(--ui); font-weight:700; font-size:15px; letter-spacing:.14em;
+        text-transform:uppercase; color:var(--ink); filter:url(#chip); padding-top:8px}
+  .word small{position:absolute; right:0; top:-4px; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
+  nav.tabs{display:flex; flex:1; gap:2px; flex-wrap:wrap; justify-content:flex-end}
+  nav.tabs a{font:500 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--mute);
+             padding:13px 12px; border-bottom:2px solid transparent; transition:color var(--snap), border-color var(--snap)}
+  nav.tabs a:hover, nav.tabs a:focus-visible, nav.tabs a.on{color:var(--ink); border-color:var(--amber)}
+  nav.tabs a[data-soon]{opacity:.5}
+  nav.tabs a[data-soon]::after{content:" ·SOON"; color:var(--amber); font-size:9px; letter-spacing:.12em}
+
+  /* ---------- hero: a real War Room capture full-bleed, type in the darkened left ---------- */
+  .hero{position:relative; min-height:76vh; display:grid; align-items:center; overflow:hidden; border-bottom:1px solid var(--line)}
+  .hero .art{position:absolute; inset:0; background:#000 url("/frontier/assets/shots/warroom-map.jpg") 70% center/cover no-repeat}
+  .hero .art::after{content:""; position:absolute; inset:0; background:
+    linear-gradient(to right, #0A0A0B 0%, rgba(10,10,11,.9) 26%, rgba(10,10,11,.35) 54%, rgba(10,10,11,.05) 76%, rgba(10,10,11,.6) 100%),
+    linear-gradient(to bottom, rgba(10,10,11,.8) 0%, rgba(10,10,11,0) 24%, rgba(10,10,11,0) 66%, #0A0A0B 100%)}
+  .hero .in{position:relative; z-index:2; width:100%; max-width:1640px; margin:0 auto; padding:84px 40px 72px}
+  .eyebrow{font:500 11px/1.5 var(--mono); letter-spacing:.26em; text-transform:uppercase; color:var(--amber)}
+  .hero h1{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.88; letter-spacing:.005em;
+           font-size:clamp(56px,7.4vw,120px); margin:14px 0 12px; max-width:11ch;
+           text-shadow:0 6px 40px rgba(0,0,0,.85)}
+  .hero h1 em{font-style:normal; color:var(--amber)}
+  .hero p{max-width:54ch; color:#B9B4AC; margin:0 0 32px; text-shadow:0 2px 18px rgba(0,0,0,.9)}
+  .hero .cred{margin:26px 0 0; font:500 10px/1.6 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--mute)}
+  .cta{display:flex; gap:14px; flex-wrap:wrap; align-items:center}
+  .btn{--n:12px; display:inline-block; font:700 12px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase;
+       padding:17px 28px; color:var(--amber); background:rgba(245,184,46,.07); border:1px solid var(--amber);
+       clip-path:polygon(0 0, calc(100% - var(--n)) 0, 100% var(--n), 100% 100%, var(--n) 100%, 0 calc(100% - var(--n)));
+       transition:background var(--snap), color var(--snap)}
+  .btn.solid{background:var(--amber); color:#0A0A0B}
+  .btn:hover, .btn:focus-visible{background:var(--amber); color:#0A0A0B}
+  .btn.solid:hover, .btn.solid:focus-visible{background:var(--ink); color:#0A0A0B}
+  .btn:focus-visible{outline:2px solid var(--ink); outline-offset:-5px}
+  .tlink{font:700 11px/1.4 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); padding:8px 0}
+  .tlink small{color:var(--mute); font-weight:500; letter-spacing:.14em}
+  .tlink:hover, .tlink:focus-visible{text-decoration:underline}
+
+  /* ---------- section frame (landing grammar): hairlines, "// 01" numbers, crosshair ticks ---------- */
+  section.blk{position:relative; border-top:1px solid var(--line); overflow-x:clip}   /* corner ticks never widen the page */
+  section.blk > .in{max-width:1640px; margin:0 auto; padding:76px 40px 84px; position:relative}
+  .num{position:absolute; left:40px; top:16px; font:500 11px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
+  .tick{position:absolute; width:11px; height:11px; pointer-events:none}
+  .tick::before,.tick::after{content:""; position:absolute; background:rgba(234,230,223,.38)}
+  .tick::before{left:5px; top:0; width:1px; height:11px}
+  .tick::after{top:5px; left:0; width:11px; height:1px}
+  .tick.tl{left:-6px; top:-6px} .tick.tr{right:-6px; top:-6px}
+  .h2{display:flex; align-items:flex-end; gap:22px; margin:0 0 30px}
+  .h2 h2{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; letter-spacing:.01em;
+         font-size:clamp(46px,5.6vw,84px); margin:0}
+  .h2 .rule{flex:1; height:1px; background:linear-gradient(90deg,var(--amber),transparent 70%); margin-bottom:12px}
+  .h2 .lede{color:var(--mute); max-width:44ch; margin:0 0 6px}
+  .sub{font:500 11px/1 var(--mono); letter-spacing:.24em; text-transform:uppercase; color:var(--amber); margin:56px 0 0; display:flex; gap:16px; align-items:center}
+  .sub::after{content:""; flex:1; height:1px; background:var(--line)}
+
+  /* ---------- screen feed: roster of real captures + stacked stage (landing "arsenal" grammar) ---------- */
+  .feed{display:grid; grid-template-columns:300px minmax(0,1fr); border:1px solid var(--line)}
+  .roster{display:flex; flex-direction:column; border-right:1px solid var(--line)}
+  .roster button{display:grid; grid-template-columns:58px 1fr; gap:16px; align-items:center; text-align:left; cursor:pointer;
+    background:transparent; border:0; border-bottom:1px solid var(--line); color:var(--mute); padding:17px 18px; flex:1;
+    font:500 12px/1.3 var(--mono); letter-spacing:.16em; text-transform:uppercase; transition:color var(--snap), background var(--snap)}
+  .roster button:last-child{border-bottom:0}
+  .roster button .thumb{width:58px; height:33px; background:#000 center/cover no-repeat; filter:grayscale(.55) brightness(.7); transition:filter var(--snap)}
+  .roster button:hover, .roster button:focus-visible{color:var(--ink); background:rgba(234,230,223,.03)}
+  .roster button[aria-pressed="true"]{color:var(--ink); background:linear-gradient(90deg,rgba(245,184,46,.11),transparent 70%); box-shadow:inset 3px 0 0 var(--amber)}
+  .roster button[aria-pressed="true"] .thumb{filter:none}
+  .stage{display:grid; background:#000; min-width:0}
+  .pane{grid-area:1/1; display:flex; flex-direction:column; opacity:0; visibility:hidden; transition:opacity var(--snap), visibility 0s linear 120ms; min-width:0}
+  .pane.on{opacity:1; visibility:visible; transition:opacity var(--snap)}
+  .pane img{width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; transition:filter 90ms linear}
+  .pane.spike img{filter:brightness(1.6) contrast(1.3)}
+  .pane .cap{display:grid; grid-template-columns:230px minmax(0,1fr); align-items:baseline; align-content:start; flex:1; gap:24px; padding:20px 26px 22px; border-top:1px solid var(--line); background:var(--bg)}
+  .pane .cap h3{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.9; font-size:38px; margin:0}
+  .pane .cap p{margin:0; color:var(--mute); font-size:13px; max-width:70ch}
+  .note{margin:12px 0 0; font:500 10px/1.6 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--mute)}
+
+  /* ---------- labelled list: hairline rows, never cards (landing "command center" grammar) ---------- */
+  .rows{border-top:1px solid var(--line); margin-top:22px}
+  .rows .it{display:grid; grid-template-columns:34px 280px minmax(0,1fr); gap:22px; align-items:baseline; padding:22px 0; border-bottom:1px solid var(--line)}
+  .it .n{font:500 11px/1 var(--mono); color:var(--amber); letter-spacing:.2em}
+  .it h4{font-family:var(--disp); font-weight:700; font-size:32px; line-height:.9; text-transform:uppercase; margin:0; letter-spacing:.02em}
+  .it h4 small{display:block; font:500 9px/1.4 var(--mono); letter-spacing:.22em; color:var(--mute); margin-top:8px}
+  .it h4 small.live{color:var(--amber)}
+  .it p{margin:0; color:var(--mute); max-width:78ch}
+  .it p b{color:var(--ink); font-weight:500}
+
+  /* ---------- status strip: tagged hairline chips, amber = live, grey = not yet ---------- */
+  .status{display:grid; grid-template-columns:180px minmax(0,1fr); gap:10px 22px; align-items:start; margin-top:40px;
+          padding:22px 0; border-top:1px solid var(--amber); border-bottom:1px solid var(--line)}
+  .status .lbl{font:700 11px/1.5 var(--mono); letter-spacing:.22em; text-transform:uppercase; color:var(--ink); padding-top:7px}
+  .status .lbl small{display:block; font-weight:500; color:var(--mute); letter-spacing:.18em}
+  .tags{display:flex; flex-wrap:wrap; gap:8px; margin:0; padding:0; list-style:none}
+  .tags li{font:500 11px/1.3 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--ink);
+           border-left:2px solid var(--amber); padding:7px 11px; background:rgba(234,230,223,.03)}
+  .tags li b{color:var(--amber); font-weight:500; margin-left:8px}
+  .tags li.wait{border-left-color:var(--line2); color:var(--mute)} .tags li.wait b{color:var(--mute)}
+  .act{display:flex; gap:22px 28px; flex-wrap:wrap; align-items:center; margin-top:34px}
+
+  /* ---------- bounty board: plain-English copy left, real capture right ---------- */
+  .duo{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:48px; align-items:start}
+  .copy p{margin:0 0 18px; color:var(--mute); max-width:56ch}
+  .copy p:first-child{color:var(--ink); font-size:16px; line-height:1.6}
+  .copy .act{margin-top:28px}
+  figure.shot{margin:0; border:1px solid var(--line); background:#000; position:relative}
+  figure.shot img{width:100%; height:auto; aspect-ratio:16/9; object-fit:cover}
+  figure.shot figcaption{padding:14px 18px; border-top:1px solid var(--line); font:500 10px/1.6 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--mute); background:var(--bg)}
+  figure.shot figcaption b{color:var(--amber); font-weight:500}
+  figure.shot .tick.bl{left:-6px; bottom:-6px} figure.shot .tick.br{right:-6px; bottom:-6px}
+
+  /* ---------- legal line ---------- */
+  .legal{margin:34px 0 0; font:500 11px/1.7 var(--mono); letter-spacing:.06em; color:var(--mute)}
+
+  footer{border-top:1px solid var(--line); padding:30px 40px 84px; max-width:1640px; margin:0 auto;
+         display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+         font:500 10px/1.8 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--mute)}
+  footer a{color:var(--amber)}
+
+  @media (prefers-reduced-motion:reduce){ .pane.spike img{filter:none} *{transition:none !important} }
+  @media (max-width:1180px){
+    .rows .it{grid-template-columns:34px 220px minmax(0,1fr)}
+    .duo{grid-template-columns:1fr; gap:34px}
+  }
+  @media (max-width:980px){
+    .nav{height:auto; padding:10px 18px; gap:10px; flex-wrap:wrap} nav.tabs{justify-content:flex-start; flex-basis:100%}
+    .hero .in{padding:70px 22px 60px}    /* h1 keeps its 11ch measure here so it never runs over the capture's right-hand panel */
+    section.blk > .in{padding:60px 22px 64px} .num{left:22px}
+    /* roster becomes a tab grid above the screen, so the picture stays near the top */
+    .feed{grid-template-columns:1fr}
+    .roster{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-right:0; border-bottom:1px solid var(--line)}
+    .roster button{grid-template-columns:1fr; padding:14px 12px; border-right:1px solid var(--line); font-size:11px}
+    .roster button:nth-child(3n){border-right:0}
+    .roster button:last-child{border-bottom:1px solid var(--line)}
+    .roster button .thumb{display:none}
+    .roster button[aria-pressed="true"]{box-shadow:inset 0 -3px 0 var(--amber); background:rgba(245,184,46,.09)}
+    .pane .cap{grid-template-columns:1fr; gap:8px; padding:18px 18px 20px}
+    .rows .it{grid-template-columns:28px minmax(0,1fr); row-gap:8px} .it p{grid-column:2}
+    .status{grid-template-columns:1fr}
+    footer{padding:26px 22px 84px}
+  }
+  @media (max-width:560px){
+    /* phone: the capture is mood only behind the copy, so dim it evenly */
+    .hero .art{background-size:auto 118%; background-position:62% 100%}   /* crop the capture's own nav row off the top */
+    .hero .art::after{background:linear-gradient(to bottom, rgba(10,10,11,.97) 0%, rgba(10,10,11,.62) 30%, rgba(10,10,11,.7) 70%, #0A0A0B 100%)}
+    .h2{flex-direction:column; align-items:flex-start; gap:14px} .h2 .rule{align-self:stretch; flex:none; margin:0}
+    .roster{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .roster button:nth-child(3n){border-right:1px solid var(--line)}
+    .roster button:nth-child(2n){border-right:0}
+    .pane .cap h3{font-size:32px}
+    .it h4{font-size:28px}
+    .btn{padding:16px 20px}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="chip" x="-6%" y="-6%" width="112%" height="112%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+<div class="page">
+
+<header>
+  <div class="nav">
+    <a class="mark" href="/" aria-label="Honey Badger home">
+      <img src="/assets/arsenal/emblem_mark.jpg?v=20261012c" srcset="/assets/arsenal/emblem_mark.jpg?v=20261012c 1x, /assets/arsenal/emblem_mark@2x.jpg?v=20261012c 2x" alt="" width="320" height="320">
+      <span class="word">Honey Badger<small>.software</small></span>
+    </a>
+    <nav class="tabs" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/#arsenal">Supported Games</a>
+      <a href="/#deployment">Our Mods</a>
+      <a href="/#software">Software</a>
+      <a href="#" data-soon>Intel</a>
+      <a href="/#commlink">Comm-Link</a>
+      <a href="#" data-soon data-discord>The Den</a>
+      <a href="/support.html">Support</a>
+      <a href="/industrial.html">Industrial</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="art" role="img" aria-label="The War Room Live Map: kill activity across the EVE Frontier cluster, seen from a cockpit"></div>
+  <div class="in">
+    <div class="eyebrow">EVE Frontier — Cycle 7 Stillness — two live mods</div>
+    <h1>The frontier, <em>on the record.</em></h1>
+    <p>Two free mods built by Honey Badger from EVE Frontier's public chain. War Room turns every kill and gate jump that reaches the chain into live PvP intel. Bounty Board puts a price on any pilot and pays the hunter straight from the chain.</p>
+    <div class="cta">
+      <a class="btn solid" href="/frontier/warroom/">Open War Room</a>
+      <a class="btn" href="/frontier/bounty/">Open Bounty Board</a>
+    </div>
+    <p class="cred">Read-only public data &nbsp;·&nbsp; no game automation &nbsp;·&nbsp; Sui testnet</p>
+  </div>
+</section>
+
+<!-- 01 WAR ROOM -->
+<section class="blk" id="warroom">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 01 &nbsp;WAR ROOM</div>
+    <div class="h2"><h2>War Room</h2><span class="rule"></span><p class="lede">A free PvP intel hub for EVE Frontier, built only from what the public chain publishes. Open it in a browser; nothing to install.</p></div>
+
+    <div class="feed">
+      <div class="roster" id="roster" role="group" aria-label="War Room screens">
+        <button data-k="map" aria-pressed="true"><span class="thumb" style="background-image:url('/frontier/assets/shots/warroom-map.jpg')"></span><span>Live Map</span></button>
+        <button data-k="kills" aria-pressed="false"><span class="thumb" style="background-image:url('/frontier/assets/shots/warroom-kills.jpg')"></span><span>Kills</span></button>
+        <button data-k="dossier" aria-pressed="false"><span class="thumb" style="background-image:url('/frontier/assets/shots/warroom-dossier.jpg')"></span><span>Pilot dossier</span></button>
+        <button data-k="watch" aria-pressed="false"><span class="thumb" style="background-image:url('/frontier/assets/shots/warroom-watch.jpg')"></span><span>Watch &amp; Alerts</span></button>
+        <button data-k="bounties" aria-pressed="false"><span class="thumb" style="background-image:url('/frontier/assets/shots/warroom-bounties.jpg')"></span><span>Bounties</span></button>
+        <button data-k="history" aria-pressed="false"><span class="thumb" style="background-image:url('/frontier/assets/shots/warroom-history.jpg')"></span><span>History</span></button>
+      </div>
+      <div class="stage" id="stage">
+        <figure class="pane on" data-k="map" style="margin:0">
+          <img src="/frontier/assets/shots/warroom-map.jpg" width="1600" height="900" alt="War Room Live Map: live feed of gate jumps on the left, the star map with kill counts per system, a pilot dossier card on the right">
+          <figcaption class="cap"><h3>Live Map</h3><p>The cluster as a star map. Systems light up where kills landed in the last 24 hours; the feed beside it shows jumps and kills as they reach the chain, and says "location hidden" when the chain hides one.</p></figcaption>
+        </figure>
+        <figure class="pane" data-k="kills" style="margin:0" aria-hidden="true">
+          <img src="/frontier/assets/shots/warroom-kills.jpg" width="1600" height="900" alt="War Room Kills board: latest kills list, hot systems for the last 24 hours, gate jumps today" loading="lazy">
+          <figcaption class="cap"><h3>Kills</h3><p>Latest kills in the order they reached the chain, hot systems over 1 h, 24 h or 7 d, and on every kill a note of how late it was reported.</p></figcaption>
+        </figure>
+        <figure class="pane" data-k="dossier" style="margin:0" aria-hidden="true">
+          <img src="/frontier/assets/shots/warroom-dossier.jpg" width="1600" height="900" alt="War Room pilot dossier: kills and losses, tribe, last signed time, an on-chain kill timeline and the systems the pilot was seen in" loading="lazy">
+          <figcaption class="cap"><h3>Pilot dossier</h3><p>Kills, losses, tribe, an on-chain timeline, the systems a pilot has been seen in, and when their wallet last signed anything.</p></figcaption>
+        </figure>
+        <figure class="pane" data-k="watch" style="margin:0" aria-hidden="true">
+          <img src="/frontier/assets/shots/warroom-watch.jpg" width="1600" height="900" alt="War Room Watch and Alerts: alert rules on the left, watch list slots on the right, Discord pings marked as not deployed yet" loading="lazy">
+          <figcaption class="cap"><h3>Watch &amp; Alerts</h3><p>Pick pilots, systems or tribes to watch and set your own alert rules. The Discord panel says plainly that its server is not deployed yet.</p></figcaption>
+        </figure>
+        <figure class="pane" data-k="bounties" style="margin:0" aria-hidden="true">
+          <img src="/frontier/assets/shots/warroom-bounties.jpg" width="1600" height="900" alt="War Room Bounties page: wanted list, recently claimed and expired bounties read from the chain" loading="lazy">
+          <figcaption class="cap"><h3>Bounties</h3><p>The Bounty Board's Most Wanted, recently claimed and expired bounties, read straight off the chain, with a jump to the live board to post one.</p></figcaption>
+        </figure>
+        <figure class="pane" data-k="history" style="margin:0" aria-hidden="true">
+          <img src="/frontier/assets/shots/warroom-history.jpg" width="1600" height="900" alt="War Room History: 24 hour chain replay with a timeline of kills, jumps and structure events and playback speed controls" loading="lazy">
+          <figcaption class="cap"><h3>History</h3><p>Scrub back through 24 hours or 7 days of chain events and replay them on the map, from a quarter speed up to 5x.</p></figcaption>
+        </figure>
+      </div>
+    </div>
+    <p class="note">Every frame above is a capture of the live War Room on 21 Oct 2026. The numbers were real at that moment.</p>
+
+    <div class="sub">What a player gets</div>
+    <div class="rows">
+      <div class="it"><span class="n">01</span><h4>Live Map</h4><p>See where the fighting is. Kill activity is drawn on the real star map, fog-of-war aware: if the chain does not publish a location, War Room does not invent one.</p></div>
+      <div class="it"><span class="n">02</span><h4>Kills board</h4><p>Every kill that reaches the chain, the hottest systems, and today's player gate jumps. Each kill says <b>how late it arrived</b>, so you know how fresh the picture is.</p></div>
+      <div class="it"><span class="n">03</span><h4>Pilot dossiers</h4><p>Look anyone up by name. Kills and losses, <b>other characters on the same wallet</b>, and <b>when that wallet last signed an on-chain action</b>. It is a record of what happened, not a tracker of where someone is.</p></div>
+      <div class="it"><span class="n">04</span><h4>Watch &amp; Alerts<small class="live">Live — on the page</small></h4><p>Watch pilots, systems or tribes. The moment a watched thing appears on chain, an alert lands on screen, with sound if you want it. Relaying those alerts to Discord is coming.</p></div>
+      <div class="it"><span class="n">05</span><h4>My Fleet &amp; Fleet room<small class="live">My Fleet live</small></h4><p>My Fleet reads your own structures and their fuel clocks from your wallet address, read-only. The shared Fleet room runs in demo mode until its rooms server is deployed.</p></div>
+      <div class="it"><span class="n">06</span><h4>Bounties</h4><p>Most Wanted, expired and claimed bounties from the Bounty Board, read from the chain.</p></div>
+      <div class="it"><span class="n">07</span><h4>History</h4><p>A 24 hour and 7 day replay scrubber, so you can see how a fight built up, not just how it ended.</p></div>
+      <div class="it"><span class="n">08</span><h4>Compact overlay</h4><p>An in-game-sized view at <b>#/overlay</b> to keep beside the client. It only shows information; it never touches the game.</p></div>
+    </div>
+
+    <div class="status" aria-label="War Room status">
+      <div class="lbl">Status<small>Cycle 7 Stillness</small></div>
+      <ul class="tags">
+        <li>Live Map<b>Live</b></li>
+        <li>Kills<b>Live</b></li>
+        <li>Pilot dossiers<b>Live</b></li>
+        <li>Watch &amp; Alerts<b>Live</b></li>
+        <li>My Fleet<b>Live</b></li>
+        <li>Bounties<b>Live</b></li>
+        <li>History<b>Live</b></li>
+        <li>Overlay<b>Live</b></li>
+        <li class="wait">Fleet rooms<b>Demo until server is deployed</b></li>
+        <li class="wait">Discord relay<b>Coming</b></li>
+        <li class="wait">Rifts<b>Waiting for the chain to publish one</b></li>
+      </ul>
+    </div>
+
+    <div class="act">
+      <a class="btn solid" href="/frontier/warroom/">Open War Room</a>
+      <a class="tlink" href="/frontier/warroom/#/overlay">Compact overlay <small>— #/overlay</small></a>
+    </div>
+  </div>
+</section>
+
+<!-- 02 BOUNTY BOARD -->
+<section class="blk" id="bounty">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 02 &nbsp;BOUNTY BOARD</div>
+    <div class="h2"><h2>Bounty Board</h2><span class="rule"></span><p class="lede">Put a price on any pilot. Whoever gets the kill collects straight from the chain.</p></div>
+
+    <div class="duo">
+      <div class="copy">
+        <p>Bounty Board is a public wanted list for EVE Frontier. Any player can put a price on any pilot by name. The reward locks on chain in SUI or EVE, and whoever gets the kill collects it straight from the chain, with the game's own killmail as proof.</p>
+        <p>No fee and no middleman. The reward sits in the bounty contract, not with Honey Badger, and the contract pays the hunter directly. The poster pays only the network gas.</p>
+        <p>Nothing to install besides EVE Vault, the wallet you sign with. Anyone can read the board; you only need Vault to post or collect.</p>
+        <p>It runs on Cycle 7 Stillness, which lives on Sui testnet: rewards are test tokens, not real money.</p>
+        <div class="act">
+          <a class="btn solid" href="/frontier/bounty/">Open Bounty Board</a>
+          <a class="tlink" href="/frontier/bounty/Honey-Badger-Bounty-Board-Guide.pdf">Player guide <small>— PDF, 10 MB</small></a>
+        </div>
+      </div>
+      <figure class="shot">
+        <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
+        <img src="/frontier/assets/shots/bounty-board.jpg" width="1600" height="900" alt="The Bounty Board: a Wanted list of pilots with SUI rewards on the left, a form to put a price on a pilot on the right, in a starship hangar" loading="lazy">
+        <figcaption><b>Live capture</b> — the Bounty Board on 21 Oct 2026</figcaption>
+      </figure>
+    </div>
+
+    <div class="sub">How a bounty pays</div>
+    <div class="rows">
+      <div class="it"><span class="n">01</span><h4>Pick a pilot</h4><p>Type any pilot's name or character ID.</p></div>
+      <div class="it"><span class="n">02</span><h4>Lock the reward</h4><p>Choose the amount in SUI or EVE and how long it runs, then sign in EVE Vault. The reward locks in the <b>hb_bounty</b> contract on chain.</p></div>
+      <div class="it"><span class="n">03</span><h4>Get the kill</h4><p>Whoever kills that pilot while the bounty is open has earned it. The game's own killmail is the proof; nobody has to vouch for anyone.</p></div>
+      <div class="it"><span class="n">04</span><h4>Collect</h4><p>The hunter claims straight from the chain and gets the whole reward. No fee.</p></div>
+      <div class="it"><span class="n">05</span><h4>If nobody does</h4><p>When a bounty runs out unclaimed, the poster can take it back. A kill made before it ran out can still collect until they do.</p></div>
+    </div>
+
+    <div class="status" aria-label="Bounty Board status">
+      <div class="lbl">Status<small>Cycle 7 Stillness</small></div>
+      <ul class="tags">
+        <li>Post a bounty<b>Live</b></li>
+        <li>Collect with a killmail<b>Live</b></li>
+        <li>Take back after expiry<b>Live</b></li>
+        <li>Player guide<b>PDF</b></li>
+        <li class="wait">Network<b>Sui testnet — test tokens</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 03 HOW IT IS BUILT -->
+<section class="blk" id="built">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 03 &nbsp;HOW IT IS BUILT</div>
+    <div class="h2"><h2>How it is built</h2><span class="rule"></span><p class="lede">Public data in, honest picture out.</p></div>
+    <div class="rows">
+      <div class="it"><span class="n">01</span><h4>Public chain only</h4><p>Everything both mods show comes from EVE Frontier's public chain. War Room needs no login and no wallet to read.</p></div>
+      <div class="it"><span class="n">02</span><h4>Read-only, no inputs</h4><p>Neither mod sends a keystroke or a click to the game. No automation, one human input per client. The only thing that ever writes to the chain is a bounty you post or collect yourself, signed in EVE Vault.</p></div>
+      <div class="it"><span class="n">03</span><h4>The kill-delay rule</h4><p>Kills reach the chain late, minutes to days after they happen. War Room measures the median delay on the kills it has loaded and prints it, places each kill when it happened, and shows how late it arrived, every time.</p></div>
+      <div class="it"><span class="n">04</span><h4>No guessing</h4><p>War Room never claims who is online or where anyone is right now. A last-seen time is only a last-seen time, and a hidden location stays hidden.</p></div>
+      <div class="it"><span class="n">05</span><h4>Sui testnet, Cycle 7</h4><p>Both mods run against Stillness, the Cycle 7 world on Sui testnet, with test tokens. The Bounty Board's Move contract, hb_bounty, is published on testnet_stillness for that world.</p></div>
+    </div>
+    <p class="legal">Made for EVE Frontier by Honey Badger. This material is used with limited permission of CCP Games. No official affiliation or endorsement by CCP Games is stated or implied.</p>
+  </div>
+</section>
+
+<footer>
+  <span>honeybadger.software — independent mods, servers &amp; tactical software. All rights reserved.</span>
+  <span><a href="/downloads.html">Downloads</a> &nbsp;·&nbsp; <a href="#" data-discord>Join The Den</a> &nbsp;·&nbsp; <a href="/support.html">Support</a> &nbsp;·&nbsp; <a href="/industrial.html">Industrial</a></span>
+</footer>
+
+</div><!-- /page -->
+
+<script>
+(function(){
+  // ---- screen feed: stacked panes crossfade; the incoming one gets a 90 ms brightness spike (monitor-feed switch).
+  //      aria-pressed / aria-hidden stay in sync. Click or hover a roster entry to switch. ----
+  var roster  = document.getElementById('roster');
+  var buttons = [].slice.call(roster.querySelectorAll('button[data-k]'));
+  var panes   = [].slice.call(document.querySelectorAll('#stage .pane'));
+  var reduce  = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var current = 'map';
+  function select(k){
+    if(k === current) return;
+    current = k;
+    buttons.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.k === k)); });
+    panes.forEach(function(p){
+      var on = p.dataset.k === k;
+      p.classList.toggle('on', on);
+      if(on){
+        p.removeAttribute('aria-hidden');
+        var img = p.querySelector('img'); if(img) img.loading = 'eager';
+        if(!reduce){ p.classList.add('spike'); setTimeout(function(){ p.classList.remove('spike'); }, 90); }
+      } else { p.setAttribute('aria-hidden','true'); }
+    });
+  }
+  roster.addEventListener('click', function(e){ var b = e.target.closest('button[data-k]'); if(b) select(b.dataset.k); });
+  // hover switching only where a real mouse exists (touch taps would fire it together with click)
+  if(window.matchMedia && window.matchMedia('(hover: hover)').matches){
+    roster.addEventListener('mouseover', function(e){ var b = e.target.closest('button[data-k]'); if(b) select(b.dataset.k); });
+  }
+  // warm the other captures once the page is idle so switching never shows an empty frame
+  window.addEventListener('load', function(){
+    setTimeout(function(){ panes.forEach(function(p){ var i = p.querySelector('img'); if(i) i.loading = 'eager'; }); }, 1200);
+  });
+
+  // ---- "soon" tabs (same as landing): no destination yet — never jump to top, never 404 ----
+  document.querySelectorAll('a[data-soon], a[data-discord]').forEach(function(a){
+    a.addEventListener('click', function(e){ if(a.getAttribute('href') === '#') e.preventDefault(); });
+  });
+})();
+</script>
+</body>
+</html>
