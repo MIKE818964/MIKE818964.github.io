@@ -22,3 +22,8 @@
   Cache-Control: no-cache
 /index.html
   Cache-Control: no-cache
+
+/frontier/warroom/
+  Cache-Control: no-cache
+/frontier/warroom/index.html
+  Cache-Control: no-cache

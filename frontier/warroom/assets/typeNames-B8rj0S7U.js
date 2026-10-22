@@ -1,0 +1,1 @@
+let o=null;function c(t){const n=new Map,e=t==null?void 0:t.types;if(!e||typeof e!="object")return n;for(const[i,s]of Object.entries(e)){const r=s==null?void 0:s.name,a=Number(i);Number.isInteger(a)&&typeof r=="string"&&r.trim()&&n.set(a,r.trim())}return n}function f(t,n=fetch){return o||(o=n(t).then(e=>e.ok?e.json():{}).then(c).catch(()=>new Map)),o}export{f as l};
