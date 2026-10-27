@@ -435,7 +435,7 @@
   .cfgcard{background:linear-gradient(160deg,#0B1130,#141B3E)}
   .divider-trace .dcur.b{stroke:var(--cyan)}
 
-  /* ===== v17: full-cinema hero (Gemini-directed: slow, atmospheric) ===== */
+  /* ===== v17: full-cinema hero (slow, atmospheric) ===== */
   .hero{background:
       radial-gradient(70% 100% at 78% 14%, rgba(46,123,255,.30), transparent 56%),
       radial-gradient(50% 80% at 8% 88%, rgba(63,216,255,.13), transparent 60%),
@@ -466,10 +466,10 @@
   @keyframes glint{0%,86%,100%{opacity:0}91%{opacity:.85}96%{opacity:0}}
   .heroimg{background:#fff}
   .heroimg figcaption{color:var(--mut)}
-  /* hero -> light content: asymmetric curve with a cyan glow tracing it (Gemini d) */
+  /* hero -> light content: asymmetric curve with a cyan glow tracing it */
   .curve{position:absolute;left:0;right:0;bottom:-1px;height:72px;pointer-events:none}
   .curve svg{width:100%;height:100%;display:block}
-  /* watch-it-run facade (Gemini e): still + pulsing red play, video loads ONLY on click */
+  /* watch-it-run facade: still + pulsing red play, video loads ONLY on click */
   .facade{position:relative;margin-top:14px;border-radius:14px;overflow:hidden;cursor:pointer;
       border:1px solid rgba(63,216,255,.35);box-shadow:0 0 24px rgba(46,123,255,.25)}
   .facade img{width:100%;display:block;filter:brightness(.82)}
@@ -1824,7 +1824,7 @@ if (location.hash === '#noanim') {
   window.addEventListener('mousemove', function(e){ if (drag){ px = e.clientX - drag.x; py = e.clientY - drag.y; apply(); } });
   window.addEventListener('mouseup', function(){ drag = null; });
 })();
-// ---- complete-pinout focus mode (Gemini direction: diagnostic-interface dimming) ----
+// ---- complete-pinout focus mode (diagnostic-interface dimming) ----
 // inline styles, not classes: wins every cascade, every browser
 (function(){
   var grid = document.getElementById('pingrid');
