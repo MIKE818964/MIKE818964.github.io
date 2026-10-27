@@ -30,5 +30,5 @@
 
 # Rust HUD art (Honey Badger DPS Meter): every Rust client downloads these PNGs by URL; file names and the ?v= tag
 # are versioned, so they can cache for a year. Never overwrite a published file - publish a new name or bump the tag.
-/assets/hud/*
+/assets/hud/v1/*
   Cache-Control: public, max-age=31536000, immutable
