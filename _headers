@@ -32,3 +32,9 @@
 # are versioned, so they can cache for a year. Never overwrite a published file - publish a new name or bump the tag.
 /assets/hud/v1/*
   Cache-Control: public, max-age=31536000, immutable
+
+# HoneyBadger Bunker update channel: the signed manifest must always revalidate; artifacts are versioned by file name.
+/installer/manifest.json
+  Cache-Control: no-cache
+/installer/plugins/*
+  Cache-Control: public, max-age=31536000, immutable
