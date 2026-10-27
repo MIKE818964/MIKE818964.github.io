@@ -12,7 +12,7 @@
   "notes": [
     "Box map for 202610101923_dd7927cb_0.png = the APPROVED top-band master (gunmetal band under the compass, killfeed rows top-right, skull hit pop at the crosshair).",
     "Pixel boxes are [x0, y0, x1, y1] in the 1792x1024 render. text_boxes are the baked sample values the live plugin redraws (DPS, headshots, last hit, target, acc, names, distances).",
-    "The badge (badger + HONEY BADGER plate) is brand art and keeps its text."
+    "The badge (badger + HONEYBADGER plate) is brand art and keeps its text."
   ],
   "slice_border_ltrb": [
     26,

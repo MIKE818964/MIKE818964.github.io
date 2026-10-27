@@ -2,7 +2,7 @@
   "schema": "evefrontier.dapp-index.domain-proof",
   "schemaVersion": 1,
   "id": "honey-badger-war-room",
-  "name": "Honey Badger War Room",
+  "name": "HoneyBadger War Room",
   "liveUrl": "https://honeybadger.software/frontier/warroom/",
   "owner": "0xaec4ce054f607260c9befc7de9bc9a76209e49a92066b20c58020edf3d08ccdc",
   "registry": {
@@ -14,13 +14,13 @@
   "listings": [
     {
       "id": "honey-badger-war-room",
-      "name": "Honey Badger War Room",
+      "name": "HoneyBadger War Room",
       "liveUrl": "https://honeybadger.software/frontier/warroom/",
       "slug": "honey-badger-war-room"
     },
     {
       "id": "honey-badger-bounty-board",
-      "name": "Honey Badger Bounty Board",
+      "name": "HoneyBadger Bounty Board",
       "liveUrl": "https://honeybadger.software/frontier/bounty/",
       "slug": "honey-badger-bounty-board"
     }
