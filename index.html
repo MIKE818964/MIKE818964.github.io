@@ -122,6 +122,9 @@
   .mods .t{color:var(--amber); margin-left:8px}
   .mods .dev{border-left-color:var(--line2)} .mods .dev .t{color:var(--mute)}
   .mods a:hover .t, .mods a:focus-visible .t{text-decoration:underline}
+  .mods button{cursor:pointer; border-top:0; border-right:0; border-bottom:0; text-align:right}
+  .mods button:hover .t, .mods button:focus-visible .t{text-decoration:underline}
+  button.btn{cursor:pointer}
   .cap h3 a{transition:color var(--snap)} .cap h3 a:hover, .cap h3 a:focus-visible{color:var(--amber)}
 
   /* ---------- 02 featured deployment ---------- */
@@ -245,10 +248,11 @@
         <div class="pane on" data-game="rust">
           <div class="art" data-art="rust"></div>
           <div class="cap">
-            <div><h3>Rust</h3><p>Our own Honey Badger server. The Combat HUD reads every hit live; WarDogs three-team zone warfare is being built on top of it.</p></div>
+            <div><h3><a href="/rust-dps-meter.html">Rust</a></h3><p>Our own Honey Badger server runs the DPS Meter: damage that actually landed, headshots, last hit, target HP, accuracy and weapon on one band under the compass. Free for any Oxide or Carbon server.</p></div>
             <div class="mods">
-              <span>Combat HUD<b class="t">Live</b></span>
-              <span class="dev">WarDogs<b class="t">In dev</b></span>
+              <a href="/rust-dps-meter.html">DPS Meter<b class="t">Download</b></a>
+              <a href="/rust-dps-meter.html#live">Join the server<b class="t">216.39.241.155:27915</b></a>
+              <button type="button" data-copy="client.connect 216.39.241.155:27915">Copy connect command<b class="t">F1</b></button>
             </div>
           </div>
         </div>
@@ -303,15 +307,19 @@
     <div class="spot">
       <div class="art" id="spotArt"></div>
       <div class="sin">
-        <div class="eyebrow">Rust — Honey Badger server — in development</div>
-        <h3>WarDogs</h3>
-        <p>Three teams. One control zone. Every thirty seconds the team holding the zone scores; first to the cap wins. Buy your loadout each life, earn cash for kills, revives and holding ground. The Combat HUD that already runs on the server reads it all live.</p>
+        <div class="eyebrow">Rust — Honey Badger server — live now</div>
+        <h3>DPS Meter</h3>
+        <p>A live combat band under the compass: damage that actually landed after armour, headshots, last hit with zone and range, your target's HP, accuracy and the weapon in your hands. Running on our server; one file, free, for any Oxide or Carbon server.</p>
         <div class="spec">
-          <div><b>3</b><span>Teams</span></div>
-          <div><b>1</b><span>Control zone</span></div>
-          <div><b>30s</b><span>Score tick</span></div>
+          <div><b>1</b><span>File to install</span></div>
+          <div><b>0</b><span>Other plugins</span></div>
+          <div><b>MIT</b><span>Code licence</span></div>
         </div>
-        <a class="btn solid" href="#arsenal">Back to the arsenal</a>
+        <div class="cta">
+          <a class="btn solid" href="/downloads/HoneyBadgerDps-1.0.1.zip" download>Download v1.0.1</a>
+          <a class="btn" href="/rust-dps-meter.html">Docs &amp; live server</a>
+          <button type="button" class="btn" data-copy="client.connect 216.39.241.155:27915">Copy join 216.39.241.155:27915</button>
+        </div>
       </div>
     </div>
   </div>
@@ -326,7 +334,7 @@
     <div class="soft">
       <div class="it"><span class="n">01</span><h4>EVE Bounty Board<small class="live">Live — Cycle 7</small></h4><p>Put a price on any pilot in EVE Frontier. Hunters collect straight from the chain. No fee.</p><a href="/frontier/bounty/">Open board</a></div>
       <div class="it"><span class="n">02</span><h4>War Room<small class="live">Live — Cycle 7</small></h4><p>Live PvP intel from EVE Frontier's public chain: kills, gate jumps, pilot dossiers, watch alerts. Discord relay coming.</p><a href="/frontier/warroom/">Open War Room</a></div>
-      <div class="it"><span class="n">03</span><h4>Combat HUD<small class="live">Live — Rust</small></h4><p>Server-side overlay for our Rust server: live DPS meter and loadout menu, reading every hit as it lands.</p><span class="hold">On the server</span></div>
+      <div class="it"><span class="n">03</span><h4>DPS Meter<small class="live">Live — Rust — free</small></h4><p>Live combat band for Rust servers: real landed damage, headshots, last hit, target HP, accuracy and weapon. Runs on our server; one file for yours, Oxide and Carbon, MIT.</p><a href="/rust-dps-meter.html">Get it</a></div>
       <div class="it"><span class="n">04</span><h4>EVE Fleet Foreman<small class="live">Shipped — free</small></h4><p>Fleet-mining assistant for EVE Online: ranks ore by ISK/m³ off live Jita prices, computes fleet yield, splits loot fairly.</p><a href="/eve-fleet-foreman.html">Get it</a></div>
     </div>
   </div>
@@ -352,7 +360,7 @@
   var ART = { rust:"assets/arsenal/rust.jpg"+V, wow:"assets/arsenal/wow.jpg"+V, eve:"assets/arsenal/eve.jpg"+V,
               roblox:"assets/arsenal/roblox.jpg"+V, ore:"assets/arsenal/ore.jpg"+V };
   var HERO = "assets/arsenal/hero.jpg"+V;        // 21:9 hero: operator + stencil emblem painted on the blast wall
-  var SPOT = "assets/arsenal/wardogs.jpg"+V;     // WARDOGS scene (the chosen render), headline band cropped off
+  var SPOT = "assets/images/rust-dps-meter-ingame.jpg?v=1";   // real frame from the Honey Badger server, 27 Oct 2026
   document.querySelectorAll('[data-art]').forEach(function(el){
     var k = el.getAttribute('data-art'); if(ART[k]) el.style.backgroundImage = "url('"+ART[k]+"')";
   });
@@ -387,6 +395,15 @@
   // ---- "soon" tabs: no destination yet (Discord URL + Intel page pending) — never jump to top, never 404 ----
   document.querySelectorAll('a[data-soon], a[data-discord]').forEach(function(a){
     a.addEventListener('click', function(e){ if(a.getAttribute('href') === '#') e.preventDefault(); });
+  });
+
+  // ---- copy-to-clipboard for the join command (data-copy): F1 console line, with a visible confirmation ----
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var t = b.getAttribute('data-copy'), label = b.innerHTML;
+      function done(){ b.innerHTML = 'Copied — paste in F1'; setTimeout(function(){ b.innerHTML = label; }, 1800); }
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done, done); } else { done(); }
+    });
   });
 
   // ---- comm-link: two identical groups so the -50% loop is seamless. Every line is a verified fact. ----
