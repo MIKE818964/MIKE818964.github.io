@@ -271,11 +271,11 @@
   <div class="art"></div>
   <div class="in">
     <div class="crumb"><a href="/">Home</a> &nbsp;/&nbsp; <a href="/games.html">Games</a> &nbsp;/&nbsp; Rust DPS Meter</div>
-    <div class="eyebrow">Rust — server plugin — free — Oxide + Carbon — v1.0.0</div>
+    <div class="eyebrow">Rust — server plugin — free — Oxide + Carbon — v1.0.1</div>
     <h1>Honey Badger <em>DPS Meter.</em></h1>
     <p>A live combat band for Rust servers: DPS, headshots, last hit with body zone and range, your target's HP, accuracy and the weapon in your hands, on one painted band under the compass, measured from the damage that actually landed. One <code>.cs</code> file, no other plugins required, MIT code.</p>
     <div class="cta">
-      <a class="btn solid" href="downloads/HoneyBadgerDps-1.0.0.zip" download>Download v1.0.0</a>
+      <a class="btn solid" href="downloads/HoneyBadgerDps-1.0.1.zip" download>Download v1.0.1</a>
       <a class="btn" href="https://github.com/honeybadger-software/HoneyBadgerDps" target="_blank" rel="noopener">Source on GitHub</a>
     </div>
     <div class="links"><a href="#install">Install</a><a href="#live">See it running</a><a href="#config">Config</a><a href="rust-dps-meter-art.html">Art pack</a><a href="https://github.com/honeybadger-software/HoneyBadgerDps/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></div>
@@ -366,10 +366,10 @@
     <div class="h2"><h2>Three steps, no restart</h2><span class="rule"></span></div>
     <div class="soft">
       <div class="it"><span class="n">01</span><h4>Drop one file</h4><p>Download the zip and put <code>HoneyBadgerDps.cs</code> into <code>oxide/plugins/</code> (Oxide) or <code>carbon/plugins/</code> (Carbon). The framework compiles it on the spot. No restart.</p></div>
-      <div class="it"><span class="n">02</span><h4>Watch the console</h4><p><code>Loaded plugin Honey Badger DPS Meter v1.0.0</code>. The config appears as <code>config/HoneyBadgerDps.json</code>, the texts as <code>lang/en/HoneyBadgerDps.json</code>.</p></div>
+      <div class="it"><span class="n">02</span><h4>Watch the console</h4><p><code>Loaded plugin Honey Badger DPS Meter v1.0.1</code>. The config appears as <code>config/HoneyBadgerDps.json</code>, the texts as <code>lang/en/HoneyBadgerDps.json</code>.</p></div>
       <div class="it"><span class="n">03</span><h4>Join</h4><p>The band comes up the first time you wake. Type <code>/dps</code> for the menu. Admins can prove the art loads with <code>/dps probe</code>.</p></div>
     </div>
-    <div class="cta" style="margin-top:34px"><a class="btn solid" href="downloads/HoneyBadgerDps-1.0.0.zip" download>Download v1.0.0</a><a class="btn" href="rust-dps-meter-art.html">The art pack</a></div>
+    <div class="cta" style="margin-top:34px"><a class="btn solid" href="downloads/HoneyBadgerDps-1.0.1.zip" download>Download v1.0.1</a><a class="btn" href="rust-dps-meter-art.html">The art pack</a></div>
   </div>
 </section>
 
@@ -399,7 +399,7 @@
   <div class="in">
     <i class="tick tl"></i><i class="tick tr"></i>
     <div class="num">// 07 &nbsp;CONFIG</div>
-    <div class="h2"><h2>config/HoneyBadgerDps.json</h2><span class="rule"></span><p class="lede">As shipped in v1.0.0. Every key is a sentence, so the file reads without this page.</p></div>
+    <div class="h2"><h2>config/HoneyBadgerDps.json</h2><span class="rule"></span><p class="lede">As shipped in v1.0.1. Every key is a sentence, so the file reads without this page.</p></div>
 <pre class="json">{
   &quot;Meter&quot;: {
     &quot;On by default for every player&quot;: true,
@@ -442,9 +442,9 @@
     <div class="h2"><h2>Read it, check it, run it</h2><span class="rule"></span><p class="lede">The things a server owner should be able to verify before a plugin touches their box.</p></div>
     <div class="soft">
       <div class="it"><span class="n">01</span><h4>No telemetry</h4><p>The plugin makes no web requests of its own: no analytics, no version checks, no remote switches. The only traffic is each client's image download from the configured art host, which can be yours.</p></div>
-      <div class="it"><span class="n">02</span><h4>Compatibility record<small>Rust 2635 · Oxide 2.0.7839 · Carbon 2026.10.01</small></h4><p>Version 1.0.0: compiled against the Rust dedicated server assemblies (build 2635) under Oxide 2.0.7839 and the Carbon 2026.10.01 production build; loaded on our live Carbon server and on a local Oxide server; 27 October 2026. Each release repeats this check and this line.</p></div>
-      <div class="it"><span class="n">03</span><h4>Licence<small>MIT code · licensed art</small></h4><p>Plugin code: MIT, the licence file ships in the zip and in the repository. Art: The band artwork (badge, frame, body silhouette, hit skull) served from honeybadger.software is copyright Honey Badger Software and is licensed for use with this plugin, including self-hosted copies made for a server running it.</p></div>
-      <div class="it"><span class="n">04</span><h4>Release history<small>v1.0.0</small></h4><p>1.0.0: changelog dated 26 October 2026, published 27 October 2026, first public release. The full changelog is readable before you download.</p><a href="https://github.com/honeybadger-software/HoneyBadgerDps/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></div>
+      <div class="it"><span class="n">02</span><h4>Compatibility record<small>Rust 2635 · Oxide 2.0.7839 · Carbon 2026.10.01</small></h4><p>Version 1.0.1: compiled against the Rust dedicated server assemblies (build 2635) under Oxide 2.0.7839 and the Carbon 2026.10.01 production build; loaded on our live Carbon server and on a local Oxide server; 27 October 2026. Each release repeats this check and this line.</p></div>
+      <div class="it"><span class="n">03</span><h4>Licence<small>MIT code · licensed art</small></h4><p>Plugin code: MIT, the licence file ships in the zip and in the repository. Art: # Artwork licence</p></div>
+      <div class="it"><span class="n">04</span><h4>Release history<small>v1.0.1</small></h4><p>1.0.1: changelog dated 26 October 2026, published 27 October 2026, first public release. The full changelog is readable before you download.</p><a href="https://github.com/honeybadger-software/HoneyBadgerDps/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a></div>
       <div class="it"><span class="n">05</span><h4>Source</h4><p>One file, readable in full. Fork it, read it, diff it against the zip.</p><a href="https://github.com/honeybadger-software/HoneyBadgerDps" target="_blank" rel="noopener">GitHub</a></div>
       <div class="it"><span class="n">06</span><h4>Support</h4><p>Open an issue on GitHub, or write to <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a>. Include the plugin version, the framework and its version, the console lines around the load, and what <code>/dps probe</code> showed.</p><a href="https://github.com/honeybadger-software/HoneyBadgerDps/issues" target="_blank" rel="noopener">Issues</a></div>
     </div>
@@ -473,7 +473,7 @@
     <div class="num">// 10 &nbsp;GET IT</div>
     <div class="final">
       <div><h2>Put a real DPS meter on your server tonight.</h2><p>Free, one file, MIT code. Install takes less time than reading this page.</p></div>
-      <div class="cta"><a class="btn solid" href="downloads/HoneyBadgerDps-1.0.0.zip" download>Download v1.0.0</a><a class="btn" href="https://github.com/honeybadger-software/HoneyBadgerDps" target="_blank" rel="noopener">Source on GitHub</a></div>
+      <div class="cta"><a class="btn solid" href="downloads/HoneyBadgerDps-1.0.1.zip" download>Download v1.0.1</a><a class="btn" href="https://github.com/honeybadger-software/HoneyBadgerDps" target="_blank" rel="noopener">Source on GitHub</a></div>
     </div>
   </div>
 </section>
