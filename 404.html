@@ -4,97 +4,250 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#05080C">
-<title>Not found | HONEYBADGER SOFTWARE INC</title>
-<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
-<link rel="stylesheet" href="/assets/css/style.css?v=9">
+<meta name="theme-color" content="#0A0A0B">
+<title>Not found | Honey Badger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  .nf-code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; letter-spacing: .18em; color: var(--accent-hi); }
-  .nf-path { font-family: ui-monospace, Consolas, monospace; background: rgba(63,216,255,.08); border: 1px solid var(--border); padding: 2px 8px; border-radius: 3px; word-break: break-all; }
-  .nf-list { list-style: none; padding: 0; margin: 28px 0 0; max-width: 720px; }
-  .nf-list li { border-top: 1px solid var(--border); padding: 16px 0; display: flex; gap: 18px; align-items: baseline; }
-  .nf-list li:last-child { border-bottom: 1px solid var(--border); }
-  .nf-list a { font-weight: 700; color: var(--text); white-space: nowrap; }
-  .nf-list span { color: var(--text-mid); font-size: 15px; }
+  /* ---- palette + type (art direction: Gemini 2026-10-12, brand_emblem/gemini_art_direction_2026-10-12.md) ---- */
+  :root{
+    --bg:#0A0A0B; --ink:#EAE6DF; --mute:#8E8A84; --amber:#F5B82E;
+    --line:rgba(234,230,223,.08); --line2:#262629;
+    --disp:"Teko",Impact,"Arial Narrow",sans-serif;          /* tall industrial display */
+    --ui:"Chakra Petch","Arial Narrow",sans-serif;            /* wordmark */
+    --mono:"JetBrains Mono",Consolas,monospace;               /* every label, tag, description */
+    --snap:120ms cubic-bezier(.16,1,.3,1);                    /* hard-cut mechanical motion, no floaty eases */
+  }
+  *{box-sizing:border-box; border-radius:0 !important}        /* 0px law: nothing on this page is rounded */
+  html,body{margin:0; background:var(--bg)}
+  body{color:var(--ink); font-family:var(--mono); font-size:14px; line-height:1.55;
+       -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative}
+  a{color:inherit; text-decoration:none}
+  img{display:block}
+
+  /* concrete under everything (8%) + film grain over everything (5.5%) */
+  body::before{content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.08;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
+    background-size:420px 420px}
+  body::after{content:""; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.055;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='11'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+    background-size:200px 200px}
+  .page{position:relative; z-index:1}
+
+  /* ---------- nav: raster emblem mark + chipped wordmark + 8 mono tabs ---------- */
+  header{position:sticky; top:0; z-index:60; background:rgba(10,10,11,.94); border-bottom:1px solid var(--line);
+         backdrop-filter:blur(8px); overflow:visible}
+  .nav{display:flex; align-items:center; gap:26px; height:66px; padding:0 28px; max-width:1640px; margin:0 auto}
+  .mark{display:flex; align-items:center; gap:14px; height:66px; position:relative}
+  .mark img{height:60px; width:auto; mix-blend-mode:screen; transform:translateY(7px);   /* drips hang below the bar */
+            filter:drop-shadow(0 0 16px rgba(245,184,46,.18));
+            -webkit-mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%);   /* no square edge: only the paint survives */
+            mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%)}
+  .ticker .lbl img{-webkit-mask-image:radial-gradient(circle, #000 52%, transparent 74%); mask-image:radial-gradient(circle, #000 52%, transparent 74%)}
+  .word{position:relative; font-family:var(--ui); font-weight:700; font-size:15px; letter-spacing:.14em;
+        text-transform:uppercase; color:var(--ink); filter:url(#chip); padding-top:8px}
+  .word small{position:absolute; right:0; top:-4px; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
+  nav.tabs{display:flex; flex:1; gap:2px; flex-wrap:wrap; justify-content:flex-end}
+  nav.tabs a{font:500 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--mute);
+             padding:13px 12px; border-bottom:2px solid transparent; transition:color var(--snap), border-color var(--snap)}
+  nav.tabs a:hover, nav.tabs a:focus-visible, nav.tabs a.on{color:var(--ink); border-color:var(--amber)}
+  nav.tabs a[data-soon]{opacity:.5}
+  nav.tabs a[data-soon]::after{content:" ·SOON"; color:var(--amber); font-size:9px; letter-spacing:.12em}
+
+  /* ---------- hero: full-bleed render, emblem painted on the wall inside the world, type in the dark left ---------- */
+  .hero{position:relative; min-height:76vh; display:grid; align-items:center; overflow:hidden; border-bottom:1px solid var(--line)}
+  .hero .art{position:absolute; inset:0; background:#000 right center/cover no-repeat}   /* crop eats the dark left, keeps the operator */
+  .hero .art::after{content:""; position:absolute; inset:0; background:
+    linear-gradient(to right, #0A0A0B 0%, rgba(10,10,11,.88) 24%, rgba(10,10,11,.25) 52%, rgba(10,10,11,0) 72%, #0A0A0B 100%),
+    linear-gradient(to bottom, rgba(10,10,11,.45) 0%, rgba(10,10,11,0) 28%, rgba(10,10,11,0) 70%, #0A0A0B 100%)}
+  .hero .in{position:relative; z-index:2; width:100%; max-width:1640px; margin:0 auto; padding:84px 40px 72px}
+  .eyebrow{font:500 11px/1 var(--mono); letter-spacing:.26em; text-transform:uppercase; color:var(--amber)}
+  .hero h1{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.88; letter-spacing:.005em;
+           font-size:clamp(56px,7.4vw,120px); margin:14px 0 12px; max-width:12.5ch;      /* 3 lines at desktop */
+           text-shadow:0 6px 40px rgba(0,0,0,.85)}
+  .hero h1 em{font-style:normal; color:var(--amber)}
+  .hero p{max-width:54ch; color:var(--mute); margin:0 0 32px}
+  .cta{display:flex; gap:14px; flex-wrap:wrap}
+  .btn{--n:12px; display:inline-block; font:700 12px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase;
+       padding:17px 28px; color:var(--amber); background:rgba(245,184,46,.07); border:1px solid var(--amber);
+       clip-path:polygon(0 0, calc(100% - var(--n)) 0, 100% var(--n), 100% 100%, var(--n) 100%, 0 calc(100% - var(--n)));
+       transition:background var(--snap), color var(--snap)}
+  .btn.solid{background:var(--amber); color:#0A0A0B}
+  .btn:hover, .btn:focus-visible{background:var(--amber); color:#0A0A0B}
+  .btn.solid:hover, .btn.solid:focus-visible{background:var(--ink); color:#0A0A0B}   /* solid must visibly change too */
+  .btn:focus-visible{outline:2px solid var(--ink); outline-offset:-5px}             /* inset: the notch clip-path would eat an outer ring */
+
+  /* ---------- section frame: edge-to-edge hairlines, "// 01" numbers, crosshair ticks ---------- */
+  section.blk{position:relative; border-top:1px solid var(--line)}
+  section.blk > .in{max-width:1640px; margin:0 auto; padding:76px 40px 84px; position:relative}
+  .num{position:absolute; left:40px; top:16px; font:500 11px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
+  .tick{position:absolute; width:11px; height:11px; pointer-events:none}
+  .tick::before,.tick::after{content:""; position:absolute; background:rgba(234,230,223,.38)}
+  .tick::before{left:5px; top:0; width:1px; height:11px}
+  .tick::after{top:5px; left:0; width:11px; height:1px}
+  .tick.tl{left:-6px; top:-6px} .tick.tr{right:-6px; top:-6px}
+  .h2{display:flex; align-items:flex-end; gap:22px; margin:0 0 30px}
+  .h2 h2{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; letter-spacing:.01em;
+         font-size:clamp(46px,5.6vw,84px); margin:0}
+  .h2 .rule{flex:1; height:1px; background:linear-gradient(90deg,var(--amber),transparent 70%); margin-bottom:12px}
+  .h2 .lede{color:var(--mute); max-width:44ch; margin:0 0 6px}
+
+  /* ---------- 01 the arsenal: roster + crossfade stage (switching feels like flipping a monitor feed) ---------- */
+  .arsenal{display:grid; grid-template-columns:380px 1fr; border:1px solid var(--line)}
+  .roster{display:flex; flex-direction:column; border-right:1px solid var(--line)}
+  .roster button{display:grid; grid-template-columns:58px 1fr auto; gap:16px; align-items:center; text-align:left; cursor:pointer;
+    background:transparent; border:0; border-bottom:1px solid var(--line); color:var(--mute); padding:19px 18px;
+    font:500 12px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; transition:color var(--snap), background var(--snap)}
+  .roster button:last-child{border-bottom:0}
+  .roster button .thumb{width:58px; height:36px; background:#000 center/cover no-repeat; filter:grayscale(.55) brightness(.7); transition:filter var(--snap)}
+  .roster button .st{font-size:9px; letter-spacing:.22em; color:var(--mute)}
+  .roster button .st.live{color:var(--amber)}
+  .roster button:hover, .roster button:focus-visible{color:var(--ink); background:rgba(234,230,223,.03)}
+  .roster button[aria-pressed="true"]{color:var(--ink); background:linear-gradient(90deg,rgba(245,184,46,.11),transparent 70%); box-shadow:inset 3px 0 0 var(--amber)}
+  .roster button[aria-pressed="true"] .thumb{filter:none}
+  .stage{position:relative; min-height:560px; background:#000; overflow:hidden}
+  .pane{position:absolute; inset:0; opacity:0; z-index:1; transition:opacity var(--snap)}
+  .pane.on{opacity:1; z-index:2}
+  .pane .art{position:absolute; inset:0; background:#000 center/cover no-repeat; transition:filter 90ms linear}
+  .pane.spike .art{filter:brightness(1.6) contrast(1.3)}
+  .pane .art::after{content:""; position:absolute; inset:0; background:
+    linear-gradient(to right, rgba(10,10,11,.55) 0%, rgba(10,10,11,0) 30%),
+    linear-gradient(to top, #0A0A0B 0%, rgba(10,10,11,.55) 22%, rgba(10,10,11,0) 55%)}
+  .pane .cap{position:absolute; left:0; right:0; bottom:0; z-index:3; display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding:30px 34px}
+  .cap h3{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.84; font-size:clamp(48px,5.4vw,92px); margin:0}
+  .cap p{margin:8px 0 0; color:var(--mute); max-width:48ch; font-size:13px}
+  .mods{display:flex; flex-direction:column; gap:8px; align-items:flex-end; text-align:right; flex:none}
+  .mods > *{display:inline-block; font:500 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--ink);
+            border-left:2px solid var(--amber); padding:7px 11px; background:rgba(10,10,11,.74)}
+  .mods .t{color:var(--amber); margin-left:8px}
+  .mods .dev{border-left-color:var(--line2)} .mods .dev .t{color:var(--mute)}
+  .mods a:hover .t, .mods a:focus-visible .t{text-decoration:underline}
+  .cap h3 a{transition:color var(--snap)} .cap h3 a:hover, .cap h3 a:focus-visible{color:var(--amber)}
+
+  /* ---------- 02 featured deployment ---------- */
+  .spot{position:relative; min-height:480px; display:flex; align-items:center; overflow:hidden; border:1px solid var(--line)}
+  .spot .art{position:absolute; inset:0; background:#000 center/cover no-repeat}
+  .spot .art::after{content:""; position:absolute; inset:0; background:
+    linear-gradient(to right, #0A0A0B 0%, rgba(10,10,11,.9) 28%, rgba(10,10,11,.25) 62%, rgba(10,10,11,0) 100%),
+    linear-gradient(to top, #0A0A0B 0%, rgba(10,10,11,0) 35%)}
+  .spot .sin{position:relative; z-index:2; padding:84px 40px; max-width:700px}
+  .spot h3{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; font-size:clamp(56px,6.4vw,104px); margin:14px 0 14px}
+  .spot p{color:var(--mute); margin:0 0 26px; max-width:50ch}
+  .spec{display:grid; grid-template-columns:repeat(3,auto); gap:28px; margin:0 0 30px; justify-content:start}
+  .spec div{border-top:1px solid var(--line); padding-top:10px}
+  .spec b{display:block; font-family:var(--disp); font-weight:600; font-size:34px; line-height:.9; color:var(--ink)}
+  .spec span{font:500 10px/1 var(--mono); letter-spacing:.2em; color:var(--mute); text-transform:uppercase}
+
+  /* ---------- 03 command center: hairline rows, never cards ---------- */
+  .soft{border-top:1px solid var(--line)}
+  .soft .it{display:grid; grid-template-columns:34px 300px 1fr auto; gap:22px; align-items:baseline; padding:24px 0; border-bottom:1px solid var(--line)}
+  .it .n{font:500 11px/1 var(--mono); color:var(--amber); letter-spacing:.2em}
+  .it h4{font-family:var(--disp); font-weight:700; font-size:34px; line-height:.9; text-transform:uppercase; margin:0; letter-spacing:.02em}
+  .it h4 small{display:block; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--mute); margin-top:8px}
+  .it h4 small.live{color:var(--amber)}
+  .it p{margin:0; color:var(--mute)}
+  .it a{font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); white-space:nowrap}
+  .it a:hover, .it a:focus-visible{text-decoration:underline}
+  .it span.hold{font:500 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); white-space:nowrap}
+
+  /* ---------- comm-link ticker (sticky bottom) ---------- */
+  .ticker{position:sticky; bottom:0; z-index:55; display:flex; align-items:stretch; height:44px; overflow:hidden;
+          border-top:1px solid var(--amber); background:rgba(10,10,11,.96)}
+  .ticker .lbl{display:flex; align-items:center; gap:10px; padding:0 18px; height:100%; cursor:pointer; flex:none;
+               font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber);
+               background:transparent; border:0; border-right:1px solid var(--line)}
+  .ticker .lbl img{height:26px; width:auto; mix-blend-mode:screen}
+  .ticker .viewport{display:flex; align-items:center; overflow:hidden; flex:1}
+  .ticker .track{display:flex; white-space:nowrap; animation:scroll 38s linear infinite; will-change:transform}
+  .ticker.paused .track, .ticker:hover .track, .ticker:focus-within .track{animation-play-state:paused}
+  .ticker .grp{display:flex; gap:48px; padding-right:48px}
+  .ticker .grp span{font:500 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--mute)}
+  .ticker .grp span b{color:var(--amber); font-weight:500}
+  @keyframes scroll{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+
+  footer{border-top:1px solid var(--line); padding:30px 40px 84px; max-width:1640px; margin:0 auto;
+         display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+         font:500 10px/1.8 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--mute)}
+  footer a{color:var(--amber)}
+
+  @media (prefers-reduced-motion:reduce){
+    .ticker .track{animation:none} .pane{transition:none} .pane.spike .art{filter:none} *{transition:none !important}
+  }
+  @media (max-width:980px){
+    .nav{height:auto; padding:10px 18px; gap:10px; flex-wrap:wrap} nav.tabs{justify-content:flex-start; flex-basis:100%}
+    .hero .in{padding:70px 22px 60px} .hero h1{max-width:none}
+    section.blk > .in{padding:60px 22px 64px} .num{left:22px}
+    .arsenal{grid-template-columns:1fr} .roster{border-right:0; border-bottom:1px solid var(--line)} .stage{min-height:380px}
+    .pane .cap{flex-direction:column; align-items:flex-start} .mods{align-items:flex-start; text-align:left}
+    .soft .it{grid-template-columns:28px 1fr; row-gap:8px} .it p{grid-column:2} .it a, .it span.hold{grid-column:2}
+    .spot .sin{padding:60px 22px} .spec{grid-template-columns:repeat(3,1fr); gap:14px}
+    footer{padding:26px 22px 84px}
+  }
+</style>
+<style>
+  .nf{position:relative; border-bottom:1px solid var(--line); min-height:64vh; display:grid; align-items:center}
+  .nf .in{max-width:1640px; margin:0 auto; padding:96px 40px 84px; width:100%}
+  .nf h1{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.88; letter-spacing:.005em;
+          font-size:clamp(56px,7.4vw,120px); margin:14px 0 18px; max-width:13ch}
+  .nf h1 em{font-style:normal; color:var(--amber)}
+  .nf p{max-width:62ch; color:var(--mute); margin:0 0 30px}
+  .nf .path{color:var(--ink); background:rgba(245,184,46,.08); border:1px solid var(--line2); padding:2px 8px; word-break:break-all}
+  .nf .soft .it{grid-template-columns:34px 300px 1fr auto}
+  @media (max-width:980px){ .nf .in{padding:70px 22px 60px} .nf .soft .it{grid-template-columns:28px 1fr} .nf .it p, .nf .it a{grid-column:2} }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="chip" x="-6%" y="-6%" width="112%" height="112%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+<div class="page">
 
-<div class="topbar">
-  <div class="container">
-    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
-    <span class="topbar-links">
-      <a href="/community.html">Community</a>
-      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
-      <a href="/downloads.html">Downloads</a>
-    </span>
-  </div>
-</div>
-<header class="site-header">
-  <div class="container header-row">
-    <a href="/" class="brand">
-      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
-      <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
+<header>
+  <div class="nav">
+    <a class="mark" href="/" aria-label="Honey Badger home">
+      <img src="/assets/arsenal/emblem_mark.jpg?v=20261012c" srcset="/assets/arsenal/emblem_mark.jpg?v=20261012c 1x, assets/arsenal/emblem_mark@2x.jpg?v=20261012c 2x" alt="" width="320" height="320">
+      <span class="word">Honey Badger<small>.software</small></span>
     </a>
-    <nav class="site-nav" id="siteNav">
+    <nav class="tabs" aria-label="Primary">
       <a href="/">Home</a>
-      <div class="nav-dropdown">
-        <a href="/products.html" class="nav-dropdown-trigger">Products ▾</a>
-        <div class="nav-dropdown-menu">
-          <a href="/industrial.html"><strong>Industrial</strong><span>Plant-floor dashboards, troubleshooters, ERP hand-off</span></a>
-          <a href="/j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
-          <a href="/3d-printing/"><strong>3D Printing Hub</strong><span>Board wiring, firmware &amp; pinouts</span></a>
-          <a href="/eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
-          <a href="/rust-dps-meter.html"><strong>Rust DPS Meter</strong><span>Free live combat band for Rust servers</span></a>
-          <a href="/c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
-          <a href="/gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
-        </div>
-      </div>
-      <a href="/3d-printing/">3D Printing</a>
+      <a href="/#arsenal">Supported Games</a>
+      <a href="/#deployment">Our Mods</a>
+      <a href="/#software">Software</a>
+      <a href="#" data-soon>Intel</a>
+      <a href="/#commlink">Comm-Link</a>
+      <a href="#" data-soon data-discord>The Den</a>
+      <a href="/support.html">Support</a>
       <a href="/industrial.html">Industrial</a>
-      <a href="/training.html">Training</a>
-      <a href="/games.html">Games</a>
-      <a href="/community.html">Community</a>
-      <a href="/downloads.html">Downloads</a>
-      <a href="/about.html">About</a>
     </nav>
-    <div class="header-actions">
-      <a href="/downloads/HoneyBadgerDps-1.0.0.zip" class="btn btn-gold btn-sm" download>Download free</a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
-    </div>
   </div>
 </header>
 
-<section class="page-hero">
-  <div class="container">
-    <div class="nf-code">HTTP 404</div>
-    <h1>That address is not here.</h1>
-    <p class="lede">Nothing lives at <span class="nf-path" id="nfPath">this address</span>. If you followed a link from one of our pages, listings or READMEs, that link is wrong and we want to know: <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a>. Nothing is logged on this page; the address above is read by your own browser.</p>
-    <ul class="nf-list">
-      <li><a href="/">Home</a><span>What Honey Badger Software ships.</span></li>
-      <li><a href="/rust-dps-meter.html">Rust DPS Meter</a><span>The free live combat band for Rust servers: docs, download, source.</span></li>
-      <li><a href="/rust-dps-meter-art.html">DPS Meter art pack</a><span>Every band image with preview, size and the self-host steps.</span></li>
-      <li><a href="/downloads.html">Downloads</a><span>Every file we publish, in one place.</span></li>
-      <li><a href="/support.html">Support &amp; Docs</a><span>How to reach us and what we already wrote down.</span></li>
-    </ul>
+<section class="nf">
+  <div class="in">
+    <i class="tick tl" style="left:34px;top:84px"></i>
+    <div class="eyebrow">HTTP 404 — nothing at this address</div>
+    <h1>That address is <em>not here.</em></h1>
+    <p>Nothing lives at <span class="path" id="nfPath">this address</span>. If a link on one of our pages, listings or READMEs sent you here, the link is wrong and we want to know: <a href="mailto:contact@honeybadger.software" style="color:var(--amber)">contact@honeybadger.software</a>. Nothing is logged on this page; the address above is read by your own browser.</p>
+    <div class="soft">
+      <div class="it"><span class="n">01</span><h4>Home</h4><p>What Honey Badger ships: games, servers, software.</p><a href="/">Go home</a></div>
+      <div class="it"><span class="n">02</span><h4>Rust DPS Meter<small class="live">Free — Oxide + Carbon</small></h4><p>The live combat band for Rust servers: docs, download, source.</p><a href="/rust-dps-meter.html">Open</a></div>
+      <div class="it"><span class="n">03</span><h4>DPS Meter art pack</h4><p>Every band image with preview, size and the self-host steps.</p><a href="/rust-dps-meter-art.html">Open</a></div>
+      <div class="it"><span class="n">04</span><h4>Downloads</h4><p>Every file we publish, in one place.</p><a href="/downloads.html">Open</a></div>
+      <div class="it"><span class="n">05</span><h4>Support &amp; docs</h4><p>How to reach us and what we already wrote down.</p><a href="/support.html">Open</a></div>
+    </div>
   </div>
 </section>
 
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-cols">
-      <div class="footer-col">
-        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
-        <p class="footer-blurb">A one-person studio shipping polished tools for gaming, 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
-      </div>
-      <div class="footer-col"><h4>Products</h4><a href="/eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="/rust-dps-meter.html">Rust DPS Meter</a><a href="/j1-bridge.html">J1 Bridge</a><a href="/c7-dashboard.html">C7 Dashboard</a><a href="/builder.html">Dash Builder</a><a href="/industrial.html">Industrial</a></div>
-      <div class="footer-col"><h4>Resources</h4><a href="/support.html">Support &amp; Docs</a><a href="/downloads.html">Downloads</a><a href="/news.html">News</a><a href="/about.html">About</a></div>
-      <div class="footer-col"><h4>Community</h4><a href="/community.html">Forums</a><a href="/community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
-    </div>
-    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools. · Rust is a trademark of Facepunch Studios.</small></div>
-  </div>
+<footer>
+  <span>honeybadger.software — independent mods, servers &amp; tactical software. All rights reserved.</span>
+  <span><a href="/downloads.html">Downloads</a> &nbsp;·&nbsp; <a href="#" data-discord>Join The Den</a> &nbsp;·&nbsp; <a href="/support.html">Support</a> &nbsp;·&nbsp; <a href="/industrial.html">Industrial</a></span>
 </footer>
-<script src="/assets/js/nav.js?v=4"></script>
+
+</div><!-- /page -->
 <script>
   (function () { var p = document.getElementById('nfPath'); if (p) { p.textContent = location.pathname + location.search; } })();
 </script>
