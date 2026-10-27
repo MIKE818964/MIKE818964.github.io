@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Every image file of the Honey Badger DPS Meter band for Rust, with previews, sizes and the three steps to host the art on your own https server.">
+<meta name="theme-color" content="#05080C">
+<title>Rust DPS Meter art pack - every band image, sizes and self-hosting | HONEYBADGER SOFTWARE INC</title>
+<link rel="canonical" href="https://honeybadger.software/rust-dps-meter-art.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Honey Badger Software">
+<meta property="og:title" content="Honey Badger DPS Meter - the art pack">
+<meta property="og:description" content="The PNG files every Rust client downloads for the band, with previews and the self-host steps.">
+<meta property="og:url" content="https://honeybadger.software/rust-dps-meter-art.html">
+<meta property="og:image" content="https://honeybadger.software/assets/images/rust-dps-meter-og.png">
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
+<style>
+  .art-table { width: 100%; border-collapse: collapse; margin: 26px 0 0; }
+  .art-table th { text-align: left; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-dim); padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .art-table td { padding: 14px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text-mid); }
+  .art-table td a { color: var(--text); font-weight: 600; word-break: break-all; }
+  .art-table .meta { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+  .art-table .prev { width: 34%; }
+  .art-table .prev img { display: block; background: #0e0f11 repeating-conic-gradient(#15171b 0 25%, #0e0f11 0 50%) 0 0 / 16px 16px; border: 1px solid var(--border); padding: 8px; height: auto; }
+  .art-table .prev img.wide { width: 100%; max-width: 440px; }
+  .art-table .prev img.small { width: auto; max-width: 160px; max-height: 120px; image-rendering: auto; }
+  .art-table .role { width: 36%; font-size: 15px; }
+  .art-note { color: var(--text-dim); font-size: 14px; margin: 14px 0 0; }
+  .hbd-steps { counter-reset: s; list-style: none; padding: 0; margin: 24px 0 0; }
+  .hbd-steps li { counter-increment: s; position: relative; padding: 18px 0 18px 64px; border-top: 1px solid var(--border); font-size: 16px; }
+  .hbd-steps li::before { content: counter(s, decimal-leading-zero); position: absolute; left: 0; top: 14px; font-weight: 800; font-size: 30px; letter-spacing: -.04em; color: var(--accent-hi); }
+  .hbd-steps code { background: rgba(63,216,255,.08); border: 1px solid var(--border); padding: 1px 7px; border-radius: 3px; font-size: 14px; }
+  @media (max-width: 760px) { .art-table .prev { width: 40%; } .art-table .role { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
+    <span class="topbar-links">
+      <a href="community.html">Community</a>
+      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
+      <a href="downloads.html">Downloads</a>
+    </span>
+  </div>
+</div>
+<header class="site-header">
+  <div class="container header-row">
+    <a href="/" class="brand">
+      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
+      <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
+    </a>
+    <nav class="site-nav" id="siteNav">
+      <a href="/">Home</a>
+      <div class="nav-dropdown">
+        <a href="/products.html" class="nav-dropdown-trigger">Products ▾</a>
+        <div class="nav-dropdown-menu">
+          <a href="/industrial.html"><strong>Industrial</strong><span>Plant-floor dashboards, troubleshooters, ERP hand-off</span></a>
+          <a href="/j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
+          <a href="/3d-printing/"><strong>3D Printing Hub</strong><span>Board wiring, firmware &amp; pinouts</span></a>
+          <a href="/eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
+          <a href="/rust-dps-meter.html"><strong>Rust DPS Meter</strong><span>Free live combat band for Rust servers</span></a>
+          <a href="/c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
+          <a href="/gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
+        </div>
+      </div>
+      <a href="/3d-printing/">3D Printing</a>
+      <a href="/industrial.html">Industrial</a>
+      <a href="/training.html">Training</a>
+      <a href="/games.html">Games</a>
+      <a href="/community.html">Community</a>
+      <a href="/downloads.html">Downloads</a>
+      <a href="/about.html">About</a>
+    </nav>
+    <div class="header-actions">
+      <a href="downloads/HoneyBadgerDps-1.0.0.zip" class="btn btn-gold btn-sm" download>Download free</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a> / <a href="games.html">Games</a> / <a href="rust-dps-meter.html">Rust DPS Meter</a> / Art pack</div>
+    <div class="kicker">RUST DPS METER · ART PACK · v1</div>
+    <h1>The band, file by file</h1>
+    <p class="lede">These are the image files every Rust client downloads when the <a href="rust-dps-meter.html">Honey Badger DPS Meter</a> draws its band. They live here as plain static files over https, cached for a year under versioned names, and they are licensed for use with the plugin, including copies you host yourself. Nothing on this page is generated on the fly: what you see is what the client gets.</p>
+    <div class="hero-cta" style="margin-top:24px">
+      <a href="rust-dps-meter.html" class="btn btn-primary">Back to the plugin</a>
+      <a href="downloads/HoneyBadgerDps-1.0.0.zip" class="btn btn-ghost" download>Download v1.0.0 (.zip)</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">THE FOUR FILES THE PLUGIN LOADS</div>
+      <h2>Read straight out of the plugin source</h2>
+      <p>The plugin asks the art host for exactly these names, in this order. Copy these four and you have the whole band.</p>
+    </div>
+    <table class="art-table">
+      <thead><tr><th>Preview</th><th>File</th><th>Where it goes</th></tr></thead>
+      <tbody>
+<tr><td class="prev"><img src="assets/hud/v1/badge.png?v=1" alt="badge.png" width="156" height="130" loading="lazy" class="small"></td><td><a href="assets/hud/v1/badge.png?v=1">badge.png</a><div class="meta">156 x 130 px &middot; 37 KB</div></td><td class="role">Honey Badger badge with the name plate, left cell.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_cleaned_v3.png?v=1" alt="band_frame_cleaned_v3.png" width="1305" height="150" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame_cleaned_v3.png?v=1">band_frame_cleaned_v3.png</a><div class="meta">1305 x 150 px &middot; 193 KB</div></td><td class="role">The band itself: brushed gunmetal plate, amber hairlines, text-free. Stretched to the band box.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/body_silhouette.png?v=1" alt="body_silhouette.png" width="71" height="129" loading="lazy" class="small"></td><td><a href="assets/hud/v1/body_silhouette.png?v=1">body_silhouette.png</a><div class="meta">71 x 129 px &middot; 15 KB</div></td><td class="role">Body silhouette behind the zone colouring, centre cell.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/hitpop_skull_cleaned.png?v=1" alt="hitpop_skull_cleaned.png" width="60" height="60" loading="lazy" class="small"></td><td><a href="assets/hud/v1/hitpop_skull_cleaned.png?v=1">hitpop_skull_cleaned.png</a><div class="meta">60 x 60 px &middot; 7 KB</div></td><td class="role">Skull for the hit pop beside the band.</td></tr>
+      </tbody>
+    </table>
+    <p class="art-note">Previews sit on a checker so the transparent areas show. In game they sit on the player's screen.</p>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">SELF-HOSTING</div>
+      <h2>Serve the art from your own domain in three steps</h2>
+      <p>By default clients fetch from this site. If you would rather own that traffic, the plugin only needs a folder URL.</p>
+    </div>
+    <ol class="hbd-steps">
+      <li>Copy the four files above to any <strong>https</strong> host that serves them as <code>image/png</code> with no login and no redirect. Keep the file names.</li>
+      <li>In <code>config/HoneyBadgerDps.json</code> set <code>Image base URL (https, ends with /)</code> to that folder, ending with a slash, and reload the plugin.</li>
+      <li>If you ever replace an image under the same name, change <code>Image cache tag</code> so clients fetch it again. Admins can prove loading with <code>/dps probe</code>; <code>/dps text</code> is the fallback for a client that cannot load images.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">EVERYTHING ELSE IN THE FOLDER</div>
+      <h2>The rest of the lift</h2>
+      <p>Nine-slice edges and corners, the text-free variants, the kill-feed row and the weapon plate from the same master art. The plugin does not request them; they are here for anyone matching the look in their own HUD. Same licence: use with the plugin, credit Honey Badger Software, ask before anything else. The <a href="assets/hud/v1/manifest.json">manifest.json</a> carries the CUI anchors the art was lifted with.</p>
+    </div>
+    <table class="art-table">
+      <thead><tr><th>Preview</th><th>File</th><th>Note</th></tr></thead>
+      <tbody>
+<tr><td class="prev"><img src="assets/hud/v1/badge_cleaned.png?v=1" alt="badge_cleaned.png" width="156" height="130" loading="lazy" class="small"></td><td><a href="assets/hud/v1/badge_cleaned.png?v=1">badge_cleaned.png</a><div class="meta">156 x 130 px &middot; 37 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame.png?v=1" alt="band_frame.png" width="1305" height="150" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame.png?v=1">band_frame.png</a><div class="meta">1305 x 150 px &middot; 260 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_b.png?v=1" alt="band_frame_b.png" width="1253" height="22" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame_b.png?v=1">band_frame_b.png</a><div class="meta">1253 x 22 px &middot; 26 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_b_cleaned.png?v=1" alt="band_frame_b_cleaned.png" width="1253" height="22" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame_b_cleaned.png?v=1">band_frame_b_cleaned.png</a><div class="meta">1253 x 22 px &middot; 24 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_bl.png?v=1" alt="band_frame_bl.png" width="26" height="22" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_bl.png?v=1">band_frame_bl.png</a><div class="meta">26 x 22 px &middot; 1 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_bl_cleaned.png?v=1" alt="band_frame_bl_cleaned.png" width="26" height="22" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_bl_cleaned.png?v=1">band_frame_bl_cleaned.png</a><div class="meta">26 x 22 px &middot; 1 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_br.png?v=1" alt="band_frame_br.png" width="26" height="22" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_br.png?v=1">band_frame_br.png</a><div class="meta">26 x 22 px &middot; 1 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_br_cleaned.png?v=1" alt="band_frame_br_cleaned.png" width="26" height="22" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_br_cleaned.png?v=1">band_frame_br_cleaned.png</a><div class="meta">26 x 22 px &middot; 1 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_c.png?v=1" alt="band_frame_c.png" width="1253" height="106" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame_c.png?v=1">band_frame_c.png</a><div class="meta">1253 x 106 px &middot; 191 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_c_cleaned.png?v=1" alt="band_frame_c_cleaned.png" width="1253" height="106" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame_c_cleaned.png?v=1">band_frame_c_cleaned.png</a><div class="meta">1253 x 106 px &middot; 113 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_cleaned.png?v=1" alt="band_frame_cleaned.png" width="1305" height="150" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame_cleaned.png?v=1">band_frame_cleaned.png</a><div class="meta">1305 x 150 px &middot; 179 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_cleaned_v2.png?v=1" alt="band_frame_cleaned_v2.png" width="1305" height="150" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame_cleaned_v2.png?v=1">band_frame_cleaned_v2.png</a><div class="meta">1305 x 150 px &middot; 192 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_l.png?v=1" alt="band_frame_l.png" width="26" height="106" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_l.png?v=1">band_frame_l.png</a><div class="meta">26 x 106 px &middot; 3 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_l_cleaned.png?v=1" alt="band_frame_l_cleaned.png" width="26" height="106" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_l_cleaned.png?v=1">band_frame_l_cleaned.png</a><div class="meta">26 x 106 px &middot; 3 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_r.png?v=1" alt="band_frame_r.png" width="26" height="106" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_r.png?v=1">band_frame_r.png</a><div class="meta">26 x 106 px &middot; 3 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_r_cleaned.png?v=1" alt="band_frame_r_cleaned.png" width="26" height="106" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_r_cleaned.png?v=1">band_frame_r_cleaned.png</a><div class="meta">26 x 106 px &middot; 3 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_t.png?v=1" alt="band_frame_t.png" width="1253" height="22" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame_t.png?v=1">band_frame_t.png</a><div class="meta">1253 x 22 px &middot; 26 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_t_cleaned.png?v=1" alt="band_frame_t_cleaned.png" width="1253" height="22" loading="lazy" class="wide"></td><td><a href="assets/hud/v1/band_frame_t_cleaned.png?v=1">band_frame_t_cleaned.png</a><div class="meta">1253 x 22 px &middot; 26 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_tl.png?v=1" alt="band_frame_tl.png" width="26" height="22" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_tl.png?v=1">band_frame_tl.png</a><div class="meta">26 x 22 px &middot; 1 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_tl_cleaned.png?v=1" alt="band_frame_tl_cleaned.png" width="26" height="22" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_tl_cleaned.png?v=1">band_frame_tl_cleaned.png</a><div class="meta">26 x 22 px &middot; 1 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_tr.png?v=1" alt="band_frame_tr.png" width="26" height="22" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_tr.png?v=1">band_frame_tr.png</a><div class="meta">26 x 22 px &middot; 1 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/band_frame_tr_cleaned.png?v=1" alt="band_frame_tr_cleaned.png" width="26" height="22" loading="lazy" class="small"></td><td><a href="assets/hud/v1/band_frame_tr_cleaned.png?v=1">band_frame_tr_cleaned.png</a><div class="meta">26 x 22 px &middot; 1 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/body_silhouette_cleaned.png?v=1" alt="body_silhouette_cleaned.png" width="71" height="129" loading="lazy" class="small"></td><td><a href="assets/hud/v1/body_silhouette_cleaned.png?v=1">body_silhouette_cleaned.png</a><div class="meta">71 x 129 px &middot; 15 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/hitpop_skull.png?v=1" alt="hitpop_skull.png" width="60" height="60" loading="lazy" class="small"></td><td><a href="assets/hud/v1/hitpop_skull.png?v=1">hitpop_skull.png</a><div class="meta">60 x 60 px &middot; 7 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/killfeed_row.png?v=1" alt="killfeed_row.png" width="378" height="38" loading="lazy" class="small"></td><td><a href="assets/hud/v1/killfeed_row.png?v=1">killfeed_row.png</a><div class="meta">378 x 38 px &middot; 22 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/killfeed_row_cleaned.png?v=1" alt="killfeed_row_cleaned.png" width="378" height="38" loading="lazy" class="small"></td><td><a href="assets/hud/v1/killfeed_row_cleaned.png?v=1">killfeed_row_cleaned.png</a><div class="meta">378 x 38 px &middot; 13 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/weapon_icon.png?v=1" alt="weapon_icon.png" width="121" height="54" loading="lazy" class="small"></td><td><a href="assets/hud/v1/weapon_icon.png?v=1">weapon_icon.png</a><div class="meta">121 x 54 px &middot; 8 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+<tr><td class="prev"><img src="assets/hud/v1/weapon_icon_cleaned.png?v=1" alt="weapon_icon_cleaned.png" width="121" height="54" loading="lazy" class="small"></td><td><a href="assets/hud/v1/weapon_icon_cleaned.png?v=1">weapon_icon_cleaned.png</a><div class="meta">121 x 54 px &middot; 8 KB</div></td><td class="role">Nine-slice piece, cleaned variant or spare panel from the same lift; not requested by the plugin.</td></tr>
+      </tbody>
+    </table>
+    <p class="art-note">Cache rule for this folder: one year, immutable. A published file is never overwritten; a change gets a new name or a new tag.</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
+        <p class="footer-blurb">A one-person studio shipping polished tools for gaming, 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
+      </div>
+      <div class="footer-col"><h4>Products</h4><a href="eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="rust-dps-meter.html">Rust DPS Meter</a><a href="j1-bridge.html">J1 Bridge</a><a href="c7-dashboard.html">C7 Dashboard</a><a href="builder.html">Dash Builder</a><a href="industrial.html">Industrial</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="support.html">Support &amp; Docs</a><a href="downloads.html">Downloads</a><a href="news.html">News</a><a href="about.html">About</a></div>
+      <div class="footer-col"><h4>Community</h4><a href="community.html">Forums</a><a href="community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
+    </div>
+    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools. · Rust is a trademark of Facepunch Studios.</small></div>
+  </div>
+</footer>
+<script src="assets/js/nav.js?v=4"></script>
+</body>
+</html>
