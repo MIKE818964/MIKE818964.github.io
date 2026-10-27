@@ -56,10 +56,15 @@ var CHARACTERS_QUERY = `query Chars($t: String!, $after: String) {
 function asRecord2(v) {
   return v && typeof v === "object" ? v : null;
 }
-function parseCharacterPage(body) {
+function graphqlErrorMessages(body) {
   const b = asRecord2(body);
   const errors = b && Array.isArray(b.errors) ? b.errors : null;
-  if (errors?.length) throw new Error(`GraphQL: ${errors.map((e) => e?.message ?? "?").join("; ")}`);
+  return errors?.length ? errors.map((e) => e?.message ?? "?") : null;
+}
+function parseCharacterPage(body) {
+  const b = asRecord2(body);
+  const errors = graphqlErrorMessages(body);
+  if (errors) throw new Error(`GraphQL: ${errors.join("; ")}`);
   const objects = asRecord2(asRecord2(b?.data)?.objects);
   if (!objects) throw new Error("GraphQL: response had no objects");
   const pi = asRecord2(objects.pageInfo);
@@ -104,6 +109,12 @@ async function fetchPage(endpoint, type, after) {
       body = await res.json();
     } catch {
       await sleep(1500 * (attempt + 1));
+      continue;
+    }
+    const gqlErrors = graphqlErrorMessages(body);
+    if (gqlErrors && attempt < MAX_ATTEMPTS - 1) {
+      console.error(`GraphQL error (attempt ${attempt + 1}/${MAX_ATTEMPTS}, retrying): ${gqlErrors.join("; ")}`);
+      await sleep(2e3 * (attempt + 1));
       continue;
     }
     return parseCharacterPage(body);
