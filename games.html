@@ -107,10 +107,10 @@
     everything else, pointed at fun.</p>
     <div class="bansafe">
       <span style="font-size:20px">🛡️</span>
-      <span><b>Ban-safe by design — the whole point.</b> Every overlay here is read-only and client-side:
-      it reads public data or your own account's data, renders in its own window, and <b>never injects input,
-      never broadcasts one keypress to many clients, never reads game memory.</b> One human input drives one
-      client. That line is the personality, not a disclaimer.</span>
+      <span><b>Ban-safe by design — the whole point.</b> The overlays here are designed read-only and client-side:
+      they read public data or your own account's data, render in their own window, and <b>never inject input,
+      never broadcast one keypress to many clients, never read game memory.</b> One human input drives one
+      client. The Rust DPS Meter is different: it is a server plugin, and its page says exactly what it touches.</span>
     </div>
   </div>
 </section>
@@ -128,7 +128,7 @@
           <h3>EVE Fleet Foreman</h3>
           <p>Ranks every ore by ISK/m³ off live Jita prices, computes fleet yield and time-to-fill, and splits
           mined loot fairly. Pro tier pulls your real 30-day Mining Ledger via EVE's own SSO login. Already public
-          on GitHub with a Windows installer.</p>
+          on GitHub with a Windows installer. <a href="/eve-fleet-foreman.html">Details &amp; download &rarr;</a></p>
           <div class="gm-safe"><b>Ban-safe:</b> reads public market data + (with your login) your own ESI ledger.
           Never touches the game client. CCP-sanctioned ESI pattern.</div>
         </div>
@@ -260,7 +260,7 @@
       <div class="footer-col"><h4>Resources</h4><a href="/support.html">Support &amp; Docs</a><a href="/downloads.html">Downloads</a><a href="/news.html">News</a><a href="/about.html">About</a></div>
       <div class="footer-col"><h4>Community</h4><a href="/community.html">Forums</a><a href="/community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
     </div>
-    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · All overlays read-only &amp; client-side · No telemetry. No tracking. Just tools.</small></div>
+    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · Overlays designed read-only &amp; client-side · the Rust plugin runs on the server · No telemetry. No tracking. Just tools.</small></div>
   </div>
 </footer>
 <script src="/assets/js/nav.js?v=4"></script>
