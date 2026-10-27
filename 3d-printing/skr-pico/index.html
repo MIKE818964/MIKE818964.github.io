@@ -336,7 +336,7 @@
   /* v11 fix: the absolute "+N motors" badge overlaid the path-card titles at narrow widths —
      float it into the flow so the text wraps around it instead of running underneath */
   .grow .motors{position:static;float:right;margin:0 0 6px 14px;text-align:right}
-  /* v11 fix: the board tour hard-codes 1034px of side columns — at Michael's 980 window the
+  /* v11 fix: the board tour hard-codes 1034px of side columns — at a 980px window the
      center board collapsed to 0px. Below 1140px: board first (full width), chips under it, rails last. */
   @media (max-width:1140px){
     .tour{grid-template-columns:1fr 1fr}
@@ -405,7 +405,7 @@
   .pol.n{background:#EEF1F5;border:1px solid #CBD3DC;color:#2E3640}
   .pol.x{background:#EDF7EE;border:1px solid #BFE3C2;color:#1E7A2E}
 
-  /* ===== v16: the blues + the official films (Michael's BTT-site references) ===== */
+  /* ===== v16: the blues + the official films (BTT-site references) ===== */
   :root{--navy:#0A1134;--navy2:#16226B;--elec:#2E7BFF;--cyan:#3FD8FF}
   /* cine band goes full BTT-space: deep navy + electric streaks */
   .cine{background:linear-gradient(135deg,#060B24 0%,var(--navy) 38%,var(--navy2) 72%,#0A1445 100%)}
