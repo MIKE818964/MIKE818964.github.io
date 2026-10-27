@@ -205,6 +205,8 @@
   .rule-box b{color:var(--ink); font-weight:500}
   .soft .it.game{grid-template-columns:34px 300px 220px 1fr auto; align-items:center}
   .it.game .prev{min-height:1px}
+  .it.game .prev:empty{display:none}            /* rows without a picture: the text takes the picture column too */
+  .it.game .prev:empty + p{grid-column:3 / 5}
   .it.game .prev img{width:100%; max-width:220px; height:auto; border:1px solid var(--line2)}
   .it.game p .touch{display:block; margin-top:8px; font-size:12px; color:var(--mute); opacity:.85}
   .it h4 small:not(.live){color:var(--mute)}
@@ -212,6 +214,7 @@
   .join code{font:500 15px/1.4 var(--mono); color:var(--ink); background:rgba(245,184,46,.08); border:1px solid var(--line2); padding:8px 14px; user-select:all}
   @media (max-width:980px){
     .soft .it.game{grid-template-columns:28px 1fr; row-gap:8px} .it.game .prev, .it.game p, .it.game a, .it.game span.hold{grid-column:2}
+    .it.game .prev:empty + p{grid-column:2}
   }
 </style>
 </head>
