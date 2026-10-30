@@ -1,159 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="The Honeybadger Software community — Discord chat plus discussion boards for owners, tinkerers, and tuners. Share builds, get support, and shape what ships next.">
-<meta name="theme-color" content="#05080C">
-<title>Community &amp; Forums | HONEYBADGER SOFTWARE INC</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Community | HoneyBadger</title>
+<meta name="description" content="The Den — the HoneyBadger community. Real-time Discord, six discussion boards, and a live announcement feed for owners, tinkerers and tuners.">
 <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
-<link rel="stylesheet" href="assets/css/style.css?v=9">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/brand.css?v=1">
+<style>
+/* ===== COMMUNITY — archetype "BROADCAST BOARD" ===== */
+/* wide banner hero */
+.cbanner{position:relative;min-height:48vh;display:flex;align-items:flex-end;
+  background:#000 url(/assets/images/badger-neon.jpg) center 38%/cover no-repeat}
+.cbanner::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,#0B0B0D 0%,rgba(11,11,13,.92) 30%,rgba(11,11,13,.40) 62%,rgba(11,11,13,0) 86%)}
+.cbanner::before{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(0deg,#0B0B0D 3%,rgba(11,11,13,0) 56%)}
+.cbanner .in{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;width:100%;padding:0 var(--gut) 46px}
+.cbanner h1{font-size:clamp(58px,8.4vw,136px);margin:12px 0 12px;max-width:14ch}
+.cbanner .sub{max-width:54ch;color:var(--muted)}
+.art-cap{position:absolute;right:var(--gut);bottom:20px;z-index:2;max-width:46vw;
+  font:500 10px/1.4 "JetBrains Mono",monospace;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--faint);text-align:right;border-right:1px solid var(--accent);padding-right:11px}
+@media(max-width:700px){.art-cap{display:none}}
+
+/* oversized stat band */
+.bigstats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
+.bigstats .in{display:grid;grid-template-columns:repeat(3,1fr);max-width:var(--maxw);margin:0 auto}
+.bigstats .s{position:relative;padding:34px var(--gut) 28px;border-left:1px solid var(--line)}
+.bigstats .s:first-child{border-left:0}
+.bigstats .s b{display:block;font:600 clamp(66px,9vw,146px)/.8 "Teko",sans-serif;color:var(--ink)}
+.bigstats .s b em{color:var(--accent);font-style:normal}
+.bigstats .s span{display:block;margin-top:10px;font:500 11px/1.4 "JetBrains Mono",monospace;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+@media(max-width:700px){.bigstats .in{grid-template-columns:1fr}
+  .bigstats .s{border-left:0;border-top:1px solid var(--line)}
+  .bigstats .s:first-child{border-top:0}}
+
+/* two-zone asymmetric grid */
+.den{display:grid;grid-template-columns:1.4fr 1fr;max-width:var(--maxw);margin:0 auto;
+  padding:66px var(--gut) 0;align-items:start}
+.zone-l{padding-right:50px;border-right:1px solid var(--line)}
+.zone-r{padding-left:50px}
+@media(max-width:1040px){.den{grid-template-columns:1fr;padding-top:48px}
+  .zone-l{padding-right:0;border-right:0}
+  .zone-r{padding-left:0;margin-top:56px}}
+
+.zhead{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.zhead h2{font-size:clamp(30px,3.4vw,48px)}
+.zhead .meta{font:500 10px/1 "JetBrains Mono",monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.zhead p{margin-top:8px}
+
+/* announcement feed rows: mono timestamp gutter + cyan left-tick */
+.feed{margin-top:22px}
+.frow{display:grid;grid-template-columns:104px 1fr;gap:20px;position:relative;
+  padding:20px 0 20px 16px;border-top:1px solid var(--line)}
+.frow::before{content:"";position:absolute;left:0;top:20px;bottom:20px;width:2px;background:var(--accent);opacity:.72}
+.frow time{display:block;font:500 11px/1.5 "JetBrains Mono",monospace;letter-spacing:.06em;color:var(--faint)}
+.frow .tag{display:block;margin-top:8px;font:500 9.5px/1 "JetBrains Mono",monospace;letter-spacing:.2em;color:var(--accent)}
+.frow h3{font-size:25px;letter-spacing:.015em;margin-bottom:5px}
+.frow p{color:var(--muted);font-size:13px;line-height:1.55;max-width:60ch}
+.frow a.more{color:var(--accent);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.housenote{margin-top:30px;padding:18px 0 0 16px;border-top:1px solid var(--line-2);
+  color:var(--faint);font-size:12px;line-height:1.6;max-width:62ch}
+.housenote b{color:var(--muted);font-weight:500}
+
+/* join rail */
+.join{border:1px solid var(--line-2);background:var(--surface);padding:28px}
+.join h3{font-size:36px;margin:8px 0 10px}
+.join p{color:var(--muted);font-size:13.5px;line-height:1.6}
+.join .btn{margin-top:20px;width:100%;justify-content:center}
+.join .fine{margin-top:12px;font-size:11.5px;color:var(--faint)}
+.dwidget{margin-top:22px;border:1px solid var(--line)}
+.dwidget iframe{display:block;width:100%;height:420px;border:0}
+
+.chan{margin-top:44px}
+.chan .ch-head{display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:1px solid var(--line-2);padding-bottom:10px}
+.chan h4{font-size:24px}
+.chan .ch-head span{font:500 10px/1 "JetBrains Mono",monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.crow{display:flex;justify-content:space-between;gap:14px;align-items:baseline;position:relative;
+  padding:14px 0 14px 15px;border-top:1px solid var(--line)}
+.crow:first-of-type{border-top:0}
+.crow::before{content:"";position:absolute;left:0;top:50%;width:7px;height:1px;background:var(--accent);transform:translateY(-50%)}
+.crow .c{color:var(--ink);font-size:13.5px}
+.crow .c b{color:var(--accent);font-weight:400}
+.crow .n{color:var(--faint);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+</style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="container">
-    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
-    <span class="topbar-links">
-      <a href="community.html">Community</a>
-      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
-      <a href="downloads.html">Downloads</a>
-    </span>
+<!-- ===== CANONICAL NAV ===== -->
+<nav class="nav" id="nav">
+  <div class="in">
+    <a class="brand" href="/">Honey<b>Badger</b></a>
+    <a class="item" href="/games.html">Games</a>
+    <a class="item" href="/products.html">Software</a>
+    <a class="item" href="/industrial.html">Industrial</a>
+    <a class="item on" href="/community.html">Community</a>
+    <a class="item" href="/support.html">Support</a>
+    <span class="sp"></span>
+    <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
+    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
   </div>
-</div>
-<header class="site-header">
-  <div class="container header-row">
-    <a href="/" class="brand">
-      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
-      <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
-    </a>
-    <nav class="site-nav" id="siteNav">
-      <a href="/">Home</a>
-      <div class="nav-dropdown">
-        <a href="/products.html" class="nav-dropdown-trigger">Products ▾</a>
-        <div class="nav-dropdown-menu">
-          <a href="/industrial.html"><strong>Industrial</strong><span>Plant-floor dashboards, troubleshooters, ERP hand-off</span></a>
-          <a href="/j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
-          <a href="/3d-printing/"><strong>3D Printing Hub</strong><span>Board wiring, firmware &amp; pinouts</span></a>
-          <a href="/eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
-          <a href="/c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
-          <a href="/gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
-        </div>
-      </div>
-      <a href="/3d-printing/">3D Printing</a>
-      <a href="/industrial.html">Industrial</a>
-      <a href="/training.html">Training</a>
-      <a href="/games.html">Games</a>
-      <a href="/community.html">Community</a>
-      <a href="/downloads.html">Downloads</a>
-      <a href="/about.html">About</a>
-    </nav>
-    <div class="header-actions">
-      <a href="builder.html" class="btn btn-gold btn-sm">Try the Dash Builder</a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
-    </div>
+</nav>
+
+<!-- ===== HERO BANNER ===== -->
+<header class="cbanner">
+  <div class="in">
+    <p class="eyebrow">THE DEN</p>
+    <h1>Find your squad.</h1>
+    <p class="sub">A home for everyone running HoneyBadger gear — share builds, swap gauge designs, get support, and help shape what ships next. Real-time chat on Discord, six discussion boards, one feed.</p>
   </div>
+  <p class="art-cap">Brand artwork<br>&ldquo;Neon Alley&rdquo; · the HoneyBadger</p>
 </header>
 
-<section class="page-hero">
-  <div class="container">
-    <div class="breadcrumb"><a href="/">Home</a> / Community</div>
-    <div class="eyebrow-chip">🦡 OWNERS · TINKERERS · TUNERS</div>
-    <h1>Join the build.</h1>
-    <p class="lede">A home for everyone running Honeybadger gear — share builds, swap gauge designs, get support, and help shape what ships next. Real-time chat on Discord, plus threaded discussion boards.</p>
+<!-- ===== OVERSIZED STAT BAND ===== -->
+<section class="bigstats">
+  <div class="in">
+    <div class="s"><span class="tick tl"></span><b>6</b><span>Discussion boards</span></div>
+    <div class="s"><span class="tick tl"></span><b>5</b><span>Products supported</span></div>
+    <div class="s"><span class="tick tl"></span><b><em>0</em></b><span>Trackers · no telemetry</span></div>
   </div>
 </section>
 
-<section class="brand-band">
-  <div class="container brand-band-grid">
-    <img src="assets/images/badger-neon.jpg" class="brand-band-art" alt="The Honeybadger — owners, tinkerers, tuners">
-    <div>
-      <div class="kicker" style="color:var(--accent)">THE STUBBORN FEW</div>
-      <h2>The honey badger doesn't care.<br>Neither do we.</h2>
-      <p>Owners, tinkerers, tuners, makers — if you'd rather modify it than replace it, you're home. Pull up a chair.</p>
-      <a href="https://discord.gg/HsFwkF3Tms" class="btn btn-primary" target="_blank" rel="noopener">Join the Discord →</a>
-    </div>
-  </div>
-</section>
+<!-- ===== TWO-ZONE BOARD ===== -->
+<section class="den">
 
-<section class="section">
-  <div class="container">
-    <div class="stat-bar">
-      <div class="stat-box"><div class="stat-num">5</div><div class="stat-label">Products</div></div>
-      <div class="stat-box"><div class="stat-num">6</div><div class="stat-label">Boards</div></div>
-      <div class="stat-box"><div class="stat-num">$0</div><div class="stat-label">To join</div></div>
-      <div class="stat-box"><div class="stat-num">0</div><div class="stat-label">Tracking</div></div>
+  <!-- LEFT (1.4fr): announcement / activity feed -->
+  <div class="zone-l">
+    <div class="zhead">
+      <h2>The feed</h2>
+      <span class="meta">Announcements · newest first</span>
     </div>
+    <p class="lede">Studio announcements and board activity. The boards are new — be the first to post.</p>
 
-    <!-- DISCORD -->
-    <div class="discord-card">
-      <div>
-        <div class="kicker" style="color:#7BC4E0">REAL-TIME CHAT</div>
-        <h2>Hang out on Discord</h2>
-        <p style="color:var(--text-mid);margin:0 0 22px">The fastest way in. Voice + text channels for each product, a show-off room for builds, and direct line to the developer. The badger reads everything.</p>
-        <a href="https://discord.gg/HsFwkF3Tms" id="discordInvite" class="btn btn-primary" target="_blank" rel="noopener">Join the Discord →</a>
-        <p style="font-size:12px;color:var(--text-dim);margin:14px 0 0">Free, no account on this site required — just a Discord login.</p>
+    <div class="feed">
+      <div class="frow">
+        <div><time>2026-10-28</time><span class="tag">STUDIO</span></div>
+        <div>
+          <h3>Community moves to the new site look</h3>
+          <p>The Den gets the dark-cinema rebuild — one feed, one join rail, no clutter. Same honest tools, sharper room to talk shop.</p>
+        </div>
       </div>
-      <div class="discord-embed">
+      <div class="frow">
+        <div><time>2026-10-20</time><span class="tag">BOARDS</span></div>
+        <div>
+          <h3>Six discussion boards opened</h3>
+          <p>General &amp; Announcements, Builds &amp; Show-off, J1 Bridge, C7 Dashboard &amp; Dash Builder, Industrial, and Support &amp; Help are live and waiting for the first threads.</p>
+        </div>
+      </div>
+      <div class="frow">
+        <div><time>2026-10-12</time><span class="tag">DISCORD</span></div>
+        <div>
+          <h3>Real-time chat is on</h3>
+          <p>Voice and text channels for each product, a show-off room for builds, and a direct line to the developer. The badger reads everything.</p>
+          <a class="more" href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener">Join the Discord &rarr;</a>
+        </div>
+      </div>
+      <div class="frow">
+        <div><time>2026-05</time><span class="tag">DASH BUILDER</span></div>
+        <div>
+          <h3>Dash Builder shipped — show us your cluster</h3>
+          <p>Design a custom digital gauge cluster in the browser; the SVG you configure renders pixel-identical on the physical C7 dash. Post your design in Builds &amp; Show-off.</p>
+          <a class="more" href="/builder.html">Open the builder &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="housenote"><b>House rules.</b> Keep it useful, keep it kind. Be helpful, be honest, no spam, no gatekeeping. We talk about modifying your own gear — off-road / track features are framed that way for a reason; know your local laws. The badger has no patience for jerks.</p>
+  </div>
+
+  <!-- RIGHT (1fr): join rail -->
+  <div class="zone-r">
+    <div class="join">
+      <p class="eyebrow">Real-time chat</p>
+      <h3>Hang out on Discord</h3>
+      <p>The fastest way in. Jump into the channels below, show off a build, or get the developer on the line. Free — no account on this site required, just a Discord login.</p>
+      <a class="btn solid" href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener">Join the Discord &rarr;</a>
+      <p class="fine">discord.gg/HsFwkF3Tms</p>
+      <div class="dwidget">
         <iframe src="https://discord.com/widget?id=1438637741473661041&theme=dark"
-                width="100%" height="500" allowtransparency="true" frameborder="0"
+                width="100%" height="420" allowtransparency="true" frameborder="0"
                 sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
-                title="Honeybadger Software Discord server widget"></iframe>
+                title="HoneyBadger Discord server widget"></iframe>
       </div>
     </div>
 
-    <!-- FORUM BOARDS -->
-    <div class="section-head"><div class="kicker">DISCUSSION BOARDS</div><h2>The forums</h2><p class="lede">Threaded, searchable discussion for longer-form help, build logs, and feature requests.</p></div>
-    <div class="forum-grid">
-      <a href="#threads" class="forum-cat"><div class="forum-icon">📣</div><div><h3>General &amp; Announcements</h3><p>Studio news, release notes, and anything that doesn't fit a product board.</p><div class="forum-meta">NEW BOARD · BE THE FIRST TO POST</div></div></a>
-      <a href="#threads" class="forum-cat"><div class="forum-icon">🏆</div><div><h3>Builds &amp; Show-off</h3><p>Show your install, your gauge cluster, your print. Photos encouraged.</p><div class="forum-meta">NEW BOARD · BE THE FIRST TO POST</div></div></a>
-      <a href="#threads" class="forum-cat"><div class="forum-icon">🧊</div><div><h3>J1 Bridge</h3><p>Snapmaker J1 slicing, monitoring, camera, and firmware talk.</p><div class="forum-meta">NEW BOARD · BE THE FIRST TO POST</div></div></a>
-      <a href="#threads" class="forum-cat"><div class="forum-icon">🚗</div><div><h3>C7 Dashboard &amp; Dash Builder</h3><p>Corvette installs, CAN signals, and custom cluster designs.</p><div class="forum-meta">NEW BOARD · BE THE FIRST TO POST</div></div></a>
-      <a href="#threads" class="forum-cat"><div class="forum-icon">🏭</div><div><h3>Industrial</h3><p>Plant dashboards, protocols, and integration questions.</p><div class="forum-meta">NEW BOARD · BE THE FIRST TO POST</div></div></a>
-      <a href="support.html" class="forum-cat"><div class="forum-icon">🛟</div><div><h3>Support &amp; Help</h3><p>Stuck? Post here or check the docs. The Known Issues pages live in Support.</p><div class="forum-meta">SEE THE DOCS →</div></div></a>
-    </div>
-
-    <!-- THREADS (giscus / GitHub Discussions mounts here) -->
-    <div id="threads" style="margin-top:48px">
-      <div class="section-head"><div class="kicker">LIVE THREADS</div><h2>Recent discussion</h2></div>
-      <div class="embed-placeholder" style="border:1px dashed var(--border-hi);border-radius:14px;background:var(--bg-card)">
-        <div style="font-size:40px;margin-bottom:10px">🧵</div>
-        Threaded discussions (powered by GitHub Discussions) load here<br>once the board is switched on. In the meantime, jump into Discord above.
-        <!-- giscus mounts here once GitHub Discussions + the giscus app are enabled on the repo:
-        <script src="https://giscus.app/client.js"
-                data-repo="MIKE818964/MIKE818964.github.io"
-                data-repo-id="..." data-category="Community" data-category-id="..."
-                data-mapping="pathname" data-theme="dark_dimmed" crossorigin="anonymous" async></script>
-        -->
-      </div>
+    <div class="chan">
+      <div class="ch-head"><h4>Channels &amp; boards</h4><span>6 live</span></div>
+      <div class="crow"><span class="c"><b>#</b>announcements</span><span class="n">Studio news</span></div>
+      <div class="crow"><span class="c"><b>#</b>builds-show-off</span><span class="n">Photos welcome</span></div>
+      <div class="crow"><span class="c"><b>#</b>j1-bridge</span><span class="n">Snapmaker J1</span></div>
+      <div class="crow"><span class="c"><b>#</b>c7-dashboard</span><span class="n">CAN · clusters</span></div>
+      <div class="crow"><span class="c"><b>#</b>dash-builder</span><span class="n">Custom gauges</span></div>
+      <div class="crow"><span class="c"><b>#</b>industrial</span><span class="n">Plant floor</span></div>
+      <div class="crow"><span class="c"><b>#</b>support</span><span class="n">Stuck? Ask here</span></div>
     </div>
   </div>
+
 </section>
 
-<section class="section section-alt">
-  <div class="container">
-    <div class="center-block">
-      <div class="kicker">HOUSE RULES</div>
-      <h2 style="margin-bottom:16px">Keep it useful, keep it kind.</h2>
-      <p class="lede" style="margin:0 auto">Be helpful, be honest, no spam, no gatekeeping. We talk about modifying your own gear — off-road / track features are framed that way for a reason; know your local laws. The badger has no patience for jerks.</p>
-    </div>
-  </div>
-</section>
+<!-- ===== CANONICAL FOOTER ===== -->
+<footer class="foot"><div class="in">
+  <span>honeybadger.software — independent mods, servers &amp; tactical software.</span>
+  <span class="links"><a href="/about.html">Studio</a><a href="/news.html">Dispatch</a><a href="/contact.html">Contact</a><a href="https://github.com/honeybadger-software">GitHub</a></span>
+</div></footer>
 
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-cols">
-      <div class="footer-col">
-        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
-        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
-      </div>
-      <div class="footer-col"><h4>Products</h4><a href="eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="j1-bridge.html">J1 Bridge</a><a href="c7-dashboard.html">C7 Dashboard</a><a href="nitrous.html">Nitrous Control</a><a href="builder.html">Dash Builder</a><a href="industrial.html">Industrial</a></div>
-      <div class="footer-col"><h4>Resources</h4><a href="support.html">Support &amp; Docs</a><a href="downloads.html">Downloads</a><a href="news.html">News</a><a href="about.html">About</a></div>
-      <div class="footer-col"><h4>Community</h4><a href="community.html">Forums</a><a href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
-    </div>
-    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small></div>
-  </div>
-</footer>
-<script src="assets/js/nav.js?v=4"></script>
 </body>
 </html>

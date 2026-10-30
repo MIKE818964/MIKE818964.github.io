@@ -1,121 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="About Honeybadger Software Inc — a one-person studio shipping polished tools across 3D printing, automotive electronics, and industrial monitoring. The philosophy, the why, and how to get in touch.">
-<meta name="theme-color" content="#05080C">
-<title>About | HONEYBADGER SOFTWARE INC</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Studio | HoneyBadger</title>
+<meta name="description" content="HoneyBadger is a one-developer studio. The missing software layer for the gear you already own — printers, cars, and plant floors. Polished or it doesn't ship.">
 <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
-<link rel="stylesheet" href="assets/css/style.css?v=9">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/brand.css?v=1">
+<style>
+/* ============ ARCHETYPE: MANIFESTO — restraint, maximal whitespace ============ */
+:root{--read:#C9C6C0}
+
+/* opening — oversized pull-quote on near-empty canvas, silhouette watermark behind */
+.manifesto{position:relative;overflow:hidden;min-height:92vh;display:flex;align-items:center;
+  background:var(--bg);border-bottom:1px solid var(--line)}
+.manifesto .mark{position:absolute;pointer-events:none;user-select:none;z-index:0;
+  right:-4%;bottom:-8%;width:min(1180px,96vw);opacity:.06;filter:grayscale(1) contrast(1.05)}
+.manifesto .in{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;width:100%;
+  padding:120px var(--gut)}
+.manifesto .eyebrow{margin-bottom:34px}
+.pull{font-family:"Teko",sans-serif;font-weight:700;text-transform:uppercase;
+  line-height:.84;letter-spacing:.005em;color:var(--ink);
+  font-size:clamp(58px,10.6vw,184px);max-width:19ch;text-wrap:balance}
+.pull .cyan{color:var(--accent)}
+.manifesto .sig{margin-top:46px;display:flex;align-items:center;gap:16px;
+  font:500 11px/1 "JetBrains Mono",monospace;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+.manifesto .sig i{display:block;width:46px;height:1px;background:var(--line-2)}
+
+/* body — single narrow reading column */
+.read{max-width:760px;margin:0 auto;padding:92px var(--gut) 0}
+.read .eyebrow{margin-bottom:22px}
+.read h2{font-size:clamp(34px,4.2vw,56px);margin-bottom:30px;max-width:16ch}
+.read p{font:400 16.5px/1.85 "JetBrains Mono",monospace;color:var(--read);margin-bottom:22px}
+.read p.open{color:var(--ink);font-size:18px;line-height:1.8}
+.read p em{color:var(--accent);font-style:normal}
+.read p strong{color:var(--ink);font-weight:700}
+
+/* principles — hairline rows with mono numeral gutter */
+.creed{max-width:760px;margin:70px auto 0;padding:0 var(--gut)}
+.creed .eyebrow{margin-bottom:10px}
+.creed .line{display:grid;grid-template-columns:52px 1fr;gap:20px;align-items:start;
+  padding:22px 0;border-top:1px solid var(--line)}
+.creed .line:last-child{border-bottom:1px solid var(--line)}
+.creed .n{font:500 12px/1.5 "JetBrains Mono",monospace;letter-spacing:.14em;color:var(--accent)}
+.creed .t strong{display:block;font:700 15px/1.4 "JetBrains Mono",monospace;color:var(--ink);
+  letter-spacing:.01em;margin-bottom:5px}
+.creed .t span{color:var(--muted);font-size:14px;line-height:1.7}
+
+/* // LOG — dated studio timeline */
+.log{max-width:760px;margin:84px auto 0;padding:0 var(--gut)}
+.log .eyebrow{margin-bottom:14px}
+.log .r{display:grid;grid-template-columns:132px 1fr;gap:22px;align-items:baseline;
+  padding:15px 0;border-top:1px solid var(--line)}
+.log .r:last-child{border-bottom:1px solid var(--line)}
+.log .d{font:500 11px/1.5 "JetBrains Mono",monospace;letter-spacing:.14em;color:var(--faint);
+  text-transform:uppercase;white-space:nowrap}
+.log .r.now .d{color:var(--accent)}
+.log .e{color:var(--read);font-size:14px;line-height:1.65}
+
+/* closing — the single reserved red punch */
+.sendoff{max-width:760px;margin:90px auto 0;padding:0 var(--gut);display:flex;
+  align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.sendoff h3{font-size:clamp(30px,3.4vw,46px)}
+.sendoff p{color:var(--muted);font-size:14px;margin-top:8px;max-width:40ch}
+
+@media(max-width:620px){
+  .manifesto .in{padding:96px var(--gut) 88px}
+  .log .r{grid-template-columns:104px 1fr;gap:14px}
+  .creed .line{grid-template-columns:40px 1fr;gap:14px}
+}
+</style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="container">
-    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
-    <span class="topbar-links">
-      <a href="community.html">Community</a>
-      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
-      <a href="downloads.html">Downloads</a>
-    </span>
+<nav class="nav" id="nav">
+  <div class="in">
+    <a class="brand" href="/">Honey<b>Badger</b></a>
+    <a class="item" href="/games.html">Games</a>
+    <a class="item" href="/products.html">Software</a>
+    <a class="item" href="/industrial.html">Industrial</a>
+    <a class="item" href="/community.html">Community</a>
+    <a class="item" href="/support.html">Support</a>
+    <span class="sp"></span>
+    <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
+    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
   </div>
-</div>
-<header class="site-header">
-  <div class="container header-row">
-    <a href="/" class="brand">
-      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
-      <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
-    </a>
-    <nav class="site-nav" id="siteNav">
-      <a href="/">Home</a>
-      <div class="nav-dropdown">
-        <a href="/products.html" class="nav-dropdown-trigger">Products ▾</a>
-        <div class="nav-dropdown-menu">
-          <a href="/industrial.html"><strong>Industrial</strong><span>Plant-floor dashboards, troubleshooters, ERP hand-off</span></a>
-          <a href="/j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
-          <a href="/3d-printing/"><strong>3D Printing Hub</strong><span>Board wiring, firmware &amp; pinouts</span></a>
-          <a href="/eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
-          <a href="/c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
-          <a href="/gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
-        </div>
-      </div>
-      <a href="/3d-printing/">3D Printing</a>
-      <a href="/industrial.html">Industrial</a>
-      <a href="/training.html">Training</a>
-      <a href="/games.html">Games</a>
-      <a href="/community.html">Community</a>
-      <a href="/downloads.html">Downloads</a>
-      <a href="/about.html">About</a>
-    </nav>
-    <div class="header-actions">
-      <a href="builder.html" class="btn btn-gold btn-sm">Try the Dash Builder</a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
-    </div>
-  </div>
-</header>
+</nav>
 
-<section class="page-hero">
-  <div class="container">
-    <div class="breadcrumb"><a href="/">Home</a> / About</div>
-    <div class="eyebrow-chip">🦡 THE STUDIO</div>
-    <h1>About Honeybadger Software</h1>
-    <p class="lede">A one-person studio building polished tools for the gear you actually own — 3D printers, the car in your garage, the machines at your plant.</p>
+<!-- ===== OPENING — oversized pull-quote, silhouette watermark ===== -->
+<section class="manifesto">
+  <img class="mark" src="/assets/images/honey-badger.png" alt="" aria-hidden="true">
+  <div class="in">
+    <p class="eyebrow">THE STUDIO</p>
+    <h1 class="pull">The honey badger doesn't care. It ships the <span class="cyan">polished thing</span> anyway.</h1>
+    <div class="sig"><i></i><span>One developer · many disciplines</span></div>
   </div>
 </section>
 
-<section class="section">
-  <div class="container">
-    <div class="why-quote">
-      The honey badger doesn't care. It chews through firmware bugs vendors won't fix, walks past "this can't be done" forum threads, and ships the polished thing anyway.
-    </div>
-    <div class="center-block">
-      <p>Honeybadger Software exists because too many great machines come wrapped in software that fights you. A 3D printer that needs a Raspberry Pi and a firmware conversion before it'll tell you the bed temp. A car packed with sensors you can't see. A factory floor full of data trapped in PLCs. The hardware is fine — the <em>experience</em> is broken.</p>
-      <p>So this studio builds the missing layer: one-click installers and open hardware that make the gear do what it always should have. No terminals. No "pip install" for end users. No telemetry phoning home. Honest about what works and what doesn't — every product ships with a Known Issues page on day one.</p>
-      <p>It's one developer across a lot of disciplines, which is exactly why the polish bar stays high: if it's not good enough to put my own name behind, it doesn't ship.</p>
-    </div>
-  </div>
+<!-- ===== READING COLUMN — the real studio story ===== -->
+<section class="read">
+  <p class="eyebrow">WHY THIS EXISTS</p>
+  <h2>The hardware is fine. The experience is broken.</h2>
+  <p class="open">Too many great machines come wrapped in software that fights you. A 3D printer that needs a Raspberry Pi and a firmware conversion before it'll tell you the bed temp. A car packed with sensors you can't see. A factory floor full of data trapped in PLCs.</p>
+  <p>So this studio builds the missing layer: one-click installers and open hardware that make the gear do what it always should have. No terminals. No <em>pip install</em> for end users. No telemetry phoning home. Honest about what works and what doesn't — every product ships with a Known Issues page on day one.</p>
+  <p>It chews through firmware bugs vendors won't fix, walks past the <strong>"this can't be done"</strong> forum threads, and ships the polished thing anyway. It's one developer across a lot of disciplines, which is exactly why the polish bar stays high: if it's not good enough to put a name behind, it doesn't ship.</p>
 </section>
 
-<section class="section section-alt">
-  <div class="container">
-    <div class="section-head center"><div class="kicker">WHAT WE STAND ON</div><h2>Five principles, no exceptions.</h2></div>
-    <ul class="principle-list">
-      <li><strong>One-click installers, no terminals.</strong> A user shouldn't need to know what Python is to use the software.</li>
-      <li><strong>Honest about limits.</strong> Every product ships with a Known Issues page on day one.</li>
-      <li><strong>No telemetry, no analytics, no "phone home."</strong> Your machines are your business.</li>
-      <li><strong>Free + open where it makes sense.</strong> Support the studio if you want to feed the badger; nothing essential behind a paywall.</li>
-      <li><strong>Polished or it doesn't ship.</strong> No DOS-window installers. No half-finished features pretending to be done.</li>
-    </ul>
-  </div>
+<!-- ===== PRINCIPLES — five, no exceptions ===== -->
+<section class="creed">
+  <p class="eyebrow">WHAT WE STAND ON</p>
+  <div class="line"><div class="n">01</div><div class="t"><strong>One-click installers, no terminals.</strong><span>A user shouldn't need to know what Python is to use the software.</span></div></div>
+  <div class="line"><div class="n">02</div><div class="t"><strong>Honest about limits.</strong><span>Every product ships with a Known Issues page on day one.</span></div></div>
+  <div class="line"><div class="n">03</div><div class="t"><strong>No telemetry, no analytics, no phone-home.</strong><span>Your machines are your business.</span></div></div>
+  <div class="line"><div class="n">04</div><div class="t"><strong>Free and open where it makes sense.</strong><span>Support the studio if you want to feed the badger; nothing essential behind a paywall.</span></div></div>
+  <div class="line"><div class="n">05</div><div class="t"><strong>Polished or it doesn't ship.</strong><span>No DOS-window installers. No half-finished features pretending to be done.</span></div></div>
 </section>
 
-<section class="section">
-  <div class="container">
-    <div class="split-cta">
-      <div><h2>Get in touch.</h2><p>Questions, partnerships, plant deployments, or just want to talk shop — the door's open.</p></div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <a href="mailto:contact@honeybadger.software" class="btn btn-primary">contact@honeybadger.software</a>
-        <a href="community.html" class="btn btn-ghost">Join the community</a>
-      </div>
-    </div>
-  </div>
+<!-- ===== // LOG — studio timeline ===== -->
+<section class="log">
+  <p class="eyebrow">// LOG</p>
+  <div class="r now"><div class="d">2026-10-30</div><div class="e">Current build — tools shipping across printers, cars, and plant floors.</div></div>
+  <div class="r"><div class="d">Standing</div><div class="e">Known Issues page bundled with every release, from day one.</div></div>
+  <div class="r"><div class="d">Standing</div><div class="e">No telemetry, no analytics — held since the first line of code.</div></div>
+  <div class="r"><div class="d">Rule 00</div><div class="e">Polished or it doesn't ship. Nothing reaches a user half-done.</div></div>
 </section>
 
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-cols">
-      <div class="footer-col">
-        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
-        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
-      </div>
-      <div class="footer-col"><h4>Products</h4><a href="eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="j1-bridge.html">J1 Bridge</a><a href="c7-dashboard.html">C7 Dashboard</a><a href="nitrous.html">Nitrous Control</a><a href="builder.html">Dash Builder</a><a href="industrial.html">Industrial</a></div>
-      <div class="footer-col"><h4>Resources</h4><a href="support.html">Support &amp; Docs</a><a href="downloads.html">Downloads</a><a href="news.html">News</a><a href="about.html">About</a></div>
-      <div class="footer-col"><h4>Community</h4><a href="community.html">Forums</a><a href="community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
-    </div>
-    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small></div>
+<!-- ===== CLOSING — the one reserved red punch ===== -->
+<section class="sendoff">
+  <div>
+    <h3>Talk shop.</h3>
+    <p>Questions, partnerships, or a plant deployment — the door's open.</p>
   </div>
-</footer>
-<script src="assets/js/nav.js?v=4"></script>
+  <a class="btn solid" href="mailto:contact@honeybadger.software">contact@honeybadger.software</a>
+</section>
+
+<footer class="foot"><div class="in">
+  <span>honeybadger.software — independent mods, servers &amp; tactical software.</span>
+  <span class="links"><a href="/about.html">Studio</a><a href="/news.html">Dispatch</a><a href="/contact.html">Contact</a><a href="https://github.com/honeybadger-software">GitHub</a></span>
+</div></footer>
+
 </body>
 </html>

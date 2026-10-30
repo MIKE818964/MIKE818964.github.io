@@ -2,431 +2,133 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HoneyBadger — Mods, Software &amp; Live Combat Tools</title>
-<meta name="description" content="HoneyBadger builds game mods, custom servers and tactical software for Rust, WoW Forever, EVE Frontier and Roblox.">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HoneyBadger — mods, servers &amp; live combat tools</title>
+<meta name="description" content="Independent studio building Rust mods, dedicated-server tooling, live combat overlays and industrial automation. Shipped, free, and running right now.">
+<meta property="og:title" content="HoneyBadger — mods, servers & live combat tools">
+<meta property="og:description" content="Rust mods, a one-click server installer, live combat overlays, and industrial automation — from a one-person studio.">
+<meta property="og:image" content="https://honeybadger.software/assets/arsenal/hero.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/brand.css?v=1">
 <style>
-  /* ---- palette + type ---- */
-  :root{
-    --bg:#0A0A0B; --ink:#EAE6DF; --mute:#8E8A84; --amber:#F5B82E;
-    --line:rgba(234,230,223,.08); --line2:#262629;
-    --disp:"Teko",Impact,"Arial Narrow",sans-serif;          /* tall industrial display */
-    --ui:"Chakra Petch","Arial Narrow",sans-serif;            /* wordmark */
-    --mono:"JetBrains Mono",Consolas,monospace;               /* every label, tag, description */
-    --snap:120ms cubic-bezier(.16,1,.3,1);                    /* hard-cut mechanical motion, no floaty eases */
-  }
-  *{box-sizing:border-box; border-radius:0 !important}        /* 0px law: nothing on this page is rounded */
-  html,body{margin:0; background:var(--bg)}
-  body{color:var(--ink); font-family:var(--mono); font-size:14px; line-height:1.55;
-       -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative}
-  a{color:inherit; text-decoration:none}
-  img{display:block}
-
-  /* concrete under everything (8%) + film grain over everything (5.5%) */
-  body::before{content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.08;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
-    background-size:420px 420px}
-  body::after{content:""; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.055;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='11'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
-    background-size:200px 200px}
-  .page{position:relative; z-index:1}
-
-  /* ---------- nav: raster emblem mark + chipped wordmark + 8 mono tabs ---------- */
-  header{position:sticky; top:0; z-index:60; background:rgba(10,10,11,.94); border-bottom:1px solid var(--line);
-         backdrop-filter:blur(8px); overflow:visible}
-  .nav{display:flex; align-items:center; gap:26px; height:66px; padding:0 28px; max-width:1640px; margin:0 auto}
-  .mark{display:flex; align-items:center; gap:14px; height:66px; position:relative}
-  .mark img{height:60px; width:auto; mix-blend-mode:screen; transform:translateY(7px);   /* drips hang below the bar */
-            filter:drop-shadow(0 0 16px rgba(245,184,46,.18));
-            -webkit-mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%);   /* no square edge: only the paint survives */
-            mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%)}
-  .ticker .lbl img{-webkit-mask-image:radial-gradient(circle, #000 52%, transparent 74%); mask-image:radial-gradient(circle, #000 52%, transparent 74%)}
-  .word{position:relative; font-family:var(--ui); font-weight:700; font-size:15px; letter-spacing:.14em;
-        text-transform:uppercase; color:var(--ink); filter:url(#chip); padding-top:8px}
-  .word small{position:absolute; right:0; top:-4px; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
-  nav.tabs{display:flex; flex:1; gap:2px; flex-wrap:wrap; justify-content:flex-end}
-  nav.tabs a{font:500 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--mute);
-             padding:13px 12px; border-bottom:2px solid transparent; transition:color var(--snap), border-color var(--snap)}
-  nav.tabs a:hover, nav.tabs a:focus-visible, nav.tabs a.on{color:var(--ink); border-color:var(--amber)}
-  nav.tabs a[data-soon]{opacity:.5}
-  nav.tabs a[data-soon]::after{content:" ·SOON"; color:var(--amber); font-size:9px; letter-spacing:.12em}
-
-  /* ---------- hero: full-bleed render, emblem painted on the wall inside the world, type in the dark left ---------- */
-  .hero{position:relative; min-height:76vh; display:grid; align-items:center; overflow:hidden; border-bottom:1px solid var(--line)}
-  .hero .art{position:absolute; inset:0; background:#000 right center/cover no-repeat}   /* crop eats the dark left, keeps the operator */
-  .hero .art::after{content:""; position:absolute; inset:0; background:
-    linear-gradient(to right, #0A0A0B 0%, rgba(10,10,11,.88) 24%, rgba(10,10,11,.25) 52%, rgba(10,10,11,0) 72%, #0A0A0B 100%),
-    linear-gradient(to bottom, rgba(10,10,11,.45) 0%, rgba(10,10,11,0) 28%, rgba(10,10,11,0) 70%, #0A0A0B 100%)}
-  .hero .in{position:relative; z-index:2; width:100%; max-width:1640px; margin:0 auto; padding:84px 40px 72px}
-  .eyebrow{font:500 11px/1 var(--mono); letter-spacing:.26em; text-transform:uppercase; color:var(--amber)}
-  .hero h1{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.88; letter-spacing:.005em;
-           font-size:clamp(56px,7.4vw,120px); margin:14px 0 12px; max-width:12.5ch;      /* 3 lines at desktop */
-           text-shadow:0 6px 40px rgba(0,0,0,.85)}
-  .hero h1 em{font-style:normal; color:var(--amber)}
-  .hero p{max-width:54ch; color:var(--mute); margin:0 0 32px}
-  .cta{display:flex; gap:14px; flex-wrap:wrap}
-  .btn{--n:12px; display:inline-block; font:700 12px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase;
-       padding:17px 28px; color:var(--amber); background:rgba(245,184,46,.07); border:1px solid var(--amber);
-       clip-path:polygon(0 0, calc(100% - var(--n)) 0, 100% var(--n), 100% 100%, var(--n) 100%, 0 calc(100% - var(--n)));
-       transition:background var(--snap), color var(--snap)}
-  .btn.solid{background:var(--amber); color:#0A0A0B}
-  .btn:hover, .btn:focus-visible{background:var(--amber); color:#0A0A0B}
-  .btn.solid:hover, .btn.solid:focus-visible{background:var(--ink); color:#0A0A0B}   /* solid must visibly change too */
-  .btn:focus-visible{outline:2px solid var(--ink); outline-offset:-5px}             /* inset: the notch clip-path would eat an outer ring */
-
-  /* ---------- section frame: edge-to-edge hairlines, "// 01" numbers, crosshair ticks ---------- */
-  section.blk{position:relative; border-top:1px solid var(--line)}
-  section.blk > .in{max-width:1640px; margin:0 auto; padding:76px 40px 84px; position:relative}
-  .num{position:absolute; left:40px; top:16px; font:500 11px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
-  .tick{position:absolute; width:11px; height:11px; pointer-events:none}
-  .tick::before,.tick::after{content:""; position:absolute; background:rgba(234,230,223,.38)}
-  .tick::before{left:5px; top:0; width:1px; height:11px}
-  .tick::after{top:5px; left:0; width:11px; height:1px}
-  .tick.tl{left:-6px; top:-6px} .tick.tr{right:-6px; top:-6px}
-  .h2{display:flex; align-items:flex-end; gap:22px; margin:0 0 30px}
-  .h2 h2{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; letter-spacing:.01em;
-         font-size:clamp(46px,5.6vw,84px); margin:0}
-  .h2 .rule{flex:1; height:1px; background:linear-gradient(90deg,var(--amber),transparent 70%); margin-bottom:12px}
-  .h2 .lede{color:var(--mute); max-width:44ch; margin:0 0 6px}
-
-  /* ---------- 01 the arsenal: roster + crossfade stage (switching feels like flipping a monitor feed) ---------- */
-  .arsenal{display:grid; grid-template-columns:380px 1fr; border:1px solid var(--line)}
-  .roster{display:flex; flex-direction:column; border-right:1px solid var(--line)}
-  .roster button{display:grid; grid-template-columns:58px 1fr auto; gap:16px; align-items:center; text-align:left; cursor:pointer;
-    background:transparent; border:0; border-bottom:1px solid var(--line); color:var(--mute); padding:19px 18px;
-    font:500 12px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; transition:color var(--snap), background var(--snap)}
-  .roster button:last-child{border-bottom:0}
-  .roster button .thumb{width:58px; height:36px; background:#000 center/cover no-repeat; filter:grayscale(.55) brightness(.7); transition:filter var(--snap)}
-  .roster button .st{font-size:9px; letter-spacing:.22em; color:var(--mute)}
-  .roster button .st.live{color:var(--amber)}
-  .roster button:hover, .roster button:focus-visible{color:var(--ink); background:rgba(234,230,223,.03)}
-  .roster button[aria-pressed="true"]{color:var(--ink); background:linear-gradient(90deg,rgba(245,184,46,.11),transparent 70%); box-shadow:inset 3px 0 0 var(--amber)}
-  .roster button[aria-pressed="true"] .thumb{filter:none}
-  .stage{position:relative; min-height:560px; background:#000; overflow:hidden}
-  .pane{position:absolute; inset:0; opacity:0; z-index:1; transition:opacity var(--snap)}
-  .pane.on{opacity:1; z-index:2}
-  .pane .art{position:absolute; inset:0; background:#000 center/cover no-repeat; transition:filter 90ms linear}
-  .pane.spike .art{filter:brightness(1.6) contrast(1.3)}
-  .pane .art::after{content:""; position:absolute; inset:0; background:
-    linear-gradient(to right, rgba(10,10,11,.55) 0%, rgba(10,10,11,0) 30%),
-    linear-gradient(to top, #0A0A0B 0%, rgba(10,10,11,.55) 22%, rgba(10,10,11,0) 55%)}
-  .pane .cap{position:absolute; left:0; right:0; bottom:0; z-index:3; display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding:30px 34px}
-  .cap h3{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.84; font-size:clamp(48px,5.4vw,92px); margin:0}
-  .cap p{margin:8px 0 0; color:var(--mute); max-width:48ch; font-size:13px}
-  .mods{display:flex; flex-direction:column; gap:8px; align-items:flex-end; text-align:right; flex:none}
-  .mods > *{display:inline-block; font:500 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--ink);
-            border-left:2px solid var(--amber); padding:7px 11px; background:rgba(10,10,11,.74)}
-  .mods .t{color:var(--amber); margin-left:8px}
-  .mods .dev{border-left-color:var(--line2)} .mods .dev .t{color:var(--mute)}
-  .mods a:hover .t, .mods a:focus-visible .t{text-decoration:underline}
-  .mods button{cursor:pointer; border-top:0; border-right:0; border-bottom:0; text-align:right}
-  .mods button:hover .t, .mods button:focus-visible .t{text-decoration:underline}
-  button.btn{cursor:pointer}
-  .cap h3 a{transition:color var(--snap)} .cap h3 a:hover, .cap h3 a:focus-visible{color:var(--amber)}
-
-  /* ---------- 02 featured deployment ---------- */
-  .spot{position:relative; min-height:480px; display:flex; align-items:center; overflow:hidden; border:1px solid var(--line)}
-  .spot .art{position:absolute; inset:0; background:#000 center/cover no-repeat}
-  .spot .art::after{content:""; position:absolute; inset:0; background:
-    linear-gradient(to right, #0A0A0B 0%, rgba(10,10,11,.9) 28%, rgba(10,10,11,.25) 62%, rgba(10,10,11,0) 100%),
-    linear-gradient(to top, #0A0A0B 0%, rgba(10,10,11,0) 35%)}
-  .spot .sin{position:relative; z-index:2; padding:84px 40px; max-width:700px}
-  .spot h3{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; font-size:clamp(56px,6.4vw,104px); margin:14px 0 14px}
-  .spot p{color:var(--mute); margin:0 0 26px; max-width:50ch}
-  .spec{display:grid; grid-template-columns:repeat(3,auto); gap:28px; margin:0 0 30px; justify-content:start}
-  .spec div{border-top:1px solid var(--line); padding-top:10px}
-  .spec b{display:block; font-family:var(--disp); font-weight:600; font-size:34px; line-height:.9; color:var(--ink)}
-  .spec span{font:500 10px/1 var(--mono); letter-spacing:.2em; color:var(--mute); text-transform:uppercase}
-
-  /* ---------- 03 command center: hairline rows, never cards ---------- */
-  .soft{border-top:1px solid var(--line)}
-  .soft .it{display:grid; grid-template-columns:34px 300px 1fr auto; gap:22px; align-items:baseline; padding:24px 0; border-bottom:1px solid var(--line)}
-  .it .n{font:500 11px/1 var(--mono); color:var(--amber); letter-spacing:.2em}
-  .it h4{font-family:var(--disp); font-weight:700; font-size:34px; line-height:.9; text-transform:uppercase; margin:0; letter-spacing:.02em}
-  .it h4 small{display:block; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--mute); margin-top:8px}
-  .it h4 small.live{color:var(--amber)}
-  .it p{margin:0; color:var(--mute)}
-  .it a{font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); white-space:nowrap}
-  .it a:hover, .it a:focus-visible{text-decoration:underline}
-  .it span.hold{font:500 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); white-space:nowrap}
-
-  /* ---------- comm-link ticker (sticky bottom) ---------- */
-  .ticker{position:sticky; bottom:0; z-index:55; display:flex; align-items:stretch; height:44px; overflow:hidden;
-          border-top:1px solid var(--amber); background:rgba(10,10,11,.96)}
-  .ticker .lbl{display:flex; align-items:center; gap:10px; padding:0 18px; height:100%; cursor:pointer; flex:none;
-               font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber);
-               background:transparent; border:0; border-right:1px solid var(--line)}
-  .ticker .lbl img{height:26px; width:auto; mix-blend-mode:screen}
-  .ticker .viewport{display:flex; align-items:center; overflow:hidden; flex:1}
-  .ticker .track{display:flex; white-space:nowrap; animation:scroll 38s linear infinite; will-change:transform}
-  .ticker.paused .track, .ticker:hover .track, .ticker:focus-within .track{animation-play-state:paused}
-  .ticker .grp{display:flex; gap:48px; padding-right:48px}
-  .ticker .grp span{font:500 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--mute)}
-  .ticker .grp span b{color:var(--amber); font-weight:500}
-  @keyframes scroll{from{transform:translateX(0)} to{transform:translateX(-50%)}}
-
-  footer{border-top:1px solid var(--line); padding:30px 40px 84px; max-width:1640px; margin:0 auto;
-         display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
-         font:500 10px/1.8 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--mute)}
-  footer a{color:var(--amber)}
-
-  @media (prefers-reduced-motion:reduce){
-    .ticker .track{animation:none} .pane{transition:none} .pane.spike .art{filter:none} *{transition:none !important}
-  }
-  @media (max-width:980px){
-    .nav{height:auto; padding:10px 18px; gap:10px; flex-wrap:wrap} nav.tabs{justify-content:flex-start; flex-basis:100%}
-    .hero .in{padding:70px 22px 60px} .hero h1{max-width:none}
-    section.blk > .in{padding:60px 22px 64px} .num{left:22px}
-    .arsenal{grid-template-columns:1fr} .roster{border-right:0; border-bottom:1px solid var(--line)} .stage{min-height:380px}
-    .pane .cap{flex-direction:column; align-items:flex-start} .mods{align-items:flex-start; text-align:left}
-    .soft .it{grid-template-columns:28px 1fr; row-gap:8px} .it p{grid-column:2} .it a, .it span.hold{grid-column:2}
-    .spot .sin{padding:60px 22px} .spec{grid-template-columns:repeat(3,1fr); gap:14px}
-    footer{padding:26px 22px 84px}
-  }
+/* HOME — archetype A: COMMAND STAGE */
+.home-hero{display:grid;grid-template-columns:44% 56%;min-height:84vh}
+.home-hero .type{display:flex;flex-direction:column;justify-content:center;padding:0 48px 0 var(--gut);max-width:820px;margin-left:auto}
+.home-hero .type h1{font-size:clamp(56px,7vw,120px);letter-spacing:.005em;margin:16px 0 20px}
+.home-hero .cta{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.home-hero .pic{position:relative;background:#000 center/cover no-repeat}
+.home-hero .pic::after{content:"";position:absolute;inset:0;background:var(--hero-scrim)}
+.home-hero .pic::before{content:"";position:absolute;inset:0;z-index:1;background:var(--hero-scrim-b)}
+/* arsenal row */
+.arsrow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;max-width:var(--maxw);margin:0 auto;padding:40px var(--gut) 0}
+.arsrow a{position:relative;aspect-ratio:3/4;background:#000 center/cover no-repeat;overflow:hidden;border:1px solid var(--line)}
+.arsrow a::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,11,13,.92),transparent 55%)}
+.arsrow a span{position:absolute;left:12px;bottom:12px;z-index:1;font:700 24px/1 "Teko";text-transform:uppercase;letter-spacing:.03em}
+.arsrow a small{position:absolute;left:12px;bottom:6px;z-index:1;font:500 8px/1 "JetBrains Mono";letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:none}
+.arsrow a:hover{border-color:var(--accent)}.arsrow a:hover span{color:var(--accent)}
+/* featured 7/5 */
+.feat{display:grid;grid-template-columns:7fr 5fr;gap:24px;max-width:var(--maxw);margin:0 auto;padding:40px var(--gut) 0}
+.feat .card{position:relative;border:1px solid var(--line);min-height:360px;display:flex;flex-direction:column;justify-content:flex-end;padding:28px;background:var(--surface) center/cover no-repeat}
+.feat .card .sc{position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,11,13,.93),rgba(11,11,13,.2) 62%,transparent)}
+.feat .card>*{position:relative;z-index:1}
+.feat .card .k{font-size:clamp(34px,3.4vw,58px);margin:8px 0 8px}
+/* software quicklist */
+.soft{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0;max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+.soft .it{border-top:1px solid var(--line);border-left:1px solid var(--line);padding:24px}
+.soft .it:nth-child(1),.soft .it:nth-child(2),.soft .it:nth-child(3){border-top:0}
+.soft .it .n{font:500 10px/1 "JetBrains Mono";letter-spacing:.2em;color:var(--accent)}
+.soft .it h4{font-size:30px;margin:10px 0 2px}
+.soft .it .live{font:500 9px/1 "JetBrains Mono";letter-spacing:.14em;color:var(--ok);display:block;margin-bottom:10px}
+.soft .it p{color:var(--muted);font-size:13.5px;margin-bottom:14px}
+.soft .it a.go{font:700 11px/1 "JetBrains Mono";letter-spacing:.14em;text-transform:uppercase}
+.soft .it a.go::after{content:" →";color:var(--hot)}
+@media(max-width:900px){
+  .home-hero{grid-template-columns:1fr;min-height:auto}.home-hero .pic{min-height:46vh}.home-hero .type{padding:40px var(--gut)}
+  .arsrow{grid-template-columns:repeat(3,1fr)}.feat{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="chip" x="-6%" y="-6%" width="112%" height="112%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="n"/>
-    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
-<div class="page">
 
-<header>
-  <div class="nav">
-    <a class="mark" href="/" aria-label="HoneyBadger home">
-      <img src="assets/arsenal/emblem_mark.jpg?v=20261012c" srcset="assets/arsenal/emblem_mark.jpg?v=20261012c 1x, assets/arsenal/emblem_mark@2x.jpg?v=20261012c 2x" alt="" width="320" height="320">
-      <span class="word">HoneyBadger<small>.software</small></span>
-    </a>
-    <nav class="tabs" aria-label="Primary">
-      <a href="/" class="on" aria-current="page">Home</a>
-      <a href="#arsenal">Supported Games</a>
-      <a href="#deployment">Our Mods</a>
-      <a href="#software">Software</a>
-      <a href="#" data-soon>Intel</a>
-      <a href="#commlink">Comm-Link</a>
-      <a href="#" data-soon data-discord>The Den</a>
-      <a href="/support.html">Support</a>
-      <a href="/industrial.html">Industrial</a>
-    </nav>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="art" id="heroArt"></div>
+<nav class="nav" id="nav">
   <div class="in">
-    <div class="eyebrow">HoneyBadger — independent studio</div>
-    <h1>Mods, software, and <em>live combat tools.</em></h1>
-    <p>Built in-house by HoneyBadger. Custom servers, live telemetry overlays, and addons for the games we actually play.</p>
+    <a class="brand" href="/">Honey<b>Badger</b></a>
+    <a class="item" href="/games.html">Games</a>
+    <a class="item" href="/products.html">Software</a>
+    <a class="item" href="/industrial.html">Industrial</a>
+    <a class="item" href="/community.html">Community</a>
+    <a class="item" href="/support.html">Support</a>
+    <span class="sp"></span>
+    <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
+    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
+  </div>
+</nav>
+
+<!-- HERO — COMMAND STAGE -->
+<section class="home-hero">
+  <div class="type">
+    <p class="eyebrow">Independent studio · built by one</p>
+    <h1>Tools for the games we actually <span class="hot">play</span>.</h1>
+    <p class="lede">Mods, dedicated-server tooling and live combat overlays — plus industrial automation when the plant floor calls. Shipped, free, and running right now.</p>
     <div class="cta">
-      <a class="btn solid" href="#arsenal">Browse the arsenal</a>
-      <a class="btn" href="#software">Software</a>
+      <a class="btn solid" href="/games.html">Explore games</a>
+      <a class="btn ghost" href="/products.html">Browse software</a>
     </div>
   </div>
+  <div class="pic" style="background-image:url('assets/arsenal/hero.jpg')"></div>
 </section>
 
-<!-- 01 THE ARSENAL -->
-<section class="blk" id="arsenal">
-  <div class="in">
-    <i class="tick tl"></i><i class="tick tr"></i>
-    <div class="num">// 01 &nbsp;THE ARSENAL</div>
-    <div class="h2"><h2>Supported games</h2><span class="rule"></span><p class="lede">Pick a game. The feed shows what we run on it and where each build stands. <a href="/games.html" style="color:var(--amber)">See the full lineup</a></p></div>
-    <div class="arsenal">
-      <div class="roster" id="roster" role="group" aria-label="Supported games">
-        <button data-game="rust" aria-pressed="true"><span class="thumb" data-art="rust"></span><span>Rust</span><span class="st live">Live server</span></button>
-        <button data-game="wow" aria-pressed="false"><span class="thumb" data-art="wow"></span><span>WoW Forever</span><span class="st live">Released</span></button>
-        <button data-game="eve" aria-pressed="false"><span class="thumb" data-art="eve"></span><span>EVE Frontier</span><span class="st live">Live</span></button>
-        <button data-game="roblox" aria-pressed="false"><span class="thumb" data-art="roblox"></span><span>Roblox</span><span class="st">In dev</span></button>
-        <button data-game="ore" aria-pressed="false"><span class="thumb" data-art="ore"></span><span>Out of Ore</span><span class="st">Planned</span></button>
-      </div>
-      <div class="stage" id="stage">
-        <div class="pane on" data-game="rust">
-          <div class="art" data-art="rust"></div>
-          <div class="cap">
-            <div><h3>Rust</h3><p>Run your own Rust server with no command prompt — the <a href="/rust-server-manager.html">HoneyBadger Bunker</a> installs and manages it on Windows or Linux. Our own server runs the free DPS Meter too: landed damage, headshots, last hit, target HP, accuracy and weapon on one band under the compass.</p></div>
-            <div class="mods">
-              <a href="/rust-server-manager.html">HoneyBadger Bunker<b class="t">Server installer</b></a>
-              <a href="/rust-dps-meter.html">DPS Meter<b class="t">Download</b></a>
-              <a href="/rust-dps-meter.html#live">Join the server<b class="t">216.39.241.155:27915</b></a>
-              <button type="button" data-copy="client.connect 216.39.241.155:27915">Copy connect command<b class="t">F1</b></button>
-            </div>
-          </div>
-        </div>
-        <div class="pane" data-game="wow" aria-hidden="true" inert>
-          <div class="art" data-art="wow"></div>
-          <div class="cap">
-            <div><h3>WoW Forever</h3><p>Battle Aura 3.1.1 — a personal damage meter on a cinematic battle scene: floating hit numbers, crits, combos and records.</p></div>
-            <div class="mods">
-              <a href="/downloads.html">Battle Aura 3.1.1<b class="t">Download</b></a>
-            </div>
-          </div>
-        </div>
-        <div class="pane" data-game="eve" aria-hidden="true" inert>
-          <div class="art" data-art="eve"></div>
-          <div class="cap">
-            <div><h3><a href="/frontier/">EVE Frontier</a></h3><p>Bounty Board puts a price on any pilot and lets hunters collect straight from the chain. War Room turns the public chain into live PvP intel.</p></div>
-            <div class="mods">
-              <a href="/frontier/bounty/">Bounty Board<b class="t">Live</b></a>
-              <a href="/frontier/warroom/">War Room<b class="t">Live</b></a>
-              <a href="/frontier/">Both mods<b class="t">Overview</b></a>
-            </div>
-          </div>
-        </div>
-        <div class="pane" data-game="roblox" aria-hidden="true" inert>
-          <div class="art" data-art="roblox"></div>
-          <div class="cap">
-            <div><h3>Roblox</h3><p>Beam Rush — jump the rotating laser arms as they multiply and speed up. Coins and best times persist. In development.</p></div>
-            <div class="mods">
-              <span class="dev">Beam Rush<b class="t">In dev</b></span>
-            </div>
-          </div>
-        </div>
-        <div class="pane" data-game="ore" aria-hidden="true" inert>
-          <div class="art" data-art="ore"></div>
-          <div class="cap">
-            <div><h3>Out of Ore</h3><p>Companion tooling for the mining sandbox is on the workbench. Nothing shipped yet — it goes on this board the day it runs.</p></div>
-            <div class="mods">
-              <span class="dev">Companion<b class="t">Planned</b></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="statband"><div class="in">
+  <div class="s"><b>6</b><span>Shipped products</span></div>
+  <div class="s"><b>5</b><span>Games on the board</span></div>
+  <div class="s"><b>0</b><span>Telemetry calls</span></div>
+  <div class="s"><b>24/7</b><span>Live Rust server</span></div>
+</div></div>
 
-<!-- 02 FEATURED DEPLOYMENT -->
-<section class="blk" id="deployment">
-  <div class="in">
-    <i class="tick tl"></i><i class="tick tr"></i>
-    <div class="num">// 02 &nbsp;FEATURED DEPLOYMENT</div>
-    <div class="spot">
-      <div class="art" id="spotArt"></div>
-      <div class="sin">
-        <div class="eyebrow">Rust — HoneyBadger server — live now</div>
-        <h3>DPS Meter</h3>
-        <p>A live combat band under the compass: damage that actually landed after armour, headshots, last hit with zone and range, your target's HP, accuracy and the weapon in your hands. Running on our server; one file, free, for any Oxide or Carbon server.</p>
-        <div class="spec">
-          <div><b>1</b><span>File to install</span></div>
-          <div><b>0</b><span>Other plugins</span></div>
-          <div><b>MIT</b><span>Code licence</span></div>
-        </div>
-        <div class="cta">
-          <a class="btn solid" href="/downloads/HoneyBadgerDps-1.0.2.zip" download>Download v1.0.2</a>
-          <a class="btn" href="/rust-dps-meter.html">Docs &amp; live server</a>
-          <button type="button" class="btn" data-copy="client.connect 216.39.241.155:27915">Copy join 216.39.241.155:27915</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 03 COMMAND CENTER -->
-<section class="blk" id="software">
-  <div class="in">
-    <i class="tick tl"></i><i class="tick tr"></i>
-    <div class="num">// 03 &nbsp;COMMAND CENTER</div>
-    <div class="h2"><h2>Software &amp; programs</h2><span class="rule"></span><p class="lede">Two web tools for EVE Frontier, a one-click Rust server installer, a Rust combat plugin, and a desktop app for EVE Online.</p></div>
-    <div class="soft">
-      <div class="it"><span class="n">01</span><h4>EVE Bounty Board<small class="live">Live — Cycle 7</small></h4><p>Put a price on any pilot in EVE Frontier. Hunters collect straight from the chain. No fee.</p><a href="/frontier/bounty/">Open board</a></div>
-      <div class="it"><span class="n">02</span><h4>War Room<small class="live">Live — Cycle 7</small></h4><p>Live PvP intel from EVE Frontier's public chain: kills, gate jumps, pilot dossiers, watch alerts. Discord relay coming.</p><a href="/frontier/warroom/">Open War Room</a></div>
-      <div class="it"><span class="n">03</span><h4>HoneyBadger Bunker<small class="live">Live — Rust — free</small></h4><p>Run a Rust dedicated server with no command prompt. Installs it with SteamCMD, then start/stop, backups, scheduled wipes and a live console in one window. Windows + Linux.</p><a href="/rust-server-manager.html">Get it</a></div>
-      <div class="it"><span class="n">04</span><h4>DPS Meter<small class="live">Live — Rust — free</small></h4><p>Live combat band for Rust servers: real landed damage, headshots, last hit, target HP, accuracy and weapon. Runs on our server; one file for yours, Oxide and Carbon, MIT.</p><a href="/rust-dps-meter.html">Get it</a></div>
-      <div class="it"><span class="n">05</span><h4>EVE Fleet Foreman<small class="live">Shipped — free</small></h4><p>Fleet-mining assistant for EVE Online: ranks ore by ISK/m³ off live Jita prices, computes fleet yield, splits loot fairly.</p><a href="/eve-fleet-foreman.html">Get it</a></div>
-    </div>
-  </div>
-</section>
-
-<div class="ticker" id="commlink">
-  <button class="lbl" id="tickerToggle" aria-pressed="false" aria-label="Comm-Link: pause the activity ticker">
-    <img src="assets/arsenal/emblem_mark.jpg?v=20261012c" alt="" width="320" height="320">Comm-Link</button>
-  <div class="viewport"><div class="track" id="track"></div></div>
+<!-- ARSENAL ROW -->
+<div class="sechead"><span class="num">// 01 · The arsenal</span><h2>Pick a game.</h2><p class="lede">What we run on each, and where it stands. <a href="/games.html" class="cyan">See the full lineup →</a></p></div>
+<div class="arsrow">
+  <a href="/games.html" style="background-image:url('assets/arsenal/rust.jpg')"><span>Rust</span></a>
+  <a href="/games.html" style="background-image:url('assets/arsenal/wow.jpg')"><span>WoW</span></a>
+  <a href="/games.html" style="background-image:url('assets/arsenal/eve.jpg')"><span>EVE</span></a>
+  <a href="/games.html" style="background-image:url('assets/arsenal/roblox.jpg')"><span>Roblox</span></a>
+  <a href="/games.html" style="background-image:url('assets/arsenal/ore.jpg')"><span>Out of Ore</span></a>
 </div>
 
-<footer>
-  <span>honeybadger.software — independent mods, servers &amp; tactical software. All rights reserved.</span>
-  <span><a href="/downloads.html">Downloads</a> &nbsp;·&nbsp; <a href="/community.html">Join The Den</a> &nbsp;·&nbsp; <a href="/support.html">Support</a> &nbsp;·&nbsp; <a href="/industrial.html">Industrial</a></span>
-</footer>
+<!-- FEATURED 7/5 -->
+<div class="sechead"><span class="num">// 02 · Featured deployment</span><h2>Running now.</h2></div>
+<div class="feat">
+  <a class="card" href="/rust-dps-meter.html" style="background-image:url('assets/images/rust-dps-meter-ingame.jpg')">
+    <div class="sc"></div>
+    <p class="eyebrow">Rust · free · Oxide + Carbon</p>
+    <h3 class="k">The DPS Meter<br>goes live</h3>
+    <p class="mut" style="max-width:42ch">Real landed damage, headshots, last hit, target HP, accuracy and weapon — one band under the compass.</p>
+  </a>
+  <a class="card" href="/rust-server-manager.html" style="background-image:url('assets/images/bunker-deck.webp')">
+    <div class="sc"></div>
+    <p class="eyebrow">Rust · free · Win + Linux</p>
+    <h3 class="k">HoneyBadger<br>Bunker</h3>
+    <p class="mut" style="max-width:34ch">A Rust dedicated server with no command prompt.</p>
+  </a>
+</div>
 
-</div><!-- /page -->
+<!-- SOFTWARE QUICKLIST -->
+<div class="sechead"><span class="num">// 03 · Command center</span><h2>Software &amp; programs.</h2><p class="lede">Game tools, a Rust server installer and two EVE Frontier web tools. <a href="/products.html" class="cyan">All software →</a></p></div>
+<div class="soft">
+  <div class="it"><span class="n">01</span><h4>HoneyBadger Bunker</h4><span class="live">● Live · Rust · free</span><p>Run a Rust dedicated server with no command prompt — SteamCMD, wipes, backups, live console.</p><a class="go" href="/rust-server-manager.html">Get it</a></div>
+  <div class="it"><span class="n">02</span><h4>DPS Meter</h4><span class="live">● Live · Rust · free</span><p>Live combat band: landed damage, headshots, accuracy and weapon. One file, MIT.</p><a class="go" href="/rust-dps-meter.html">Get it</a></div>
+  <div class="it"><span class="n">03</span><h4>EVE Bounty Board</h4><span class="live">● Live · Cycle 7</span><p>Put a price on any pilot in EVE Frontier. Hunters collect straight from the chain.</p><a class="go" href="/frontier/bounty/">Open board</a></div>
+  <div class="it"><span class="n">04</span><h4>War Room</h4><span class="live">● Live · Cycle 7</span><p>Live PvP intel from EVE Frontier's public chain: kills, gate jumps, pilot dossiers.</p><a class="go" href="/frontier/warroom/">Open War Room</a></div>
+  <div class="it"><span class="n">05</span><h4>EVE Fleet Foreman</h4><span class="live">● Shipped · free</span><p>Fleet-mining assistant for EVE Online: ranks ore by ISK/m³, splits loot fairly.</p><a class="go" href="/eve-fleet-foreman.html">Get it</a></div>
+  <div class="it"><span class="n">06</span><h4>Industrial</h4><span class="live">● Plant floor</span><p>PLC/HMI, live blender &amp; pump monitoring, Pi kiosks — real registers, readable screens.</p><a class="go" href="/industrial.html">See the work</a></div>
+</div>
 
-<script>
-(function(){
-  // ---- art sources (swap files here as new renders land) ----
-  var V = "?v=20261012c";                        // bump when an art file is swapped so browsers/CDN refetch it
-  var ART = { rust:"assets/arsenal/rust.jpg"+V, wow:"assets/arsenal/wow.jpg"+V, eve:"assets/arsenal/eve.jpg"+V,
-              roblox:"assets/arsenal/roblox.jpg"+V, ore:"assets/arsenal/ore.jpg"+V };
-  var HERO = "assets/arsenal/hero.jpg"+V;        // 21:9 hero: operator + stencil emblem painted on the blast wall
-  var SPOT = "assets/images/rust-dps-meter-ingame.jpg?v=1";   // real frame from the HoneyBadger server, 27 Oct 2026
-  document.querySelectorAll('[data-art]').forEach(function(el){
-    var k = el.getAttribute('data-art'); if(ART[k]) el.style.backgroundImage = "url('"+ART[k]+"')";
-  });
-  var ha = document.getElementById('heroArt'); if(ha) ha.style.backgroundImage = "url('"+HERO+"')";
-  var sa = document.getElementById('spotArt'); if(sa) sa.style.backgroundImage = "url('"+SPOT+"')";
+<footer class="foot"><div class="in">
+  <span>honeybadger.software — independent mods, servers &amp; tactical software.</span>
+  <span class="links"><a href="/about.html">Studio</a><a href="/news.html">Dispatch</a><a href="/contact.html">Contact</a><a href="https://github.com/honeybadger-software">GitHub</a></span>
+</div></footer>
 
-  // ---- arsenal: stacked panes crossfade; the incoming pane gets a 90 ms brightness spike (monitor-feed switch);
-  //      aria-pressed / aria-hidden / inert stay in sync; only the active pane's video (if any) plays ----
-  var roster  = document.getElementById('roster');
-  var buttons = [].slice.call(roster.querySelectorAll('button[data-game]'));
-  var panes   = [].slice.call(document.querySelectorAll('#stage .pane'));
-  var reduce  = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var current = 'rust';
-  function select(game){
-    if(game === current) return;
-    current = game;
-    buttons.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.game === game)); });
-    panes.forEach(function(p){
-      var on = p.dataset.game === game;
-      p.classList.toggle('on', on);
-      if(on){
-        p.removeAttribute('aria-hidden'); p.removeAttribute('inert');
-        if(!reduce){ p.classList.add('spike'); setTimeout(function(){ p.classList.remove('spike'); }, 90); }
-      } else { p.setAttribute('aria-hidden','true'); p.setAttribute('inert',''); }
-      var v = p.querySelector('video');
-      if(v){ if(on){ v.play && v.play().catch(function(){}); } else { v.pause && v.pause(); } }
-    });
-  }
-  roster.addEventListener('click',     function(e){ var b = e.target.closest('button[data-game]'); if(b) select(b.dataset.game); });
-  roster.addEventListener('mouseover', function(e){ var b = e.target.closest('button[data-game]'); if(b) select(b.dataset.game); });
-
-  // ---- "soon" tabs: no destination yet (Discord URL + Intel page pending) — never jump to top, never 404 ----
-  document.querySelectorAll('a[data-soon], a[data-discord]').forEach(function(a){
-    a.addEventListener('click', function(e){ if(a.getAttribute('href') === '#') e.preventDefault(); });
-  });
-
-  // ---- copy-to-clipboard for the join command (data-copy): F1 console line, with a visible confirmation ----
-  document.querySelectorAll('[data-copy]').forEach(function(b){
-    b.addEventListener('click', function(){
-      var t = b.getAttribute('data-copy'), label = b.innerHTML;
-      function done(){ b.innerHTML = 'Copied — paste in F1'; setTimeout(function(){ b.innerHTML = label; }, 1800); }
-      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done, done); } else { done(); }
-    });
-  });
-
-  // ---- comm-link: two identical groups so the -50% loop is seamless. Every line is a verified fact. ----
-  var lines = [
-    ["RUST // BUNKER",      "HoneyBadger Bunker v0.1.0 — free one-click Rust server installer for Windows + Linux"],
-    ["RUST // DPS METER",   "v1.0.2 free for Oxide + Carbon — running on our HoneyBadger server"],
-    ["RUST // SERVER",      "HoneyBadger live at 216.39.241.155:27915 — connect line in the Arsenal"],
-    ["WOW FOREVER",         "Battle Aura 3.1.1 released on CurseForge + WoWInterface"],
-    ["EVE FRONTIER",        "Bounty Board live on Cycle 7 — no fee"],
-    ["EVE FRONTIER",        "War Room live on Cycle 7 — public-chain PvP intel"],
-    ["ROBLOX",              "Beam Rush — in development"]
-  ];
-  var one = lines.map(function(l){ return "<span><b>["+l[0]+"]</b> "+l[1]+"</span>"; }).join("");
-  document.getElementById('track').innerHTML = '<div class="grp">'+one+'</div><div class="grp" aria-hidden="true">'+one+'</div>';
-  var ticker = document.getElementById('commlink'), toggle = document.getElementById('tickerToggle');
-  toggle.addEventListener('click', function(){
-    var paused = ticker.classList.toggle('paused');
-    toggle.setAttribute('aria-pressed', String(paused));
-    toggle.setAttribute('aria-label', paused ? 'Comm-Link: resume the activity ticker' : 'Comm-Link: pause the activity ticker');
-  });
-})();
-</script>
 </body>
 </html>

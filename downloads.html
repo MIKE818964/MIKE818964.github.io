@@ -1,198 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Download Honeybadger Software — J1 Bridge for Windows, the browser-based Dash Builder, and more. Real installers, no telemetry.">
-<meta name="theme-color" content="#05080C">
-<title>Downloads | HONEYBADGER SOFTWARE INC</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Downloads | HoneyBadger</title>
+<meta name="description" content="Download HoneyBadger Software — the Bunker Rust server deck, the DPS Meter, Battle Aura, EVE Fleet Foreman, J1 Bridge and more. Real installers, signed, no telemetry.">
 <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
-<link rel="stylesheet" href="assets/css/style.css?v=9">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/brand.css?v=1">
+<style>
+  /* ===== archetype: RELEASE CONSOLE ===== */
+  .rc-head{max-width:var(--maxw);margin:0 auto;padding:54px var(--gut) 30px;border-bottom:1px solid var(--line)}
+  .rc-head h1{font-size:clamp(44px,5.4vw,84px);margin:12px 0 14px}
+  .rc-head .lede{max-width:66ch}
+  .rc-head .meta{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px 26px;font:500 11px/1.6 "JetBrains Mono";letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .rc-head .meta b{color:var(--accent);font-weight:500}
+
+  .console{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut) 8px}
+
+  /* column template shared by header + rows */
+  .cols{display:grid;grid-template-columns:minmax(0,2.2fr) .9fr 1.3fr .7fr minmax(150px,auto);gap:22px;align-items:center}
+
+  .rel-colhead{position:sticky;top:66px;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);
+    padding:14px 0;border-bottom:1px solid var(--line-2)}
+  .rel-colhead .cols>span{font:700 10px/1 "JetBrains Mono";letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  .rel-colhead .cols>span:last-child{text-align:right}
+
+  .rel-group{display:flex;align-items:center;gap:16px;padding:26px 0 10px}
+  .rel-group .t{font:700 11px/1 "JetBrains Mono";letter-spacing:.24em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+  .rel-group .ln{height:1px;background:var(--line);flex:1}
+  .rel-group .ct{font:500 10px/1 "JetBrains Mono";letter-spacing:.18em;color:var(--faint)}
+
+  details.rel{border-top:1px solid var(--line)}
+  details.rel:last-of-type{border-bottom:1px solid var(--line)}
+  .rel>summary{list-style:none;cursor:pointer;min-height:72px;padding:14px 0;transition:background .15s}
+  .rel>summary::-webkit-details-marker{display:none}
+  .rel>summary:hover{background:color-mix(in srgb,var(--surface) 55%,transparent)}
+  .rel.flat{cursor:default}
+
+  .rel .nm{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .rel .nm strong{font:500 15px/1.25 "JetBrains Mono";color:var(--ink)}
+  .rel .tag{font:500 10px/1 "JetBrains Mono";letter-spacing:.18em;color:var(--faint)}
+  .rel .tag.free{color:var(--accent)}
+  .rel .nm .more{font:500 10px/1 "JetBrains Mono";letter-spacing:.14em;color:var(--faint);transition:.15s}
+  .rel[open] .nm .more::after{content:" \2212 LESS"}
+  .rel:not([open]) .nm .more::after{content:" + SPECS"}
+  .rel>summary:hover .more{color:var(--accent)}
+  .rel .desc{margin-top:5px;font-size:12px;color:var(--muted);max-width:60ch}
+
+  .rel .v{font:500 13px/1.3 "JetBrains Mono";color:var(--ink)}
+  .rel .pl{font:500 11.5px/1.4 "JetBrains Mono";letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+  .rel .sz{font:500 12px/1.3 "JetBrains Mono";color:var(--faint)}
+
+  .rel .act{text-align:right;white-space:nowrap}
+  a.dl{display:inline-flex;align-items:center;gap:8px;font:700 11px/1 "JetBrains Mono";letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);padding:11px 0;border-bottom:1px solid transparent;transition:.15s}
+  a.dl:hover{border-bottom-color:var(--accent)}
+  a.dl .ar{font-weight:400}
+
+  /* expanded specs */
+  .rel .specs{padding:4px 0 22px;grid-column:1 / -1}
+  .rel .specs .k{font:700 10px/1 "JetBrains Mono";letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin:14px 0 6px}
+  .rel .specs p{font-size:12.5px;color:var(--muted);max-width:80ch;margin:6px 0}
+  .rel .specs p a{color:var(--accent)}.rel .specs p a:hover{text-decoration:underline}
+  .rel .specs .hash{font:500 11.5px/1.5 "JetBrains Mono";color:var(--ink);word-break:break-all}
+  .rel .specs pre{margin:8px 0 0;padding:14px 16px;background:#0E0E11;border:1px solid var(--line-2);border-left:2px solid var(--accent);
+    font:500 12px/1.6 "JetBrains Mono";color:var(--ink);overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+
+  .rc-note{max-width:var(--maxw);margin:0 auto;padding:26px var(--gut) 0}
+  .rc-note p{font-size:12.5px;color:var(--faint);max-width:80ch}
+  .rc-note a{color:var(--accent)}.rc-note a:hover{text-decoration:underline}
+  .rc-note em{color:var(--muted);font-style:normal}
+
+  @media(max-width:860px){
+    .rel-colhead{display:none}
+    .cols{grid-template-columns:1fr auto;gap:6px 16px;align-items:start}
+    .rel .nm{grid-column:1 / -1}
+    .rel .desc{grid-column:1 / -1;order:5}
+    .rel .v{order:2;color:var(--muted);font-size:12px}
+    .rel .v::before{content:"VER · "}
+    .rel .pl{order:3}
+    .rel .sz{display:none}
+    .rel .act{grid-column:1 / -1;order:6;text-align:left;margin-top:4px}
+    .rel .specs .cols,.rel .specs{grid-column:1 / -1}
+  }
+</style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="container">
-    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
-    <span class="topbar-links">
-      <a href="/3d-printing/" style="color:#3FD8FF">3D Printing</a>
-      <a href="community.html">Community</a>
-      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
-      <a href="downloads.html">Downloads</a>
-    </span>
+<nav class="nav" id="nav">
+  <div class="in">
+    <a class="brand" href="/">Honey<b>Badger</b></a>
+    <a class="item" href="/games.html">Games</a>
+    <a class="item" href="/products.html">Software</a>
+    <a class="item" href="/industrial.html">Industrial</a>
+    <a class="item" href="/community.html">Community</a>
+    <a class="item" href="/support.html">Support</a>
+    <span class="sp"></span>
+    <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
+    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
   </div>
-</div>
-<header class="site-header">
-  <div class="container header-row">
-    <a href="/" class="brand">
-      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
-      <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
-    </a>
-    <nav class="site-nav" id="siteNav">
-      <a href="/">Home</a>
-      <div class="nav-dropdown">
-        <a href="/products.html" class="nav-dropdown-trigger">Products ▾</a>
-        <div class="nav-dropdown-menu">
-          <a href="/rust-server-manager.html"><strong>HoneyBadger Bunker</strong><span>Free Rust dedicated server installer &amp; manager</span></a>
-          <a href="/rust-dps-meter.html"><strong>DPS Meter</strong><span>Free Rust combat band, Oxide &amp; Carbon</span></a>
-          <a href="/industrial.html"><strong>Industrial</strong><span>Plant-floor dashboards, troubleshooters, ERP hand-off</span></a>
-          <a href="/j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
-          <a href="/3d-printing/"><strong>3D Printing Hub</strong><span>Board wiring, firmware &amp; pinouts</span></a>
-          <a href="/eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
-          <a href="/c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
-          <a href="/gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
-        </div>
-      </div>
-      <a href="/3d-printing/">3D Printing</a>
-      <a href="/industrial.html">Industrial</a>
-      <a href="/training.html">Training</a>
-      <a href="/games.html">Games</a>
-      <a href="/community.html">Community</a>
-      <a href="/downloads.html">Downloads</a>
-      <a href="/about.html">About</a>
-    </nav>
-    <div class="header-actions">
-      <a href="builder.html" class="btn btn-gold btn-sm">Try the Dash Builder</a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
-    </div>
-  </div>
+</nav>
+
+<!-- ===== RELEASE CONSOLE header ===== -->
+<header class="rc-head">
+  <p class="eyebrow">DOWNLOADS</p>
+  <h1>Grab a build.</h1>
+  <p class="lede">Real installers. No Python, no Docker, no terminal. No telemetry baked in. Every Windows installer is signed — grab what you need and go.</p>
+  <div class="meta"><span>All builds <b>free</b> unless marked</span><span>Windows installers <b>code-signed</b></span><span>No telemetry · no tracking</span></div>
 </header>
 
-<section class="page-hero">
-  <div class="container">
-    <div class="breadcrumb"><a href="/">Home</a> / Downloads</div>
-    <div class="eyebrow-chip">⬇️ GET THE TOOLS</div>
-    <h1>Downloads</h1>
-    <p class="lede">Real installers. No Python, no Docker, no terminal. No telemetry baked in. Grab what you need and go.</p>
+<section class="console">
+
+  <div class="rel-colhead">
+    <div class="cols">
+      <span>Product</span><span>Version</span><span>Platform</span><span>Size</span><span>Download</span>
+    </div>
   </div>
+
+  <!-- ===================== RUST SERVERS & COMBAT ===================== -->
+  <div class="rel-group"><span class="t">Rust &middot; servers &amp; combat</span><span class="ln"></span><span class="ct">2 builds</span></div>
+
+  <details class="rel">
+    <summary>
+      <div class="cols">
+        <div class="nm-wrap">
+          <div class="nm"><strong>HoneyBadger Bunker</strong><span class="tag free">FREE</span><span class="tag">TEST RELEASE</span><span class="more"></span></div>
+          <div class="desc">Rust dedicated server installer &amp; control deck — SteamCMD install, start/stop, backups, scheduled wipes, live console, players &amp; FPS. One window, no command prompt.</div>
+        </div>
+        <div class="v">v0.1.0</div>
+        <div class="pl">Windows + Linux</div>
+        <div class="sz">&mdash;</div>
+        <div class="act"><a class="dl" href="https://github.com/honeybadger-software/HoneyBadgerBunker/releases/latest/download/HoneyBadgerBunker-Setup-0.1.0.exe">Windows <span class="ar">&darr;</span></a></div>
+      </div>
+    </summary>
+    <div class="cols"><div class="specs">
+      <div class="k">Full details</div>
+      <p><a href="/rust-server-manager.html">Requirements, the Linux install and the whole walkthrough &rarr;</a> &nbsp;·&nbsp; Ships with the free HoneyBadger DPS Meter.</p>
+      <div class="k">Windows SHA-256</div>
+      <p class="hash">cd0c9977053bce44b908e6d13b1e10403b8a040016e1c3319ba537c3c446c77a</p>
+      <div class="k">Linux (Debian/Ubuntu or Fedora/RHEL) — paste on a server you own</div>
+      <pre>curl -sSL https://honeybadger.software/installer/install.sh | sudo bash -s -- --from https://honeybadger.software/installer/HoneyBadgerBunker-0.1.0.tar.gz</pre>
+      <div class="k">Linux tar.gz SHA-256</div>
+      <p class="hash">57cb5c23d3a101c62bd916288bf94cd67decb4e06e787f1f555b25c2444fed99</p>
+    </div></div>
+  </details>
+
+  <details class="rel">
+    <summary>
+      <div class="cols">
+        <div class="nm-wrap">
+          <div class="nm"><strong>HoneyBadger DPS Meter</strong><span class="tag free">FREE</span><span class="more"></span></div>
+          <div class="desc">A live combat band for Rust: DPS, headshots, last hit with zone and range, target HP, accuracy and weapon — measured from damage that actually landed. One .cs file, no other plugins.</div>
+        </div>
+        <div class="v">v1.0.2</div>
+        <div class="pl">Oxide + Carbon</div>
+        <div class="sz">&mdash;</div>
+        <div class="act"><a class="dl" href="downloads/HoneyBadgerDps-1.0.2.zip" download>.zip <span class="ar">&darr;</span></a></div>
+      </div>
+    </summary>
+    <div class="cols"><div class="specs">
+      <div class="k">Release</div>
+      <p>Rust server plugin (Oxide + Carbon) · v1.0.2 · 27 Oct 2026 · <a href="https://github.com/honeybadger-software/HoneyBadgerDps/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog &rarr;</a> &nbsp;·&nbsp; <a href="/rust-dps-meter.html">Docs, commands and config &rarr;</a></p>
+      <p>Code under MIT; the band art is licensed for use with the plugin.</p>
+      <div class="k">SHA-256</div>
+      <p class="hash">d34cc22a5017733cf9de558b7fd62185272fe4589c8d78dec34868ebbe715ee8</p>
+    </div></div>
+  </details>
+
+  <!-- ===================== GAMES ===================== -->
+  <div class="rel-group"><span class="t">Games</span><span class="ln"></span><span class="ct">2 builds</span></div>
+
+  <details class="rel">
+    <summary>
+      <div class="cols">
+        <div class="nm-wrap">
+          <div class="nm"><strong>Battle Aura for WoW: Forever</strong><span class="tag free">FREE</span><span class="more"></span></div>
+          <div class="desc">An immersive personal damage meter: your total, biggest hit and DPS on a cinematic battle scene, with floating hit numbers, crits, combo and personal-best banners. Built on Blizzard's own damage meter.</div>
+        </div>
+        <div class="v">v3.1.1</div>
+        <div class="pl">WoW: Forever addon</div>
+        <div class="sz">&mdash;</div>
+        <div class="act"><a class="dl" href="downloads/BattleAura-3.1.1.zip" download>.zip <span class="ar">&darr;</span></a></div>
+      </div>
+    </summary>
+    <div class="cols"><div class="specs">
+      <div class="k">SHA-256</div>
+      <p class="hash">f7eb70944455a119fe87324a714f47daace677b5ddd6da7525961d2705641ab5</p>
+    </div></div>
+  </details>
+
+  <div class="rel flat">
+    <div class="cols" style="padding:14px 0;min-height:72px;border-top:1px solid var(--line)">
+      <div class="nm-wrap">
+        <div class="nm"><strong>EVE Fleet Foreman</strong><span class="tag free">FREE &amp; OPEN SOURCE</span></div>
+        <div class="desc">Free EVE Online mining tool — what to mine by ISK/m³, refine-or-sell calculator, and automatic fleet Mining-Ledger splits. Read-only and EULA-safe.</div>
+      </div>
+      <div class="v">&mdash;</div>
+      <div class="pl">Windows 10/11 · 64-bit</div>
+      <div class="sz">&mdash;</div>
+      <div class="act"><a class="dl" href="https://github.com/honeybadger-software/eve-fleet-foreman/releases/latest/download/EVE-Fleet-Foreman.exe">.exe <span class="ar">&darr;</span></a></div>
+    </div>
+  </div>
+
+  <!-- ===================== 3D PRINTING ===================== -->
+  <div class="rel-group"><span class="t">3D printing</span><span class="ln"></span><span class="ct">3 builds</span></div>
+
+  <div class="rel flat">
+    <div class="cols" style="padding:14px 0;min-height:72px;border-top:1px solid var(--line)">
+      <div class="nm-wrap">
+        <div class="nm"><strong>J1 Bridge for Windows</strong><span class="tag">BETA</span><span class="tag">FREE FOR PERSONAL USE</span></div>
+        <div class="desc">OrcaSlicer + Snapmaker J1 — drag-drop slicing, live monitoring, camera. Public installer drops with the launch.</div>
+      </div>
+      <div class="v">Beta</div>
+      <div class="pl">Windows 10/11 · 64-bit</div>
+      <div class="sz">&mdash;</div>
+      <div class="act"><a class="dl" href="community.html">Notify me <span class="ar">&rarr;</span></a></div>
+    </div>
+  </div>
+
+  <div class="rel flat">
+    <div class="cols" style="padding:14px 0;min-height:72px;border-top:1px solid var(--line)">
+      <div class="nm-wrap">
+        <div class="nm"><strong>Anet A8 Plus firmware (SKR Mini E3 V2)</strong><span class="tag free">FREE</span></div>
+        <div class="desc">Ready-to-flash Marlin for an Anet A8 Plus upgraded with a BigTreeTech SKR Mini E3 V2. Copy firmware.bin to the SD card and the board flashes itself — flash guide and safety checklist included.</div>
+      </div>
+      <div class="v">Marlin 2.1.2.8</div>
+      <div class="pl">SKR Mini E3 V2</div>
+      <div class="sz">&mdash;</div>
+      <div class="act"><a class="dl" href="files/A8Plus_SKR_Mini_E3_V2_Marlin_2.1.2.8.zip">.zip <span class="ar">&darr;</span></a></div>
+    </div>
+  </div>
+
+  <details class="rel">
+    <summary>
+      <div class="cols">
+        <div class="nm-wrap">
+          <div class="nm"><strong>A8 Plus &times; SKR Mini E3 V2 wiring package</strong><span class="tag free">FREE</span><span class="more"></span></div>
+          <div class="desc">Professional 11-sheet wiring &amp; interconnect document: every connector pinout, endstop rewire, fan architecture, commissioning checklist, and the official BigTreeTech schematic as an appendix.</div>
+        </div>
+        <div class="v">&mdash;</div>
+        <div class="pl">PDF · 11 sheets</div>
+        <div class="sz">&mdash;</div>
+        <div class="act"><a class="dl" href="files/A8Plus_SKR_Mini_E3_V2_Wiring_Package.pdf">.pdf <span class="ar">&darr;</span></a></div>
+      </div>
+    </summary>
+    <div class="cols"><div class="specs">
+      <div class="k">Details</div>
+      <p>Official BTT sources. Pairs with the firmware above. <a href="a8plus-skr-mini-e3.html">Full conversion guide &rarr;</a></p>
+    </div></div>
+  </details>
+
+  <!-- ===================== AUTOMOTIVE ===================== -->
+  <div class="rel-group"><span class="t">Automotive</span><span class="ln"></span><span class="ct">2 items</span></div>
+
+  <div class="rel flat">
+    <div class="cols" style="padding:14px 0;min-height:72px;border-top:1px solid var(--line)">
+      <div class="nm-wrap">
+        <div class="nm"><strong>Dash Builder</strong><span class="tag free">LIVE</span></div>
+        <div class="desc">Design a custom digital gauge cluster in your browser. Nothing to install.</div>
+      </div>
+      <div class="v">Live</div>
+      <div class="pl">Web · any browser</div>
+      <div class="sz">&mdash;</div>
+      <div class="act"><a class="dl" href="builder.html">Open <span class="ar">&rarr;</span></a></div>
+    </div>
+  </div>
+
+  <div class="rel flat">
+    <div class="cols" style="padding:14px 0;min-height:72px;border-top:1px solid var(--line)">
+      <div class="nm-wrap">
+        <div class="nm"><strong>C7 Dashboard kit</strong><span class="tag">PRE-LAUNCH</span></div>
+        <div class="desc">A sealed hardware kit, not a download — pre-flashed and ready to plug into your Corvette's OBD-II port.</div>
+      </div>
+      <div class="v">&mdash;</div>
+      <div class="pl">Hardware · 2014–2019 C7</div>
+      <div class="sz">&mdash;</div>
+      <div class="act"><a class="dl" href="c7-dashboard.html">See the kit <span class="ar">&rarr;</span></a></div>
+    </div>
+  </div>
+
+  <!-- ===================== INDUSTRIAL ===================== -->
+  <div class="rel-group"><span class="t">Industrial</span><span class="ln"></span><span class="ct">1 item</span></div>
+
+  <div class="rel flat">
+    <div class="cols" style="padding:14px 0;min-height:72px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+      <div class="nm-wrap">
+        <div class="nm"><strong>Industrial dashboards</strong><span class="tag">CUSTOM DEPLOYMENT</span></div>
+        <div class="desc">Deployed per-facility, tailored to your protocols and machines. Let's scope it together.</div>
+      </div>
+      <div class="v">&mdash;</div>
+      <div class="pl">Custom · contact</div>
+      <div class="sz">&mdash;</div>
+      <div class="act"><a class="dl" href="contact.html">Get in touch <span class="ar">&rarr;</span></a></div>
+    </div>
+  </div>
+
 </section>
 
-<section class="section">
-  <div class="container">
-    <div class="dl-card">
-      <div class="dl-os">🦡</div>
-      <div>
-        <h3>HoneyBadger Bunker — Rust dedicated server installer &amp; manager <span class="pill" style="vertical-align:middle">FREE</span></h3>
-        <p>Install a Rust dedicated server with SteamCMD, then start, stop, back up, wipe on a schedule, and watch players, FPS and the live console — all in one window, no command prompt. Windows and Linux. Ships with the free HoneyBadger DPS Meter. <a href="rust-server-manager.html">Full details, requirements and the Linux install &rarr;</a></p>
-        <div class="dl-meta">RUST · DEDICATED SERVER INSTALLER + CONTROL DECK · WINDOWS + LINUX · FREE · v0.1.0 · TEST RELEASE</div>
-        <div class="dl-meta">WINDOWS SHA-256 cd0c9977053bce44b908e6d13b1e10403b8a040016e1c3319ba537c3c446c77a</div>
-        <div class="dl-meta">LINUX (Debian/Ubuntu or Fedora/RHEL) — paste in a terminal on a server you own:</div>
-        <pre style="margin:10px 0 0;padding:14px 16px;background:#0b1016;border:1px solid #1d2733;border-left:3px solid #F5B82E;color:#e9eef5;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;white-space:pre-wrap;word-break:break-all">curl -sSL https://honeybadger.software/installer/install.sh | sudo bash -s -- --from https://honeybadger.software/installer/HoneyBadgerBunker-0.1.0.tar.gz</pre>
-        <div class="dl-meta" style="margin-top:8px">LINUX TAR.GZ SHA-256 57cb5c23d3a101c62bd916288bf94cd67decb4e06e787f1f555b25c2444fed99</div>
-      </div>
-      <a href="https://github.com/honeybadger-software/HoneyBadgerBunker/releases/latest/download/HoneyBadgerBunker-Setup-0.1.0.exe" class="btn btn-primary">Download for Windows</a>
-    </div>
+<div class="rc-note">
+  <p>All Windows installers are signed. If SmartScreen warns on a fresh release, choose <em>More info &rarr; Run anyway</em>. See the <a href="/support.html">Support</a> page for help.</p>
+</div>
 
-    <div class="dl-card">
-      <div class="dl-os">🎯</div>
-      <div>
-        <h3>HoneyBadger DPS Meter for Rust servers <span class="pill" style="vertical-align:middle">FREE</span></h3>
-        <p>A live combat band for Rust: DPS, headshots, last hit with zone and range, target HP, accuracy and weapon, measured from damage that actually landed. One .cs file, no other plugins required, Oxide and Carbon. Code under MIT; the band art is licensed for use with the plugin. <a href="rust-dps-meter.html">Docs, commands and config &rarr;</a></p>
-        <div class="dl-meta">RUST · SERVER PLUGIN (OXIDE + CARBON) · FREE · v1.0.2 · 27 OCT 2026 · <a href="https://github.com/honeybadger-software/HoneyBadgerDps/blob/main/CHANGELOG.md" target="_blank" rel="noopener">CHANGELOG</a></div>
-        <div class="dl-meta">SHA-256 d34cc22a5017733cf9de558b7fd62185272fe4589c8d78dec34868ebbe715ee8</div>
-      </div>
-      <a href="downloads/HoneyBadgerDps-1.0.2.zip" class="btn btn-primary" download>Download .zip</a>
-    </div>
+<footer class="foot"><div class="in">
+  <span>honeybadger.software — independent mods, servers &amp; tactical software.</span>
+  <span class="links"><a href="/about.html">Studio</a><a href="/news.html">Dispatch</a><a href="/contact.html">Contact</a><a href="https://github.com/honeybadger-software">GitHub</a></span>
+</div></footer>
 
-    <div class="dl-card">
-      <div class="dl-os">⚔️</div>
-      <div>
-        <h3>Battle Aura for WoW: Forever <span class="pill" style="vertical-align:middle">FREE</span></h3>
-        <p>An immersive personal damage meter: your total, biggest hit and DPS on a cinematic battle scene, with floating hit numbers, crits, combo and personal-best banners. Built on Blizzard's own damage meter, so it works with Forever's restricted combat data.</p>
-        <div class="dl-meta">WORLD OF WARCRAFT: FOREVER · ADDON · FREE · v3.1.1</div>
-        <div class="dl-meta">SHA-256 f7eb70944455a119fe87324a714f47daace677b5ddd6da7525961d2705641ab5</div>
-      </div>
-      <a href="downloads/BattleAura-3.1.1.zip" class="btn btn-primary" download>Download .zip</a>
-    </div>
-
-    <div class="dl-card">
-      <div class="dl-os">⛏️</div>
-      <div>
-        <h3>EVE Fleet Foreman for Windows <span class="pill" style="vertical-align:middle">FREE</span></h3>
-        <p>Free EVE Online mining tool — what to mine by ISK/m³, refine-or-sell calculator, and automatic fleet Mining-Ledger splits. Read-only and EULA-safe.</p>
-        <div class="dl-meta">WINDOWS 10/11 · 64-BIT · FREE &amp; OPEN SOURCE</div>
-      </div>
-      <a href="https://github.com/honeybadger-software/eve-fleet-foreman/releases/latest/download/EVE-Fleet-Foreman.exe" class="btn btn-primary">Download .exe</a>
-    </div>
-
-    <div class="dl-card">
-      <div class="dl-os">🎛️</div>
-      <div>
-        <h3>Dash Builder <span class="pill" style="vertical-align:middle">LIVE</span></h3>
-        <p>Design a custom digital gauge cluster in your browser. Nothing to install.</p>
-        <div class="dl-meta">WEB · ANY MODERN BROWSER · FREE</div>
-      </div>
-      <a href="builder.html" class="btn btn-gold">Open the builder →</a>
-    </div>
-
-    <div class="dl-card">
-      <div class="dl-os">🪟</div>
-      <div>
-        <h3>J1 Bridge for Windows <span class="pill" style="vertical-align:middle">BETA</span></h3>
-        <p>OrcaSlicer + Snapmaker J1 — drag-drop slicing, live monitoring, camera. Public installer drops with the launch.</p>
-        <div class="dl-meta">WINDOWS 10/11 · 64-BIT · FREE FOR PERSONAL USE</div>
-      </div>
-      <a href="community.html" class="btn btn-primary">Notify me at launch</a>
-    </div>
-
-    <div class="dl-card">
-      <div class="dl-os">🖨️</div>
-      <div>
-        <h3>Anet A8 Plus firmware for SKR Mini E3 V2 <span class="pill" style="vertical-align:middle">FREE</span></h3>
-        <p>Ready-to-flash Marlin 2.1.2.8 for an Anet A8 Plus upgraded with a BigTreeTech SKR Mini E3 V2 board. Copy firmware.bin to the SD card and the board flashes itself — full flash guide and safety checklist included in the zip.</p>
-        <div class="dl-meta">MARLIN 2.1.2.8 · SKR MINI E3 V2 · FREE</div>
-      </div>
-      <a href="files/A8Plus_SKR_Mini_E3_V2_Marlin_2.1.2.8.zip" class="btn btn-primary">Download .zip</a>
-    </div>
-
-    <div class="dl-card">
-      <div class="dl-os">📐</div>
-      <div>
-        <h3>A8 Plus × SKR Mini E3 V2 wiring package <span class="pill" style="vertical-align:middle">FREE</span></h3>
-        <p>Professional 11-sheet wiring &amp; interconnect document for the same conversion: every connector pinout, endstop rewire, fan architecture, commissioning checklist, and the official BigTreeTech schematic as an appendix. Pairs with the firmware above. <a href="a8plus-skr-mini-e3.html">Full conversion guide →</a></p>
-        <div class="dl-meta">PDF · 11 SHEETS · OFFICIAL BTT SOURCES · FREE</div>
-      </div>
-      <a href="files/A8Plus_SKR_Mini_E3_V2_Wiring_Package.pdf" class="btn btn-primary">Download .pdf</a>
-    </div>
-
-    <div class="dl-card">
-      <div class="dl-os">🚗</div>
-      <div>
-        <h3>C7 Dashboard kit</h3>
-        <p>A sealed hardware kit, not a download — pre-flashed and ready to plug into your Corvette's OBD-II port.</p>
-        <div class="dl-meta">HARDWARE · 2014–2019 C7 · PRE-LAUNCH</div>
-      </div>
-      <a href="c7-dashboard.html" class="btn btn-ghost">See the kit →</a>
-    </div>
-
-    <div class="dl-card">
-      <div class="dl-os">🏭</div>
-      <div>
-        <h3>Industrial dashboards</h3>
-        <p>Deployed per-facility, tailored to your protocols and machines. Let's scope it together.</p>
-        <div class="dl-meta">CUSTOM DEPLOYMENT · CONTACT</div>
-      </div>
-      <a href="contact.html" class="btn btn-ghost">Get in touch →</a>
-    </div>
-
-    <p class="proof-fineprint">All Windows installers are signed. If SmartScreen warns on a fresh release, choose <em>More info → Run anyway</em>. See the <a href="support.html">Support</a> page for help.</p>
-  </div>
-</section>
-
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-cols">
-      <div class="footer-col">
-        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
-        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
-      </div>
-      <div class="footer-col"><h4>Products</h4><a href="eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="j1-bridge.html">J1 Bridge</a><a href="c7-dashboard.html">C7 Dashboard</a><a href="nitrous.html">Nitrous Control</a><a href="builder.html">Dash Builder</a><a href="industrial.html">Industrial</a></div>
-      <div class="footer-col"><h4>Resources</h4><a href="support.html">Support &amp; Docs</a><a href="downloads.html">Downloads</a><a href="news.html">News</a><a href="about.html">About</a></div>
-      <div class="footer-col"><h4>Community</h4><a href="community.html">Forums</a><a href="community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
-    </div>
-    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small></div>
-  </div>
-</footer>
-<script src="assets/js/nav.js?v=4"></script>
 </body>
 </html>

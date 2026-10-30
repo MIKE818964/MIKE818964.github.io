@@ -1,131 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Honeybadger Software support & documentation — install guides, FAQs, troubleshooting, and the honest Known Issues pages for J1 Bridge, the C7 Dashboard, and the Dash Builder.">
-<meta name="theme-color" content="#05080C">
-<title>Support &amp; Docs | HONEYBADGER SOFTWARE INC</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Support | HoneyBadger</title>
+<meta name="description" content="HoneyBadger field manual — install, ports, file locations, updates and troubleshooting for the Bunker, plus J1 Bridge, the C7 Dashboard and the Dash Builder.">
 <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
-<link rel="stylesheet" href="assets/css/style.css?v=9">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/brand.css?v=1">
+<style>
+  /* ===== archetype: FIELD MANUAL ===== */
+  .fm-hero{position:relative;min-height:42vh;display:flex;align-items:flex-end;
+    background:#000 url("/assets/images/badger-alley.jpg") center/cover no-repeat}
+  .fm-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,#0B0B0D 0%,rgba(11,11,13,.92) 34%,rgba(11,11,13,.62) 66%,rgba(11,11,13,.40) 100%)}
+  .fm-hero::before{content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(0deg,#0B0B0D 0%,rgba(11,11,13,0) 55%)}
+  .fm-hero .in{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;width:100%;padding:0 var(--gut) 40px}
+  .fm-hero h1{font-size:clamp(46px,6vw,92px);margin:12px 0 14px}
+  .fm-hero .lede{max-width:60ch}
+  .fm-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
+
+  /* status strip under hero */
+  .fm-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
+  .fm-strip .in{display:flex;flex-wrap:wrap;gap:0;max-width:var(--maxw);margin:0 auto}
+  .fm-strip .c{padding:16px var(--gut);border-left:1px solid var(--line);flex:1;min-width:200px}
+  .fm-strip .c:first-child{border-left:0}
+  .fm-strip .k{font:500 10px/1.4 "JetBrains Mono";letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  .fm-strip .v{display:block;margin-top:5px;color:var(--ink);font-size:13px}
+  .fm-strip .v b{color:var(--accent);font-weight:500}
+
+  /* two-column doc layout */
+  .fm-grid{display:grid;grid-template-columns:240px 1fr;gap:56px;max-width:var(--maxw);margin:0 auto;padding:46px var(--gut) 10px;align-items:start}
+  .fm-index{position:sticky;top:90px}
+  .fm-index .lbl{font:700 10px/1 "JetBrains Mono";letter-spacing:.24em;text-transform:uppercase;color:var(--faint);margin:0 0 14px}
+  .fm-index a{display:block;font:500 12px/1.3 "JetBrains Mono";letter-spacing:.06em;color:var(--muted);padding:9px 0 9px 15px;border-left:1px solid var(--line-2);transition:.15s}
+  .fm-index a:hover{color:var(--ink);border-left-color:var(--accent)}
+  .fm-index a.sub{padding-left:28px;color:var(--faint);font-size:11px}
+  .fm-index .gap{height:14px}
+
+  /* content */
+  .fm-doc{min-width:0}
+  .fm-sec{padding-top:34px;margin-top:34px;border-top:1px solid var(--line)}
+  .fm-sec:first-child{padding-top:0;margin-top:0;border-top:0}
+  .fm-sec>.eyebrow{margin-bottom:8px}
+  .fm-sec h2{font-size:clamp(30px,3.4vw,46px);margin:0 0 6px}
+  .fm-sec p{color:var(--muted);max-width:72ch;margin:10px 0}
+  .fm-sec p b{color:var(--ink);font-weight:500}
+  .fm-sec a{color:var(--accent)}.fm-sec a:hover{text-decoration:underline}
+  .fm-sec ul{color:var(--muted);max-width:72ch;margin:10px 0;padding-left:20px}
+  .fm-sec li{margin:6px 0}
+  .fm-sec code{color:var(--ink);background:var(--surface-2);border:1px solid var(--line-2);padding:1px 6px;font-size:12.5px;white-space:nowrap}
+
+  /* numbered install steps */
+  .fm-step{display:grid;grid-template-columns:42px 1fr;gap:18px;padding:16px 0;border-bottom:1px solid var(--line);align-items:start}
+  .fm-step .n{font-family:"Teko";font-weight:700;font-size:34px;line-height:.8;color:var(--accent)}
+  .fm-step h3{font-family:"Chakra Petch";font-weight:700;text-transform:none;font-size:15px;letter-spacing:.02em;color:var(--ink);margin:0 0 4px}
+  .fm-step p{margin:0}
+
+  /* mono command block */
+  pre.cmd{margin:14px 0;padding:16px 18px;background:#0E0E11;border:1px solid var(--line-2);border-left:2px solid var(--accent);
+    font:500 12.5px/1.6 "JetBrains Mono";color:var(--ink);overflow-x:auto;white-space:pre-wrap;word-break:break-all;max-width:none}
+
+  /* data table */
+  .fm-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px}
+  .fm-table th,.fm-table td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  .fm-table th{font:700 10px/1 "JetBrains Mono";letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  .fm-table td{color:var(--muted)}
+  .fm-table td b{color:var(--ink);font-weight:500}
+  .fm-table code{white-space:nowrap}
+
+  /* accordion (details) */
+  .fm-acc{border-top:1px solid var(--line)}
+  .fm-acc:last-of-type{border-bottom:1px solid var(--line)}
+  .fm-acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:18px;
+    padding:16px 2px;font:500 14px/1.4 "JetBrains Mono";color:var(--ink);transition:.15s}
+  .fm-acc summary::-webkit-details-marker{display:none}
+  .fm-acc summary:hover{color:var(--accent)}
+  .fm-acc summary::after{content:"+";font:400 20px/1 "JetBrains Mono";color:var(--accent);flex:none;transition:transform .15s}
+  .fm-acc[open] summary::after{content:"\2212"}
+  .fm-acc .body{padding:0 2px 18px;color:var(--muted);max-width:74ch}
+  .fm-acc .body p:first-child{margin-top:0}
+
+  /* callout note */
+  .fm-note{border-left:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 5%,transparent);padding:16px 20px;margin:18px 0;max-width:74ch}
+  .fm-note .k{font:700 10px/1 "JetBrains Mono";letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:8px}
+  .fm-note p{color:var(--ink);margin:0}
+
+  @media(max-width:900px){
+    .fm-grid{grid-template-columns:1fr;gap:0;padding:30px var(--gut) 0}
+    .fm-index{position:static;margin-bottom:30px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+    .fm-index a{display:inline-block;border-left:0;border-bottom:1px solid var(--line-2);margin-right:4px;padding:8px 10px}
+  }
+</style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="container">
-    <span class="topbar-tag">🦡 HONEYBADGER SOFTWARE INC — polished tools for the stubborn few</span>
-    <span class="topbar-links">
-      <a href="community.html">Community</a>
-      <a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a>
-      <a href="downloads.html">Downloads</a>
-    </span>
+<nav class="nav" id="nav">
+  <div class="in">
+    <a class="brand" href="/">Honey<b>Badger</b></a>
+    <a class="item" href="/games.html">Games</a>
+    <a class="item" href="/products.html">Software</a>
+    <a class="item" href="/industrial.html">Industrial</a>
+    <a class="item" href="/community.html">Community</a>
+    <a class="item on" href="/support.html">Support</a>
+    <span class="sp"></span>
+    <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
+    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
   </div>
-</div>
-<header class="site-header">
-  <div class="container header-row">
-    <a href="/" class="brand">
-      <img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo" class="brand-logo">
-      <div class="brand-text"><div class="brand-name">HONEYBADGER</div><div class="brand-tag">SOFTWARE INC</div></div>
-    </a>
-    <nav class="site-nav" id="siteNav">
-      <a href="/">Home</a>
-      <div class="nav-dropdown">
-        <a href="/products.html" class="nav-dropdown-trigger">Products ▾</a>
-        <div class="nav-dropdown-menu">
-          <a href="/industrial.html"><strong>Industrial</strong><span>Plant-floor dashboards, troubleshooters, ERP hand-off</span></a>
-          <a href="/j1-bridge.html"><strong>J1 Bridge</strong><span>Snapmaker J1 + OrcaSlicer, finally talking</span></a>
-          <a href="/3d-printing/"><strong>3D Printing Hub</strong><span>Board wiring, firmware &amp; pinouts</span></a>
-          <a href="/eve-fleet-foreman.html"><strong>EVE Fleet Foreman</strong><span>Free EVE Online fleet-mining tool</span></a>
-          <a href="/c7-dashboard.html"><strong>C7 Dashboard</strong><span>Corvette CAN-bus touchscreen head unit</span></a>
-          <a href="/gauge-builder.html"><strong>Dash Builder</strong><span>Design a custom digital cluster</span></a>
-        </div>
-      </div>
-      <a href="/3d-printing/">3D Printing</a>
-      <a href="/industrial.html">Industrial</a>
-      <a href="/training.html">Training</a>
-      <a href="/games.html">Games</a>
-      <a href="/community.html">Community</a>
-      <a href="/downloads.html">Downloads</a>
-      <a href="/about.html">About</a>
-    </nav>
-    <div class="header-actions">
-      <a href="builder.html" class="btn btn-gold btn-sm">Try the Dash Builder</a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ===== FIELD MANUAL hero ===== -->
+<header class="fm-hero">
+  <div class="in">
+    <p class="eyebrow">FIELD MANUAL</p>
+    <h1>Get back online.</h1>
+    <p class="lede">Install, first run, ports, file locations, updates and troubleshooting — the whole path, start to finish, plus what to do when something goes wrong. No telemetry, no phone-home, no terminal required.</p>
+    <div class="fm-cta">
+      <a class="btn solid" href="/community.html">Ask the community</a>
+      <a class="btn ghost" href="/downloads.html">All downloads</a>
     </div>
   </div>
 </header>
 
-<section class="page-hero">
-  <div class="container">
-    <div class="breadcrumb"><a href="/">Home</a> / Support</div>
-    <div class="eyebrow-chip">📚 DOCS · FAQ · KNOWN ISSUES</div>
-    <h1>Support &amp; documentation</h1>
-    <p class="lede">Install guides, answers, and honest limitations. Can't find it? The fastest help is the <a href="community.html">community Discord</a>.</p>
+<div class="fm-strip">
+  <div class="in">
+    <div class="c"><span class="k">Signed installers</span><span class="v">Windows builds are <b>code-signed</b>; no console</span></div>
+    <div class="c"><span class="k">Telemetry</span><span class="v"><b>None.</b> No analytics, no tracking</span></div>
+    <div class="c"><span class="k">Fastest help</span><span class="v"><a href="/community.html" style="color:var(--accent)">Community &rarr;</a></span></div>
+    <div class="c"><span class="k">Direct</span><span class="v"><a href="mailto:contact@honeybadger.software" style="color:var(--accent)">contact@honeybadger.software</a></span></div>
   </div>
-</section>
+</div>
 
-<section class="section">
-  <div class="container">
-    <div class="docs-layout">
-      <aside class="docs-sidebar">
-        <div class="docs-group">Getting started</div>
-        <a href="#start">Quick start</a>
-        <a href="#install">Installing</a>
-        <div class="docs-group">Products</div>
-        <a href="#j1">J1 Bridge</a>
-        <a href="#c7">C7 Dashboard</a>
-        <a href="#builder">Dash Builder</a>
-        <div class="docs-group">Help</div>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
-      </aside>
+<!-- ===== doc body ===== -->
+<div class="fm-grid">
 
-      <div class="docs-content">
-        <h2 id="start">Quick start</h2>
-        <p>Every Honeybadger product is built to install and run without a terminal. Pick your product below, grab it from the <a href="downloads.html">Downloads</a> page, and follow the in-app guidance. Each app ships with a built-in <strong>Known Issues</strong> page so you always know exactly what works and what's still cooking.</p>
+  <!-- LEFT: sticky section index -->
+  <nav class="fm-index" aria-label="Section index">
+    <p class="lbl">Section index</p>
+    <a href="#start">00 · Quick start</a>
+    <a href="#install">01 · Install</a>
+    <a href="#install" class="sub">Windows</a>
+    <a href="#linux" class="sub">Linux</a>
+    <a href="#firstrun">02 · First run</a>
+    <a href="#ports">03 · Ports to forward</a>
+    <a href="#files">04 · Where files live</a>
+    <a href="#updates">05 · Updates</a>
+    <div class="gap"></div>
+    <a href="#products">06 · Other products</a>
+    <a href="#products" class="sub">J1 Bridge</a>
+    <a href="#c7" class="sub">C7 Dashboard</a>
+    <a href="#builder" class="sub">Dash Builder</a>
+    <div class="gap"></div>
+    <a href="#trouble">07 · Troubleshooting</a>
+    <a href="#faq">08 · FAQ</a>
+    <a href="#licence">09 · Licence</a>
+    <a href="#contact">10 · Contact</a>
+  </nav>
 
-        <h2 id="install" style="margin-top:36px">Installing</h2>
-        <p>Windows products ship as a single signed installer — no Python, no Docker, no command line. Hardware kits (like the C7 Dashboard) arrive pre-flashed: plug in, mount, power on. If Windows SmartScreen warns on a new release, choose <em>More info → Run anyway</em>; signing reputation builds with each download.</p>
+  <!-- RIGHT: content -->
+  <div class="fm-doc">
 
-        <h2 id="j1" style="margin-top:36px">J1 Bridge</h2>
-        <p>Connect your Snapmaker J1/J1s to the same network as your PC, open J1 Bridge, and add the printer by IP under Settings. Drag an STL onto the Home tab to slice → upload → print. See the <a href="j1-bridge.html">product page</a> for the full workflow.</p>
-        <div class="faq-item"><details><summary>Do I need to convert to Klipper?</summary><div class="faq-body">No. J1 Bridge works on <strong>stock V2.8.0 firmware</strong>. No flashing, no warranty risk.</div></details></div>
-        <div class="faq-item"><details><summary>My first layer has wiper marks</summary><div class="faq-body">That's the stock start macro. J1 Bridge patches it automatically — make sure the start-macro patch safety gate is ON in Settings.</div></details></div>
+    <section class="fm-sec" id="start">
+      <p class="eyebrow">00 / Quick start</p>
+      <h2>Pick a tool, grab it, run it.</h2>
+      <p>Every HoneyBadger product is built to install and run without a terminal. Pick your product, grab it from the <a href="/downloads.html">Downloads</a> page, and follow the in-app guidance. Each app ships with a built-in <b>Known Issues</b> page so you always know exactly what works and what's still cooking.</p>
+      <p>Most of this manual covers the <a href="/rust-server-manager.html">HoneyBadger Bunker</a> Rust server deck, since it has the most moving parts. J1 Bridge, the C7 Dashboard and the Dash Builder are further down.</p>
+    </section>
 
-        <h2 id="c7" style="margin-top:36px">C7 Dashboard</h2>
-        <p>The kit arrives ready to run. Plug into the OBD-II port, mount the touchscreen, and power on from a switched 12V source. The dashboard auto-detects your trim and shows the right gauges. Boost gauges appear automatically on Z06 / ZR1.</p>
-        <div class="faq-item"><details><summary>Does this reflash or modify my ECU?</summary><div class="faq-body">No. The dashboard reads the OEM CAN bus <strong>passively</strong>. No reflash, no tune change, warranty intact. Control features drive their own relays — they never write to the ECU.</div></details></div>
-        <div class="faq-item"><details><summary>Which years and trims are supported?</summary><div class="faq-body">2014–2019 C7 Stingray, Grand Sport, Z06, and ZR1. Auto trans, M7 manual, and MagneRide are auto-detected.</div></details></div>
+    <section class="fm-sec" id="install">
+      <p class="eyebrow">01 / Install &middot; Windows</p>
+      <h2>Install on Windows</h2>
+      <p>Windows 10 or 11, 64-bit. Windows products ship as a single signed installer — no Python, no Docker, no command line. The easiest way is the signed installer.</p>
+      <div class="fm-step"><div class="n">1</div><div><h3>Download the installer</h3><p>Get <code>HoneyBadgerBunker-Setup-0.1.0.exe</code> from the <a href="/rust-server-manager.html#download">Bunker page</a> or the <a href="/downloads.html">Downloads</a> page. It is <b>signed</b>, so there is no "unknown publisher" warning, and it installs <b>per-user</b> with <b>no administrator rights</b>.</p></div></div>
+      <div class="fm-step"><div class="n">2</div><div><h3>Run it</h3><p>Double-click it and follow the prompts. It installs to your account and adds a Start Menu shortcut (and a desktop one if you tick the box).</p></div></div>
+      <div class="fm-step"><div class="n">3</div><div><h3>Open the deck</h3><p>Launch <b>HoneyBadger Bunker</b> from the Start Menu. The deck window opens — no console, no terminal.</p></div></div>
+      <div class="fm-note"><span class="k">Portable zip</span><p>Prefer no installer? Download the portable zip, right-click it &rarr; Properties &rarr; tick <b>Unblock</b> &rarr; OK, unzip it anywhere, and double-click <b>HoneyBadger Bunker.bat</b>. The zip carries its own copy of Python, so there is nothing else to install.</p></div>
+      <p>Closing the deck window does <b>not</b> stop your server — the engine keeps running in the background. Open the deck again and everything is where you left it.</p>
+    </section>
 
-        <h2 id="builder" style="margin-top:36px">Dash Builder</h2>
-        <p>The <a href="builder.html">Dash Builder</a> runs in any modern browser — no install. Pick a style, materials, needle, and units; the preview rebuilds live. The exact SVG you design renders identically on the C7 dashboard.</p>
+    <section class="fm-sec" id="linux">
+      <p class="eyebrow">01 / Install &middot; Linux</p>
+      <h2>Install on Linux</h2>
+      <p>Debian and Ubuntu (64-bit) are the tested path; there is also a newer Fedora / RHEL / Rocky / Alma path. On the server, as root, paste one line:</p>
+      <pre class="cmd">curl -sSL https://honeybadger.software/installer/install.sh | sudo bash -s -- \
+  --from https://honeybadger.software/installer/HoneyBadgerBunker-0.1.0.tar.gz</pre>
+      <p>Already have the source folder on the box? Run <code>sudo bash packaging/linux/install.sh</code> from it instead. The installer is safe to run again, and it will:</p>
+      <ul>
+        <li>install the 32-bit libraries SteamCMD needs, plus Python, curl, unzip and logrotate;</li>
+        <li>create an unprivileged user <code>honeybadger</code> — <b>the game server never runs as root</b>;</li>
+        <li>install the deck into <code>/opt/honeybadger</code> and run it as a systemd service named <code>hbdeck</code>;</li>
+        <li>set up log rotation and a restart-on-crash limit so a broken update cannot loop forever.</li>
+      </ul>
+      <p>The deck listens on the server's <b>loopback address only</b> — it is never exposed to the internet. Reach it from your own PC over an SSH tunnel:</p>
+      <pre class="cmd">ssh -L 27800:127.0.0.1:27800 you@your-server</pre>
+      <p>Then open <code>http://127.0.0.1:27800/</code> in your browser. Useful commands:</p>
+      <pre class="cmd">systemctl status hbdeck
+journalctl -u hbdeck -f
+sudo systemctl restart hbdeck
+sudo bash /opt/honeybadger/uninstall.sh            # removes the deck, keeps your servers
+sudo bash /opt/honeybadger/uninstall.sh --purge    # removes everything, servers included</pre>
+    </section>
 
-        <h2 id="faq" style="margin-top:36px">Frequently asked</h2>
-        <div class="faq-item"><details><summary>Is any of this free?</summary><div class="faq-body">J1 Bridge is free for personal use, and the Dash Builder is free to use in the browser. The C7 Dashboard is a commercial hardware kit. Support the studio if you'd like to feed the badger — nothing essential is paywalled.</div></details></div>
-        <div class="faq-item"><details><summary>Do you collect any data?</summary><div class="faq-body">No telemetry, no analytics, no "phone home." Your machines are your business.</div></details></div>
-        <div class="faq-item"><details><summary>How do I report a bug or request a feature?</summary><div class="faq-body">Post in the <a href="community.html">community</a> or email <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a>. Confirmed limitations go on each product's Known Issues page.</div></details></div>
+    <section class="fm-sec" id="firstrun">
+      <p class="eyebrow">02 / First run</p>
+      <h2>First run</h2>
+      <p>The first time the deck opens, the setup wizard walks you through a server: a <b>name</b>, <b>where the files go</b>, the <b>map</b> and <b>how many players</b>. It <b>picks free ports</b> and installs the game for you.</p>
+      <div class="fm-note"><span class="k">Be patient</span><p>The first start is slow on purpose: Rust downloads about <b>6 GB</b>, then the server generates the map. Expect several minutes before it shows as running. Later starts are much faster. Friends can join the moment the deck shows the server running.</p></div>
+    </section>
 
-        <h2 id="contact" style="margin-top:36px">Contact</h2>
-        <p>Email <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a> or jump into the <a href="community.html">Discord</a> for the fastest response.</p>
-      </div>
-    </div>
+    <section class="fm-sec" id="ports">
+      <p class="eyebrow">03 / Ports to forward</p>
+      <h2>Ports to forward</h2>
+      <table class="fm-table">
+        <tr><th>Port</th><th>Protocol</th><th>Purpose</th><th>Open to the internet?</th></tr>
+        <tr><td><code>28015</code></td><td>UDP</td><td>Game</td><td><b>Yes</b></td></tr>
+        <tr><td><code>28017</code></td><td>UDP</td><td>Server query (the server list needs it)</td><td><b>Yes</b></td></tr>
+        <tr><td><code>28016</code></td><td>TCP</td><td>RCON</td><td>No, unless you manage from outside</td></tr>
+        <tr><td>Rust+ port</td><td>TCP</td><td>Rust+ companion app (the deck shows the number)</td><td>Only if you turned it on</td></tr>
+        <tr><td><code>27800</code></td><td>TCP</td><td>The deck panel on Linux</td><td><b>Never</b> — use the SSH tunnel</td></tr>
+      </table>
+      <p>These are the defaults; if you change a port in the wizard, forward the numbers the deck shows. Playing from the same PC or network needs no forwarding — press F1 in Rust and type <code>client.connect 127.0.0.1:28015</code>.</p>
+    </section>
+
+    <section class="fm-sec" id="files">
+      <p class="eyebrow">04 / Where files live</p>
+      <h2>Where your files live</h2>
+      <table class="fm-table">
+        <tr><th></th><th>Windows (installer / zip)</th><th>Linux (installer)</th></tr>
+        <tr><td><b>Deck settings, database, logs</b></td><td><code>state\</code> next to the launcher</td><td><code>/var/lib/honeybadger</code></td></tr>
+        <tr><td><b>Game servers</b></td><td>the folder you pick in the wizard</td><td><code>/srv/honeybadger/servers/&lt;name&gt;</code></td></tr>
+        <tr><td><b>Engine settings (port, bind)</b></td><td>chosen automatically</td><td><code>/etc/honeybadger/engine.env</code></td></tr>
+        <tr><td><b>Logs</b></td><td><code>state\logs\</code></td><td><code>journalctl -u hbdeck</code></td></tr>
+      </table>
+      <p>To move a Windows install to another PC, close the deck, copy the whole folder, and start it there.</p>
+    </section>
+
+    <section class="fm-sec" id="updates">
+      <p class="eyebrow">05 / Updates</p>
+      <h2>Updates</h2>
+      <p>Updates come from honeybadger.software. The deck checks a <b>signed list</b>, and every file it downloads must match a signature and a checksum or it is refused. You get a plain notice in the deck when there is a new version — <b>nothing installs until you click</b>.</p>
+      <ul>
+        <li><b>Windows:</b> the deck downloads and verifies the new version, then swaps it in when you click and the engine has stopped. Or unzip the new portable zip over the old folder — <code>state\</code> is not in the zip, so your servers and settings stay.</li>
+        <li><b>Linux:</b> run the installer again with the new package; your settings and servers are kept.</li>
+      </ul>
+      <p>Updating the Rust server itself is separate: it is one button (or a schedule), and it keeps your mod framework in place afterwards.</p>
+    </section>
+
+    <section class="fm-sec" id="products">
+      <p class="eyebrow">06 / Other products</p>
+      <h2>J1 Bridge</h2>
+      <p>Connect your Snapmaker J1/J1s to the same network as your PC, open J1 Bridge, and add the printer by IP under Settings. Drag an STL onto the Home tab to slice &rarr; upload &rarr; print. See the <a href="/j1-bridge.html">product page</a> for the full workflow.</p>
+      <details class="fm-acc"><summary>Do I need to convert to Klipper?</summary><div class="body"><p>No. J1 Bridge works on <b>stock V2.8.0 firmware</b>. No flashing, no warranty risk.</p></div></details>
+      <details class="fm-acc"><summary>My first layer has wiper marks</summary><div class="body"><p>That's the stock start macro. J1 Bridge patches it automatically — make sure the start-macro patch safety gate is ON in Settings.</p></div></details>
+    </section>
+
+    <section class="fm-sec" id="c7">
+      <p class="eyebrow">06 / Other products</p>
+      <h2>C7 Dashboard</h2>
+      <p>The kit arrives ready to run. Plug into the OBD-II port, mount the touchscreen, and power on from a switched 12V source. The dashboard auto-detects your trim and shows the right gauges. Boost gauges appear automatically on Z06 / ZR1.</p>
+      <details class="fm-acc"><summary>Does this reflash or modify my ECU?</summary><div class="body"><p>No. The dashboard reads the OEM CAN bus <b>passively</b>. No reflash, no tune change, warranty intact. Control features drive their own relays — they never write to the ECU.</p></div></details>
+      <details class="fm-acc"><summary>Which years and trims are supported?</summary><div class="body"><p>2014–2019 C7 Stingray, Grand Sport, Z06, and ZR1. Auto trans, M7 manual, and MagneRide are auto-detected.</p></div></details>
+    </section>
+
+    <section class="fm-sec" id="builder">
+      <p class="eyebrow">06 / Other products</p>
+      <h2>Dash Builder</h2>
+      <p>The <a href="/builder.html">Dash Builder</a> runs in any modern browser — no install. Pick a style, materials, needle, and units; the preview rebuilds live. The exact SVG you design renders identically on the C7 dashboard.</p>
+    </section>
+
+    <section class="fm-sec" id="trouble">
+      <p class="eyebrow">07 / Troubleshooting</p>
+      <h2>Troubleshooting</h2>
+      <details class="fm-acc"><summary>Windows says "Windows protected your PC" (SmartScreen)</summary><div class="body"><p>The signed installer is code-signed by HoneyBadger Software, so you should not see an "unknown publisher" warning. A brand-new signed program can still get a reputation prompt until enough people have downloaded it — click <b>More info</b>, then <b>Run anyway</b>. With the portable zip, right-click &rarr; Properties &rarr; tick <b>Unblock</b> before you unzip. Signing reputation builds with each download.</p></div></details>
+      <details class="fm-acc"><summary>The deck window does not open</summary><div class="body"><p>Open <code>state\logs\launcher.log</code>. If it is empty or unclear, run <b>Bunker (console debug).bat</b> to see what it prints. The window needs the Microsoft Edge WebView2 runtime — Windows 11 has it built in; on Windows 10 it is a free download from Microsoft.</p></div></details>
+      <details class="fm-acc"><summary>First start takes forever</summary><div class="body"><p>Normal: the game downloads ~6 GB and then the map generates. Give it several minutes the first time; later starts are quick.</p></div></details>
+      <details class="fm-acc"><summary>Not enough memory</summary><div class="body"><p>A Rust server wants about <b>12 GB of RAM</b> and 15 GB of free disk. If the machine has less, pick a smaller map and fewer players in the wizard.</p></div></details>
+      <details class="fm-acc"><summary>Players cannot join, but it works for me</summary><div class="body"><p>The ports above are not reachable from outside. Check the router forward, the Windows or Linux firewall, and — on a cloud host — the provider's security group. <b>Both UDP ports</b> must be open.</p></div></details>
+      <details class="fm-acc"><summary>Linux service will not start</summary><div class="body"><p><code>journalctl -u hbdeck -n 50</code> shows why. The service gives up after 3 failed starts in 5 minutes on purpose; fix the cause and run <code>sudo systemctl restart hbdeck</code>.</p></div></details>
+      <div class="fm-note"><span class="k">Still stuck?</span><p>Tell us what broke on the <a href="/community.html">community page</a> — this is a test release, and that feedback goes straight to the people building it.</p></div>
+    </section>
+
+    <section class="fm-sec" id="faq">
+      <p class="eyebrow">08 / FAQ</p>
+      <h2>Frequently asked</h2>
+      <details class="fm-acc"><summary>Is any of this free?</summary><div class="body"><p>The Bunker and the HoneyBadger DPS Meter are free. J1 Bridge is free for personal use, and the Dash Builder is free to use in the browser. The C7 Dashboard is a commercial hardware kit. Support the studio if you'd like to feed the badger — nothing essential is paywalled.</p></div></details>
+      <details class="fm-acc"><summary>Do you collect any data?</summary><div class="body"><p>No telemetry, no analytics, no "phone home." Your machines are your business.</p></div></details>
+      <details class="fm-acc"><summary>How do I report a bug or request a feature?</summary><div class="body"><p>Post in the <a href="/community.html">community</a> or email <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a>. Confirmed limitations go on each product's Known Issues page.</p></div></details>
+    </section>
+
+    <section class="fm-sec" id="licence">
+      <p class="eyebrow">09 / Licence</p>
+      <h2>Licence and what is not ours</h2>
+      <p>The Bunker deck's own code is MIT licensed. Copyright HoneyBadger Software. Things the deck downloads for you keep their own licences and terms:</p>
+      <ul>
+        <li><b>Rust Dedicated Server</b> belongs to Facepunch Studios; the deck installs it through Valve's SteamCMD, anonymously.</li>
+        <li><b>SteamCMD</b> belongs to Valve.</li>
+        <li><b>Carbon</b> and <b>Oxide (uMod)</b> are separate projects with their own licences; the deck downloads them from their official releases and never bundles or modifies them.</li>
+        <li><b>Python</b> and the libraries inside the Windows zip carry their own open-source licences.</li>
+      </ul>
+      <p>HoneyBadger Software is not affiliated with Facepunch Studios or Valve.</p>
+    </section>
+
+    <section class="fm-sec" id="contact">
+      <p class="eyebrow">10 / Contact</p>
+      <h2>Contact</h2>
+      <p>Email <a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a> or jump into the <a href="/community.html">community</a> for the fastest response.</p>
+    </section>
+
   </div>
-</section>
+</div>
 
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-cols">
-      <div class="footer-col">
-        <div class="footer-brand-row"><img src="https://avatars.githubusercontent.com/u/108652491?v=4" alt="Honeybadger Software logo"><div><div class="brand-name-sm">HONEYBADGER SOFTWARE INC</div><div class="brand-tag-sm">Built honest. Shipped polished.</div></div></div>
-        <p class="footer-blurb">A one-person studio shipping polished tools for 3D printing, automotive electronics, and industrial monitoring. No telemetry. No tracking. Just tools.</p>
-      </div>
-      <div class="footer-col"><h4>Products</h4><a href="eve-fleet-foreman.html">EVE Fleet Foreman</a><a href="j1-bridge.html">J1 Bridge</a><a href="c7-dashboard.html">C7 Dashboard</a><a href="nitrous.html">Nitrous Control</a><a href="builder.html">Dash Builder</a><a href="industrial.html">Industrial</a></div>
-      <div class="footer-col"><h4>Resources</h4><a href="support.html">Support &amp; Docs</a><a href="downloads.html">Downloads</a><a href="news.html">News</a><a href="about.html">About</a></div>
-      <div class="footer-col"><h4>Community</h4><a href="community.html">Forums</a><a href="community.html">Discord</a><a href="https://github.com/MIKE818964" target="_blank" rel="noopener">GitHub</a><a href="mailto:contact@honeybadger.software">contact@honeybadger.software</a></div>
-    </div>
-    <div class="footer-fineprint"><small>© HONEYBADGER SOFTWARE INC · No telemetry. No tracking. Just tools.</small></div>
-  </div>
-</footer>
-<script src="assets/js/nav.js?v=4"></script>
+<footer class="foot"><div class="in">
+  <span>honeybadger.software — independent mods, servers &amp; tactical software.</span>
+  <span class="links"><a href="/about.html">Studio</a><a href="/news.html">Dispatch</a><a href="/contact.html">Contact</a><a href="https://github.com/honeybadger-software">GitHub</a></span>
+</div></footer>
+
 </body>
 </html>

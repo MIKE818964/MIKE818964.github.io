@@ -1,0 +1,103 @@
+/* =====================================================================
+   HoneyBadger — brand.css  ·  ONE shared design system (dark cinema)
+   Palette: near-black canvas · electric-cyan accent · reserved ember-red
+   Type: Teko (display) · Chakra Petch (wordmark/subhead) · JetBrains Mono (UI/body)
+   Rule: 0px radius everywhere · hairlines · gold/amber is DEAD (warm only in photos)
+   Every page links this file for cohesion, then adds its own archetype layout.
+   ===================================================================== */
+
+:root{
+  --bg:#0B0B0D; --surface:#141518; --surface-2:#1B1C20;
+  --ink:#ECE9E3; --muted:#9A968F; --faint:#6E6A64;
+  --line:rgba(236,233,227,.09); --line-2:#26272B;
+  --accent:#3FD8FF; --accent-ink:#06121A;
+  --hot:#FF3B41; --hot-deep:#E1252B; --hot-ink:#0B0B0D;
+  --ok:#2FD37E; --warn:#F5A623; --err:#E1252B; --idle:#94A3B8;
+  --hero-scrim: linear-gradient(90deg,#0B0B0D 0%,rgba(11,11,13,.90) 26%,rgba(11,11,13,.30) 55%,rgba(11,11,13,0) 76%,#0B0B0D 100%);
+  --hero-scrim-b: linear-gradient(0deg,#0B0B0D 0%,rgba(11,11,13,0) 45%);
+  --gut:40px; --maxw:1640px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 14.5px/1.6 "JetBrains Mono",ui-monospace,monospace;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:var(--accent-ink)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+
+/* ---- type ---- */
+.eyebrow{font:500 11px/1 "JetBrains Mono",monospace;letter-spacing:.26em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"— "}
+h1,h2,h3,h4{font-family:"Teko",sans-serif;font-weight:700;text-transform:uppercase;line-height:.88;letter-spacing:.01em}
+.hot{color:var(--hot)}
+.cyan{color:var(--accent)}
+.mut{color:var(--muted)}
+.lede{font:400 16px/1.6 "JetBrains Mono",monospace;color:var(--muted);max-width:54ch}
+
+/* ---- buttons (notched, 0 radius, never pills) ---- */
+.btn{display:inline-flex;align-items:center;gap:.6em;height:48px;padding:0 24px;font:700 12px/1 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:0;transition:.15s;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.btn.solid{background:var(--hot);color:var(--hot-ink)}
+.btn.solid:hover{background:var(--hot-deep)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2)}
+.btn.ghost:hover{box-shadow:inset 0 0 0 1px var(--accent);color:var(--accent)}
+.btn.cyan-fill{background:var(--accent);color:var(--accent-ink)}
+.btn.cyan-fill:hover{filter:brightness(1.1)}
+
+/* ---- crosshair ticks (section corners) ---- */
+.tick{position:absolute;width:9px;height:9px;opacity:.5}
+.tick::before,.tick::after{content:"";position:absolute;background:var(--accent)}
+.tick::before{left:0;top:4px;width:9px;height:1px}.tick::after{left:4px;top:0;width:1px;height:9px}
+.tl{left:14px;top:14px}.tr{right:14px;top:14px}
+
+/* ---- shared top nav ---- */
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .in{display:flex;align-items:center;gap:26px;height:66px;max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+.brand{font:700 26px/1 "Teko";letter-spacing:.02em;text-transform:uppercase}
+.brand b{color:var(--accent);font-weight:700}
+.nav a.item{font:500 12px/1 "JetBrains Mono";letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:2px solid transparent;white-space:nowrap}
+.nav a.item:hover{color:var(--ink)}
+.nav a.item.on{color:var(--ink);border-bottom-color:var(--accent)}
+.nav .sp{flex:1}
+.nav .mbtn{display:none;background:transparent;border:1px solid var(--line-2);color:var(--ink);height:40px;width:44px;cursor:pointer;font-size:18px}
+
+/* ---- shared section header ---- */
+.sechead{position:relative;max-width:var(--maxw);margin:0 auto;padding:56px var(--gut) 0}
+.sechead .num{position:absolute;left:var(--gut);top:20px;font:500 10px/1 "JetBrains Mono";letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+.sechead h2{font-size:clamp(40px,5vw,78px);margin-top:20px}
+.sechead p{margin-top:12px}
+
+/* ---- generic page hero (image left-scrim) — used by most sub-pages ---- */
+.phero{position:relative;min-height:56vh;display:flex;align-items:flex-end;background:#000 center/cover no-repeat}
+.phero::after{content:"";position:absolute;inset:0;background:var(--hero-scrim)}
+.phero::before{content:"";position:absolute;inset:0;z-index:1;background:var(--hero-scrim-b)}
+.phero .in{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;width:100%;padding:0 var(--gut) 56px}
+.phero h1{font-size:clamp(50px,6.4vw,104px);margin:14px 0 16px;max-width:16ch}
+
+/* ---- stat band (reusable) ---- */
+.statband{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
+.statband .in{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));max-width:var(--maxw);margin:0 auto}
+.statband .s{padding:26px var(--gut);border-left:1px solid var(--line)}
+.statband .s:first-child{border-left:0}
+.statband .s b{display:block;font:600 clamp(40px,4vw,62px)/1 "Teko";color:var(--ink)}
+.statband .s span{font:500 10px/1.4 "JetBrains Mono";letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+
+/* ---- hairline rows ---- */
+.rows{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+.row{display:flex;justify-content:space-between;gap:20px;align-items:baseline;padding:16px 0;border-top:1px solid var(--line)}
+.row .l{color:var(--ink)}.row .r{color:var(--faint);font-size:13px}
+
+/* ---- footer ---- */
+.foot{border-top:1px solid var(--line);margin-top:76px}
+.foot .in{max-width:var(--maxw);margin:0 auto;padding:40px var(--gut);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;color:var(--faint);font-size:12px}
+.foot a{color:var(--muted)}.foot a:hover{color:var(--accent)}
+.foot .links a{margin-left:18px}
+
+@media(max-width:1040px){
+  .nav a.item{display:none}.nav .mbtn{display:inline-block}
+  .nav.open a.item{display:block;position:static}
+}
+@media(max-width:900px){
+  :root{--gut:22px}
+  .statband .in{grid-template-columns:1fr 1fr}
+}
