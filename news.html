@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/brand.css?v=1">
+<link rel="stylesheet" href="assets/css/brand.css?v=2">
 <style>
 /* ===== NEWS — archetype "DISPATCH" ===== */
 /* compact hero strip */
@@ -70,8 +70,9 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
 <!-- ===== CANONICAL NAV (News has no top-nav item — none "on") ===== -->
-<nav class="nav" id="nav">
+<nav class="nav" id="nav" aria-label="Primary">
   <div class="in">
     <a class="brand" href="/">Honey<b>Badger</b></a>
     <a class="item" href="/games.html">Games</a>
@@ -81,10 +82,11 @@
     <a class="item" href="/support.html">Support</a>
     <span class="sp"></span>
     <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
-    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
+    <button class="mbtn" aria-label="Menu" aria-controls="nav" aria-expanded="false" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">&#8801;</button>
   </div>
 </nav>
 
+<main id="main">
 <!-- ===== COMPACT HERO STRIP ===== -->
 <header class="dhero">
   <div class="in">
@@ -112,6 +114,16 @@
 <!-- ===== DISPATCH ROWS (newest first) ===== -->
 <section class="dsec">
   <div class="head"><h2>The log</h2><span>Newest first</span></div>
+
+  <div class="drow">
+    <div class="when"><time>Oct 2026</time><span class="tag">RUST</span></div>
+    <div>
+      <h3>HoneyBadger Bunker and the DPS Meter ship</h3>
+      <p>The Bunker — a Rust dedicated-server installer and control deck for Windows and Linux, with no command prompt — is out as a test release (v0.1.0). Alongside it, the free HoneyBadger DPS Meter reaches v1.0.2: live landed damage, headshots, accuracy and weapon on one band. Both are free — grab them from the downloads page.</p>
+      <a class="more" href="/downloads.html">Get the builds &rarr;</a>
+    </div>
+    <a class="thumb" href="/rust-server-manager.html"><img src="/assets/images/bunker-deck.webp" alt="HoneyBadger Bunker server deck"></a>
+  </div>
 
   <div class="drow">
     <div class="when"><time>May 2026</time><span class="tag">C7 DASHBOARD</span></div>
@@ -148,6 +160,8 @@
 <div class="dnote">
   <p>Want release notes in your inbox? An email list lands with the J1 Bridge launch. For now, <a href="/community.html">join the community</a> for the freshest updates.</p>
 </div>
+
+</main>
 
 <!-- ===== CANONICAL FOOTER ===== -->
 <footer class="foot"><div class="in">

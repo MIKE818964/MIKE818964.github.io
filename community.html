@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/brand.css?v=1">
+<link rel="stylesheet" href="assets/css/brand.css?v=2">
 <style>
 /* ===== COMMUNITY — archetype "BROADCAST BOARD" ===== */
 /* wide banner hero */
@@ -93,21 +93,23 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
 <!-- ===== CANONICAL NAV ===== -->
-<nav class="nav" id="nav">
+<nav class="nav" id="nav" aria-label="Primary">
   <div class="in">
     <a class="brand" href="/">Honey<b>Badger</b></a>
     <a class="item" href="/games.html">Games</a>
     <a class="item" href="/products.html">Software</a>
     <a class="item" href="/industrial.html">Industrial</a>
-    <a class="item on" href="/community.html">Community</a>
+    <a class="item on" href="/community.html" aria-current="page">Community</a>
     <a class="item" href="/support.html">Support</a>
     <span class="sp"></span>
     <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
-    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
+    <button class="mbtn" aria-label="Menu" aria-controls="nav" aria-expanded="false" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">&#8801;</button>
   </div>
 </nav>
 
+<main id="main">
 <!-- ===== HERO BANNER ===== -->
 <header class="cbanner">
   <div class="in">
@@ -122,7 +124,7 @@
 <section class="bigstats">
   <div class="in">
     <div class="s"><span class="tick tl"></span><b>6</b><span>Discussion boards</span></div>
-    <div class="s"><span class="tick tl"></span><b>5</b><span>Products supported</span></div>
+    <div class="s"><span class="tick tl"></span><b>6</b><span>Products supported</span></div>
     <div class="s"><span class="tick tl"></span><b><em>0</em></b><span>Trackers · no telemetry</span></div>
   </div>
 </section>
@@ -136,7 +138,7 @@
       <h2>The feed</h2>
       <span class="meta">Announcements · newest first</span>
     </div>
-    <p class="lede">Studio announcements and board activity. The boards are new — be the first to post.</p>
+    <p class="lede">Studio announcements and board activity. The <a href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener">Discord channels</a> are new — be the first to post.</p>
 
     <div class="feed">
       <div class="frow">
@@ -165,7 +167,7 @@
         <div><time>2026-05</time><span class="tag">DASH BUILDER</span></div>
         <div>
           <h3>Dash Builder shipped — show us your cluster</h3>
-          <p>Design a custom digital gauge cluster in the browser; the SVG you configure renders pixel-identical on the physical C7 dash. Post your design in Builds &amp; Show-off.</p>
+          <p>Design a custom digital gauge cluster in the browser; the SVG you configure renders pixel-identical on the physical C7 dash. Share your design in the <a href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener">#builds-show-off channel on Discord</a>.</p>
           <a class="more" href="/builder.html">Open the builder &rarr;</a>
         </div>
       </div>
@@ -191,18 +193,19 @@
     </div>
 
     <div class="chan">
-      <div class="ch-head"><h4>Channels &amp; boards</h4><span>6 live</span></div>
-      <div class="crow"><span class="c"><b>#</b>announcements</span><span class="n">Studio news</span></div>
-      <div class="crow"><span class="c"><b>#</b>builds-show-off</span><span class="n">Photos welcome</span></div>
-      <div class="crow"><span class="c"><b>#</b>j1-bridge</span><span class="n">Snapmaker J1</span></div>
-      <div class="crow"><span class="c"><b>#</b>c7-dashboard</span><span class="n">CAN · clusters</span></div>
-      <div class="crow"><span class="c"><b>#</b>dash-builder</span><span class="n">Custom gauges</span></div>
-      <div class="crow"><span class="c"><b>#</b>industrial</span><span class="n">Plant floor</span></div>
-      <div class="crow"><span class="c"><b>#</b>support</span><span class="n">Stuck? Ask here</span></div>
+      <div class="ch-head"><h4>Discord channels</h4><span>6 live</span></div>
+      <div class="crow"><a class="c" href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener"><b>#</b>announcements</a><span class="n">Studio news</span></div>
+      <div class="crow"><a class="c" href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener"><b>#</b>builds-show-off</a><span class="n">Photos welcome</span></div>
+      <div class="crow"><a class="c" href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener"><b>#</b>j1-bridge</a><span class="n">Snapmaker J1</span></div>
+      <div class="crow"><a class="c" href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener"><b>#</b>c7-dashboard</a><span class="n">CAN · clusters</span></div>
+      <div class="crow"><a class="c" href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener"><b>#</b>industrial</a><span class="n">Plant floor</span></div>
+      <div class="crow"><a class="c" href="https://discord.gg/HsFwkF3Tms" target="_blank" rel="noopener"><b>#</b>support</a><span class="n">Stuck? Ask here</span></div>
     </div>
   </div>
 
 </section>
+
+</main>
 
 <!-- ===== CANONICAL FOOTER ===== -->
 <footer class="foot"><div class="in">

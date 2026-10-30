@@ -10,7 +10,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/brand.css?v=1">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://honeybadger.software/products.html">
+<link rel="stylesheet" href="assets/css/brand.css?v=2">
 <style>
 /* SOFTWARE — archetype C: FEATURE STRIPS (alternating full-bleed app screenshots) */
 .s-head{max-width:var(--maxw);margin:0 auto;padding:68px var(--gut) 40px}
@@ -20,7 +22,7 @@
 .strip .pic{background:var(--surface-2) center/cover no-repeat;min-height:46vh}
 .strip .pic.contain{background-size:contain;background-repeat:no-repeat;background-position:center;background-color:#0e0f12}
 .strip .txt{display:flex;flex-direction:column;justify-content:center;padding:56px 64px}
-.strip .txt h3{font-size:clamp(38px,4.2vw,74px);margin:12px 0 16px}
+.strip .txt h2{font-size:clamp(38px,4.2vw,74px);margin:12px 0 16px}
 .strip .spec{display:flex;gap:28px;margin:18px 0 26px;flex-wrap:wrap}
 .strip .spec div b{font:600 38px/1 "Teko"}
 .strip .spec div span{font:500 10px/1.3 "JetBrains Mono";letter-spacing:.16em;text-transform:uppercase;color:var(--faint);display:block}
@@ -29,20 +31,22 @@
 </head>
 <body>
 
-<nav class="nav" id="nav">
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav" id="nav" aria-label="Primary">
   <div class="in">
     <a class="brand" href="/">Honey<b>Badger</b></a>
     <a class="item" href="/games.html">Games</a>
-    <a class="item on" href="/products.html">Software</a>
+    <a class="item on" href="/products.html" aria-current="page">Software</a>
     <a class="item" href="/industrial.html">Industrial</a>
     <a class="item" href="/community.html">Community</a>
     <a class="item" href="/support.html">Support</a>
     <span class="sp"></span>
     <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
-    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
+    <button class="mbtn" aria-label="Menu" aria-controls="nav" aria-expanded="false" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">&#8801;</button>
   </div>
 </nav>
 
+<main id="main">
 <div class="s-head">
   <p class="eyebrow">Command center</p>
   <h1>Tools you can see working.</h1>
@@ -50,10 +54,10 @@
 </div>
 
 <section class="strip">
-  <div class="pic contain" style="background-image:url('assets/images/bunker-deck.webp')"></div>
+  <div class="pic contain" role="img" aria-label="HoneyBadger Bunker control deck screenshot" style="background-image:url('assets/images/bunker-deck.webp')"></div>
   <div class="txt">
     <p class="eyebrow">Rust · Windows + Linux · free</p>
-    <h3>HoneyBadger Bunker</h3>
+    <h2>HoneyBadger Bunker</h2>
     <p class="mut" style="max-width:46ch">Run a dedicated Rust server with no command prompt. Install with SteamCMD, then start/stop, schedule wipes, back up and watch a live console in one window.</p>
     <div class="spec"><div><b>1</b><span>Click to install</span></div><div><b>2</b><span>Frameworks</span></div><div><b>0</b><span>Subscription</span></div></div>
     <div><a class="btn cyan-fill" href="/rust-server-manager.html">Docs &amp; download</a></div>
@@ -61,10 +65,10 @@
 </section>
 
 <section class="strip flip">
-  <div class="pic" style="background-image:url('assets/images/rust-dps-meter-ingame.jpg')"></div>
+  <div class="pic" role="img" aria-label="Rust DPS Meter combat band in-game" style="background-image:url('assets/images/rust-dps-meter-ingame.jpg')"></div>
   <div class="txt">
     <p class="eyebrow">Rust · Oxide + Carbon · MIT</p>
-    <h3>DPS Meter</h3>
+    <h2>DPS Meter</h2>
     <p class="mut" style="max-width:46ch">A live combat band under the compass: damage that actually landed after armour, headshots, last hit with zone and range, your target's HP, accuracy and the weapon in your hands.</p>
     <div class="spec"><div><b>1</b><span>File to install</span></div><div><b>0</b><span>Other plugins</span></div><div><b>MIT</b><span>Licence</span></div></div>
     <div><a class="btn cyan-fill" href="/rust-dps-meter.html">Docs &amp; live server</a></div>
@@ -72,24 +76,26 @@
 </section>
 
 <section class="strip">
-  <div class="pic contain" style="background-image:url('assets/images/screenshots/eve-mining-ledger.png')"></div>
+  <div class="pic" role="img" aria-label="EVE Frontier" style="background-image:url('assets/arsenal/eve.jpg')"></div>
   <div class="txt">
     <p class="eyebrow">EVE Frontier · web · live</p>
-    <h3>Bounty Board &amp; War Room</h3>
+    <h2>Bounty Board &amp; War Room</h2>
     <p class="mut" style="max-width:46ch">Put a price on any pilot and let hunters collect straight from the chain — then turn the public chain into live PvP intel: kills, gate jumps, pilot dossiers and watch alerts.</p>
     <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn cyan-fill" href="/frontier/bounty/">Bounty Board</a><a class="btn ghost" href="/frontier/warroom/">War Room</a></div>
   </div>
 </section>
 
 <section class="strip flip">
-  <div class="pic contain" style="background-image:url('assets/images/screenshots/eve-what-to-mine.png')"></div>
+  <div class="pic contain" role="img" aria-label="EVE Fleet Foreman — what to mine screen" style="background-image:url('assets/images/screenshots/eve-what-to-mine.png')"></div>
   <div class="txt">
     <p class="eyebrow">EVE Online · desktop · free</p>
-    <h3>Fleet Foreman</h3>
+    <h2>Fleet Foreman</h2>
     <p class="mut" style="max-width:46ch">Fleet-mining assistant: ranks ore by ISK/m³ off live Jita prices, computes fleet yield, and splits the loot fairly when the hold is full.</p>
     <div><a class="btn cyan-fill" href="/eve-fleet-foreman.html">Get it</a></div>
   </div>
 </section>
+
+</main>
 
 <footer class="foot"><div class="in">
   <span>honeybadger.software — independent mods, servers &amp; tactical software.</span>

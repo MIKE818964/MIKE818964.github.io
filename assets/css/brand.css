@@ -8,7 +8,7 @@
 
 :root{
   --bg:#0B0B0D; --surface:#141518; --surface-2:#1B1C20;
-  --ink:#ECE9E3; --muted:#9A968F; --faint:#6E6A64;
+  --ink:#ECE9E3; --muted:#9A968F; --faint:#928D85;
   --line:rgba(236,233,227,.09); --line-2:#26272B;
   --accent:#3FD8FF; --accent-ink:#06121A;
   --hot:#FF3B41; --hot-deep:#E1252B; --hot-ink:#0B0B0D;
@@ -24,6 +24,14 @@ img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--accent);color:var(--accent-ink)}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* skip link — visible on focus */
+.skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--accent);color:var(--accent-ink);
+  padding:10px 16px;font:700 12px/1 "JetBrains Mono";letter-spacing:.12em;text-transform:uppercase;transition:top .15s}
+.skip:focus{top:12px}
+/* visually hidden (available to screen readers) */
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
 
 /* ---- type ---- */
 .eyebrow{font:500 11px/1 "JetBrains Mono",monospace;letter-spacing:.26em;text-transform:uppercase;color:var(--accent)}
@@ -57,7 +65,7 @@ h1,h2,h3,h4{font-family:"Teko",sans-serif;font-weight:700;text-transform:upperca
 .brand b{color:var(--accent);font-weight:700}
 .nav a.item{font:500 12px/1 "JetBrains Mono";letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 0;border-bottom:2px solid transparent;white-space:nowrap}
 .nav a.item:hover{color:var(--ink)}
-.nav a.item.on{color:var(--ink);border-bottom-color:var(--accent)}
+.nav a.item.on,.nav a.item[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
 .nav .sp{flex:1}
 .nav .mbtn{display:none;background:transparent;border:1px solid var(--line-2);color:var(--ink);height:40px;width:44px;cursor:pointer;font-size:18px}
 

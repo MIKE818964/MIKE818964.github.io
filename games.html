@@ -4,19 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Games | HoneyBadger</title>
-<meta name="description" content="The HoneyBadger game lineup: a live Rust server with the free DPS Meter and Bunker installer, WoW Battle Aura, EVE Frontier tools, Roblox and Out of Ore.">
+<meta name="description" content="The HoneyBadger game lineup: a live Rust server with the free DPS Meter and Bunker installer, WoW Battle Aura, EVE tools, Roblox and Out of Ore.">
 <meta property="og:title" content="Games | HoneyBadger">
+<meta property="og:description" content="Pick a game: a live Rust server with the free DPS Meter and Bunker installer, WoW Battle Aura, EVE tools, and more.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://honeybadger.software/games.html">
 <meta property="og:image" content="https://honeybadger.software/assets/arsenal/wardogs.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/brand.css?v=1">
+<link rel="stylesheet" href="assets/css/brand.css?v=2">
 <style>
-/* GAMES — archetype B: GAME SHELF (title rail + 21:9 poster + tool grid, no split hero) */
-.g-rail{background:var(--bg);border-bottom:1px solid var(--line);height:64px;display:flex;align-items:center;gap:4px;padding:0 var(--gut);overflow-x:auto}
-.g-rail button{background:transparent;border:0;color:var(--muted);font:700 22px/1 "Teko";letter-spacing:.04em;text-transform:uppercase;padding:8px 18px;cursor:pointer;white-space:nowrap}
-.g-rail button.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
-.g-rail button:hover{color:var(--ink)}
+/* GAMES — archetype B: GAME SHELF (tablist + 21:9 poster + tool grid) */
+.g-rail{background:var(--bg);border-bottom:1px solid var(--line);min-height:64px;display:flex;align-items:center;gap:4px;padding:0 var(--gut);overflow-x:auto}
+.g-rail [role=tab]{background:transparent;border:0;color:var(--muted);font:700 22px/1 "Teko";letter-spacing:.04em;text-transform:uppercase;padding:14px 18px;cursor:pointer;white-space:nowrap}
+.g-rail [role=tab].on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
+.g-rail [role=tab]:hover{color:var(--ink)}
+.g-rail [role=tab]:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .g-rail .st{font:500 9px/1 "JetBrains Mono";letter-spacing:.14em;margin-left:7px;vertical-align:middle}
 .poster{position:relative;aspect-ratio:21/9;background:#000 center/cover no-repeat;max-width:var(--maxw);margin:0 auto}
 .poster::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,11,13,.86),transparent 56%),linear-gradient(0deg,rgba(11,11,13,.96),transparent 50%)}
@@ -29,88 +33,97 @@
 .tool p{color:var(--muted);font-size:13.5px}
 .tool .go{margin-top:auto;font:700 11px/1 "JetBrains Mono";letter-spacing:.14em;text-transform:uppercase;padding-top:14px}
 .tool .go::after{content:" →";color:var(--hot)}
+.tool .soon{margin-top:auto;padding-top:14px;font:700 11px/1 "JetBrains Mono";letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
 .tool.dev{opacity:.7}.tool.dev .tag{color:var(--idle)}
-.gpanel{display:none}.gpanel.on{display:block}
-@media(max-width:900px){.shelf{grid-template-columns:1fr}}
+.gpanel[hidden]{display:none}
+.gpanel{display:block}
+@media(max-width:900px){.shelf{grid-template-columns:1fr}.poster{aspect-ratio:auto;min-height:240px}}
+@media(max-width:520px){.poster{min-height:200px}}
 </style>
 </head>
 <body>
 
-<nav class="nav" id="nav">
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav" id="nav" aria-label="Primary">
   <div class="in">
     <a class="brand" href="/">Honey<b>Badger</b></a>
-    <a class="item on" href="/games.html">Games</a>
+    <a class="item on" href="/games.html" aria-current="page">Games</a>
     <a class="item" href="/products.html">Software</a>
     <a class="item" href="/industrial.html">Industrial</a>
     <a class="item" href="/community.html">Community</a>
     <a class="item" href="/support.html">Support</a>
     <span class="sp"></span>
     <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
-    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
+    <button class="mbtn" aria-label="Menu" aria-controls="nav" aria-expanded="false" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">&#8801;</button>
   </div>
 </nav>
 
-<div class="g-rail" id="grail">
-  <button class="on" data-g="rust">Rust<span class="st" style="color:var(--ok)">● LIVE SERVER</span></button>
-  <button data-g="wow">WoW Forever<span class="st" style="color:var(--ok)">● RELEASED</span></button>
-  <button data-g="eve">EVE Frontier<span class="st" style="color:var(--ok)">● LIVE</span></button>
-  <button data-g="roblox">Roblox<span class="st" style="color:var(--idle)">● IN DEV</span></button>
-  <button data-g="ore">Out of Ore<span class="st" style="color:var(--idle)">● PLANNED</span></button>
+<main id="main">
+<h1 class="vh">Games</h1>
+
+<div class="g-rail" id="grail" role="tablist" aria-label="Choose a game">
+  <button role="tab" id="tab-rust" data-g="rust" aria-controls="panel-rust" aria-selected="true" class="on" tabindex="0">Rust<span class="st" aria-hidden="true" style="color:var(--ok)">● LIVE SERVER</span></button>
+  <button role="tab" id="tab-wow" data-g="wow" aria-controls="panel-wow" aria-selected="false" tabindex="-1">WoW Forever<span class="st" aria-hidden="true" style="color:var(--ok)">● RELEASED</span></button>
+  <button role="tab" id="tab-eve" data-g="eve" aria-controls="panel-eve" aria-selected="false" tabindex="-1">EVE<span class="st" aria-hidden="true" style="color:var(--ok)">● LIVE</span></button>
+  <button role="tab" id="tab-roblox" data-g="roblox" aria-controls="panel-roblox" aria-selected="false" tabindex="-1">Roblox<span class="st" aria-hidden="true" style="color:var(--idle)">● IN DEV</span></button>
+  <button role="tab" id="tab-ore" data-g="ore" aria-controls="panel-ore" aria-selected="false" tabindex="-1">Out of Ore<span class="st" aria-hidden="true" style="color:var(--idle)">● PLANNED</span></button>
 </div>
 
 <!-- RUST -->
-<div class="gpanel on" data-g="rust">
-  <div class="poster" style="background-image:url('assets/arsenal/wardogs.jpg')">
+<div class="gpanel" id="panel-rust" role="tabpanel" aria-labelledby="tab-rust" tabindex="0" data-g="rust">
+  <div class="poster" role="img" aria-label="Rust — our modded server" style="background-image:url('assets/arsenal/wardogs.jpg')">
     <div class="cap"><p class="eyebrow">216.39.241.155 : 27915</p><h2>Rust</h2><p class="lede" style="color:var(--ink)">Our own modded server — plus the free DPS Meter and the Bunker installer for yours.</p></div>
   </div>
   <div class="shelf">
-    <div class="tool"><div class="tag">Overlay · free</div><div class="t">DPS Meter</div><p>Live combat band: landed damage, headshots, accuracy, weapon. Oxide + Carbon, MIT.</p><a class="go" href="/rust-dps-meter.html">Get it</a></div>
-    <div class="tool"><div class="tag">Server installer · free</div><div class="t">The Bunker</div><p>One-click dedicated server for Windows + Linux. SteamCMD, wipes, backups, console.</p><a class="go" href="/rust-server-manager.html">Get it</a></div>
-    <div class="tool"><div class="tag">Join · live</div><div class="t">The Server</div><p>Jump onto the HoneyBadger server and watch the band light up. F1 → copy the connect.</p><a class="go" href="/rust-dps-meter.html#live">Connect</a></div>
+    <div class="tool"><div class="tag">Overlay · free</div><div class="t">DPS Meter</div><p>Live combat band: landed damage, headshots, accuracy, weapon. Oxide + Carbon, MIT.</p><a class="go" href="/rust-dps-meter.html" aria-label="Get the Rust DPS Meter">Get it</a></div>
+    <div class="tool"><div class="tag">Server installer · free</div><div class="t">The Bunker</div><p>One-click dedicated server for Windows + Linux. SteamCMD, wipes, backups, console.</p><a class="go" href="/rust-server-manager.html" aria-label="Get the HoneyBadger Bunker">Get it</a></div>
+    <div class="tool"><div class="tag">Join · live</div><div class="t">The Server</div><p>Jump onto the HoneyBadger server and watch the band light up. F1 → copy the connect.</p><a class="go" href="/rust-dps-meter.html#live" aria-label="Join the HoneyBadger Rust server">Connect</a></div>
   </div>
 </div>
 
 <!-- WOW -->
-<div class="gpanel" data-g="wow">
-  <div class="poster" style="background-image:url('assets/arsenal/wow.jpg')">
+<div class="gpanel" id="panel-wow" role="tabpanel" aria-labelledby="tab-wow" tabindex="0" data-g="wow" hidden>
+  <div class="poster" role="img" aria-label="World of Warcraft battle scene" style="background-image:url('assets/arsenal/wow.jpg')">
     <div class="cap"><p class="eyebrow">WoW Forever · released</p><h2>WoW Forever</h2><p class="lede" style="color:var(--ink)">Battle Aura 3.1.1 — a personal damage meter on a cinematic battle scene.</p></div>
   </div>
   <div class="shelf">
-    <div class="tool"><div class="tag">Addon · free</div><div class="t">Battle Aura 3.1.1</div><p>Floating hit numbers, crits, combos and records on a cinematic battle scene.</p><a class="go" href="/downloads.html">Download</a></div>
+    <div class="tool"><div class="tag">Addon · free</div><div class="t">Battle Aura 3.1.1</div><p>Floating hit numbers, crits, combos and records on a cinematic battle scene.</p><a class="go" href="/downloads/BattleAura-3.1.1.zip" aria-label="Download Battle Aura 3.1.1">Download</a></div>
   </div>
 </div>
 
 <!-- EVE -->
-<div class="gpanel" data-g="eve">
-  <div class="poster" style="background-image:url('assets/arsenal/eve.jpg')">
-    <div class="cap"><p class="eyebrow">EVE Frontier · live</p><h2>EVE Frontier</h2><p class="lede" style="color:var(--ink)">Put a price on any pilot, and turn the public chain into live PvP intel.</p></div>
+<div class="gpanel" id="panel-eve" role="tabpanel" aria-labelledby="tab-eve" tabindex="0" data-g="eve" hidden>
+  <div class="poster" role="img" aria-label="EVE space scene" style="background-image:url('assets/arsenal/eve.jpg')">
+    <div class="cap"><p class="eyebrow">EVE Frontier &amp; EVE Online</p><h2>EVE</h2><p class="lede" style="color:var(--ink)">Two live web tools for EVE Frontier, plus a free fleet-mining app for EVE Online.</p></div>
   </div>
   <div class="shelf">
-    <div class="tool"><div class="tag">Web · live</div><div class="t">Bounty Board</div><p>Put a price on any pilot. Hunters collect straight from the chain. No fee.</p><a class="go" href="/frontier/bounty/">Open board</a></div>
-    <div class="tool"><div class="tag">Web · live</div><div class="t">War Room</div><p>Live PvP intel from the public chain: kills, gate jumps, pilot dossiers, watch alerts.</p><a class="go" href="/frontier/warroom/">Open War Room</a></div>
-    <div class="tool"><div class="tag">Desktop · free</div><div class="t">Fleet Foreman</div><p>EVE Online fleet-mining: ranks ore by ISK/m³ off live Jita prices, splits loot.</p><a class="go" href="/eve-fleet-foreman.html">Get it</a></div>
+    <div class="tool"><div class="tag">EVE Frontier · web · live</div><div class="t">Bounty Board</div><p>Put a price on any pilot. Hunters collect straight from the chain. No fee.</p><a class="go" href="/frontier/bounty/" aria-label="Open the EVE Frontier Bounty Board">Open board</a></div>
+    <div class="tool"><div class="tag">EVE Frontier · web · live</div><div class="t">War Room</div><p>Live PvP intel from the public chain: kills, gate jumps, pilot dossiers, watch alerts.</p><a class="go" href="/frontier/warroom/" aria-label="Open the EVE Frontier War Room">Open War Room</a></div>
+    <div class="tool"><div class="tag">EVE Online · desktop · free</div><div class="t">Fleet Foreman</div><p>EVE Online fleet-mining: ranks ore by ISK/m³ off live Jita prices, splits loot.</p><a class="go" href="/eve-fleet-foreman.html" aria-label="Get EVE Fleet Foreman">Get it</a></div>
   </div>
 </div>
 
 <!-- ROBLOX -->
-<div class="gpanel" data-g="roblox">
-  <div class="poster" style="background-image:url('assets/arsenal/roblox.jpg')">
+<div class="gpanel" id="panel-roblox" role="tabpanel" aria-labelledby="tab-roblox" tabindex="0" data-g="roblox" hidden>
+  <div class="poster" role="img" aria-label="Roblox Beam Rush" style="background-image:url('assets/arsenal/roblox.jpg')">
     <div class="cap"><p class="eyebrow">Roblox · in development</p><h2>Roblox</h2><p class="lede" style="color:var(--ink)">Beam Rush — jump the rotating laser arms as they multiply and speed up.</p></div>
   </div>
   <div class="shelf">
-    <div class="tool dev"><div class="tag">In dev</div><div class="t">Beam Rush</div><p>Coins and best times persist. It goes on the board the day it ships.</p><span class="go" style="color:var(--faint)">Soon</span></div>
+    <div class="tool dev"><div class="tag">In dev</div><div class="t">Beam Rush</div><p>Coins and best times persist. It goes on the board the day it ships.</p><span class="soon">In dev</span></div>
   </div>
 </div>
 
 <!-- ORE -->
-<div class="gpanel" data-g="ore">
-  <div class="poster" style="background-image:url('assets/arsenal/ore.jpg')">
+<div class="gpanel" id="panel-ore" role="tabpanel" aria-labelledby="tab-ore" tabindex="0" data-g="ore" hidden>
+  <div class="poster" role="img" aria-label="Out of Ore mining sandbox" style="background-image:url('assets/arsenal/ore.jpg')">
     <div class="cap"><p class="eyebrow">Out of Ore · planned</p><h2>Out of Ore</h2><p class="lede" style="color:var(--ink)">Companion tooling for the mining sandbox is on the workbench.</p></div>
   </div>
   <div class="shelf">
-    <div class="tool dev"><div class="tag">Planned</div><div class="t">Companion</div><p>Nothing shipped yet — it goes on this board the day it runs.</p><span class="go" style="color:var(--faint)">Planned</span></div>
+    <div class="tool dev"><div class="tag">Planned</div><div class="t">Companion</div><p>Nothing shipped yet — it goes on this board the day it runs.</p><span class="soon">Planned</span></div>
   </div>
 </div>
+
+</main>
 
 <footer class="foot"><div class="in">
   <span>honeybadger.software — independent mods, servers &amp; tactical software.</span>
@@ -118,13 +131,30 @@
 </div></footer>
 
 <script>
-const rail=document.getElementById('grail');
-rail.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  const g=b.dataset.g;
-  rail.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
-  document.querySelectorAll('.gpanel').forEach(p=>p.classList.toggle('on',p.dataset.g===g));
-  window.scrollTo({top:0,behavior:'instant'});
-});
+(function(){
+  var rail=document.getElementById('grail');
+  var tabs=[].slice.call(rail.querySelectorAll('[role=tab]'));
+  function select(g,focus){
+    var tab=document.getElementById('tab-'+g); if(!tab) return false;
+    tabs.forEach(function(t){var on=t===tab;t.classList.toggle('on',on);t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;});
+    [].slice.call(document.querySelectorAll('.gpanel')).forEach(function(p){p.hidden=(p.id!=='panel-'+g);});
+    if(focus) tab.focus();
+    return true;
+  }
+  rail.addEventListener('click',function(e){var t=e.target.closest('[role=tab]'); if(!t) return;
+    var g=t.dataset.g; if(history.replaceState) history.replaceState(null,'','#'+g); else location.hash=g;
+    select(g); window.scrollTo(0,0);
+  });
+  rail.addEventListener('keydown',function(e){var i=tabs.indexOf(document.activeElement); if(i<0) return; var n;
+    if(e.key==='ArrowRight'||e.key==='ArrowDown') n=(i+1)%tabs.length;
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp') n=(i-1+tabs.length)%tabs.length;
+    else if(e.key==='Home') n=0; else if(e.key==='End') n=tabs.length-1; else return;
+    e.preventDefault(); var g=tabs[n].dataset.g; if(history.replaceState) history.replaceState(null,'','#'+g); select(g,true);
+  });
+  function fromHash(){var g=(location.hash||'').replace('#','').toLowerCase(); if(g&&document.getElementById('tab-'+g)) select(g);}
+  window.addEventListener('hashchange',fromHash);
+  fromHash();
+})();
 </script>
 </body>
 </html>

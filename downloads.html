@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/brand.css?v=1">
+<link rel="stylesheet" href="assets/css/brand.css?v=2">
 <style>
   /* ===== archetype: RELEASE CONSOLE ===== */
   .rc-head{max-width:var(--maxw);margin:0 auto;padding:54px var(--gut) 30px;border-bottom:1px solid var(--line)}
@@ -77,8 +77,7 @@
   @media(max-width:860px){
     .rel-colhead{display:none}
     .cols{grid-template-columns:1fr auto;gap:6px 16px;align-items:start}
-    .rel .nm{grid-column:1 / -1}
-    .rel .desc{grid-column:1 / -1;order:5}
+    .rel .nm-wrap{grid-column:1 / -1}
     .rel .v{order:2;color:var(--muted);font-size:12px}
     .rel .v::before{content:"VER · "}
     .rel .pl{order:3}
@@ -90,7 +89,8 @@
 </head>
 <body>
 
-<nav class="nav" id="nav">
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav" id="nav" aria-label="Primary">
   <div class="in">
     <a class="brand" href="/">Honey<b>Badger</b></a>
     <a class="item" href="/games.html">Games</a>
@@ -99,11 +99,12 @@
     <a class="item" href="/community.html">Community</a>
     <a class="item" href="/support.html">Support</a>
     <span class="sp"></span>
-    <a class="btn solid" href="/downloads.html" style="height:40px">Downloads</a>
-    <button class="mbtn" aria-label="Menu" onclick="document.getElementById('nav').classList.toggle('open')">&#8801;</button>
+    <a class="btn solid" href="/downloads.html" style="height:40px" aria-current="page">Downloads</a>
+    <button class="mbtn" aria-label="Menu" aria-controls="nav" aria-expanded="false" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">&#8801;</button>
   </div>
 </nav>
 
+<main id="main">
 <!-- ===== RELEASE CONSOLE header ===== -->
 <header class="rc-head">
   <p class="eyebrow">DOWNLOADS</p>
@@ -183,7 +184,7 @@
         <div class="v">v3.1.1</div>
         <div class="pl">WoW: Forever addon</div>
         <div class="sz">&mdash;</div>
-        <div class="act"><a class="dl" href="downloads/BattleAura-3.1.1.zip" download>.zip <span class="ar">&darr;</span></a></div>
+        <div class="act"><a class="dl" href="/downloads/BattleAura-3.1.1.zip" download>.zip <span class="ar">&darr;</span></a></div>
       </div>
     </summary>
     <div class="cols"><div class="specs">
@@ -303,6 +304,8 @@
 <div class="rc-note">
   <p>All Windows installers are signed. If SmartScreen warns on a fresh release, choose <em>More info &rarr; Run anyway</em>. See the <a href="/support.html">Support</a> page for help.</p>
 </div>
+
+</main>
 
 <footer class="foot"><div class="in">
   <span>honeybadger.software — independent mods, servers &amp; tactical software.</span>
