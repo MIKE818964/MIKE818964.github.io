@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HoneyBadger Bunker: a free Rust dedicated server installer and manager for Windows and Linux. Installs the server with SteamCMD, then starts, stops, backs up, wipes and schedules it with live players, FPS and the console in one window - no command prompt. Ships with the free HoneyBadger DPS Meter.">
+<meta name="keywords" content="rust dedicated server, rust server installer, game server manager, steamcmd, server administration, rcon, rust server manager windows, rust server linux, systemd, rust server control panel">
+<meta name="theme-color" content="#0A0A0B">
+<title>Rust Dedicated Server Installer &amp; Manager - HoneyBadger Bunker (free, Windows + Linux) | HONEYBADGER SOFTWARE INC</title>
+<link rel="canonical" href="https://honeybadger.software/rust-server-manager.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HoneyBadger Software">
+<meta property="og:title" content="HoneyBadger Bunker - free Rust dedicated server installer &amp; manager (Windows + Linux)">
+<meta property="og:description" content="Install a Rust dedicated server with SteamCMD, then run, stop, back up, wipe and schedule it with live players, FPS and console in one window. Free. Windows and Linux. No command prompt.">
+<meta property="og:url" content="https://honeybadger.software/rust-server-manager.html">
+<meta property="og:image" content="https://honeybadger.software/assets/images/bunker-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@HoneyBadgerMods">
+<meta name="twitter:title" content="HoneyBadger Bunker - free Rust dedicated server installer &amp; manager">
+<meta name="twitter:description" content="SteamCMD install, start/stop, backups, scheduled wipes, live players, FPS and console - one window, no command prompt. Free. Windows + Linux.">
+<meta name="twitter:image" content="https://honeybadger.software/assets/images/bunker-og.png">
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ---- palette + type (homepage stylesheet, embedded at build time) ---- */
+  :root{
+    --bg:#0A0A0B; --ink:#EAE6DF; --mute:#8E8A84; --amber:#F5B82E;
+    --line:rgba(234,230,223,.08); --line2:#262629;
+    --disp:"Teko",Impact,"Arial Narrow",sans-serif;          /* tall industrial display */
+    --ui:"Chakra Petch","Arial Narrow",sans-serif;            /* wordmark */
+    --mono:"JetBrains Mono",Consolas,monospace;               /* every label, tag, description */
+    --snap:120ms cubic-bezier(.16,1,.3,1);                    /* hard-cut mechanical motion, no floaty eases */
+  }
+  *{box-sizing:border-box; border-radius:0 !important}        /* 0px law: nothing on this page is rounded */
+  html,body{margin:0; background:var(--bg)}
+  body{color:var(--ink); font-family:var(--mono); font-size:14px; line-height:1.55;
+       -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative}
+  a{color:inherit; text-decoration:none}
+  img{display:block}
+
+  /* concrete under everything (8%) + film grain over everything (5.5%) */
+  body::before{content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.08;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
+    background-size:420px 420px}
+  body::after{content:""; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.055;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='11'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+    background-size:200px 200px}
+  .page{position:relative; z-index:1}
+
+  /* ---------- nav: raster emblem mark + chipped wordmark + mono tabs ---------- */
+  header{position:sticky; top:0; z-index:60; background:rgba(10,10,11,.94); border-bottom:1px solid var(--line);
+         backdrop-filter:blur(8px); overflow:visible}
+  .nav{display:flex; align-items:center; gap:26px; height:66px; padding:0 28px; max-width:1640px; margin:0 auto}
+  .mark{display:flex; align-items:center; gap:14px; height:66px; position:relative}
+  .mark img{height:60px; width:auto; mix-blend-mode:screen; transform:translateY(7px);   /* drips hang below the bar */
+            filter:drop-shadow(0 0 16px rgba(245,184,46,.18));
+            -webkit-mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%);   /* no square edge: only the paint survives */
+            mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%)}
+  .word{position:relative; font-family:var(--ui); font-weight:700; font-size:15px; letter-spacing:.14em;
+        text-transform:uppercase; color:var(--ink); filter:url(#chip); padding-top:8px}
+  .word small{position:absolute; right:0; top:-4px; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
+  nav.tabs{display:flex; flex:1; gap:2px; flex-wrap:wrap; justify-content:flex-end}
+  nav.tabs a{font:500 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--mute);
+             padding:13px 12px; border-bottom:2px solid transparent; transition:color var(--snap), border-color var(--snap)}
+  nav.tabs a:hover, nav.tabs a:focus-visible, nav.tabs a.on{color:var(--ink); border-color:var(--amber)}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative; min-height:72vh; display:grid; align-items:center; overflow:hidden; border-bottom:1px solid var(--line)}
+  /* no photo: a warm glow pooling where the art would sit + the concrete grain showing through, so the wide view reads cinematic, not empty */
+  .hero .art{position:absolute; inset:0;
+    background:radial-gradient(58% 82% at 80% 42%, rgba(245,184,46,.13), rgba(10,10,11,0) 60%),
+               radial-gradient(90% 120% at 100% 0%, rgba(245,184,46,.05), rgba(10,10,11,0) 55%)}
+  .hero .art::after{content:""; position:absolute; inset:0; background:
+    linear-gradient(to right, #0A0A0B 0%, rgba(10,10,11,.86) 20%, rgba(10,10,11,.3) 46%, rgba(10,10,11,0) 70%, rgba(10,10,11,.55) 100%),
+    linear-gradient(to bottom, rgba(10,10,11,.35) 0%, rgba(10,10,11,0) 26%, rgba(10,10,11,0) 72%, #0A0A0B 100%)}
+  .hero .art img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:84% 0; opacity:.5; z-index:0}
+  .hero .in{position:relative; z-index:2; width:100%; max-width:1640px; margin:0 auto; padding:84px 40px 72px}
+  .eyebrow{font:500 11px/1 var(--mono); letter-spacing:.26em; text-transform:uppercase; color:var(--amber)}
+  .hero h1{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.88; letter-spacing:.005em;
+           font-size:clamp(56px,7.4vw,120px); margin:14px 0 12px; max-width:13ch;
+           text-shadow:0 6px 40px rgba(0,0,0,.85)}
+  .hero h1 em{font-style:normal; color:var(--amber)}
+  .hero p{max-width:56ch; color:var(--mute); margin:0 0 32px}
+  .cta{display:flex; gap:14px; flex-wrap:wrap}
+  .btn{--n:12px; display:inline-block; font:700 12px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase;
+       padding:17px 28px; color:var(--amber); background:rgba(245,184,46,.07); border:1px solid var(--amber);
+       clip-path:polygon(0 0, calc(100% - var(--n)) 0, 100% var(--n), 100% 100%, var(--n) 100%, 0 calc(100% - var(--n)));
+       transition:background var(--snap), color var(--snap)}
+  .btn.solid{background:var(--amber); color:#0A0A0B}
+  .btn:hover, .btn:focus-visible{background:var(--amber); color:#0A0A0B}
+  .btn.solid:hover, .btn.solid:focus-visible{background:var(--ink); color:#0A0A0B}
+  .btn:focus-visible{outline:2px solid var(--ink); outline-offset:-5px}
+  button.btn{cursor:pointer}
+
+  /* ---------- section frame: edge-to-edge hairlines, "// 01" numbers, crosshair ticks ---------- */
+  section.blk{position:relative; border-top:1px solid var(--line)}
+  section.blk > .in{max-width:1640px; margin:0 auto; padding:76px 40px 84px; position:relative}
+  .num{position:absolute; left:40px; top:16px; font:500 11px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
+  .tick{position:absolute; width:11px; height:11px; pointer-events:none}
+  .tick::before,.tick::after{content:""; position:absolute; background:rgba(234,230,223,.38)}
+  .tick::before{left:5px; top:0; width:1px; height:11px}
+  .tick::after{top:5px; left:0; width:11px; height:1px}
+  .tick.tl{left:-6px; top:-6px} .tick.tr{right:-6px; top:-6px}
+  .h2{display:flex; align-items:flex-end; gap:22px; margin:0 0 30px}
+  .h2 h2{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; letter-spacing:.01em;
+         font-size:clamp(46px,5.6vw,84px); margin:0}
+  .h2 .rule{flex:1; height:1px; background:linear-gradient(90deg,var(--amber),transparent 70%); margin-bottom:12px}
+  .h2 .lede{color:var(--mute); max-width:46ch; margin:0 0 6px}
+
+  /* ---------- hairline rows, never cards ---------- */
+  .soft{border-top:1px solid var(--line)}
+  .soft .it{display:grid; grid-template-columns:34px 300px 1fr auto; gap:22px; align-items:baseline; padding:24px 0; border-bottom:1px solid var(--line)}
+  .it .n{font:500 11px/1 var(--mono); color:var(--amber); letter-spacing:.2em}
+  .it h4{font-family:var(--disp); font-weight:700; font-size:34px; line-height:.9; text-transform:uppercase; margin:0; letter-spacing:.02em}
+  .it h4 small{display:block; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--mute); margin-top:8px}
+  .it h4 small.live{color:var(--amber)}
+  .it p{margin:0; color:var(--mute)}
+  .it p code{color:var(--ink); background:rgba(245,184,46,.08); border:1px solid var(--line2); padding:1px 6px; white-space:nowrap; font-family:var(--mono)}
+  .it p b{color:var(--ink); font-weight:500}
+  .it p a{color:var(--amber)}
+  .it a{font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); white-space:nowrap}
+  .it a:hover, .it a:focus-visible{text-decoration:underline}
+
+  /* ---------- download: two platform lanes, hairline-framed, no cards ---------- */
+  .lanes{display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line)}
+  .lane{padding:36px 34px; border-right:1px solid var(--line)}
+  .lane:last-child{border-right:0}
+  .lane .os{font:500 11px/1 var(--mono); letter-spacing:.26em; text-transform:uppercase; color:var(--amber); margin:0 0 6px}
+  .lane h3{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; font-size:clamp(40px,4.4vw,64px); margin:0 0 14px}
+  .lane p{color:var(--mute); margin:0 0 22px; max-width:48ch}
+  .lane p b{color:var(--ink); font-weight:500}
+  .sha{font:500 11px/1.7 var(--mono); letter-spacing:.04em; color:var(--mute); margin:20px 0 0; word-break:break-all}
+  .sha b{color:var(--ink); font-weight:500; letter-spacing:.16em; text-transform:uppercase; display:block; margin-bottom:4px}
+  .cmd{position:relative; margin:0 0 20px}
+  pre.cmd-block{margin:0; padding:20px 54px 20px 22px; background:#0E0E10; border:1px solid var(--line); border-left:2px solid var(--amber);
+            font:500 13px/1.6 var(--mono); color:var(--ink); overflow-x:auto; white-space:pre-wrap; word-break:break-all}
+  .copybtn{position:absolute; top:10px; right:10px; cursor:pointer; background:rgba(245,184,46,.09); border:1px solid var(--amber);
+           color:var(--amber); font:700 9px/1 var(--mono); letter-spacing:.18em; text-transform:uppercase; padding:8px 10px; transition:background var(--snap), color var(--snap)}
+  .copybtn:hover, .copybtn:focus-visible{background:var(--amber); color:#0A0A0B}
+
+  /* ---------- note strip ---------- */
+  .note{display:flex; gap:16px; align-items:flex-start; border-left:2px solid var(--amber); background:rgba(245,184,46,.045);
+        padding:22px 26px; margin:30px 0 0}
+  .note .k{font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); flex:none; padding-top:2px}
+  .note p{margin:0; color:var(--ink)}
+  .note p + p{margin-top:10px; color:var(--mute)}
+  .note a{color:var(--amber)}
+
+  /* ---------- final ---------- */
+  .final{display:flex; align-items:flex-end; justify-content:space-between; gap:40px; flex-wrap:wrap}
+  .final h2{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.86; font-size:clamp(46px,5.6vw,84px); margin:0 0 10px; max-width:16ch}
+  .final p{color:var(--mute); margin:0}
+  .crumb{font:500 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 18px}
+  .crumb a:hover{color:var(--amber)}
+  .hero .spec{display:grid; grid-template-columns:repeat(3,auto); gap:28px; margin:34px 0 0; justify-content:start}
+  .hero .spec div{border-top:1px solid var(--line); padding-top:10px}
+  .hero .spec b{display:block; font-family:var(--disp); font-weight:600; font-size:34px; line-height:.9; color:var(--ink)}
+  .hero .spec span{font:500 10px/1 var(--mono); letter-spacing:.2em; color:var(--mute); text-transform:uppercase}
+
+  footer{border-top:1px solid var(--line); padding:30px 40px 84px; max-width:1640px; margin:0 auto;
+         display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+         font:500 10px/1.8 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--mute)}
+  footer a{color:var(--amber)}
+
+  /* ---------- screen gallery: real captures, hairline-framed, never cards ---------- */
+  .shots{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-top:8px}
+  figure.shot{margin:0; background:var(--bg); display:flex; flex-direction:column}
+  figure.shot img{width:100%; height:auto; display:block; border-bottom:1px solid var(--line)}
+  figure.shot figcaption{padding:18px 22px 22px}
+  figure.shot .cl{font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber)}
+  figure.shot .cd{color:var(--mute); margin:9px 0 0}
+  figure.shot .cd b{color:var(--ink); font-weight:500}
+  figure.shot.wide{grid-column:1 / -1}
+  figure.shot.wide img{max-height:none}
+
+  @media (prefers-reduced-motion:reduce){ *{transition:none !important} }
+  @media (max-width:980px){
+    .nav{height:auto; padding:10px 18px; gap:10px; flex-wrap:wrap} nav.tabs{justify-content:flex-start; flex-basis:100%}
+    .hero .in{padding:70px 22px 60px} .hero h1{max-width:none}
+    section.blk > .in{padding:60px 22px 64px} .num{left:22px}
+    .soft .it{grid-template-columns:28px 1fr; row-gap:8px} .it p{grid-column:2} .it a{grid-column:2}
+    .lanes{grid-template-columns:1fr} .lane{border-right:0; border-bottom:1px solid var(--line)} .lane:last-child{border-bottom:0}
+    .hero .spec{grid-template-columns:repeat(3,1fr); gap:14px}
+    .shots{grid-template-columns:1fr} figure.shot.wide{grid-column:auto}
+    footer{padding:26px 22px 84px}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="chip" x="-6%" y="-6%" width="112%" height="112%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+<div class="page">
+
+<header>
+  <div class="nav">
+    <a class="mark" href="/" aria-label="HoneyBadger home">
+      <img src="/assets/arsenal/emblem_mark.jpg?v=20261012c" srcset="/assets/arsenal/emblem_mark.jpg?v=20261012c 1x, /assets/arsenal/emblem_mark@2x.jpg?v=20261012c 2x" alt="" width="320" height="320">
+      <span class="word">HoneyBadger<small>.software</small></span>
+    </a>
+    <nav class="tabs" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/#arsenal">Supported Games</a>
+      <a href="/#deployment">Our Mods</a>
+      <a href="/#software">Software</a>
+      <a href="/#commlink">Comm-Link</a>
+      <a href="/support.html">Support</a>
+      <a href="/industrial.html">Industrial</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="art"><img src="/assets/images/bunker-deck.webp" alt="The HoneyBadger Bunker control deck showing a running Rust server: status, players, server FPS, memory and uptime" width="1440" height="1550" fetchpriority="high"></div>
+  <div class="in">
+    <div class="crumb"><a href="/">Home</a> &nbsp;/&nbsp; <a href="/games.html">Games</a> &nbsp;/&nbsp; HoneyBadger Bunker</div>
+    <div class="eyebrow">Rust — dedicated server installer + control deck — free — Windows + Linux — v0.1.0</div>
+    <h1>Run a Rust server. <em>No command prompt.</em></h1>
+    <p>HoneyBadger Bunker installs a Rust dedicated server with SteamCMD and hands you the whole thing in one window: start it, stop it, back it up, wipe it on a schedule, and watch the players, the server FPS and the live console the entire time.</p>
+    <div class="cta">
+      <a class="btn solid" href="https://github.com/honeybadger-software/HoneyBadgerBunker/releases/latest/download/HoneyBadgerBunker-Setup-0.1.0.exe">Download for Windows</a>
+      <a class="btn" href="#linux">Install on Linux</a>
+      <a class="btn" href="#screens">See every screen</a>
+      <a class="btn" href="/bunker-help.html">Getting started</a>
+    </div>
+    <div class="spec">
+      <div><b>2</b><span>Platforms: Win + Linux</span></div>
+      <div><b>1</b><span>Window, no terminal</span></div>
+      <div><b>$0</b><span>Free</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 WHAT IT DOES -->
+<section class="blk" id="what">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 01 &nbsp;WHAT IT DOES</div>
+    <div class="h2"><h2>The whole server, in one window</h2><span class="rule"></span><p class="lede">Everything a Rust dedicated server needs doing, done from a control deck instead of a command line.</p></div>
+    <div class="soft">
+      <div class="it"><span class="n">01</span><h4>Installs the server</h4><p>Point it at a folder and it pulls the Rust dedicated server down with <b>SteamCMD</b> for you. No manual SteamCMD scripts, no hunting for the right app id.</p></div>
+      <div class="it"><span class="n">02</span><h4>Start and stop</h4><p>One control starts the server and one stops it cleanly. The deck shows whether it is running, starting or down, without you reading a log.</p></div>
+      <div class="it"><span class="n">03</span><h4>Backups</h4><p>Back up the server's save and config on demand, so a bad wipe or a bad plugin is one restore away instead of a lost world.</p></div>
+      <div class="it"><span class="n">04</span><h4>Scheduled wipes</h4><p>Set the wipe on a schedule and let the deck run it. Map and blueprint wipes on the cadence you choose, not the night you happen to remember.</p></div>
+      <div class="it"><span class="n">05</span><h4>Live players, FPS and console</h4><p>The player list, the server's FPS and the raw console scroll live in the deck while the server runs. The console is right there to read and type into.</p></div>
+      <div class="it"><span class="n">06</span><h4>One window, no command prompt</h4><p>Install, run, wipe, back up and watch the server from a single window. You never open a terminal to keep a server alive.</p></div>
+      <div class="it"><span class="n">07</span><h4>Windows and Linux</h4><p>A signed one-click installer on Windows; a copy-paste install that runs it as a <code>systemd</code> service on Debian, Ubuntu, Fedora and RHEL.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 SEE EVERY SCREEN -->
+<section class="blk" id="screens">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 02 &nbsp;SEE EVERY SCREEN</div>
+    <div class="h2"><h2>This is the actual deck</h2><span class="rule"></span><p class="lede">Real screens from the running program — not mock-ups. Every one of these is a tab in the window.</p></div>
+    <div class="shots">
+      <figure class="shot wide">
+        <img src="/assets/images/bunker-deck.webp" alt="HoneyBadger Bunker control deck: a running Rust server with live status, player count, server FPS, entities, managed memory and uptime" width="1440" height="1550" loading="lazy">
+        <figcaption><div class="cl">The control deck</div><p class="cd">One server, one window. <b>Live status, players, server FPS, entities, memory and uptime</b> while the server runs — and the big Start / Stop right where you expect them.</p></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/images/bunker-newserver.webp" alt="New Server wizard asking for a name, install folder, map and player slots" width="1440" height="1500" loading="lazy">
+        <figcaption><div class="cl">First-run wizard</div><p class="cd">Name it, pick a folder, choose the map and slots. It <b>picks free ports and installs the game with SteamCMD</b> for you.</p></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/images/bunker-setup.webp" alt="Server Setup screen with the server's core settings" width="1440" height="1800" loading="lazy">
+        <figcaption><div class="cl">Server setup</div><p class="cd">Every core setting for the server laid out as fields — <b>no hand-editing a config file</b> to change the map, the name or the slot count.</p></figcaption>
+      </figure>
+      <figure class="shot wide">
+        <img src="/assets/images/bunker-console.webp" alt="The live server console streaming Carbon and Rust log lines, with log-level filters and a command box" width="1440" height="1200" loading="lazy">
+        <figcaption><div class="cl">The live console</div><p class="cd"><b>Every line the server prints</b>, streaming live, with log-level filters and a command box to type straight into the server. The black box, opened up.</p></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/images/bunker-players.webp" alt="Live player list pulled from the running Rust server" width="1440" height="1100" loading="lazy">
+        <figcaption><div class="cl">Who's online</div><p class="cd">The <b>live player list</b>, read straight from the running server — names, status, and the controls to manage them.</p></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/images/bunker-plugins.webp" alt="Plugins screen for installing Carbon, Oxide and the HoneyBadger DPS Meter" width="1440" height="1300" loading="lazy">
+        <figcaption><div class="cl">Plugins</div><p class="cd"><b>Carbon or Oxide in one click</b>, and the free HoneyBadger DPS Meter installs from the same list.</p></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/images/bunker-schedule.webp" alt="Scheduled wipes screen with map and blueprint wipe cadence" width="1440" height="1300" loading="lazy">
+        <figcaption><div class="cl">Scheduled wipes</div><p class="cd">Map and blueprint wipes <b>on the cadence you set</b> — not the night you happen to remember.</p></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/images/bunker-backups.webp" alt="Backups and restore screen listing server save snapshots" width="1440" height="1400" loading="lazy">
+        <figcaption><div class="cl">Backups &amp; restore</div><p class="cd">Snapshot the save and config on demand. A bad wipe or a bad plugin is <b>one restore away</b>, not a lost world.</p></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/images/bunker-connection.webp" alt="Connection screen showing the server address, ports and RCON details" width="1440" height="1700" loading="lazy">
+        <figcaption><div class="cl">Connection</div><p class="cd">The <b>address, ports and RCON details</b> players and tools need — including the exact ports to forward.</p></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/images/bunker-settings.webp" alt="Settings screen for server name, map, slots and Rust+" width="1440" height="1900" loading="lazy">
+        <figcaption><div class="cl">Settings</div><p class="cd">Server name, map, slots, Rust+ and the rest — all in plain fields, <b>no terminal and no config file</b>.</p></figcaption>
+      </figure>
+      <figure class="shot wide">
+        <img src="/assets/images/bunker-playerpanel.webp" alt="The in-game HoneyBadger info panel players see on the server" width="1440" height="1500" loading="lazy">
+        <figcaption><div class="cl">The in-game panel</div><p class="cd">What your <b>players</b> see on the server — the free in-game HoneyBadger info panel, served by the deck.</p></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 03 DOWNLOAD -->
+<section class="blk" id="download">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 03 &nbsp;DOWNLOAD</div>
+    <div class="h2"><h2>Two ways in</h2><span class="rule"></span><p class="lede">A signed installer for Windows, a one-liner for Linux. Both are free and both give you the same control deck.</p></div>
+    <div class="lanes">
+      <div class="lane" id="windows">
+        <p class="os">Windows 10 / 11 — 64-bit</p>
+        <h3>Windows installer</h3>
+        <p>A <b>signed</b> installer, so there is no "unknown publisher" warning. <b>One click</b>, installs <b>per-user</b>, and it needs <b>no administrator rights</b>. Download it, run it, open the deck.</p>
+        <div class="cta"><a class="btn solid" href="https://github.com/honeybadger-software/HoneyBadgerBunker/releases/latest/download/HoneyBadgerBunker-Setup-0.1.0.exe">Download the installer</a></div>
+        <p class="sha"><b>SHA-256</b>cd0c9977053bce44b908e6d13b1e10403b8a040016e1c3319ba537c3c446c77a</p>
+      </div>
+      <div class="lane" id="linux">
+        <p class="os">Linux — Debian / Ubuntu or Fedora / RHEL</p>
+        <h3>Linux one-liner</h3>
+        <p>Paste this into a terminal on a server you own. It installs the deck as a <code>systemd</code> service under an <b>unprivileged user</b>, and pulls in the <b>32-bit libraries and Python it needs automatically</b>.</p>
+        <div class="cmd">
+          <button type="button" class="copybtn" data-copy="curl -sSL https://honeybadger.software/installer/install.sh | sudo bash -s -- --from https://honeybadger.software/installer/HoneyBadgerBunker-0.1.0.tar.gz">Copy</button>
+          <pre class="cmd-block">curl -sSL https://honeybadger.software/installer/install.sh | sudo bash -s -- --from https://honeybadger.software/installer/HoneyBadgerBunker-0.1.0.tar.gz</pre>
+        </div>
+        <p>The deck runs on <code>127.0.0.1:27800</code> — loopback only, so it is never exposed to the internet. Reach it from your own machine over an <b>SSH tunnel</b>.</p>
+        <p class="sha"><b>SHA-256 (tar.gz)</b>57cb5c23d3a101c62bd916288bf94cd67decb4e06e787f1f555b25c2444fed99</p>
+      </div>
+    </div>
+    <div class="note">
+      <span class="k">Honest note</span>
+      <div>
+        <p>HoneyBadger Bunker runs a Rust server <b>on a machine you control</b> — a Windows PC, a VPS, or a dedicated or home Linux box.</p>
+        <p>It is not for a managed or rented game-server slot from a hosting panel; those do not give you the machine, so the deck has nothing to install onto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 REQUIREMENTS -->
+<section class="blk" id="requirements">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 04 &nbsp;REQUIREMENTS</div>
+    <div class="h2"><h2>What the box needs</h2><span class="rule"></span><p class="lede">A Rust server is a real game server. Give it room and open the two ports it listens on.</p></div>
+    <div class="soft">
+      <div class="it"><span class="n">01</span><h4>Memory</h4><p>Roughly <b>12 GB of RAM</b> per Rust server. A bigger map or a full population wants the headroom.</p></div>
+      <div class="it"><span class="n">02</span><h4>Disk</h4><p>Around <b>15 GB of disk</b> per server for the install, the map and the saves.</p></div>
+      <div class="it"><span class="n">03</span><h4>Ports to forward</h4><p>Forward <code>UDP 28015</code> for the game and <code>UDP 28017</code> for the server query, so players can find and join you.</p></div>
+      <div class="it"><span class="n">04</span><h4>The deck stays private</h4><p>The control deck's own panel is <b>loopback-only</b>. It is never forwarded; you reach it on the machine itself or over an SSH tunnel.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 TEST RELEASE -->
+<section class="blk" id="test">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 05 &nbsp;TEST RELEASE</div>
+    <div class="h2"><h2>This is v0.1.0 — tell us what breaks</h2><span class="rule"></span></div>
+    <div class="note">
+      <span class="k">Early build</span>
+      <div>
+        <p>HoneyBadger Bunker is a <b>test release</b>. We want testers running it on real boxes and telling us what snags — what the installer missed, what the deck got wrong, what you wish it did.</p>
+        <p>Known, up front: this is an early test build and some edges are still rough. Send feedback through the <a href="/community.html">community page</a> and it goes straight to the people building it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 SHIPS WITH -->
+<section class="blk" id="dps">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 06 &nbsp;SHIPS WITH</div>
+    <div class="h2"><h2>The DPS Meter is already in the box</h2><span class="rule"></span></div>
+    <div class="soft">
+      <div class="it"><span class="n">01</span><h4>HoneyBadger<small class="live">Free — Rust — Oxide + Carbon</small></h4><p>Every Bunker ships with the free <b>HoneyBadger DPS Meter</b> plugin: a live combat band with real landed damage, headshots, last hit, target HP, accuracy and weapon. Install it on your server from the deck's plugin list.</p><a href="/rust-dps-meter.html">DPS Meter docs</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" id="get">
+  <div class="in">
+    <i class="tick tl"></i><i class="tick tr"></i>
+    <div class="num">// 07 &nbsp;GET IT</div>
+    <div class="final">
+      <div><h2>Stand up a Rust server tonight.</h2><p>Free, one window, Windows or Linux. SteamCMD does the install; the deck does the rest.</p></div>
+      <div class="cta"><a class="btn solid" href="https://github.com/honeybadger-software/HoneyBadgerBunker/releases/latest/download/HoneyBadgerBunker-Setup-0.1.0.exe">Download for Windows</a><a class="btn" href="#linux">Install on Linux</a><a class="btn" href="/bunker-help.html">Getting started</a></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>honeybadger.software — independent mods, servers &amp; tactical software. All rights reserved.</span>
+  <span><a href="/downloads.html">Downloads</a> &nbsp;·&nbsp; <a href="/community.html">Join The Den</a> &nbsp;·&nbsp; <a href="/support.html">Support</a> &nbsp;·&nbsp; <a href="/industrial.html">Industrial</a></span>
+</footer>
+
+</div><!-- /page -->
+<script>
+(function(){
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var t = b.getAttribute('data-copy'), label = b.textContent;
+      function done(){ b.textContent = 'Copied'; setTimeout(function(){ b.textContent = label; }, 1600); }
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done, done); } else { done(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="HoneyBadger Bunker getting-started and help: install on Windows or Linux, first run, ports to forward, where your files live, updates, and troubleshooting a Rust dedicated server.">
+<meta name="theme-color" content="#0A0A0B">
+<title>HoneyBadger Bunker - Getting started &amp; help | HONEYBADGER SOFTWARE</title>
+<link rel="canonical" href="https://honeybadger.software/bunker-help.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HoneyBadger Software">
+<meta property="og:title" content="HoneyBadger Bunker - getting started &amp; help">
+<meta property="og:description" content="Install, first run, ports, file locations, updates and troubleshooting for the HoneyBadger Bunker Rust server deck.">
+<meta property="og:url" content="https://honeybadger.software/bunker-help.html">
+<meta property="og:image" content="https://honeybadger.software/assets/images/bunker-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/108652491?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0A0B; --ink:#EAE6DF; --mute:#8E8A84; --amber:#F5B82E;
+    --line:rgba(234,230,223,.08); --line2:#262629;
+    --disp:"Teko",Impact,"Arial Narrow",sans-serif;
+    --ui:"Chakra Petch","Arial Narrow",sans-serif;
+    --mono:"JetBrains Mono",Consolas,monospace;
+    --snap:120ms cubic-bezier(.16,1,.3,1);
+  }
+  *{box-sizing:border-box; border-radius:0 !important}
+  html,body{margin:0; background:var(--bg)}
+  body{color:var(--ink); font-family:var(--mono); font-size:14px; line-height:1.6;
+       -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative}
+  a{color:var(--amber); text-decoration:none} a:hover{text-decoration:underline}
+  img{display:block}
+  body::before{content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.08;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='c'><feTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23c)'/></svg>");
+    background-size:420px 420px}
+  .page{position:relative; z-index:1}
+
+  header{position:sticky; top:0; z-index:60; background:rgba(10,10,11,.94); border-bottom:1px solid var(--line); backdrop-filter:blur(8px)}
+  .nav{display:flex; align-items:center; gap:26px; height:66px; padding:0 28px; max-width:1200px; margin:0 auto}
+  .mark{display:flex; align-items:center; gap:14px; height:66px}
+  .mark img{height:60px; width:auto; mix-blend-mode:screen; transform:translateY(7px); filter:drop-shadow(0 0 16px rgba(245,184,46,.18));
+            -webkit-mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%); mask-image:radial-gradient(circle at 50% 46%, #000 52%, transparent 74%)}
+  .word{font-family:var(--ui); font-weight:700; font-size:15px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); position:relative; padding-top:8px}
+  .word small{position:absolute; right:0; top:-4px; font:500 9px/1 var(--mono); letter-spacing:.22em; color:var(--amber)}
+  nav.tabs{display:flex; flex:1; gap:2px; flex-wrap:wrap; justify-content:flex-end}
+  nav.tabs a{font:500 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--mute); padding:13px 12px; border-bottom:2px solid transparent; transition:color var(--snap), border-color var(--snap)}
+  nav.tabs a:hover, nav.tabs a.on{color:var(--ink); border-color:var(--amber); text-decoration:none}
+
+  main{max-width:1200px; margin:0 auto; padding:0 28px}
+  .top{padding:60px 0 30px; border-bottom:1px solid var(--line)}
+  .crumb{font:500 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin:0 0 18px}
+  .eyebrow{font:500 11px/1 var(--mono); letter-spacing:.26em; text-transform:uppercase; color:var(--amber)}
+  h1{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.9; letter-spacing:.01em; font-size:clamp(46px,6vw,86px); margin:12px 0 10px}
+  .top p{color:var(--mute); max-width:62ch; margin:0}
+
+  .layout{display:grid; grid-template-columns:230px 1fr; gap:48px; padding:40px 0 90px; align-items:start}
+  aside{position:sticky; top:86px}
+  aside .lbl{font:700 10px/1 var(--mono); letter-spacing:.24em; text-transform:uppercase; color:var(--mute); margin:0 0 12px}
+  aside a{display:block; font:500 12px/1.3 var(--mono); color:var(--mute); padding:8px 0 8px 14px; border-left:1px solid var(--line); transition:color var(--snap), border-color var(--snap)}
+  aside a:hover{color:var(--ink); border-color:var(--amber); text-decoration:none}
+
+  article h2{font-family:var(--disp); font-weight:700; text-transform:uppercase; line-height:.9; font-size:clamp(30px,3.6vw,46px); margin:46px 0 14px; padding-top:28px; border-top:1px solid var(--line)}
+  article h2:first-child{border-top:0; padding-top:0; margin-top:0}
+  article h3{font-family:var(--ui); font-weight:700; font-size:15px; letter-spacing:.04em; color:var(--ink); margin:26px 0 6px}
+  article p{color:var(--mute); max-width:70ch}
+  article p b{color:var(--ink); font-weight:500}
+  article ul,article ol{color:var(--mute); max-width:70ch; padding-left:22px}
+  article li{margin:6px 0}
+  article code{color:var(--ink); background:rgba(245,184,46,.08); border:1px solid var(--line2); padding:1px 6px; white-space:nowrap}
+  .step{display:grid; grid-template-columns:40px 1fr; gap:18px; padding:18px 0; border-bottom:1px solid var(--line); align-items:start}
+  .step .n{font-family:var(--disp); font-weight:700; font-size:34px; line-height:.8; color:var(--amber)}
+  .step h3{margin:0 0 4px}
+  .step p{margin:0}
+  pre{margin:14px 0; padding:18px 20px; background:#0E0E10; border:1px solid var(--line); border-left:2px solid var(--amber); font:500 12.5px/1.6 var(--mono); color:var(--ink); overflow-x:auto; white-space:pre-wrap; word-break:break-all; max-width:none}
+  table{border-collapse:collapse; width:100%; margin:14px 0; font-size:12.5px}
+  th,td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top}
+  th{font:700 10px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--amber)}
+  td code{white-space:nowrap}
+  .note{display:flex; gap:16px; align-items:flex-start; border-left:2px solid var(--amber); background:rgba(245,184,46,.045); padding:18px 22px; margin:18px 0; max-width:74ch}
+  .note .k{font:700 11px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); flex:none; padding-top:2px}
+  .note p{margin:0; color:var(--ink)}
+  .q{font-family:var(--ui); font-weight:700; font-size:15px; color:var(--ink); margin:24px 0 4px}
+  footer{border-top:1px solid var(--line); padding:30px 28px 84px; max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; font:500 10px/1.8 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--mute)}
+  footer a{color:var(--amber)}
+  @media (max-width:900px){ .layout{grid-template-columns:1fr; gap:0} aside{display:none} .nav{height:auto; padding:10px 18px; flex-wrap:wrap} nav.tabs{flex-basis:100%; justify-content:flex-start} main{padding:0 18px} }
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <div class="nav">
+    <a class="mark" href="/" aria-label="HoneyBadger home">
+      <img src="/assets/arsenal/emblem_mark.jpg?v=20261012c" alt="" width="320" height="320">
+      <span class="word">HoneyBadger<small>.software</small></span>
+    </a>
+    <nav class="tabs" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/rust-server-manager.html">The Bunker</a>
+      <a href="/bunker-help.html" class="on">Help</a>
+      <a href="/downloads.html">Downloads</a>
+      <a href="/support.html">Support</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="top">
+    <div class="crumb"><a href="/">Home</a> &nbsp;/&nbsp; <a href="/rust-server-manager.html">The Bunker</a> &nbsp;/&nbsp; Help</div>
+    <div class="eyebrow">HoneyBadger Bunker — getting started &amp; help — v0.1.0</div>
+    <h1>Set up your server</h1>
+    <p>Install the Bunker, run it, and get a Rust dedicated server online — on a Windows PC or a Linux box — without ever opening a command prompt. Everything below is the whole path, start to finish, plus what to do when something goes wrong.</p>
+  </div>
+
+  <div class="layout">
+    <aside>
+      <p class="lbl">On this page</p>
+      <a href="#windows">Install on Windows</a>
+      <a href="#linux">Install on Linux</a>
+      <a href="#firstrun">First run</a>
+      <a href="#ports">Ports to forward</a>
+      <a href="#files">Where your files live</a>
+      <a href="#updates">Updates</a>
+      <a href="#trouble">Troubleshooting</a>
+      <a href="#licence">Licence</a>
+    </aside>
+
+    <article>
+      <h2 id="windows">Install on Windows</h2>
+      <p>Windows 10 or 11, 64-bit. The easiest way is the signed installer.</p>
+      <div class="step"><div class="n">1</div><div><h3>Download the installer</h3><p>Get <code>HoneyBadgerBunker-Setup-0.1.0.exe</code> from the <a href="/rust-server-manager.html#download">Bunker page</a>. It is <b>signed</b>, so there is no "unknown publisher" warning, and it installs <b>per-user</b> with <b>no administrator rights</b>.</p></div></div>
+      <div class="step"><div class="n">2</div><div><h3>Run it</h3><p>Double-click it and follow the prompts. It installs to your account and adds a Start Menu shortcut (and a desktop one if you tick the box).</p></div></div>
+      <div class="step"><div class="n">3</div><div><h3>Open the deck</h3><p>Launch <b>HoneyBadger Bunker</b> from the Start Menu. The deck window opens — no console, no terminal.</p></div></div>
+      <div class="note"><span class="k">Portable zip</span><p>Prefer no installer? Download the portable zip, right-click it &rarr; Properties &rarr; tick <b>Unblock</b> &rarr; OK, unzip it anywhere, and double-click <b>HoneyBadger Bunker.bat</b>. The zip carries its own copy of Python, so there is nothing else to install.</p></div>
+      <p>Closing the deck window does <b>not</b> stop your server — the engine keeps running in the background. Open the deck again and everything is where you left it.</p>
+
+      <h2 id="linux">Install on Linux</h2>
+      <p>Debian and Ubuntu (64-bit) are the tested path; there is also a newer Fedora / RHEL / Rocky / Alma path. On the server, as root, paste one line:</p>
+      <pre>curl -sSL https://honeybadger.software/installer/install.sh | sudo bash -s -- \
+  --from https://honeybadger.software/installer/HoneyBadgerBunker-0.1.0.tar.gz</pre>
+      <p>Already have the source folder on the box? Run <code>sudo bash packaging/linux/install.sh</code> from it instead. The installer is safe to run again, and it will:</p>
+      <ul>
+        <li>install the 32-bit libraries SteamCMD needs, plus Python, curl, unzip and logrotate;</li>
+        <li>create an unprivileged user <code>honeybadger</code> — <b>the game server never runs as root</b>;</li>
+        <li>install the deck into <code>/opt/honeybadger</code> and run it as a systemd service named <code>hbdeck</code>;</li>
+        <li>set up log rotation and a restart-on-crash limit so a broken update cannot loop forever.</li>
+      </ul>
+      <p>The deck listens on the server's <b>loopback address only</b> — it is never exposed to the internet. Reach it from your own PC over an SSH tunnel:</p>
+      <pre>ssh -L 27800:127.0.0.1:27800 you@your-server</pre>
+      <p>Then open <code>http://127.0.0.1:27800/</code> in your browser. Useful commands:</p>
+      <pre>systemctl status hbdeck
+journalctl -u hbdeck -f
+sudo systemctl restart hbdeck
+sudo bash /opt/honeybadger/uninstall.sh            # removes the deck, keeps your servers
+sudo bash /opt/honeybadger/uninstall.sh --purge    # removes everything, servers included</pre>
+
+      <h2 id="firstrun">First run</h2>
+      <p>The first time the deck opens, the setup wizard walks you through a server: a <b>name</b>, <b>where the files go</b>, the <b>map</b> and <b>how many players</b>. It <b>picks free ports</b> and installs the game for you.</p>
+      <div class="note"><span class="k">Be patient</span><p>The first start is slow on purpose: Rust downloads about <b>6 GB</b>, then the server generates the map. Expect several minutes before it shows as running. Later starts are much faster. Friends can join the moment the deck shows the server running.</p></div>
+
+      <h2 id="ports">Ports to forward</h2>
+      <table>
+        <tr><th>Port</th><th>Protocol</th><th>Purpose</th><th>Open to the internet?</th></tr>
+        <tr><td><code>28015</code></td><td>UDP</td><td>Game</td><td>Yes</td></tr>
+        <tr><td><code>28017</code></td><td>UDP</td><td>Server query (the server list needs it)</td><td>Yes</td></tr>
+        <tr><td><code>28016</code></td><td>TCP</td><td>RCON</td><td>No, unless you manage from outside</td></tr>
+        <tr><td>Rust+ port</td><td>TCP</td><td>Rust+ companion app (the deck shows the number)</td><td>Only if you turned it on</td></tr>
+        <tr><td><code>27800</code></td><td>TCP</td><td>The deck panel on Linux</td><td><b>Never</b> — use the SSH tunnel</td></tr>
+      </table>
+      <p>These are the defaults; if you change a port in the wizard, forward the numbers the deck shows. Playing from the same PC or network needs no forwarding — press F1 in Rust and type <code>client.connect 127.0.0.1:28015</code>.</p>
+
+      <h2 id="files">Where your files live</h2>
+      <table>
+        <tr><th></th><th>Windows (installer / zip)</th><th>Linux (installer)</th></tr>
+        <tr><td>Deck settings, database, logs</td><td><code>state\</code> next to the launcher</td><td><code>/var/lib/honeybadger</code></td></tr>
+        <tr><td>Game servers</td><td>the folder you pick in the wizard</td><td><code>/srv/honeybadger/servers/&lt;name&gt;</code></td></tr>
+        <tr><td>Engine settings (port, bind)</td><td>chosen automatically</td><td><code>/etc/honeybadger/engine.env</code></td></tr>
+        <tr><td>Logs</td><td><code>state\logs\</code></td><td><code>journalctl -u hbdeck</code></td></tr>
+      </table>
+      <p>To move a Windows install to another PC, close the deck, copy the whole folder, and start it there.</p>
+
+      <h2 id="updates">Updates</h2>
+      <p>Updates come from honeybadger.software. The deck checks a <b>signed list</b>, and every file it downloads must match a signature and a checksum or it is refused. You get a plain notice in the deck when there is a new version — <b>nothing installs until you click</b>.</p>
+      <ul>
+        <li><b>Windows:</b> the deck downloads and verifies the new version, then swaps it in when you click and the engine has stopped. Or unzip the new portable zip over the old folder — <code>state\</code> is not in the zip, so your servers and settings stay.</li>
+        <li><b>Linux:</b> run the installer again with the new package; your settings and servers are kept.</li>
+      </ul>
+      <p>Updating the Rust server itself is separate: it is one button (or a schedule), and it keeps your mod framework in place afterwards.</p>
+
+      <h2 id="trouble">Troubleshooting</h2>
+      <p class="q">Windows says "Windows protected your PC" (SmartScreen).</p>
+      <p>The signed installer is code-signed by HoneyBadger Software, so you should not see an "unknown publisher" warning. A brand-new signed program can still get a reputation prompt until enough people have downloaded it — click <b>More info</b>, then <b>Run anyway</b>. With the portable zip, right-click &rarr; Properties &rarr; tick <b>Unblock</b> before you unzip.</p>
+      <p class="q">The deck window does not open.</p>
+      <p>Open <code>state\logs\launcher.log</code>. If it is empty or unclear, run <b>Bunker (console debug).bat</b> to see what it prints. The window needs the Microsoft Edge WebView2 runtime — Windows 11 has it built in; on Windows 10 it is a free download from Microsoft.</p>
+      <p class="q">First start takes forever.</p>
+      <p>Normal: the game downloads ~6 GB and then the map generates. Give it several minutes the first time; later starts are quick.</p>
+      <p class="q">Not enough memory.</p>
+      <p>A Rust server wants about <b>12 GB of RAM</b> and 15 GB of free disk. If the machine has less, pick a smaller map and fewer players in the wizard.</p>
+      <p class="q">Players cannot join, but it works for me.</p>
+      <p>The ports above are not reachable from outside. Check the router forward, the Windows or Linux firewall, and — on a cloud host — the provider's security group. <b>Both UDP ports</b> must be open.</p>
+      <p class="q">Linux service will not start.</p>
+      <p><code>journalctl -u hbdeck -n 50</code> shows why. The service gives up after 3 failed starts in 5 minutes on purpose; fix the cause and run <code>sudo systemctl restart hbdeck</code>.</p>
+      <div class="note"><span class="k">Still stuck?</span><p>Tell us what broke on the <a href="/community.html">community page</a> — this is a test release, and that feedback goes straight to the people building it.</p></div>
+
+      <h2 id="licence">Licence and what is not ours</h2>
+      <p>The deck's own code is MIT licensed. Copyright HoneyBadger Software. Things the deck downloads for you keep their own licences and terms:</p>
+      <ul>
+        <li><b>Rust Dedicated Server</b> belongs to Facepunch Studios; the deck installs it through Valve's SteamCMD, anonymously.</li>
+        <li><b>SteamCMD</b> belongs to Valve.</li>
+        <li><b>Carbon</b> and <b>Oxide (uMod)</b> are separate projects with their own licences; the deck downloads them from their official releases and never bundles or modifies them.</li>
+        <li><b>Python</b> and the libraries inside the Windows zip carry their own open-source licences.</li>
+      </ul>
+      <p>HoneyBadger Software is not affiliated with Facepunch Studios or Valve.</p>
+    </article>
+  </div>
+</main>
+
+<footer>
+  <span>honeybadger.software — independent mods, servers &amp; tactical software. All rights reserved.</span>
+  <span><a href="/rust-server-manager.html">The Bunker</a> &nbsp;·&nbsp; <a href="/downloads.html">Downloads</a> &nbsp;·&nbsp; <a href="/community.html">Join The Den</a> &nbsp;·&nbsp; <a href="/support.html">Support</a></span>
+</footer>
+</div>
+</body>
+</html>
